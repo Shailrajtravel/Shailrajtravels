@@ -27,6 +27,7 @@ export interface Tour {
   canonicalUrl: string;
   heroContent: {
     image: string;
+    mobileImage?: string;
     description: string;
   };
   overview: string;

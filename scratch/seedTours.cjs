@@ -10,6 +10,7 @@ const tours = [
     canonicalUrl: 'https://www.shailrajtravels.com/tours/ashtavinayak-yatra',
     heroContent: {
       image: '/images/ashtavinayak.jpg', // Placeholder image
+      mobileImage: '/images/ashtavinayak-mobile.jpg',
       description: 'Visit all 8 sacred Ganesha temples in Maharashtra with our premium AC bus package from Pune.'
     },
     overview: '<p>The Ashtavinayak Yatra covers eight ancient holy temples of Ganesha which are situated around Pune. Each of these temples has its own individual legend and history.</p>',
@@ -54,24 +55,23 @@ const tours = [
       description: 'Embark on the ultimate spiritual journey covering the 12 Jyotirlingas of Lord Shiva across India.'
     },
     overview: '<p>Our carefully planned Jyotirlinga Darshan packages offer a peaceful and organized spiritual journey to the most revered Shiva temples in the country.</p>',
-    highlights: ['Train/Flight arrangements', 'Premium accommodations', 'Local AC transport', 'Darshan assistance'],
+    highlights: ['Premium accommodations', 'Local AC transport', 'Darshan assistance'],
     destinations: ['Somnath', 'Nageshwar', 'Bhimashankar', 'Trimbakeshwar', 'Grishneshwar', 'Vaidyanath', 'Mahakaleshwar', 'Omkareshwar', 'Kashi Vishwanath', 'Kedarnath', 'Rameshwaram', 'Mallikarjuna'],
     packages: [
       {
         title: 'Maharashtra 5 Jyotirlinga',
         price: '9500',
-        inclusions: ['AC Transport from Pune', 'Hotel Stay', 'Meals', 'Guide'],
-        exclusions: ['Train/Flight Tickets to other states']
+        inclusions: ['AC Transport from Pune', 'Hotel Stay', 'Guide'],
+
       }
     ],
     faq: [
-      { question: 'What is included in the Jyotirlinga Darshan package?', answer: 'Travel, stay, food, and darshan arrangements are completely taken care of.' },
+      { question: 'What is included in the Jyotirlinga Darshan package?', answer: 'Travel, stay and darshan arrangements are completely taken care of.' },
       { question: 'How many days does the Jyotirlinga Darshan take?', answer: 'The Maharashtra 5 Jyotirlinga takes 4 days. All 12 takes about 18-20 days.' },
-      { question: 'Is food and accommodation included?', answer: 'Yes, pure vegetarian meals and comfortable stays are provided.' },
       { question: 'Can senior citizens join the tour?', answer: 'Yes, special care and assistance are provided for seniors.' },
       { question: 'What is the best time for Jyotirlinga Darshan?', answer: 'September to March is generally best, avoiding peak monsoons.' },
       { question: 'Is the tour suitable for families with children?', answer: 'Yes, it is family friendly.' },
-      { question: 'What transport is used?', answer: 'AC Buses for Maharashtra, Trains/Flights for out of state.' },
+      { question: 'What transport is used?', answer: 'AC Buses for Maharashtra.' },
       { question: 'How do I book and what is the cancellation policy?', answer: 'Bookings require 50% advance. Cancellation policy varies by package.' }
     ],
     relatedTours: [

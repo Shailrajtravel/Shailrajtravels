@@ -25,20 +25,29 @@ export function TourPageTemplate({ data }: TourPageTemplateProps) {
       <section className="relative w-full flex flex-col md:block md:h-[60vh] md:min-h-[450px] overflow-hidden bg-slate-900">
         
         {/* Image Area */}
-        <div className="relative w-full aspect-video md:absolute md:inset-0 md:h-full z-0 flex items-center justify-center">
+        <div className="relative w-full md:absolute md:inset-0 md:h-full z-0 flex flex-col items-center justify-center">
           {/* Desktop blurred background */}
           <img 
             src={data.heroContent.image} 
             alt={data.title} 
             className="hidden md:block absolute inset-0 w-full h-full object-cover blur-2xl opacity-50 scale-110"
           />
-          {/* Main image: fits exactly on mobile (aspect-video), contained on desktop */}
+          
+          {/* Mobile Image */}
+          <img 
+            src={data.heroContent.mobileImage || data.heroContent.image} 
+            alt={data.title} 
+            className="block md:hidden w-full h-auto object-contain relative z-10"
+          />
+          
+          {/* Desktop Main Image */}
           <img 
             src={data.heroContent.image} 
             alt={data.title} 
-            className="w-full h-full object-cover md:object-contain relative z-10"
+            className="hidden md:block w-full h-full object-contain relative z-10"
           />
-          {/* Desktop Overlay only - mobile doesn't need overlay because text is below */}
+          
+          {/* Desktop Overlay only */}
           <div className="hidden md:block absolute inset-0 bg-black/60 z-20" />
         </div>
 
@@ -98,17 +107,19 @@ export function TourPageTemplate({ data }: TourPageTemplateProps) {
                     <h3 className="text-xl font-bold text-gray-900 mb-2">{pkg.title}</h3>
                     <p className="text-3xl font-bold text-brand-orange mb-6">₹{pkg.price} <span className="text-sm font-normal text-gray-500">per person</span></p>
                     <div className="flex-grow space-y-4">
-                      <div>
-                        <h4 className="font-semibold text-gray-900 mb-2">Includes:</h4>
-                        <ul className="list-disc pl-5 text-sm text-gray-600 space-y-1.5">
-                          {pkg.inclusions.map((inc, i) => <li key={i}>{inc}</li>)}
-                        </ul>
-                      </div>
-                      {pkg.exclusions.length > 0 && (
+                      {pkg.inclusions && pkg.inclusions.length > 0 && (
+                        <div>
+                          <h4 className="font-semibold text-gray-900 mb-2">Includes:</h4>
+                          <ul className="list-disc pl-5 text-sm text-gray-600 space-y-1.5">
+                            {pkg.inclusions.map((inc: string, i: number) => <li key={i}>{inc}</li>)}
+                          </ul>
+                        </div>
+                      )}
+                      {pkg.exclusions && pkg.exclusions.length > 0 && (
                         <div className="pt-2">
                           <h4 className="font-semibold text-gray-900 mb-2">Excludes:</h4>
                           <ul className="list-disc pl-5 text-sm text-gray-600 space-y-1.5">
-                            {pkg.exclusions.map((exc, i) => <li key={i}>{exc}</li>)}
+                            {pkg.exclusions.map((exc: string, i: number) => <li key={i}>{exc}</li>)}
                           </ul>
                         </div>
                       )}
