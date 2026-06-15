@@ -33,3 +33,6 @@ dist-ssr
 
 # Database Fallback
 local_db.json
+
+# Environment variables
+.env
