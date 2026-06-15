@@ -75,14 +75,10 @@ const rateLimit = new Map<string, { count: number, timestamp: number }>();
 const RATE_LIMIT_WINDOW = 15 * 60 * 1000;
 const MAX_REQUESTS = 3;
 
-let cachedClient: MongoClient | null = null;
+import clientPromise from './lib/db';
+
 async function connectToDatabase() {
-  if (cachedClient) return cachedClient;
-  const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017';
-  const client = new MongoClient(uri);
-  await client.connect();
-  cachedClient = client;
-  return client;
+  return clientPromise;
 }
 
 export default {
