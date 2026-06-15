@@ -126,7 +126,8 @@ export function TourCard({ tour, onOpenDetails, t }: TourCardProps) {
           <div className="flex gap-2">
             {tour.slug ? (
               <Link 
-                to={`/tours/${tour.slug}`}
+                to="/tours/$tourSlug"
+                params={{ tourSlug: tour.slug }}
                 className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-slate-200 text-[#112233] font-semibold text-[14px] hover:bg-slate-50 transition-colors"
               >
                 <Info className="w-4 h-4" /> {t?.cardDetails || "Details"}

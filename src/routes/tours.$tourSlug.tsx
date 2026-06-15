@@ -10,7 +10,7 @@ export const Route = createFileRoute('/tours/$tourSlug')({
     if (!tour) {
       throw notFound();
     }
-    return tour;
+    return tour as NonNullable<typeof tour>;
   },
   head: ({ loaderData }) => {
     if (!loaderData) {

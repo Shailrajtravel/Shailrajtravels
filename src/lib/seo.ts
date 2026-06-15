@@ -14,8 +14,8 @@ export function generateSEO({
   canonicalUrl,
   ogImage = "https://www.shailrajtravels.com/og-image.jpg",
   type = "website",
-}: SEOProps): MetaDescriptor[] {
-  const meta: MetaDescriptor[] = [
+}: SEOProps): any {
+  const meta: any[] = [
     { title },
     { name: "description", content: description },
     { property: "og:title", content: title },

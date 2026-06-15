@@ -3,8 +3,8 @@ import { ArrowRight } from 'lucide-react';
 import iconPin from '@/assets/ChatGPT Image Jun 10, 2026, 05_09_01 PM.png';
 import iconTag from '@/assets/ChatGPT Image Jun 10, 2026, 05_09_26 PM.png';
 // Provide fallback imports for the others
-import iconShield from '@/assets/ChatGPT Image Jun 10, 2026, 05_09_26 PM.png'; // Fallback
-import iconBus from '@/assets/ChatGPT Image Jun 10, 2026, 05_09_01 PM.png';    // Fallback
+import iconShield from '@/assets/ChatGPT Image Jun 10, 2026, 04_55_09 PM.png'; // Fallback
+import iconBus from '@/assets/ChatGPT Image Jun 10, 2026, 04_57_55 PM.png';    // Fallback
 
 import { FeatureCardBig, CheckItem } from './components';
 

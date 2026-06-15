@@ -100,7 +100,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Marathi&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" },
       { rel: "stylesheet", href: appCss },
     ],
-  }),
+  }) as any,
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
@@ -113,13 +113,7 @@ function RootShell({ children }: { children: ReactNode }) {
       <head>
         <HeadContent />
         <AnalyticsScripts />
-        <SchemaMarkup schema={generateLocalBusinessSchema({
-          name: "Shailraj Travels",
-          description: "Trusted Pilgrimage Tour Operator in Pune. Book Ashtavinayak, Jyotirlinga, Pandharpur, and Char Dham yatra packages.",
-          telephone: "+919876543210",
-          address: "Pune, Maharashtra, 411001",
-          priceRange: "₹₹"
-        })} />
+        <SchemaMarkup schema={generateLocalBusinessSchema()} />
       </head>
       <body>
         {children}

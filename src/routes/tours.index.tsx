@@ -29,7 +29,7 @@ function ToursListingPage() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {tours.map((tour) => (
-          <Link key={tour.slug} to={`/tours/${tour.slug}`} className="group block h-full">
+          <Link key={tour.slug} to="/tours/$tourSlug" params={{ tourSlug: tour.slug! }} className="group block h-full">
             <div className="border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all h-full flex flex-col bg-white">
               <div className="h-48 relative overflow-hidden bg-gray-100">
                 <img src={tour.heroContent.image} alt={tour.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
