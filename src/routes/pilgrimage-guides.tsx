@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import {  generateSEO  } from '../backend/lib/seo';

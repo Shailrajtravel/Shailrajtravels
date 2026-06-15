@@ -1,3 +1,4 @@
+import { SchemaMarkup } from '../frontend/components/SchemaMarkup';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
@@ -15,7 +16,6 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../backend/lib/lovable-error-reporting";
 import { generateSEO } from '../backend/lib/seo';
 import { AnalyticsScripts } from "../frontend/components/AnalyticsScripts";
-import { SchemaMarkup } from "../frontend/components/SchemaMarkup";
 import { generateLocalBusinessSchema } from "../backend/lib/schema-generators";
 
 function NotFoundComponent() {
@@ -200,4 +200,4 @@ function RootComponent() {
       </LanguageContext.Provider>
     </QueryClientProvider>
   );
-}
+}

@@ -1,7 +1,8 @@
 // @ts-nocheck
+import { SchemaMarkup } from '../frontend/components/SchemaMarkup';
 import React from 'react';
 import { createFileRoute, Link } from '@tanstack/react-router';
-import {  generateSEO, SchemaMarkup  } from '../backend/lib/seo';
+import {  generateSEO  } from '../backend/lib/seo';
 import { businessConfig } from '../frontend/config/business';
 import { authors } from '../frontend/data/authors';
 
@@ -122,4 +123,4 @@ function AboutEntityPage() {
     </main>
   );
 }
-
+
