@@ -1,11 +1,11 @@
 import React from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useLanguage } from "./__root";
-import { getReviewsFn } from "../lib/reviews";
+import { getReviewsFn } from "../backend/lib/reviews";
 
-import { translations } from "../features/core/i18n";
-import { Navbar } from "../features/core/Navbar";
-import { FooterSection as Footer } from "../features/core/Footer";
+import { translations } from "../frontend/features/core/i18n";
+import { Navbar } from "../frontend/features/core/Navbar";
+import { FooterSection as Footer } from "../frontend/features/core/Footer";
 import { Star, User, Calendar } from "lucide-react";
 
 export const Route = createFileRoute("/blog")({

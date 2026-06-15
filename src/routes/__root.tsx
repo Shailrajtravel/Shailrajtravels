@@ -12,11 +12,11 @@ import { useEffect, useState, createContext, useContext, type ReactNode } from "
 import { Languages } from "lucide-react";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
-import { generateSEO } from "../lib/seo";
-import { AnalyticsScripts } from "../components/AnalyticsScripts";
-import { SchemaMarkup } from "../components/SchemaMarkup";
-import { generateLocalBusinessSchema } from "../lib/schema-generators";
+import { reportLovableError } from "../backend/lib/lovable-error-reporting";
+import { generateSEO } from "../backend/lib/seo";
+import { AnalyticsScripts } from "../frontend/components/AnalyticsScripts";
+import { SchemaMarkup } from "../frontend/components/SchemaMarkup";
+import { generateLocalBusinessSchema } from "../backend/lib/schema-generators";
 
 function NotFoundComponent() {
   return (

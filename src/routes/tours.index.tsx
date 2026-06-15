@@ -1,9 +1,10 @@
 import React from 'react';
-import { createFileRoute, Link } from '@tanstack/react-router';
-import { tours } from '../data/tours';
-import { generateSEO } from '../lib/seo';
+import { createFileRoute, Link, useLoaderData } from '@tanstack/react-router';
+import { getToursFn } from '../backend/lib/tours';
+import { generateSEO } from '../backend/lib/seo';
 
 export const Route = createFileRoute('/tours/')({
+  loader: () => getToursFn(),
   head: () => ({
     meta: generateSEO({
       title: 'Pilgrimage Tours from Pune | Shailraj Travels',
@@ -18,6 +19,8 @@ export const Route = createFileRoute('/tours/')({
 });
 
 function ToursListingPage() {
+  const tours = useLoaderData({ from: '/tours/' });
+
   return (
     <main className="w-full bg-white pb-16 pt-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <div className="text-center mb-12">
@@ -28,7 +31,7 @@ function ToursListingPage() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {tours.map((tour) => (
+        {tours.map((tour: any) => (
           <Link key={tour.slug} to="/tours/$tourSlug" params={{ tourSlug: tour.slug! }} className="group block h-full">
             <div className="border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all h-full flex flex-col bg-white">
               <div className="h-48 relative overflow-hidden bg-gray-100">

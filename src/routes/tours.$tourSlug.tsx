@@ -1,16 +1,28 @@
 import React from 'react';
 import { createFileRoute, notFound } from '@tanstack/react-router';
-import { tours } from '../data/tours';
-import { TourPageTemplate } from '../templates/TourPageTemplate';
-import { generateSEO } from '../lib/seo';
+import { getTourBySlugFn } from '../backend/lib/tours';
+import { TourPageTemplate } from '../frontend/templates/TourPageTemplate';
+import { generateSEO } from '../backend/lib/seo';
+import { generateProductSchema } from '../backend/lib/schema-generators';
 
 export const Route = createFileRoute('/tours/$tourSlug')({
-  loader: ({ params }) => {
-    const tour = tours.find((t) => t.slug === params.tourSlug);
+  loader: async ({ params }) => {
+    const tour = await getTourBySlugFn({ data: { slug: params.tourSlug } });
     if (!tour) {
       throw notFound();
     }
-    return tour as NonNullable<typeof tour>;
+    
+    // Dynamically generate schema since it's no longer stored in DB
+    (tour as any).schemaData = generateProductSchema({
+      name: tour.title,
+      description: tour.metaDescription || tour.heroContent?.description,
+      image: `https://www.shailrajtravels.com${tour.heroContent?.image || ''}`,
+      price: tour.packages?.[0]?.price || '0',
+      ratingValue: 4.8,
+      reviewCount: 150
+    });
+    
+    return tour as any;
   },
   head: ({ loaderData }) => {
     if (!loaderData) {

@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { createFileRoute, useNavigate, redirect } from '@tanstack/react-router';
-import { verifyAdminFn } from '../lib/auth';
-import { getPackagesFn, createPackageFn, updatePackageFn, deletePackageFn } from '../lib/packages';
-import { getReviewsFn, deleteReviewFn } from '../lib/reviews';
-import { getTripOptionsFn, createTripOptionFn, updateTripOptionFn, deleteTripOptionFn, getBookingsFn, deleteBookingFn, updateBookingStatusFn } from '../lib/bookings';
-import { getGalleryPhotosFn, addGalleryPhotoFn, deleteGalleryPhotoFn } from '../lib/gallery';
-import { getAuditLogsFn } from '../lib/audit';
+import { verifyAdminFn } from '../backend/lib/auth';
+import { getPackagesFn, createPackageFn, updatePackageFn, deletePackageFn } from '../backend/lib/packages';
+import { getReviewsFn, deleteReviewFn } from '../backend/lib/reviews';
+import { getTripOptionsFn, createTripOptionFn, updateTripOptionFn, deleteTripOptionFn, getBookingsFn, deleteBookingFn, updateBookingStatusFn } from '../backend/lib/bookings';
+import { getGalleryPhotosFn, addGalleryPhotoFn, deleteGalleryPhotoFn } from '../backend/lib/gallery';
+import { getAuditLogsFn } from '../backend/lib/audit';
+import { getToursFn, deleteTourFn } from '../backend/lib/tours';
+import { ToursAdmin } from '../frontend/features/admin/ToursAdmin';
 import * as XLSX from 'xlsx';
-import { LayoutDashboard, Package, LogOut, Plus, Trash2, Edit, Loader2, Search, ArrowLeft, Image as ImageIcon, MessageSquare, Menu, X, Map, CalendarCheck, MoreVertical, Clock, Users, Eye, FileSpreadsheet, Download, Activity, Printer } from 'lucide-react';
-import logo from '@/assets/logo11.png';
-import { Calendar } from '@/components/ui/calendar';
+import { LayoutDashboard, Package, LogOut, Plus, Trash2, Edit, Loader2, Search, ArrowLeft, Image as ImageIcon, MessageSquare, Menu, X, Map, CalendarCheck, MoreVertical, Clock, Users, Eye, FileSpreadsheet, Download, Activity, Printer, MapPin } from 'lucide-react';
+import logo from '@/frontend/assets/logo11.png';
+import { Calendar } from '@/frontend/components/ui/calendar';
 import { format } from 'date-fns';
 
 export const Route = createFileRoute('/admin')({
@@ -34,12 +36,13 @@ function AdminPage() {
   const [bookings, setBookings] = useState<any[]>([]);
   const [galleryPhotos, setGalleryPhotos] = useState<any[]>([]);
   const [auditLogs, setAuditLogs] = useState<any[]>([]);
+  const [tours, setTours] = useState<any[]>([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<any>(null); // Shared for editing
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'packages' | 'reviews' | 'trips' | 'bookings' | 'gallery' | 'customers' | 'reports' | 'invoices' | 'audit'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'packages' | 'tours' | 'reviews' | 'trips' | 'bookings' | 'gallery' | 'customers' | 'reports' | 'invoices' | 'audit'>('dashboard');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [deleteConfirm, setDeleteConfirm] = useState<{ isOpen: boolean; id: string; type: 'package' | 'review' | 'photo' | 'trip' | 'booking' } | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<{ isOpen: boolean; id: string; type: 'package' | 'review' | 'photo' | 'trip' | 'booking' | 'tour' } | null>(null);
 
   useEffect(() => {
     const t = sessionStorage.getItem('adminToken');
@@ -75,9 +78,10 @@ function AdminPage() {
       const bksPromise = tkn ? getBookingsFn({ data: { adminToken: tkn } }).catch(e => { console.error('Bookings error:', e); return []; }) : Promise.resolve([]);
       const photosPromise = getGalleryPhotosFn().catch(e => { console.error('Photos error:', e); return []; });
       const auditPromise = tkn ? getAuditLogsFn({ data: { adminToken: tkn } }).catch(e => { console.error('Audit error:', e); return []; }) : Promise.resolve([]);
+      const toursPromise = getToursFn().catch(e => { console.error('Tours error:', e); return []; });
 
-      const [pkgs, revs, trips, bks, photos, logs] = await Promise.all([
-        pkgsPromise, revsPromise, tripsPromise, bksPromise, photosPromise, auditPromise
+      const [pkgs, revs, trips, bks, photos, logs, trs] = await Promise.all([
+        pkgsPromise, revsPromise, tripsPromise, bksPromise, photosPromise, auditPromise, toursPromise
       ]);
 
       setPackages(pkgs);
@@ -86,6 +90,7 @@ function AdminPage() {
       setBookings(bks);
       setGalleryPhotos(photos);
       setAuditLogs(logs);
+      setTours(trs);
     } catch (e: any) {
       console.error('loadData fatal error:', e);
       setErrorMsg(e.message || String(e));
@@ -124,6 +129,7 @@ function AdminPage() {
       else if (deleteConfirm.type === 'photo') await deleteGalleryPhotoFn({ data: { adminToken: token, id: deleteConfirm.id } });
       else if (deleteConfirm.type === 'trip') await deleteTripOptionFn({ data: { adminToken: token, id: deleteConfirm.id } });
       else if (deleteConfirm.type === 'booking') await deleteBookingFn({ data: { adminToken: token, id: deleteConfirm.id } });
+      else if (deleteConfirm.type === 'tour') await deleteTourFn({ data: { adminToken: token, id: deleteConfirm.id } });
       
       loadData();
     } catch (e) {
@@ -175,6 +181,13 @@ function AdminPage() {
           >
             <Package className="w-5 h-5" />
             Packages
+          </button>
+          <button 
+            onClick={() => { setActiveTab('tours'); setIsFormOpen(false); setIsMobileMenuOpen(false); }}
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${activeTab === 'tours' ? 'bg-brand-blue-deep text-white shadow-md' : 'text-slate-500 hover:bg-slate-50 hover:text-brand-blue-deep'}`}
+          >
+            <MapPin className="w-5 h-5" />
+            Popular Tours
           </button>
           <button 
             onClick={() => { setActiveTab('reviews'); setIsFormOpen(false); setIsMobileMenuOpen(false); }}
@@ -252,6 +265,7 @@ function AdminPage() {
             <h1 className="text-lg sm:text-xl md:text-2xl font-bold font-display text-brand-blue-deep truncate">
               {activeTab === 'dashboard' ? 'Overview' :
                activeTab === 'packages' ? 'Packages Management' : 
+               activeTab === 'tours' ? 'Popular Tours Management' :
                activeTab === 'reviews' ? 'Reviews Management' :
                activeTab === 'trips' ? 'Trip Options' : 
                activeTab === 'gallery' ? 'Gallery Management' : 
@@ -288,6 +302,13 @@ function AdminPage() {
             <DashboardOverview packages={packages} bookings={bookings} reviews={reviews} photos={galleryPhotos} />
           ) : activeTab === 'audit' ? (
             <AuditLogsPanel logs={auditLogs} />
+          ) : activeTab === 'tours' ? (
+            <ToursAdmin 
+              token={token}
+              tours={tours}
+              loadData={loadData}
+              setDeleteConfirm={setDeleteConfirm}
+            />
           ) : activeTab === 'packages' ? (
             isFormOpen ? (
               <PackageForm 
@@ -1419,7 +1440,7 @@ function AuditLogsPanel({ logs }: { logs: any[] }) {
   );
 }
 
-import { InvoicePrint } from '../components/InvoicePrint';
+import { InvoicePrint } from '../frontend/components/InvoicePrint';
 
 function InvoicesView({ bookings }: { bookings: any[] }) {
   const [selectedBooking, setSelectedBooking] = useState<any>(null);
