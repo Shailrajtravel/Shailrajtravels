@@ -208,6 +208,9 @@ function TourForm({ token, initialData, onClose, onSuccess }: any) {
           <div className="md:col-span-2">
             <Input label="Destinations (comma separated)" value={formData.destinations?.join(', ')} onChange={(e: any) => handleArrayChange(e, 'destinations')} />
           </div>
+          <div className="md:col-span-2">
+            <Input label="Available Dates (comma separated, e.g. 2026-07-15, 2026-08-20)" value={formData.dates?.join(', ')} onChange={(e: any) => handleArrayChange(e, 'dates')} />
+          </div>
 
           <div className="md:col-span-2 p-4 bg-yellow-50 text-yellow-800 rounded-xl text-sm border border-yellow-200">
             <strong>Note:</strong> Packages and FAQs are complex data structures. To edit them fully, you will need to update them directly in the database for now. In a future update, a full drag-and-drop editor for packages can be added here.

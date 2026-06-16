@@ -35,6 +35,7 @@ export interface Tour {
   destinations: string[];
   packages: TourPackage[];
   faq: FAQItem[];
+  dates?: string[];
   schemaData: any; // Can be more specific if desired, e.g. Record<string, any>
   relatedTours: RelatedItem[];
   relatedBlogs: RelatedItem[];

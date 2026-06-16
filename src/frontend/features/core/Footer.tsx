@@ -1,8 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { getToursFn } from '../../../backend/lib/tours';
 import { Phone, Mail, MapPin, Instagram, Facebook, Youtube, ArrowRight } from 'lucide-react';
 import { translations } from './i18n';
 
 export function FooterSection({ t }: { t: typeof translations.mr }) {
+  const [popularTours, setPopularTours] = useState<{label: string, href: string}[]>([]);
+
+  useEffect(() => {
+    getToursFn()
+      .then((tours: any[]) => {
+        if (tours) {
+          setPopularTours(tours.slice(0, 4).map(t => ({
+            label: t.title,
+            href: `/tours/${t.slug}`
+          })));
+        }
+      })
+      .catch(console.error);
+  }, []);
+
   return (
     <footer id="contact" className="w-full bg-[#0a192f] text-slate-300 pt-20 pb-8 md:pt-24 md:pb-10 relative overflow-hidden scroll-mt-28 md:scroll-mt-32">
       {/* Premium subtle top gradient border */}
@@ -33,7 +49,7 @@ export function FooterSection({ t }: { t: typeof translations.mr }) {
             
             {/* Follow Us */}
             <div className="mt-2 flex flex-col items-center md:items-start gap-4">
-              <span className="text-[13px] font-bold text-white tracking-wider uppercase opacity-90">Follow Us</span>
+              <span className="text-[13px] font-bold text-white tracking-wider uppercase opacity-90">{t.footerFollowUs || "Follow Us"}</span>
               <div className="flex items-center gap-4">
                 <a 
                   href="#" 
@@ -63,18 +79,18 @@ export function FooterSection({ t }: { t: typeof translations.mr }) {
           {/* 2. Quick Links */}
           <div className="col-span-1 md:col-span-2 xl:col-span-1 flex flex-col gap-6">
             <h3 className="text-[17px] font-bold text-white font-display tracking-wide relative inline-block pb-2 self-start">
-              Quick Links
+              {t.footerQuickLinks || "Quick Links"}
               <span className="absolute bottom-0 left-0 w-8 h-[2px] bg-brand-green rounded-full"></span>
             </h3>
             <ul className="flex flex-col gap-3.5">
               {[
-                { label: 'Home', href: '/' },
-                { label: 'About', href: '/#about' },
-                { label: 'Packages', href: '/tours' },
-                { label: 'Gallery', href: '/#gallery' },
-                { label: 'Reviews', href: '/#reviews' },
-                { label: 'Blog', href: '/blog' },
-                { label: 'Contact', href: '/contact' }
+                { label: t.navHome || 'Home', href: '/' },
+                { label: t.navAbout || 'About', href: '/#about' },
+                { label: t.navPilgrimage || 'Packages', href: '/tours' },
+                { label: t.navGallery || 'Gallery', href: '/#gallery' },
+                { label: t.navReviews || 'Reviews', href: '/#reviews' },
+                { label: t.navBlog || 'Blog', href: '/blog' },
+                { label: t.navContact || 'Contact', href: '/contact' }
               ].map((link) => (
                 <li key={link.label}>
                   <a 
@@ -92,16 +108,11 @@ export function FooterSection({ t }: { t: typeof translations.mr }) {
           {/* 3. Popular Tours */}
           <div className="col-span-1 md:col-span-2 xl:col-span-1 flex flex-col gap-6">
             <h3 className="text-[17px] font-bold text-white font-display tracking-wide relative inline-block pb-2 self-start">
-              Popular Tours
+              {t.footerPopularTours || "Popular Tours"}
               <span className="absolute bottom-0 left-0 w-8 h-[2px] bg-brand-green rounded-full"></span>
             </h3>
             <ul className="flex flex-col gap-3.5">
-              {[
-                { label: 'Ashtavinayak', href: '/tours/ashtavinayak-yatra' },
-                { label: 'Pandharpur', href: '/tours/pandharpur-wari' },
-                { label: 'Jyotirling', href: '/tours/jyotirlinga-darshan' },
-                { label: 'Char Dham', href: '/tours/char-dham-yatra' }
-              ].map((tour) => (
+              {popularTours.length > 0 ? popularTours.map((tour) => (
                 <li key={tour.label}>
                   <a 
                     href={tour.href} 
@@ -111,14 +122,16 @@ export function FooterSection({ t }: { t: typeof translations.mr }) {
                     <span className="group-hover:translate-x-1 transition-transform duration-300">{tour.label}</span>
                   </a>
                 </li>
-              ))}
+              )) : (
+                <li className="text-[15px] text-slate-500">Loading tours...</li>
+              )}
             </ul>
           </div>
 
           {/* 4. Contact Us */}
           <div className="col-span-1 md:col-span-3 xl:col-span-1 flex flex-col gap-6">
             <h3 className="text-[17px] font-bold text-white font-display tracking-wide relative inline-block pb-2 self-start">
-              Contact Us
+              {t.footerContact || "Contact Us"}
               <span className="absolute bottom-0 left-0 w-8 h-[2px] bg-brand-green rounded-full"></span>
             </h3>
             <ul className="flex flex-col gap-5 text-[15px] text-slate-400">
@@ -152,15 +165,15 @@ export function FooterSection({ t }: { t: typeof translations.mr }) {
             {/* Legal */}
             <div className="flex flex-col gap-6">
               <h3 className="text-[17px] font-bold text-white font-display tracking-wide relative inline-block pb-2 self-start">
-                Legal
+                {t.footerLegal || "Legal"}
                 <span className="absolute bottom-0 left-0 w-8 h-[2px] bg-brand-green rounded-full"></span>
               </h3>
               <ul className="flex flex-col gap-3.5">
                 {[
-                  { label: 'Privacy Policy', href: '/privacy-policy' },
-                  { label: 'Terms & Conditions', href: '/terms' },
-                  { label: 'Refund Policy', href: '/refund-policy' },
-                  { label: 'Cancellation Policy', href: '/cancellation-policy' }
+                  { label: t.footerPrivacy || 'Privacy Policy', href: '/privacy-policy' },
+                  { label: t.footerTerms || 'Terms & Conditions', href: '/terms' },
+                  { label: t.footerRefund || 'Refund Policy', href: '/refund-policy' },
+                  { label: t.footerCancel || 'Cancellation Policy', href: '/cancellation-policy' }
                 ].map((link) => (
                   <li key={link.label}>
                     <a 
@@ -178,13 +191,13 @@ export function FooterSection({ t }: { t: typeof translations.mr }) {
             {/* Security */}
             <div className="flex flex-col gap-6">
               <h3 className="text-[17px] font-bold text-white font-display tracking-wide relative inline-block pb-2 self-start">
-                Security
+                {t.footerSecurity || "Security"}
                 <span className="absolute bottom-0 left-0 w-8 h-[2px] bg-brand-green rounded-full"></span>
               </h3>
               <ul className="flex flex-col gap-3.5">
                 {[
-                  { label: 'Security Policy', href: '#' },
-                  { label: 'Report Issue', href: '#' }
+                  { label: t.footerSecurityPolicy || 'Security Policy', href: '#' },
+                  { label: t.footerReportIssue || 'Report Issue', href: '#' }
                 ].map((link) => (
                   <li key={link.label}>
                     <a 
@@ -204,9 +217,9 @@ export function FooterSection({ t }: { t: typeof translations.mr }) {
 
         {/* Bottom Bar - Copyright */}
         <div className="border-t border-slate-800/80 pt-8 pb-4 flex flex-col md:flex-row items-center justify-between gap-4 text-[14px] text-slate-500 text-center md:text-left">
-          <p className="font-medium tracking-wide">© {new Date().getFullYear()} Shailraj Travels. All Rights Reserved.</p>
+          <p className="font-medium tracking-wide">© {new Date().getFullYear()} Shailraj Travels. {t.footerRights || "All Rights Reserved."}</p>
           <p className="flex items-center gap-1.5">
-            Designed & Developed by <span className="text-slate-300 font-semibold">Axenor Studio</span>
+            {t.footerDesignedBy || "Designed & Developed by"} <span className="text-slate-300 font-semibold">Axenor Studio</span>
           </p>
         </div>
       </div>

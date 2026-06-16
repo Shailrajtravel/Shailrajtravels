@@ -8,7 +8,7 @@ import { getGalleryPhotosFn, addGalleryPhotoFn, deleteGalleryPhotoFn } from '../
 import { getAuditLogsFn } from '../backend/lib/audit';
 import { getToursFn, deleteTourFn } from '../backend/lib/tours';
 import { ToursAdmin } from '../frontend/features/admin/ToursAdmin';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 import { LayoutDashboard, Package, LogOut, Plus, Trash2, Edit, Loader2, Search, ArrowLeft, Image as ImageIcon, MessageSquare, Menu, X, Map, CalendarCheck, MoreVertical, Clock, Users, Eye, FileSpreadsheet, Download, Activity, Printer, MapPin } from 'lucide-react';
 import logo from '@/frontend/assets/logo11.png';
 import { Calendar } from '@/frontend/components/ui/calendar';
@@ -87,7 +87,18 @@ function AdminPage() {
       setPackages(pkgs);
       setReviews(revs);
       setTripOptions(trips);
-      setBookings(bks);
+      
+      let sortedBks = [...(bks || [])].sort((a, b) => new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime());
+      sortedBks = sortedBks.map((bk, idx) => {
+        const index = idx + 1;
+        const letter = String.fromCharCode(65 + ((index - 1) % 26));
+        const prefix = letter + letter;
+        const padded = String(index).padStart(5, '0');
+        return { ...bk, generatedBookingId: `${prefix}${padded}` };
+      });
+      sortedBks.reverse();
+      setBookings(sortedBks);
+      
       setGalleryPhotos(photos);
       setAuditLogs(logs);
       setTours(trs);
@@ -559,7 +570,7 @@ function AdminPage() {
                         <tr key={bk._id} className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
                           <td className="px-6 py-4">
                             <span className="font-mono text-xs font-bold text-slate-500 bg-slate-100 px-2 py-1 rounded">
-                              b-{String(bookings.length - idx).padStart(5, '0')}
+                              {bk.generatedBookingId}
                             </span>
                           </td>
                           <td className="px-6 py-4">
@@ -1093,6 +1104,7 @@ function DashboardOverview({ packages, bookings, reviews, photos }: any) {
 
 function CustomersView({ bookings = [] }: { bookings?: any[] }) {
   const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
+  const [searchQuery, setSearchQuery] = useState("");
   try {
     const customersMap = new globalThis.Map();
     (bookings || []).forEach(bk => {
@@ -1144,10 +1156,28 @@ function CustomersView({ bookings = [] }: { bookings?: any[] }) {
     });
 
     // Reverse so newest customers appear at the top
-    const displayCustomers = [...sortedCustomers].reverse();
+    let displayCustomers = [...sortedCustomers].reverse();
+
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim();
+      displayCustomers = displayCustomers.filter(cust => 
+        (cust.name && cust.name.toLowerCase().includes(q)) || 
+        (cust.customerId && cust.customerId.toLowerCase().includes(q)) ||
+        (cust.phone && cust.phone.toLowerCase().includes(q))
+      );
+    }
 
     return (
       <>
+      <div className="mb-6 animate-reveal">
+        <input 
+          type="text" 
+          placeholder="Search by Customer ID, Name, or Phone..." 
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full md:w-1/2 lg:w-1/3 px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium text-brand-blue-deep placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-blue/50 focus:border-brand-blue transition-all shadow-sm"
+        />
+      </div>
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden animate-reveal">
         {displayCustomers.length === 0 ? (
           <div className="p-12 text-center text-slate-500">
@@ -1236,12 +1266,40 @@ function CustomersView({ bookings = [] }: { bookings?: any[] }) {
   }
 }
 
+const applyTableStyles = (ws: any, titleSz = 16, subtitleSz = 14) => {
+  if (ws['A1']) ws['A1'].s = { font: { bold: true, sz: titleSz, color: { rgb: "000000" } }, alignment: { horizontal: "center", vertical: "center" } };
+  if (ws['A2']) ws['A2'].s = { font: { bold: true, sz: subtitleSz, color: { rgb: "333333" } }, alignment: { horizontal: "center", vertical: "center" } };
+
+  if (ws['!ref']) {
+    const range = XLSX.utils.decode_range(ws['!ref']);
+    for (let R = 3; R <= range.e.r; ++R) {
+      for (let C = 0; C <= range.e.c; ++C) {
+        const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
+        if (!ws[cellAddress]) ws[cellAddress] = { t: 's', v: '' };
+
+        const isHeader = R === 3;
+        ws[cellAddress].s = {
+          border: {
+            top: { style: 'thin', color: { auto: 1 } },
+            bottom: { style: 'thin', color: { auto: 1 } },
+            left: { style: 'thin', color: { auto: 1 } },
+            right: { style: 'thin', color: { auto: 1 } }
+          },
+          alignment: { vertical: "center", wrapText: true },
+          font: isHeader ? { bold: true, color: { rgb: "FFFFFF" } } : undefined,
+          fill: isHeader ? { patternType: 'solid', fgColor: { rgb: "4F81BD" } } : undefined
+        };
+      }
+    }
+  }
+};
+
 function ReportsView({ bookings = [] }: { bookings?: any[] }) {
   const exportBookings = () => {
     const headers = ['Booking ID', 'Customer Name', 'Phone Number', 'Trip Name', 'Persons', 'Travel Date', 'Status', 'Submission Date', 'Custom Destination'];
     
     const rows = bookings.map((bk, idx) => {
-      const bId = `b-${String(bookings.length - idx).padStart(5, '0')}`;
+      const bId = bk.generatedBookingId;
       const phoneStr = (bk.phone || '').replace(/[\r\n]+/g, ' ');
       const dateStr = bk.createdAt ? new Date(bk.createdAt).toLocaleDateString() : '';
       return [
@@ -1257,18 +1315,36 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
       ];
     });
     
-    const ws = XLSX.utils.aoa_to_sheet([headers, ...rows]);
-    ws['!cols'] = [
-      { wch: 15 }, // Booking ID
-      { wch: 25 }, // Customer Name
-      { wch: 20 }, // Phone Number
-      { wch: 30 }, // Trip Name
-      { wch: 10 }, // Persons
-      { wch: 20 }, // Travel Date
-      { wch: 15 }, // Status
-      { wch: 20 }, // Submission Date
-      { wch: 40 }  // Custom Destination
+    const ws = XLSX.utils.aoa_to_sheet([
+      ['SHAILRAJ TRAVELS PUNE'],
+      ['Booking Report'],
+      [],
+      headers, 
+      ...rows
+    ]);
+
+    applyTableStyles(ws);
+    
+    ws['!merges'] = [
+      { s: { r: 0, c: 0 }, e: { r: 0, c: headers.length - 1 } },
+      { s: { r: 1, c: 0 }, e: { r: 1, c: headers.length - 1 } }
     ];
+
+    ws['!cols'] = [
+      { wch: 10 }, // Booking ID
+      { wch: 20 }, // Customer Name
+      { wch: 12 }, // Phone Number
+      { wch: 25 }, // Trip Name
+      { wch: 8 },  // Persons
+      { wch: 18 }, // Travel Date
+      { wch: 12 }, // Status
+      { wch: 12 }, // Submission Date
+      { wch: 20 }  // Custom Destination
+    ];
+    
+    ws['!fitToPage'] = true;
+    ws['!pageSetup'] = { orientation: 'landscape', fitToWidth: 1, fitToHeight: 0 };
+    ws['!margins'] = { left: 0.5, right: 0.5, top: 0.5, bottom: 0.5, header: 0.3, footer: 0.3, horizontallyCenter: true } as any;
     
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Bookings");
@@ -1336,24 +1412,117 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
       ];
     });
 
-    const ws = XLSX.utils.aoa_to_sheet([headers, ...rows]);
-    ws['!cols'] = [
-      { wch: 15 }, // Customer ID
-      { wch: 25 }, // Customer Name
-      { wch: 20 }, // Phone Number
-      { wch: 15 }, // Total Bookings
-      { wch: 20 }, // First Booking Date
-      { wch: 20 }, // Latest Booking Date
-      { wch: 60 }  // Trips Taken
+    const ws = XLSX.utils.aoa_to_sheet([
+      ['SHAILRAJ TRAVELS PUNE'],
+      ['Customer Report'],
+      [],
+      headers, 
+      ...rows
+    ]);
+
+    applyTableStyles(ws);
+    
+    ws['!merges'] = [
+      { s: { r: 0, c: 0 }, e: { r: 0, c: headers.length - 1 } },
+      { s: { r: 1, c: 0 }, e: { r: 1, c: headers.length - 1 } }
     ];
+
+    ws['!cols'] = [
+      { wch: 12 }, // Customer ID
+      { wch: 20 }, // Customer Name
+      { wch: 12 }, // Phone Number
+      { wch: 15 }, // Total Bookings
+      { wch: 15 }, // First Booking Date
+      { wch: 15 }, // Latest Booking Date
+      { wch: 40 }  // Trips Taken
+    ];
+    
+    ws['!fitToPage'] = true;
+    ws['!pageSetup'] = { orientation: 'landscape', fitToWidth: 1, fitToHeight: 0 };
+    ws['!margins'] = { left: 0.5, right: 0.5, top: 0.5, bottom: 0.5, header: 0.3, footer: 0.3, horizontallyCenter: true } as any;
     
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Customers");
     XLSX.writeFile(wb, `customers_report_${new Date().toISOString().split('T')[0]}.xlsx`);
   };
 
+  const groupsMap = new globalThis.Map<string, any[]>();
+  (bookings || []).forEach(bk => {
+    if (bk.tripName && bk.tripName !== 'custom') {
+      const key = `${bk.tripName} (${bk.travelDate || 'No Date'})`;
+      if (!groupsMap.has(key)) groupsMap.set(key, []);
+      groupsMap.get(key)!.push(bk);
+    }
+  });
+  const tripGroups = Array.from(groupsMap.entries());
+
+  const [selectedTripGroup, setSelectedTripGroup] = React.useState<string>('');
+
+  React.useEffect(() => {
+    if (tripGroups.length > 0 && !selectedTripGroup) {
+      setSelectedTripGroup(tripGroups[0][0]);
+    }
+  }, [tripGroups, selectedTripGroup]);
+
+  const exportSpecificTrip = () => {
+    if (!selectedTripGroup) return;
+    const group = tripGroups.find(g => g[0] === selectedTripGroup);
+    if (!group) return;
+
+    const [groupName, groupBks] = group;
+    const headers = ['Booking ID', 'Customer Name', 'Phone Number', 'Trip Name', 'Persons', 'Travel Date', 'Status', 'Submission Date', 'Custom Destination'];
+    
+    const rows = groupBks.map((bk: any) => {
+      const bId = bk.generatedBookingId;
+      const phoneStr = (bk.phone || '').replace(/[\r\n]+/g, ' ');
+      const dateStr = bk.createdAt ? new Date(bk.createdAt).toLocaleDateString() : '';
+      return [
+        bId,
+        (bk.name || '').replace(/[\r\n]+/g, ' '),
+        phoneStr,
+        (bk.tripName === 'custom' ? 'Custom Trip' : (bk.tripName || '')).replace(/[\r\n]+/g, ' '),
+        bk.persons || '',
+        (bk.travelDate || '').replace(/[\r\n]+/g, ' '),
+        bk.status || '',
+        dateStr,
+        (bk.customDestination || '').replace(/[\r\n]+/g, ' ')
+      ];
+    });
+
+    const ws = XLSX.utils.aoa_to_sheet([
+      ['SHAILRAJ TRAVELS PUNE'],
+      [`Booking Report: ${groupName}`],
+      [],
+      headers, 
+      ...rows
+    ]);
+
+    applyTableStyles(ws);
+    
+    ws['!merges'] = [
+      { s: { r: 0, c: 0 }, e: { r: 0, c: headers.length - 1 } },
+      { s: { r: 1, c: 0 }, e: { r: 1, c: headers.length - 1 } }
+    ];
+
+    ws['!cols'] = [
+      { wch: 10 }, { wch: 20 }, { wch: 12 }, { wch: 25 }, { wch: 8 }, 
+      { wch: 18 }, { wch: 12 }, { wch: 12 }, { wch: 20 }
+    ];
+    
+    ws['!fitToPage'] = true;
+    ws['!pageSetup'] = { orientation: 'landscape', fitToWidth: 1, fitToHeight: 0 };
+    ws['!margins'] = { left: 0.5, right: 0.5, top: 0.5, bottom: 0.5, header: 0.3, footer: 0.3, horizontallyCenter: true } as any;
+
+    const wb = XLSX.utils.book_new();
+    const safeSheetName = groupName.replace(/[\\/*?:\[\]]/g, '').substring(0, 31);
+    XLSX.utils.book_append_sheet(wb, ws, safeSheetName);
+    
+    const safeFileName = groupName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+    XLSX.writeFile(wb, `trip_report_${safeFileName}_${new Date().toISOString().split('T')[0]}.xlsx`);
+  };
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-reveal">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-reveal">
       <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center text-center">
         <div className="w-16 h-16 bg-brand-blue/10 text-brand-blue rounded-2xl flex items-center justify-center mb-4">
           <CalendarCheck className="w-8 h-8" />
@@ -1385,6 +1554,36 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
         >
           <FileSpreadsheet className="w-5 h-5" />
           Export Customers
+        </button>
+      </div>
+
+      <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center text-center">
+        <div className="w-16 h-16 bg-brand-orange/10 text-brand-orange rounded-2xl flex items-center justify-center mb-4">
+          <MapPin className="w-8 h-8" />
+        </div>
+        <h3 className="text-xl font-bold text-brand-blue-deep mb-2">Trip Report</h3>
+        <p className="text-slate-500 text-sm mb-4 max-w-xs">
+          Select a specific trip to download its bookings.
+        </p>
+        
+        <select
+          value={selectedTripGroup}
+          onChange={(e) => setSelectedTripGroup(e.target.value)}
+          className="w-full max-w-xs p-3 mb-4 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-blue/50 outline-none"
+        >
+          {tripGroups.map(g => (
+            <option key={g[0]} value={g[0]}>{g[0]} ({g[1].length} bookings)</option>
+          ))}
+          {tripGroups.length === 0 && <option value="">No specific trips found</option>}
+        </select>
+
+        <button 
+          onClick={exportSpecificTrip}
+          disabled={!selectedTripGroup}
+          className="w-full max-w-xs bg-brand-orange hover:bg-orange-600 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-lg shadow-brand-orange/20 disabled:opacity-50 disabled:cursor-not-allowed mt-auto"
+        >
+          <FileSpreadsheet className="w-5 h-5" />
+          Export Trip Report
         </button>
       </div>
     </div>
@@ -1444,14 +1643,40 @@ import { InvoicePrint } from '../frontend/components/InvoicePrint';
 
 function InvoicesView({ bookings }: { bookings: any[] }) {
   const [selectedBooking, setSelectedBooking] = useState<any>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Filter for confirmed bookings whose travelDate is today or in the past
-  const generatedInvoices = bookings.filter(b => {
+  let generatedInvoices = bookings.filter(b => {
     if (b.status !== 'Confirmed') return false;
     const travelTime = new Date(b.travelDate).getTime();
     if (isNaN(travelTime)) return true; // Show it if parsing fails
     return travelTime <= Date.now();
   });
+
+  // Sort them chronologically by createdAt so older bookings get smaller IDs
+  generatedInvoices.sort((a, b) => new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime());
+
+  // Assign sequential invoice ID
+  generatedInvoices = generatedInvoices.map((bk, idx) => {
+    const index = idx + 1;
+    const letter = String.fromCharCode(65 + ((index - 1) % 26));
+    const padded = String(index).padStart(4, '0');
+    return { ...bk, generatedInvoiceNo: `INV-${letter}${padded}` };
+  });
+
+  // Reverse so newest are shown first
+  generatedInvoices.reverse();
+
+  if (searchQuery.trim()) {
+    const q = searchQuery.toLowerCase().trim();
+    generatedInvoices = generatedInvoices.filter(bk => {
+      const invoiceNo = bk.generatedInvoiceNo;
+      return (
+        invoiceNo.toLowerCase().includes(q) ||
+        (bk.name && bk.name.toLowerCase().includes(q))
+      );
+    });
+  }
 
   if (selectedBooking) {
     return (
@@ -1493,6 +1718,16 @@ function InvoicesView({ bookings }: { bookings: any[] }) {
   }
 
   return (
+    <>
+    <div className="mb-6 animate-reveal">
+      <input 
+        type="text" 
+        placeholder="Search by Invoice ID or Customer Name..." 
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        className="w-full md:w-1/2 lg:w-1/3 px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium text-brand-blue-deep placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-blue/50 focus:border-brand-blue transition-all shadow-sm"
+      />
+    </div>
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden animate-reveal">
       {generatedInvoices.length === 0 ? (
         <div className="p-12 text-center text-slate-500">
@@ -1514,7 +1749,7 @@ function InvoicesView({ bookings }: { bookings: any[] }) {
             </thead>
             <tbody className="divide-y divide-slate-100">
               {generatedInvoices.map((bk) => {
-                const invoiceNo = `INV-${new Date(bk.createdAt || Date.now()).getFullYear()}-${bk._id?.slice(-6).toUpperCase()}`;
+                const invoiceNo = bk.generatedInvoiceNo;
                 const rate = 6000;
                 const total = rate * (bk.persons || 1);
                 
@@ -1545,5 +1780,6 @@ function InvoicesView({ bookings }: { bookings: any[] }) {
         </div>
       )}
     </div>
+    </>
   );
 }

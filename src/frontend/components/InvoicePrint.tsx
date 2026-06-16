@@ -12,6 +12,45 @@ const GREEN = "#1E8E3E";
 
 export function InvoicePrint({ booking }: { booking: any }) {
   const [scale, setScale] = useState(1);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const safeDate = (dateStr: string) => {
+    if (!dateStr) return new Date();
+    const d = new Date(dateStr);
+    return isNaN(d.getTime()) ? new Date() : d;
+  };
+  
+  const [data, setData] = useState({
+    invoiceNo: booking.generatedInvoiceNo || `INV-${safeDate(booking.createdAt).getFullYear()}-${booking._id ? booking._id.slice(-6).toUpperCase() : '0001'}`,
+    invoiceDate: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+    bookingId: booking.generatedBookingId || booking.bookingId || booking._id?.slice(-8).toUpperCase() || '',
+    travelDate: format(safeDate(booking.travelDate), 'dd MMM yyyy'),
+    customerName: booking.customerName || '',
+    customerPhone: booking.customerPhone || '',
+    packageName: booking.packageId?.name || booking.packageName || 'Custom Trip',
+    travelDateTime: format(safeDate(booking.travelDate), 'dd MMM yyyy, HH:mm'),
+    pickupPoint: booking.pickupPoint || 'Pune',
+    rate: 6000,
+    persons: booking.persons || 1,
+    paymentStatus: booking.paymentStatus || 'PENDING'
+  });
+
+  useEffect(() => {
+    setData({
+      invoiceNo: booking.generatedInvoiceNo || `INV-${safeDate(booking.createdAt).getFullYear()}-${booking._id ? booking._id.slice(-6).toUpperCase() : '0001'}`,
+      invoiceDate: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+      bookingId: booking.generatedBookingId || booking.bookingId || booking._id?.slice(-8).toUpperCase() || '',
+      travelDate: format(safeDate(booking.travelDate), 'dd MMM yyyy'),
+      customerName: booking.customerName || '',
+      customerPhone: booking.customerPhone || '',
+      packageName: booking.packageId?.name || booking.packageName || 'Custom Trip',
+      travelDateTime: format(safeDate(booking.travelDate), 'dd MMM yyyy, HH:mm'),
+      pickupPoint: booking.pickupPoint || 'Pune',
+      rate: 6000,
+      persons: booking.persons || 1,
+      paymentStatus: booking.paymentStatus || 'PENDING'
+    });
+  }, [booking]);
 
   useEffect(() => {
     // Auto fit to screen on mobile
@@ -20,18 +59,11 @@ export function InvoicePrint({ booking }: { booking: any }) {
     }
   }, []);
 
-  const safeDate = (dateStr: string) => {
-    if (!dateStr) return new Date();
-    const d = new Date(dateStr);
-    return isNaN(d.getTime()) ? new Date() : d;
+  const totalAmount = data.rate * data.persons;
+  
+  const updateData = (key: string, value: any) => {
+    setData(prev => ({ ...prev, [key]: value }));
   };
-  const invoiceNo = `INV-${safeDate(booking.createdAt).getFullYear()}-${booking._id ? booking._id.slice(-6).toUpperCase() : '0001'}`;
-  const invoiceDate = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-  const dueDate = safeDate(booking.travelDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-
-  // Rate logic: we can just invent a dummy rate for now or calculate based on persons if it's missing
-  const rate = 6000;
-  const totalAmount = rate * (booking.persons || 1);
 
   return (
     <div className="min-h-screen bg-[#eef0f3] py-6 print:p-0 print:bg-white w-full overflow-x-auto print:overflow-visible relative flex flex-col items-center">
@@ -46,8 +78,8 @@ export function InvoicePrint({ booking }: { booking: any }) {
         .script { font-family: 'Brush Script MT', 'Lucida Handwriting', cursive; }
       `}</style>
 
-      {/* ZOOM CONTROLS */}
-      <div className="no-print sticky top-4 z-50 mb-8 flex justify-center">
+      {/* CONTROLS */}
+      <div className="no-print sticky top-4 z-50 mb-8 flex justify-center gap-4">
         <div className="bg-white/90 backdrop-blur-md rounded-full shadow-lg border border-slate-200 px-4 py-2 flex items-center gap-3">
           <button onClick={() => setScale(s => Math.max(0.3, s - 0.1))} className="p-1.5 hover:bg-slate-100 rounded-full transition-colors text-slate-700" title="Zoom Out">
             <ZoomOut size={20} />
@@ -60,6 +92,15 @@ export function InvoicePrint({ booking }: { booking: any }) {
           <button onClick={() => setScale(window.innerWidth < 800 ? window.innerWidth / 840 : 1)} className="p-1.5 hover:bg-slate-100 rounded-full transition-colors text-slate-700" title="Fit to Screen">
             <Maximize size={18} />
           </button>
+        </div>
+
+        <div className="bg-white/90 backdrop-blur-md rounded-full shadow-lg border border-slate-200 px-4 py-2 flex items-center gap-3">
+          {isEditing ? (
+            <button onClick={() => setIsEditing(false)} className="px-3 py-1 bg-green-600 text-white rounded font-bold text-sm">Save Invoice</button>
+          ) : (
+            <button onClick={() => setIsEditing(true)} className="px-3 py-1 bg-[#0B3D91] text-white rounded font-bold text-sm">Edit Invoice</button>
+          )}
+          <button onClick={() => window.print()} className="px-3 py-1 bg-slate-800 text-white rounded font-bold text-sm">Print</button>
         </div>
       </div>
 
@@ -122,14 +163,14 @@ export function InvoicePrint({ booking }: { booking: any }) {
             <div className="mt-6 rounded-[10px] border" style={{ borderColor: BORDER }}>
               <div className="grid grid-cols-2">
                 <div className="p-3 border-r" style={{ borderColor: BORDER }}>
-                  <InfoLine label="Invoice No." value={invoiceNo} />
+                  <InfoLine label="Invoice No." value={data.invoiceNo} isEditing={isEditing} onChange={(v: string) => updateData("invoiceNo", v)} />
                   <div className="mt-2" />
-                  <InfoLine label="Invoice Date" value={format(safeDate(booking.createdAt), 'dd MMM yyyy')} />
+                  <InfoLine label="Invoice Date" value={data.invoiceDate} isEditing={isEditing} onChange={(v: string) => updateData("invoiceDate", v)} />
                 </div>
                 <div className="p-3">
-                  <InfoLine label="Booking ID" value={booking.bookingId || booking._id?.slice(-8).toUpperCase()} />
+                  <InfoLine label="Booking ID" value={data.bookingId} isEditing={isEditing} onChange={(v: string) => updateData("bookingId", v)} />
                   <div className="mt-2" />
-                  <InfoLine label="Travel Date" value={format(safeDate(booking.travelDate), 'dd MMM yyyy')} />
+                  <InfoLine label="Travel Date" value={data.travelDate} isEditing={isEditing} onChange={(v: string) => updateData("travelDate", v)} />
                 </div>
               </div>
             </div>
@@ -138,17 +179,17 @@ export function InvoicePrint({ booking }: { booking: any }) {
             <div className="mt-6 grid grid-cols-2 gap-6">
               <Card title="BILL TO">
                 <div className="flex flex-col h-full gap-1">
-                  <DetailRow label="Name" value={booking.customerName} />
-                  <DetailRow label="Mobile" value={booking.customerPhone} />
+                  <DetailRow label="Name" value={data.customerName} isEditing={isEditing} onChange={(v: string) => updateData("customerName", v)} />
+                  <DetailRow label="Mobile" value={data.customerPhone} isEditing={isEditing} onChange={(v: string) => updateData("customerPhone", v)} />
 
                 </div>
               </Card>
 
               <Card title="TRIP DETAILS">
-                <DetailRow label="Package Name" value={booking.packageId?.name || booking.packageName || 'Custom Trip'} />
-                <DetailRow label="Travel Date" value={format(safeDate(booking.travelDate), 'dd MMM yyyy, HH:mm')} />
+                <DetailRow label="Package Name" value={data.packageName} isEditing={isEditing} onChange={(v: string) => updateData("packageName", v)} />
+                <DetailRow label="Travel Date" value={data.travelDateTime} isEditing={isEditing} onChange={(v: string) => updateData("travelDateTime", v)} />
 
-                <DetailRow label="Pickup Point" value={booking.pickupPoint || 'Pune'} />
+                <DetailRow label="Pickup Point" value={data.pickupPoint} isEditing={isEditing} onChange={(v: string) => updateData("pickupPoint", v)} />
               </Card>
             </div>
 
@@ -166,8 +207,12 @@ export function InvoicePrint({ booking }: { booking: any }) {
                 <tbody>
                   <tr>
                     <td className="px-5 py-4 font-medium text-[#222]">Package Price (Per Person)</td>
-                    <td className="px-5 py-4 text-center font-medium text-[#222]">{booking.persons || 1}</td>
-                    <td className="px-5 py-4 text-center font-medium text-[#222]">{rate.toLocaleString()}</td>
+                    <td className="px-5 py-4 text-center font-medium text-[#222]">
+                      {isEditing ? <input type="number" className="w-16 text-center border border-slate-300 rounded px-1 py-0.5 outline-none focus:ring-1 focus:ring-brand-blue" value={data.persons} onChange={e => updateData("persons", parseInt(e.target.value) || 0)} /> : data.persons}
+                    </td>
+                    <td className="px-5 py-4 text-center font-medium text-[#222]">
+                      {isEditing ? <input type="number" className="w-20 text-center border border-slate-300 rounded px-1 py-0.5 outline-none focus:ring-1 focus:ring-brand-blue" value={data.rate} onChange={e => updateData("rate", parseInt(e.target.value) || 0)} /> : data.rate.toLocaleString()}
+                    </td>
                     <td className="px-5 py-4 text-center font-medium text-[#222]">{totalAmount.toLocaleString()}</td>
                   </tr>
                 </tbody>
@@ -192,9 +237,13 @@ export function InvoicePrint({ booking }: { booking: any }) {
                   <div className="mt-1 flex items-center text-[13px]">
                     <div className="w-[130px] font-medium">Payment Status</div>
                     <div className="w-3">:</div>
-                    <span className={`ml-2 rounded-sm px-2 py-0.5 text-[11px] font-bold text-white ${booking.paymentStatus === 'Completed' ? 'bg-green-500' : 'bg-orange-500'}`}>
-                      {booking.paymentStatus?.toUpperCase() || 'PENDING'}
-                    </span>
+                    {isEditing ? (
+                      <input className="ml-2 flex-1 border border-slate-300 rounded px-1 py-0.5 outline-none focus:ring-1 focus:ring-brand-blue" value={data.paymentStatus} onChange={e => updateData("paymentStatus", e.target.value)} />
+                    ) : (
+                      <span className={`ml-2 rounded-sm px-2 py-0.5 text-[11px] font-bold text-white ${data.paymentStatus?.toLowerCase() === 'completed' || data.paymentStatus?.toLowerCase() === 'paid' ? 'bg-green-500' : 'bg-orange-500'}`}>
+                        {data.paymentStatus?.toUpperCase() || 'PENDING'}
+                      </span>
+                    )}
                   </div>
                 </div>
               </Card>
@@ -253,12 +302,18 @@ export function InvoicePrint({ booking }: { booking: any }) {
   );
 }
 
-function InfoLine({ label, value }: { label: string; value: string }) {
+function InfoLine({ label, value, isEditing, onChange }: any) {
   return (
-    <div className="flex text-[13px]">
+    <div className="flex text-[13px] items-center">
       <div className="w-[120px] font-medium">{label}</div>
       <div className="w-3">:</div>
-      <div className="ml-2 font-semibold">{value}</div>
+      <div className="ml-2 font-semibold flex-1">
+        {isEditing ? (
+          <input className="w-full border border-slate-300 rounded px-1 py-0.5 outline-none focus:ring-1 focus:ring-brand-blue" value={value} onChange={e => onChange(e.target.value)} />
+        ) : (
+          value
+        )}
+      </div>
     </div>
   );
 }
@@ -274,12 +329,18 @@ function Card({ title, children }: { title: string; children: React.ReactNode })
   );
 }
 
-function DetailRow({ label, value }: { label: string; value: string }) {
+function DetailRow({ label, value, isEditing, onChange }: any) {
   return (
-    <div className="flex py-1 text-[13px]">
+    <div className="flex py-1 text-[13px] items-center">
       <div className="w-[130px] font-medium">{label}</div>
       <div className="w-3">:</div>
-      <div className="ml-2">{value}</div>
+      <div className="ml-2 flex-1">
+        {isEditing ? (
+          <input className="w-full border border-slate-300 rounded px-1 py-0.5 outline-none focus:ring-1 focus:ring-brand-blue" value={value} onChange={e => onChange(e.target.value)} />
+        ) : (
+          value
+        )}
+      </div>
     </div>
   );
 }

@@ -27,7 +27,19 @@ export function Hero({ lang, t, tripOptions = [] }: { lang: "en" | "mr"; t: type
   const [success, setSuccess] = useState(false);
 
   const selectedTripData = tripOptions.find(t => t._id === selectedTrip);
-  const validDates = selectedTripData ? selectedTripData.dates : [];
+  
+  const isUpcomingDate = (dateStr: string) => {
+    const match = dateStr.match(/(\d+)\s+([a-zA-Z]+)(?:\s+(\d{4}))?/);
+    if (!match) return true;
+    const now = new Date();
+    const year = match[3] || now.getFullYear();
+    const parsedDate = new Date(`${match[1]} ${match[2]} ${year}`);
+    if (isNaN(parsedDate.getTime())) return true;
+    now.setHours(0, 0, 0, 0);
+    return parsedDate >= now;
+  };
+
+  const validDates = selectedTripData?.dates ? selectedTripData.dates.filter(isUpcomingDate) : [];
 
   return (
     <section
@@ -230,7 +242,23 @@ export function Hero({ lang, t, tripOptions = [] }: { lang: "en" | "mr"; t: type
               </FieldBox>
 
               <FieldBox icon={<Calendar className="h-5 w-5" />} label={t.formDate}>
-                <input type="datetime-local" name="travelDate" required className="w-full bg-transparent text-[14px] md:text-[15px] font-semibold text-brand-blue-deep focus:outline-none cursor-pointer" />
+                {validDates && validDates.length > 0 ? (
+                  <div className="relative flex items-center w-full">
+                    <select
+                      name="travelDate"
+                      required
+                      className="w-full appearance-none bg-transparent text-[14px] md:text-[15px] font-semibold text-brand-blue-deep focus:outline-none cursor-pointer"
+                    >
+                      <option value="">Select a date</option>
+                      {validDates.map((date: string) => (
+                        <option key={date} value={date}>{date}</option>
+                      ))}
+                    </select>
+                    <ChevronDown className="absolute right-0 h-4 w-4 text-slate-400 pointer-events-none" />
+                  </div>
+                ) : (
+                  <input type="datetime-local" name="travelDate" required className="w-full bg-transparent text-[14px] md:text-[15px] font-semibold text-brand-blue-deep focus:outline-none cursor-pointer" />
+                )}
               </FieldBox>
 
               <button

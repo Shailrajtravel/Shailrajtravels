@@ -62,12 +62,12 @@ export function ToursSection({ lang, t, packages, tripOptions }: { lang: 'mr' | 
           <div className="flex items-center gap-4 mb-4">
             <div className="h-[1px] w-10 bg-brand-green" />
             <span className="text-[13px] md:text-[15px] font-bold tracking-[0.2em] text-brand-green-dark uppercase leading-none">
-              PACKAGES
+              {t.toursSubtitle || "PACKAGES"}
             </span>
             <div className="h-[1px] w-10 bg-brand-green" />
           </div>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold font-display text-brand-blue-deep leading-tight">
-            Popular <span className="text-brand-green-dark">Journeys</span>
+            {t.toursTitlePrefix || "Popular"} <span className="text-brand-green-dark">{t.toursTitleHighlight || "Journeys"}</span>
           </h2>
         </div>
 

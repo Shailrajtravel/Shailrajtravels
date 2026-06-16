@@ -2,6 +2,8 @@ import React from 'react';
 import { createFileRoute, Link, useLoaderData } from '@tanstack/react-router';
 import { getToursFn } from '../backend/lib/tours';
 import {  generateSEO  } from '../backend/lib/seo';
+import { useLanguage } from './__root';
+import { translations } from '../frontend/features/core/i18n';
 
 export const Route = createFileRoute('/tours/')({
   loader: () => getToursFn(),
@@ -20,13 +22,15 @@ export const Route = createFileRoute('/tours/')({
 
 function ToursListingPage() {
   const tours = useLoaderData({ from: '/tours/' });
+  const { lang } = useLanguage();
+  const t = translations[lang];
 
   return (
     <main className="w-full bg-white pb-16 pt-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <div className="text-center mb-12">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-brand-blue-deep mb-4">Our Pilgrimage Tours</h1>
+        <h1 className="text-4xl md:text-5xl font-extrabold text-brand-blue-deep mb-4">{t.toursIndexTitle || "Our Pilgrimage Tours"}</h1>
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-          Embark on a spiritual journey with our perfectly planned, comfortable, and guided pilgrimage tour packages from Pune.
+          {t.toursIndexDesc || "Embark on a spiritual journey with our perfectly planned, comfortable, and guided pilgrimage tour packages from Pune."}
         </p>
       </div>
 
@@ -41,7 +45,7 @@ function ToursListingPage() {
                 <h2 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-brand-orange transition-colors">{tour.title}</h2>
                 <p className="text-sm text-gray-600 line-clamp-3 mb-4">{tour.heroContent.description}</p>
                 <div className="mt-auto">
-                  <span className="text-brand-orange font-semibold group-hover:underline">View Tour Details &rarr;</span>
+                  <span className="text-brand-orange font-semibold group-hover:underline">{t.toursIndexViewDetails || "View Tour Details \u2192"}</span>
                 </div>
               </div>
             </div>
