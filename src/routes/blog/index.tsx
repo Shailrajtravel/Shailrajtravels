@@ -203,7 +203,7 @@ function BlogIndexPage() {
         )}
       </main>
       
-      <Footer t={t} />
+      <Footer t={t} lang={lang} />
     </div>
   );
 }

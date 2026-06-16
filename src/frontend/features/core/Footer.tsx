@@ -3,14 +3,14 @@ import { getToursFn } from '../../../backend/lib/tours';
 import { Phone, Mail, MapPin, Instagram, Facebook, Youtube, ArrowRight } from 'lucide-react';
 import { translations } from './i18n';
 
-export function FooterSection({ t }: { t: typeof translations.mr }) {
+export function FooterSection({ t, lang = 'en' }: { t: typeof translations.mr, lang?: string }) {
   const [popularTours, setPopularTours] = useState<{label: string, href: string}[]>([]);
 
   useEffect(() => {
-    getToursFn()
+    getToursFn({ data: { lang } })
       .then((tours: any[]) => {
         if (tours) {
-          setPopularTours(tours.slice(0, 4).map(t => ({
+          setPopularTours(tours.reverse().slice(0, 6).map(t => ({
             label: t.title,
             href: `/tours/${t.slug}`
           })));

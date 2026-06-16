@@ -50,7 +50,7 @@ function HomePage() {
         <ReviewsSection lang={lang} t={t} />
         <GallerySection t={t} photos={galleryPhotos} />
       </main>
-      <Footer t={t} />
+      <Footer t={t} lang={lang} />
     </div>
   );
 }

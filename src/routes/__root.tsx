@@ -5,6 +5,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useNavigate,
   HeadContent,
   Scripts,
   useLocation,
@@ -82,7 +83,12 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
+export type Language = "mr" | "en";
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  validateSearch: (search: Record<string, unknown>) => {
+    return { lang: (search.lang === 'mr' ? 'mr' : 'en') as Language };
+  },
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -122,8 +128,6 @@ function RootShell({ children }: { children: ReactNode }) {
     </html>
   );
 }
-
-export type Language = "mr" | "en";
 
 export const LanguageContext = createContext<{
   lang: Language;
@@ -178,12 +182,17 @@ function FloatingWhatsApp() {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  const [lang, setLang] = useState<Language>("en");
+  const search = Route.useSearch();
+  const [langState, setLangState] = useState<Language>("en");
+  const lang = (search.lang || langState) as Language;
+  const navigate = useNavigate();
   const location = useLocation();
   const isAdmin = location.pathname.startsWith('/admin');
 
   const toggleLang = () => {
-    setLang((l) => (l === "mr" ? "en" : "mr"));
+    const newLang = lang === "mr" ? "en" : "mr";
+    setLangState(newLang);
+    navigate({ search: (old: any) => ({ ...old, lang: newLang }), replace: true });
   };
 
   return (
@@ -200,4 +209,4 @@ function RootComponent() {
       </LanguageContext.Provider>
     </QueryClientProvider>
   );
-}
+}

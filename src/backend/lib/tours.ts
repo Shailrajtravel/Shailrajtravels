@@ -5,16 +5,26 @@ import { ObjectId } from 'mongodb';
 import { uploadImageToCloudinary } from './cloudinary';
 import { logAuditAction } from './audit';
 
-// Get all tours
-export const getToursFn = createServerFn({ method: 'POST' }).handler(async () => {
+export const getToursFn = createServerFn({ method: 'POST' })
+  .validator((data?: { lang?: string }) => data || {})
+  .handler(async ({ data }) => {
   try {
     const client = await clientPromise;
     const db = client.db('shailraj');
-    const tours = await db.collection('tours').find({}).sort({ createdAt: -1 }).toArray();
+    
+    const query: any = {};
+    if (data.lang) {
+      query.lang = data.lang;
+    } else {
+      query.lang = { $in: ['en', null] };
+    }
+    
+    const tours = await db.collection('tours').find(query).sort({ createdAt: -1 }).toArray();
     
     return tours.map((t: any) => ({
       _id: t._id.toString(),
       slug: t.slug,
+      lang: t.lang || 'en',
       title: t.title,
       metaTitle: t.metaTitle,
       metaDescription: t.metaDescription,
@@ -142,8 +152,15 @@ export const deleteTourFn = createServerFn({ method: 'POST' })
     const db = client.db('shailraj');
     
     const tour = await db.collection('tours').findOne({ _id: new ObjectId(data.id) });
-    await db.collection('tours').deleteOne({ _id: new ObjectId(data.id) });
     
-    await logAuditAction({ data: { action: "Delete Tour", entityType: "Tour", details: `Deleted tour: ${tour?.title || data.id}`, entityId: data.id } });
+    if (tour && tour.slug) {
+      // Delete all language versions of the tour
+      await db.collection('tours').deleteMany({ slug: tour.slug });
+      await logAuditAction({ data: { action: "Delete Tour", entityType: "Tour", details: `Deleted all language versions of tour: ${tour.title}`, entityId: data.id } });
+    } else {
+      await db.collection('tours').deleteOne({ _id: new ObjectId(data.id) });
+      await logAuditAction({ data: { action: "Delete Tour", entityType: "Tour", details: `Deleted tour: ${tour?.title || data.id}`, entityId: data.id } });
+    }
+    
     return { success: true };
   });

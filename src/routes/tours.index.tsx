@@ -6,7 +6,9 @@ import { useLanguage } from './__root';
 import { translations } from '../frontend/features/core/i18n';
 
 export const Route = createFileRoute('/tours/')({
-  loader: () => getToursFn(),
+  validateSearch: (search: Record<string, unknown>) => ({ lang: search.lang as string | undefined }),
+  loaderDeps: ({ search: { lang } }) => ({ lang }),
+  loader: ({ deps: { lang } }) => getToursFn({ data: { lang: lang || 'en' } }),
   head: () => ({
     meta: generateSEO({
       title: 'Pilgrimage Tours from Pune | Shailraj Travels',

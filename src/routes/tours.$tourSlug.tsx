@@ -6,8 +6,10 @@ import {  generateSEO  } from '../backend/lib/seo';
 import { generateProductSchema } from '../backend/lib/schema-generators';
 
 export const Route = createFileRoute('/tours/$tourSlug')({
-  loader: async ({ params }) => {
-    const tour = await getTourBySlugFn({ data: { slug: params.tourSlug } });
+  validateSearch: (search: Record<string, unknown>) => ({ lang: search.lang as string | undefined }),
+  loaderDeps: ({ search: { lang } }) => ({ lang }),
+  loader: async ({ params, deps: { lang } }) => {
+    const tour = await getTourBySlugFn({ data: { slug: params.tourSlug, lang: lang || 'en' } });
     if (!tour) {
       throw notFound();
     }

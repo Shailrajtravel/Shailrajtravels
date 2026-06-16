@@ -43,7 +43,7 @@ function MarathiHomePage() {
         <ReviewsSection lang={lang} t={t} />
         <GallerySection t={t} photos={[]} />
       </main>
-      <Footer t={t} />
+      <Footer t={t} lang={lang} />
     </div>
   );
 }

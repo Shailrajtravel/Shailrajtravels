@@ -96,7 +96,7 @@ function BlogPage() {
           </div>
         )}
       </main>
-      <Footer t={t} />
+      <Footer t={t} lang={lang} />
     </div>
   );
 }
