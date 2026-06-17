@@ -31,7 +31,7 @@ function CancellationPolicyPage() {
         </ul>
 
         <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">2. Procedure for Cancellation</h2>
-        <p>All cancellation requests must be submitted in writing via email to cancellations@shailrajtravels.com or by calling our customer service line directly. Verbal cancellations made to third parties will not be considered valid.</p>
+        <p>All cancellation requests must be submitted in writing via email to shailrajtravels9999@gmail.com or by calling our customer service line directly. Verbal cancellations made to third parties will not be considered valid.</p>
 
         <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">3. Special Circumstances</h2>
         <p>In cases of medical emergencies or unforeseeable personal tragedies, cancellation waivers may be considered at the sole discretion of the Shailraj Travels management, requiring official documentation.</p>

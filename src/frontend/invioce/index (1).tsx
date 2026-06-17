@@ -137,7 +137,7 @@ function Invoice({ data, setData, isEditing }: any) {
         <span className="flex items-center gap-1.5"><Phone className="h-4 w-4" style={{ color: DARK }} /> +91 97634 33556</span>
       </div>
       <div className="mt-1 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-[13px] font-medium">
-        <span className="flex items-center gap-1.5"><Mail className="h-4 w-4" style={{ color: DARK }} /> info@shailrajtravels.com</span>
+        <span className="flex items-center gap-1.5"><Mail className="h-4 w-4" style={{ color: DARK }} /> shailrajtravels9999@gmail.com</span>
         <span style={{ color: "#bbb" }}>|</span>
         <span className="flex items-center gap-1.5"><Globe className="h-4 w-4" style={{ color: DARK }} /> www.shailrajtravels.com</span>
       </div>
@@ -277,7 +277,7 @@ function Invoice({ data, setData, isEditing }: any) {
       >
         <span className="flex items-center gap-2"><Phone className="h-4 w-4" /> +91 97634 33556</span>
         <span className="opacity-50">|</span>
-        <span className="flex items-center gap-2"><Mail className="h-4 w-4" /> info@shailrajtravels.com</span>
+        <span className="flex items-center gap-2"><Mail className="h-4 w-4" /> shailrajtravels9999@gmail.com</span>
         <span className="opacity-50">|</span>
         <span className="flex items-center gap-2"><Globe className="h-4 w-4" /> www.shailrajtravels.com</span>
       </div>

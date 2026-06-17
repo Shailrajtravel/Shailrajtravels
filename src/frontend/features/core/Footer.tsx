@@ -153,8 +153,8 @@ export function FooterSection({ t, lang = 'en' }: { t: typeof translations.mr, l
                 <div className="w-8 h-8 rounded-full bg-slate-800/50 flex items-center justify-center shrink-0 group-hover:bg-brand-green/20 transition-colors">
                   <Mail className="w-4 h-4 text-brand-green" />
                 </div>
-                <a href="mailto:contact@shailrajtravels.com" className="whitespace-nowrap hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green rounded-sm overflow-hidden text-ellipsis">
-                  contact@shailrajtravels.com
+                <a href="mailto:shailrajtravels9999@gmail.com" className="whitespace-nowrap hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green rounded-sm overflow-hidden text-ellipsis">
+                  shailrajtravels9999@gmail.com
                 </a>
               </li>
               <li className="mt-2 rounded-xl overflow-hidden h-[150px] border border-slate-700/50 shadow-lg relative group">

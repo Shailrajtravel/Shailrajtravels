@@ -32,7 +32,7 @@ function RefundPolicyPage() {
         <p>In the rare event that Shailraj Travels must cancel a tour due to unforeseen circumstances (e.g., natural disasters, strikes, minimum occupancy not met), passengers will be offered a full 100% refund or an option to reschedule to the next available date.</p>
 
         <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">4. Contact for Refunds</h2>
-        <p>To follow up on a refund request, please email billing@shailrajtravels.com with your booking ID.</p>
+        <p>To follow up on a refund request, please email shailrajtravels9999@gmail.com with your booking ID.</p>
       </div>
     </main>
   );

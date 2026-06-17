@@ -95,7 +95,7 @@ function ContactPage() {
                 <Mail className="w-6 h-6 text-brand-orange shrink-0 mt-1" />
                 <div>
                   <h3 className="font-semibold text-gray-900">Email</h3>
-                  <p>contact@shailrajtravels.com</p>
+                  <p>shailrajtravels9999@gmail.com</p>
                 </div>
               </div>
             </div>
