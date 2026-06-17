@@ -368,9 +368,9 @@ export function InvoicePrint({
               className="absolute bottom-0 left-0 w-full flex items-center justify-around px-6 py-3 text-[13px] font-medium text-white"
               style={{ background: DARK }}
             >
-              <span className="flex items-center gap-2"><Phone className="h-4 w-4" />+91 72765 31897</span>
+              <span className="flex items-center gap-2"><Phone className="h-4 w-4" />+91 97634 33556</span>
               <span className="opacity-50">|</span>
-              <span className="flex items-center gap-2"><Mail className="h-4 w-4" /> shailrajtravels9999@gmail.com.com</span>
+              <span className="flex items-center gap-2"><Mail className="h-4 w-4" /> shailrajtravels9999@gmail.com</span>
               <span className="opacity-50">|</span>
               <span className="flex items-center gap-2"><Globe className="h-4 w-4" /> www.shailrajtravels.com</span>
             </div>
