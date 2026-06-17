@@ -66,7 +66,7 @@ export function FeaturesSection({ lang, t }: { lang: 'mr' | 'en', t: any }) {
           <a href="#about" className="flex w-full sm:w-[220px] items-center justify-center gap-2 bg-[#10A34A] hover:bg-[#0D8A3E] text-white rounded-lg px-6 py-4 text-[16px] font-semibold transition-all shadow-sm hover:shadow-[0_8px_20px_rgba(16,163,74,0.25)] hover:-translate-y-0.5">
             {t.btnExplore} <ArrowRight className="w-5 h-5" />
           </a>
-          <a href="tel:+919876543210" className="flex w-full sm:w-[220px] items-center justify-center gap-2 bg-white border-2 border-[#10A34A] text-[#10A34A] hover:bg-[#10A34A]/5 rounded-lg px-6 py-4 text-[16px] font-semibold transition-all hover:shadow-sm hover:-translate-y-0.5">
+          <a href="tel:+919763433556" className="flex w-full sm:w-[220px] items-center justify-center gap-2 bg-white border-2 border-[#10A34A] text-[#10A34A] hover:bg-[#10A34A]/5 rounded-lg px-6 py-4 text-[16px] font-semibold transition-all hover:shadow-sm hover:-translate-y-0.5">
             {t.btnContact} <ArrowRight className="w-5 h-5" />
           </a>
         </div>

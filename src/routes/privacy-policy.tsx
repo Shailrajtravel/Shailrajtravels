@@ -42,7 +42,7 @@ function PrivacyPolicyPage() {
         <p>We implement appropriate technical and organizational security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.</p>
 
         <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">4. Contact Us</h2>
-        <p>If you have any questions about this Privacy Policy, please contact us at privacy@shailrajtravels.com or call us at +91 98765 43210.</p>
+        <p>If you have any questions about this Privacy Policy, please contact us at privacy@shailrajtravels.com or call us at +91 97634 33556.</p>
       </div>
     </main>
   );

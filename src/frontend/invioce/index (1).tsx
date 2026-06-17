@@ -134,7 +134,7 @@ function Invoice({ data, setData, isEditing }: any) {
       <div className="mt-3 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-[13px] font-medium" style={{ color: "#222" }}>
         <span className="flex items-center gap-1.5"><MapPin className="h-4 w-4" style={{ color: DARK }} /> Pune, Maharashtra, India</span>
         <span style={{ color: "#bbb" }}>|</span>
-        <span className="flex items-center gap-1.5"><Phone className="h-4 w-4" style={{ color: DARK }} /> +91 98765 43210</span>
+        <span className="flex items-center gap-1.5"><Phone className="h-4 w-4" style={{ color: DARK }} /> +91 97634 33556</span>
       </div>
       <div className="mt-1 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-[13px] font-medium">
         <span className="flex items-center gap-1.5"><Mail className="h-4 w-4" style={{ color: DARK }} /> info@shailrajtravels.com</span>
@@ -275,7 +275,7 @@ function Invoice({ data, setData, isEditing }: any) {
         className="-mx-[10mm] mt-4 flex items-center justify-around px-6 py-3 text-[13px] font-medium text-white"
         style={{ background: DARK }}
       >
-        <span className="flex items-center gap-2"><Phone className="h-4 w-4" /> +91 98765 43210</span>
+        <span className="flex items-center gap-2"><Phone className="h-4 w-4" /> +91 97634 33556</span>
         <span className="opacity-50">|</span>
         <span className="flex items-center gap-2"><Mail className="h-4 w-4" /> info@shailrajtravels.com</span>
         <span className="opacity-50">|</span>

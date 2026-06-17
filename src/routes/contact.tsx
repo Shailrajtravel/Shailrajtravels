@@ -88,7 +88,7 @@ function ContactPage() {
                 <Phone className="w-6 h-6 text-brand-orange shrink-0 mt-1" />
                 <div>
                   <h3 className="font-semibold text-gray-900">Phone</h3>
-                  <p>+91 98765 43210</p>
+                  <p>+91 97634 33556</p>
                 </div>
               </div>
               <div className="flex items-start gap-4 text-gray-700">

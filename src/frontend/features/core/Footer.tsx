@@ -145,8 +145,8 @@ export function FooterSection({ t, lang = 'en' }: { t: typeof translations.mr, l
                 <div className="w-8 h-8 rounded-full bg-slate-800/50 flex items-center justify-center shrink-0 group-hover:bg-brand-green/20 transition-colors">
                   <Phone className="w-4 h-4 text-brand-green" />
                 </div>
-                <a href="tel:+919876543210" className="whitespace-nowrap hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green rounded-sm">
-                  +91 98765 43210
+                <a href="tel:+919763433556" className="whitespace-nowrap hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green rounded-sm">
+                  +91 97634 33556
                 </a>
               </li>
               <li className="flex items-center gap-3.5 group">

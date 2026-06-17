@@ -221,7 +221,7 @@ export function InvoicePrint({
                 <div className="-mt-5 text-[15px] font-medium text-slate-600 flex items-center justify-center gap-4 w-full">
                   <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5" /> Pune, Maharashtra, India</span>
                   <span className="opacity-50">|</span>
-                  <span className="flex items-center gap-1"><Phone className="h-3.5 w-3.5" /> +91 98765 43210</span>
+                  <span className="flex items-center gap-1"><Phone className="h-3.5 w-3.5" /> +91 97634 33556</span>
                 </div>
                 <div className="mt-1 text-[15px] font-medium text-slate-600 flex items-center justify-center gap-4 w-full">
                   <span className="flex items-center gap-1"><Mail className="h-3.5 w-3.5" /> info@shailrajtravels.com</span>
