@@ -3,7 +3,7 @@ import { createFileRoute, useNavigate, redirect } from '@tanstack/react-router';
 import { verifyAdminFn } from '../backend/lib/auth';
 import { getPackagesFn, createPackageFn, updatePackageFn, deletePackageFn } from '../backend/lib/packages';
 import { getReviewsFn, deleteReviewFn } from '../backend/lib/reviews';
-import { getTripOptionsFn, createTripOptionFn, updateTripOptionFn, deleteTripOptionFn, getBookingsFn, deleteBookingFn, updateBookingStatusFn } from '../backend/lib/bookings';
+import { getTripOptionsFn, createTripOptionFn, updateTripOptionFn, deleteTripOptionFn, getBookingsFn, deleteBookingFn, updateBookingStatusFn, updateBookingPaymentStatusFn } from '../backend/lib/bookings';
 import { getGalleryPhotosFn, addGalleryPhotoFn, deleteGalleryPhotoFn } from '../backend/lib/gallery';
 import { getAuditLogsFn } from '../backend/lib/audit';
 import { getToursFn, deleteTourFn } from '../backend/lib/tours';
@@ -11,7 +11,7 @@ import { getWhatsAppStatusFn, restartWhatsAppFn } from '../backend/lib/whatsapp-
 import { ToursAdmin } from '../frontend/features/admin/ToursAdmin';
 import * as XLSX from 'xlsx-js-style';
 import { LayoutDashboard, Package, LogOut, Plus, Trash2, Edit, Loader2, Search, ArrowLeft, Image as ImageIcon, MessageSquare, Menu, X, Map, CalendarCheck, MoreVertical, Clock, Users, Eye, FileSpreadsheet, Download, Activity, Printer, MapPin, Lock, BadgeIndianRupee, Smartphone } from 'lucide-react';
-import logo from '@/frontend/assets/logo11.png';
+import logo from '@/frontend/assets/Shailraj travels-Punelogo.png';
 import { Calendar } from '@/frontend/components/ui/calendar';
 import { format } from 'date-fns';
 
@@ -48,7 +48,8 @@ function AdminPage() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<any>(null); // Shared for editing
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'packages' | 'tours' | 'reviews' | 'trips' | 'bookings' | 'gallery' | 'customers' | 'reports' | 'invoices' | 'audit' | 'revenue' | 'whatsapp'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'tours_packages' | 'reviews' | 'trips' | 'bookings' | 'gallery' | 'customers' | 'reports' | 'invoices' | 'audit' | 'revenue' | 'whatsapp'>('dashboard');
+  const [subTab, setSubTab] = useState<'tours' | 'packages'>('tours');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState<{ isOpen: boolean; id: string; type: 'package' | 'review' | 'photo' | 'trip' | 'booking' | 'tour' } | null>(null);
 
@@ -195,18 +196,11 @@ function AdminPage() {
             Dashboard
           </button>
           <button 
-            onClick={() => { setActiveTab('packages'); setIsFormOpen(false); setIsMobileMenuOpen(false); }}
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${activeTab === 'packages' ? 'bg-brand-blue-deep text-white shadow-md' : 'text-slate-500 hover:bg-slate-50 hover:text-brand-blue-deep'}`}
+            onClick={() => { setActiveTab('tours_packages'); setIsFormOpen(false); setIsMobileMenuOpen(false); }}
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${activeTab === 'tours_packages' ? 'bg-brand-blue-deep text-white shadow-md' : 'text-slate-500 hover:bg-slate-50 hover:text-brand-blue-deep'}`}
           >
             <Package className="w-5 h-5" />
-            Packages
-          </button>
-          <button 
-            onClick={() => { setActiveTab('tours'); setIsFormOpen(false); setIsMobileMenuOpen(false); }}
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${activeTab === 'tours' ? 'bg-brand-blue-deep text-white shadow-md' : 'text-slate-500 hover:bg-slate-50 hover:text-brand-blue-deep'}`}
-          >
-            <MapPin className="w-5 h-5" />
-            Popular Tours
+            Tours & Packages
           </button>
           <button 
             onClick={() => { setActiveTab('reviews'); setIsFormOpen(false); setIsMobileMenuOpen(false); }}
@@ -297,8 +291,7 @@ function AdminPage() {
             </button>
             <h1 className="text-lg sm:text-xl md:text-2xl font-bold font-display text-brand-blue-deep truncate">
               {activeTab === 'dashboard' ? 'Overview' :
-               activeTab === 'packages' ? 'Packages Management' : 
-               activeTab === 'tours' ? 'Popular Tours Management' :
+               activeTab === 'tours_packages' ? 'Tours & Packages' :
                activeTab === 'reviews' ? 'Reviews Management' :
                activeTab === 'trips' ? 'Trip Options' : 
                activeTab === 'gallery' ? 'Gallery Management' : 
@@ -311,13 +304,13 @@ function AdminPage() {
             </h1>
           </div>
           <div className="flex items-center gap-2 md:gap-4 shrink-0">
-            {(activeTab === 'packages' || activeTab === 'trips' || activeTab === 'gallery') && (
+            {(((activeTab === 'tours_packages' && subTab === 'packages') || activeTab === 'trips' || activeTab === 'gallery') && !isFormOpen) && (
               <button 
                 onClick={handleAddNew}
                 className="bg-brand-blue-deep hover:bg-brand-blue text-white px-3 py-2 md:px-5 md:py-2.5 rounded-xl font-bold flex items-center gap-1 md:gap-2 transition-colors shadow-lg shadow-brand-blue/20 text-sm md:text-base"
               >
                 <Plus className="w-4 h-4 md:w-5 md:h-5 shrink-0" />
-                <span className="hidden sm:inline">Add {activeTab === 'packages' ? 'Package' : activeTab === 'gallery' ? 'Photo' : 'Trip'}</span>
+                <span className="hidden sm:inline">Add {activeTab === 'tours_packages' && subTab === 'packages' ? 'Package' : activeTab === 'gallery' ? 'Photo' : 'Trip'}</span>
                 <span className="sm:hidden">Add</span>
               </button>
             )}
@@ -337,86 +330,116 @@ function AdminPage() {
             <DashboardOverview packages={packages} bookings={bookings} reviews={reviews} photos={galleryPhotos} />
           ) : activeTab === 'audit' ? (
             <AuditLogsPanel logs={auditLogs} />
-          ) : activeTab === 'tours' ? (
-            <ToursAdmin 
-              token={token}
-              tours={tours}
-              loadData={loadData}
-              setDeleteConfirm={setDeleteConfirm}
-            />
-          ) : activeTab === 'packages' ? (
-            isFormOpen ? (
-              <PackageForm 
-                token={token} 
-                initialData={editingItem} 
-                onClose={() => setIsFormOpen(false)} 
-                onSuccess={() => {
-                  setIsFormOpen(false);
-                  loadData();
-                }} 
-              />
-            ) : (
-              <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden animate-reveal">
-                {loading ? (
-                  <div className="p-12 flex justify-center"><Loader2 className="w-8 h-8 animate-spin text-brand-green" /></div>
-                ) : packages.length === 0 ? (
-                  <div className="p-12 text-center text-slate-500">
-                    <Package className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                    <p className="text-lg font-medium">No packages found.</p>
-                    <p className="text-sm mt-1">Click "Add Package" to create your first package.</p>
-                  </div>
+          ) : activeTab === 'tours_packages' ? (
+            <div>
+              {/* Mini-tab toggle */}
+              {!isFormOpen && (
+                <div className="flex gap-4 mb-6 bg-slate-100 p-1 rounded-xl w-fit">
+                  <button
+                    onClick={() => setSubTab('tours')}
+                    className={`px-5 py-2.5 rounded-lg font-bold text-sm transition-all cursor-pointer ${
+                      subTab === 'tours'
+                        ? 'bg-brand-blue-deep text-white shadow-sm'
+                        : 'text-slate-600 hover:text-brand-blue-deep hover:bg-white/50'
+                    }`}
+                  >
+                    Popular Tours
+                  </button>
+                  <button
+                    onClick={() => setSubTab('packages')}
+                    className={`px-5 py-2.5 rounded-lg font-bold text-sm transition-all cursor-pointer ${
+                      subTab === 'packages'
+                        ? 'bg-brand-blue-deep text-white shadow-sm'
+                        : 'text-slate-600 hover:text-brand-blue-deep hover:bg-white/50'
+                    }`}
+                  >
+                    Packages
+                  </button>
+                </div>
+              )}
+
+              {subTab === 'tours' ? (
+                <ToursAdmin 
+                  token={token}
+                  tours={tours}
+                  loadData={loadData}
+                  setDeleteConfirm={setDeleteConfirm}
+                />
+              ) : (
+                isFormOpen ? (
+                  <PackageForm 
+                    token={token} 
+                    initialData={editingItem} 
+                    onClose={() => setIsFormOpen(false)} 
+                    onSuccess={() => {
+                      setIsFormOpen(false);
+                      loadData();
+                    }} 
+                  />
                 ) : (
-                  <div className="flex flex-col w-full">
-                    <div className="hidden md:grid grid-cols-12 gap-4 bg-slate-50 border-b border-slate-100 text-slate-500 text-[12px] uppercase tracking-wider font-bold px-6 py-4">
-                      <div className="col-span-1">Image</div>
-                      <div className="col-span-5">Package Details</div>
-                      <div className="col-span-2">Price</div>
-                      <div className="col-span-2">Schedule</div>
-                      <div className="col-span-2 text-right">Actions</div>
-                    </div>
-                    <div className="flex flex-col divide-y divide-slate-100">
-                      {packages.map(pkg => (
-                        <div key={pkg._id} className="flex flex-col md:grid md:grid-cols-12 md:gap-4 md:items-center hover:bg-slate-50/50 transition-colors p-4 md:px-6 md:py-4">
-                          <div className="flex items-center gap-4 md:col-span-6">
-                            <div className="w-16 h-16 rounded-lg bg-slate-100 overflow-hidden shrink-0">
-                              {pkg.image ? (
-                                <img src={pkg.image} alt="" className="w-full h-full object-cover" />
-                              ) : (
-                                <ImageIcon className="w-8 h-8 m-4 text-slate-300" />
-                              )}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <p className="font-bold text-brand-blue-deep text-base truncate">{pkg.title}</p>
-                              <p className="text-sm text-brand-green font-medium mt-0.5 truncate">{pkg.durationBadge} • {pkg.location}</p>
-                              <p className="md:hidden font-bold text-slate-700 mt-1">{pkg.price}</p>
-                            </div>
-                            <div className="md:hidden flex shrink-0">
-                              <button onClick={() => handleEdit(pkg)} className="p-2 text-slate-400 hover:text-brand-blue transition-colors" title="Edit">
-                                <Edit className="w-5 h-5" />
-                              </button>
-                              <button onClick={() => handleDeletePackage(pkg._id)} className="p-2 text-slate-400 hover:text-red-500 transition-colors" title="Delete">
-                                <Trash2 className="w-5 h-5" />
-                              </button>
-                            </div>
-                          </div>
-                          
-                          <div className="hidden md:block col-span-2 font-bold text-slate-700">{pkg.price}</div>
-                          <div className="hidden md:block col-span-2 text-sm text-slate-500">{pkg.schedule}</div>
-                          <div className="hidden md:flex col-span-2 justify-end gap-2">
-                            <button onClick={() => handleEdit(pkg)} className="p-2 text-slate-400 hover:text-brand-blue bg-white rounded-lg border border-slate-200 shadow-sm transition-colors" title="Edit">
-                              <Edit className="w-4 h-4" />
-                            </button>
-                            <button onClick={() => handleDeletePackage(pkg._id)} className="p-2 text-slate-400 hover:text-red-500 bg-white rounded-lg border border-slate-200 shadow-sm transition-colors" title="Delete">
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          </div>
+                  <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden animate-reveal">
+                    {loading ? (
+                      <div className="p-12 flex justify-center"><Loader2 className="w-8 h-8 animate-spin text-brand-green" /></div>
+                    ) : packages.length === 0 ? (
+                      <div className="p-12 text-center text-slate-500">
+                        <Package className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                        <p className="text-lg font-medium">No packages found.</p>
+                        <p className="text-sm mt-1">Click "Add Package" to create your first package.</p>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col w-full">
+                        <div className="hidden md:grid grid-cols-12 gap-4 bg-slate-50 border-b border-slate-100 text-slate-500 text-[12px] uppercase tracking-wider font-bold px-6 py-4">
+                          <div className="col-span-1">Image</div>
+                          <div className="col-span-5">Package Details</div>
+                          <div className="col-span-2">Price</div>
+                          <div className="col-span-2">Schedule</div>
+                          <div className="col-span-2 text-right">Actions</div>
                         </div>
-                      ))}
-                    </div>
+                        <div className="flex flex-col divide-y divide-slate-100">
+                          {packages.map(pkg => (
+                            <div key={pkg._id} className="flex flex-col md:grid md:grid-cols-12 md:gap-4 md:items-center hover:bg-slate-50/50 transition-colors p-4 md:px-6 md:py-4">
+                              <div className="flex items-center gap-4 md:col-span-6">
+                                <div className="w-16 h-16 rounded-lg bg-slate-100 overflow-hidden shrink-0">
+                                  {pkg.image ? (
+                                    <img src={pkg.image} alt="" className="w-full h-full object-cover" />
+                                  ) : (
+                                    <ImageIcon className="w-8 h-8 m-4 text-slate-300" />
+                                  )}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <p className="font-bold text-brand-blue-deep text-base truncate">{pkg.title}</p>
+                                  <p className="text-sm text-brand-green font-medium mt-0.5 truncate">{pkg.durationBadge} • {pkg.location}</p>
+                                  <p className="md:hidden font-bold text-slate-700 mt-1">{pkg.price}</p>
+                                </div>
+                                <div className="md:hidden flex shrink-0">
+                                  <button onClick={() => handleEdit(pkg)} className="p-2 text-slate-400 hover:text-brand-blue transition-colors" title="Edit">
+                                    <Edit className="w-5 h-5" />
+                                  </button>
+                                  <button onClick={() => handleDeletePackage(pkg._id)} className="p-2 text-slate-400 hover:text-red-500 transition-colors" title="Delete">
+                                    <Trash2 className="w-5 h-5" />
+                                  </button>
+                                </div>
+                              </div>
+                              
+                              <div className="hidden md:block col-span-2 font-bold text-slate-700">{pkg.price}</div>
+                              <div className="hidden md:block col-span-2 text-sm text-slate-500">{pkg.schedule}</div>
+                              <div className="hidden md:flex col-span-2 justify-end gap-2">
+                                <button onClick={() => handleEdit(pkg)} className="p-2 text-slate-400 hover:text-brand-blue bg-white rounded-lg border border-slate-200 shadow-sm transition-colors" title="Edit">
+                                  <Edit className="w-4 h-4" />
+                                </button>
+                                <button onClick={() => handleDeletePackage(pkg._id)} className="p-2 text-slate-400 hover:text-red-500 bg-white rounded-lg border border-slate-200 shadow-sm transition-colors" title="Delete">
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-            )
+                )
+              )}
+            </div>
           ) : activeTab === 'reviews' ? (
             <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden animate-reveal">
               {loading ? (
@@ -605,6 +628,7 @@ function AdminPage() {
                         <th className="px-6 py-4">Trip Details</th>
                         <th className="px-6 py-4">Travel Date</th>
                         <th className="px-6 py-4">Status</th>
+                        <th className="px-6 py-4">Payment Status</th>
                         <th className="px-6 py-4">Submitted On</th>
                         <th className="px-6 py-4 text-right">Actions</th>
                       </tr>
@@ -620,6 +644,11 @@ function AdminPage() {
                           <td className="px-6 py-4">
                             <p className="font-bold text-brand-blue-deep">{bk.name}</p>
                             <p className="text-sm font-medium text-slate-500">{bk.phone}</p>
+                            {bk.pickupLocation && (
+                              <p className="text-xs text-slate-600 font-semibold mt-1 flex items-center gap-1 bg-slate-50 border border-slate-100 rounded px-1.5 py-0.5 w-fit">
+                                <span className="text-slate-400">Pickup:</span> {bk.pickupLocation}
+                              </p>
+                            )}
                           </td>
                           <td className="px-6 py-4">
                             <p className="font-bold text-slate-700">{bk.tripName === 'custom' ? 'Custom Trip' : bk.tripName}</p>
@@ -649,6 +678,24 @@ function AdminPage() {
                               <option value="Pending">Pending</option>
                               <option value="Confirmed">Confirmed</option>
                               <option value="Cancelled">Cancelled</option>
+                            </select>
+                          </td>
+                          <td className="px-6 py-4">
+                            <select 
+                              value={bk.paymentStatus || 'PENDING'}
+                              onChange={async (e) => {
+                                try {
+                                  await updateBookingPaymentStatusFn({ data: { adminToken: token, id: bk._id, paymentStatus: e.target.value }});
+                                  loadData();
+                                } catch (err) {}
+                              }}
+                              className={`text-sm font-bold px-3 py-1.5 rounded-lg border outline-none cursor-pointer ${
+                                (bk.paymentStatus || 'PENDING') === 'PAID' ? 'bg-green-50 text-green-700 border-green-200' : 
+                                'bg-orange-50 text-orange-700 border-orange-200'
+                              }`}
+                            >
+                              <option value="PENDING">PENDING</option>
+                              <option value="PAID">PAID</option>
                             </select>
                           </td>
                           <td className="px-6 py-4 text-sm text-slate-500">
@@ -1338,6 +1385,11 @@ function DashboardOverview({ packages, bookings, reviews, photos }: any) {
                     <td className="px-6 py-4">
                       <p className="font-bold text-brand-blue-deep text-sm">{bk.name}</p>
                       <p className="text-xs text-slate-500">{bk.phone}</p>
+                      {bk.pickupLocation && (
+                        <p className="text-[11px] text-slate-600 font-medium mt-1">
+                          <span className="text-slate-400">Pickup:</span> {bk.pickupLocation}
+                        </p>
+                      )}
                     </td>
                     <td className="px-6 py-4">
                       <p className="font-bold text-slate-700 text-sm">{bk.tripName === 'custom' ? 'Custom Trip' : bk.tripName}</p>
@@ -1560,7 +1612,7 @@ const applyTableStyles = (ws: any, titleSz = 16, subtitleSz = 14) => {
 
 function ReportsView({ bookings = [] }: { bookings?: any[] }) {
   const exportBookings = () => {
-    const headers = ['Booking ID', 'Customer Name', 'Phone Number', 'Trip Name', 'Persons', 'Travel Date', 'Status', 'Submission Date', 'Custom Destination'];
+    const headers = ['Booking ID', 'Customer Name', 'Phone Number', 'Trip Name', 'Persons', 'Travel Date', 'Status', 'Submission Date', 'Pickup Location', 'Custom Destination'];
     
     const rows = bookings.map((bk, idx) => {
       const bId = bk.generatedBookingId;
@@ -1575,6 +1627,7 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
         (bk.travelDate || '').replace(/[\r\n]+/g, ' '),
         bk.status || '',
         dateStr,
+        (bk.pickupLocation || '').replace(/[\r\n]+/g, ' '),
         (bk.customDestination || '').replace(/[\r\n]+/g, ' ')
       ];
     });
@@ -1603,6 +1656,7 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
       { wch: 18 }, // Travel Date
       { wch: 12 }, // Status
       { wch: 12 }, // Submission Date
+      { wch: 25 }, // Pickup Location
       { wch: 20 }  // Custom Destination
     ];
     

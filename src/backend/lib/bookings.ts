@@ -130,11 +130,13 @@ export const getBookingsFn = createServerFn({ method: 'POST' })
         _id: b._id.toString(),
         name: b.name,
         phone: b.phone,
+        pickupLocation: b.pickupLocation,
         tripName: b.tripName,
         customDestination: b.customDestination,
         persons: b.persons,
         travelDate: b.travelDate,
         status: b.status || 'Pending',
+        paymentStatus: b.paymentStatus || 'PENDING',
         createdAt: b.createdAt,
         isInvoiceLocked: b.isInvoiceLocked || false,
         invoiceCustomData: b.invoiceCustomData || null,
@@ -154,7 +156,12 @@ export const saveInvoiceFn = createServerFn({ method: 'POST' })
     const db = client.db('shailraj');
     await db.collection('bookings').updateOne(
       { _id: new ObjectId(data.bookingId) },
-      { $set: { isInvoiceLocked: true, invoiceCustomData: data.invoiceCustomData } }
+      { $set: { 
+          isInvoiceLocked: true, 
+          invoiceCustomData: data.invoiceCustomData,
+          paymentStatus: data.invoiceCustomData?.paymentStatus || 'PENDING'
+        } 
+      }
     );
     await logAuditAction({ data: { action: "Lock Invoice", entityType: "Booking", details: `Saved custom invoice data and locked invoice`, entityId: data.bookingId } });
     return { success: true };
@@ -186,6 +193,7 @@ export const createBookingFn = createServerFn({ method: 'POST' })
         ...data,
         persons: requestedPersons,
         status: 'Pending',
+        paymentStatus: data.paymentStatus || 'PENDING',
         createdAt: new Date(),
       };
       const res = await db.collection('bookings').insertOne(newBooking);
@@ -193,7 +201,7 @@ export const createBookingFn = createServerFn({ method: 'POST' })
       // Send WhatsApp Notification
       try {
         const { sendAdminNotification } = await import('./whatsapp');
-        const msg = `*New Booking Received!*\nName: ${newBooking.name}\nPhone: ${newBooking.phone}\nTrip: ${newBooking.tripName || newBooking.customDestination}\nPersons: ${newBooking.persons}\nDate: ${newBooking.travelDate || 'N/A'}`;
+        const msg = `*New Booking Received!*\nName: ${newBooking.name}\nPhone: ${newBooking.phone}\nTrip: ${newBooking.tripName || newBooking.customDestination}\nPersons: ${newBooking.persons}\nDate: ${newBooking.travelDate || 'N/A'}${newBooking.pickupLocation ? `\nPickup: ${newBooking.pickupLocation}` : ''}`;
         await sendAdminNotification(msg);
       } catch (waErr) {
         console.error("Failed to send WhatsApp notification", waErr);
@@ -212,11 +220,55 @@ export const updateBookingStatusFn = createServerFn({ method: 'POST' })
     if (data.adminToken !== getAdminToken()) throw new Error("Unauthorized");
     const client = await clientPromise;
     const db = client.db('shailraj');
+    
+    // Fetch booking details first to send WhatsApp to target phone
+    const booking = await db.collection('bookings').findOne({ _id: new ObjectId(data.id) });
+    
     await db.collection('bookings').updateOne(
       { _id: new ObjectId(data.id) },
       { $set: { status: data.status } }
     );
+    
     await logAuditAction({ data: { action: "Update Booking", entityType: "Booking", details: `Changed booking status to ${data.status}`, entityId: data.id } });
+    
+    if (booking && booking.phone) {
+      const customerName = booking.name || 'Customer';
+      const tripName = booking.tripName === 'custom' ? (booking.customDestination || 'Custom Trip') : booking.tripName;
+      const travelDate = booking.travelDate || 'N/A';
+      
+      let msg = '';
+      if (data.status === 'Confirmed') {
+        msg = `*Booking Confirmed!* 🚩\n\nHello *${customerName}*,\nYour booking with *Shailraj Travels* for *${tripName}* (Date: ${travelDate}) has been *Confirmed*. \n\nThank you for choosing us for your spiritual journey! 🙏`;
+      } else if (data.status === 'Cancelled') {
+        msg = `*Booking Cancelled*\n\nHello *${customerName}*,\nYour booking with *Shailraj Travels* for *${tripName}* (Date: ${travelDate}) has been *Cancelled*.\n\nFor any queries or refund information, please contact us. 🙏`;
+      }
+      
+      if (msg) {
+        try {
+          const { sendWhatsAppMessage } = await import('./whatsapp');
+          await sendWhatsAppMessage(booking.phone, msg);
+        } catch (waErr) {
+          console.error("Failed to send status update WhatsApp notification", waErr);
+        }
+      }
+    }
+    
+    return { success: true };
+  });
+
+export const updateBookingPaymentStatusFn = createServerFn({ method: 'POST' })
+  .validator((data: { adminToken: string, id: string, paymentStatus: string }) => data)
+  .handler(async ({ data }) => {
+    if (data.adminToken !== getAdminToken()) throw new Error("Unauthorized");
+    const client = await clientPromise;
+    const db = client.db('shailraj');
+    
+    await db.collection('bookings').updateOne(
+      { _id: new ObjectId(data.id) },
+      { $set: { paymentStatus: data.paymentStatus } }
+    );
+    
+    await logAuditAction({ data: { action: "Update Booking Payment Status", entityType: "Booking", details: `Changed payment status to ${data.paymentStatus}`, entityId: data.id } });
     return { success: true };
   });
 

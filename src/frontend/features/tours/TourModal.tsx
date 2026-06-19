@@ -7,10 +7,11 @@ import Autoplay from 'embla-carousel-autoplay';
 interface TourModalProps {
   tour: TourData;
   onClose: () => void;
+  onBookSeat?: (tour: TourData) => void;
   t: any;
 }
 
-export function TourModal({ tour, onClose, t }: TourModalProps) {
+export function TourModal({ tour, onClose, onBookSeat, t }: TourModalProps) {
   // Prevent body scroll when modal is open
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -162,12 +163,24 @@ export function TourModal({ tour, onClose, t }: TourModalProps) {
             <p className="text-[13px] font-medium text-slate-500 mb-0.5">{t?.cardPerPerson || "Per person"}</p>
             <p className="text-[#112233] font-bold text-3xl tracking-tight leading-none">{tour.price}</p>
           </div>
-          <a 
-            href="#book"
-            className="flex items-center justify-center px-8 py-3.5 rounded-[14px] bg-[#F59E0B] hover:bg-[#E5910A] text-[#112233] font-bold text-[16px] transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
-          >
-            {t?.cardBookSeat || "Book Seat"}
-          </a>
+          {onBookSeat ? (
+            <button 
+              onClick={() => {
+                onClose();
+                onBookSeat(tour);
+              }}
+              className="flex items-center justify-center px-8 py-3.5 rounded-[14px] bg-[#F59E0B] hover:bg-[#E5910A] text-[#112233] font-bold text-[16px] transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 cursor-pointer"
+            >
+              {t?.cardBookSeat || "Book Seat"}
+            </button>
+          ) : (
+            <a 
+              href="#book"
+              className="flex items-center justify-center px-8 py-3.5 rounded-[14px] bg-[#F59E0B] hover:bg-[#E5910A] text-[#112233] font-bold text-[16px] transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
+            >
+              {t?.cardBookSeat || "Book Seat"}
+            </a>
+          )}
         </div>
 
       </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { SEOFAQAccordion } from '../components/SEOFAQAccordion';
 import { SEOBreadcrumbs, type BreadcrumbItem } from '../components/SEOBreadcrumbs';
 import { SchemaMarkup } from '../components/SchemaMarkup';
@@ -8,6 +8,7 @@ import { RelatedTours } from '../components/RelatedTours';
 import { RelatedBlogs } from '../components/RelatedBlogs';
 import { useLanguage } from '../../routes/__root';
 import { translations } from '../features/core/i18n';
+import { createBookingFn } from '../../backend/lib/bookings';
 
 interface TourPageTemplateProps {
   data: Tour;
@@ -16,6 +17,13 @@ interface TourPageTemplateProps {
 export function TourPageTemplate({ data }: TourPageTemplateProps) {
   const { lang } = useLanguage();
   const t = translations[lang];
+
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [persons, setPersons] = useState(2);
+  const [travelDate, setTravelDate] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const breadcrumbs: BreadcrumbItem[] = [
     { name: t.breadcrumbTours || 'Tours', url: '/tours' },
@@ -81,7 +89,14 @@ export function TourPageTemplate({ data }: TourPageTemplateProps) {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
             <button 
               className="w-full sm:w-auto px-8 py-3 bg-brand-orange text-white font-semibold rounded-lg hover:bg-brand-orange-dark transition-colors"
-              onClick={() => window.dataLayer?.push({ event: 'book_now_hero', tour: data.title })}
+              onClick={() => {
+                window.dataLayer?.push({ event: 'book_now_hero', tour: data.title });
+                document.getElementById('sidebar-booking-form')?.scrollIntoView({ behavior: 'smooth' });
+                setTimeout(() => {
+                  const input = document.getElementById('booking-name-input');
+                  if (input) (input as HTMLElement).focus();
+                }, 500);
+              }}
             >
               {t.formBook || "Book Now"}
             </button>
@@ -145,7 +160,14 @@ export function TourPageTemplate({ data }: TourPageTemplateProps) {
                     </div>
                     <button 
                       className="mt-8 w-full py-2.5 border-2 border-brand-orange text-brand-orange font-bold rounded-lg hover:bg-brand-orange hover:text-white transition-colors"
-                      onClick={() => window.dataLayer?.push({ event: 'inquire_package', tour: data.title, package: pkg.title })}
+                      onClick={() => {
+                        window.dataLayer?.push({ event: 'inquire_package', tour: data.title, package: pkg.title });
+                        document.getElementById('sidebar-booking-form')?.scrollIntoView({ behavior: 'smooth' });
+                        setTimeout(() => {
+                          const input = document.getElementById('booking-name-input');
+                          if (input) (input as HTMLElement).focus();
+                        }, 500);
+                      }}
                     >
                       {t.tourInquire || "Inquire Package"}
                     </button>
@@ -167,42 +189,141 @@ export function TourPageTemplate({ data }: TourPageTemplateProps) {
 
           <div className="lg:col-span-1">
             {/* Sidebar Booking Form */}
-            <div className="sticky top-24 bg-gray-50 p-6 rounded-xl border border-gray-200 shadow-sm">
-              <h3 className="text-xl font-bold text-gray-900 mb-6">{t.tourCustomQuote || "Request a Custom Quote"}</h3>
-              <form className="space-y-5">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">{t.formName || "Full Name"}</label>
-                  <input type="text" className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-brand-orange outline-none transition-shadow" placeholder={t.formNamePlace || "Your Name"} />
+            <div id="sidebar-booking-form" className="sticky top-24 bg-gray-50 p-6 rounded-xl border border-gray-200 shadow-sm">
+              {success ? (
+                <div className="flex flex-col items-center justify-center py-8 px-4 bg-brand-green/5 rounded-2xl border border-brand-green/20 text-center">
+                  <div className="w-12 h-12 bg-brand-green/10 text-brand-green rounded-full flex items-center justify-center mb-4">
+                    <svg className="w-6 h-6 text-brand-green-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <h3 className="text-lg font-bold text-brand-blue-deep mb-2">{lang === 'mr' ? "बुकिंग प्राप्त झाले!" : "Booking Received!"}</h3>
+                  <p className="text-slate-600 text-sm mb-6 max-w-sm">
+                    {lang === 'mr' 
+                      ? "आम्हाला तुमची बुकिंग विनंती मिळाली आहे. आम्ही लवकरच तुमच्याशी संपर्क साधू." 
+                      : "We have received your booking request and will contact you shortly to confirm."}
+                  </p>
+                  <button 
+                    onClick={() => {
+                      setSuccess(false);
+                      setName('');
+                      setPhone('');
+                      setTravelDate('');
+                      setPersons(2);
+                    }}
+                    className="px-6 py-2 bg-brand-blue-deep text-white text-sm rounded-xl font-bold hover:bg-brand-blue transition-colors cursor-pointer"
+                  >
+                    {lang === 'mr' ? "नवीन बुकिंग करा" : "Make Another Booking"}
+                  </button>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">{t.formContact || "Phone Number"}</label>
-                  <input type="tel" className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-brand-orange outline-none transition-shadow" placeholder="+91" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">{"Travel Date"}</label>
-                  {validDates && validDates.length > 0 ? (
-                    <select
-                      name="travelDate"
-                      className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-brand-orange outline-none transition-shadow cursor-pointer"
+              ) : (
+                <>
+                  <h3 className="text-xl font-bold text-gray-900 mb-6">{t.tourCustomQuote || "Request a Custom Quote"}</h3>
+                  <form 
+                    onSubmit={async (e) => {
+                      e.preventDefault();
+                      setLoading(true);
+                      try {
+                        const bookingData = {
+                          name: name.trim(),
+                          phone: phone.trim(),
+                          tripName: data.title,
+                          persons,
+                          travelDate
+                        };
+                        await createBookingFn({ data: bookingData });
+                        setSuccess(true);
+                      } catch (err: any) {
+                        alert(err.message || "Failed to submit booking. Please try again.");
+                      } finally {
+                        setLoading(false);
+                      }
+                    }}
+                    className="space-y-5"
+                  >
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1.5">{t.formName || "Full Name"}</label>
+                      <input 
+                        id="booking-name-input"
+                        type="text" 
+                        required
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-brand-orange outline-none transition-shadow text-slate-800" 
+                        placeholder={t.formNamePlace || "Your Name"} 
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1.5">{t.formContact || "Phone Number"}</label>
+                      <input 
+                        type="tel" 
+                        required
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-brand-orange outline-none transition-shadow text-slate-800" 
+                        placeholder="+91" 
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1.5">{lang === 'mr' ? "प्रवासी संख्या" : "Number of Persons"}</label>
+                      <select
+                        value={persons}
+                        onChange={(e) => setPersons(Number(e.target.value))}
+                        className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-brand-orange outline-none transition-shadow cursor-pointer text-slate-800"
+                      >
+                        {[...Array(16)].map((_, i) => (
+                          <option key={i + 1} value={i + 1}>
+                            {i + 1} {i + 1 === 1 ? (lang === 'mr' ? "प्रवासी" : "Person") : (lang === 'mr' ? "प्रवासी" : "Persons")}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1.5">{"Travel Date"}</label>
+                      {validDates && validDates.length > 0 ? (
+                        <select
+                          name="travelDate"
+                          required
+                          value={travelDate}
+                          onChange={(e) => setTravelDate(e.target.value)}
+                          className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-brand-orange outline-none transition-shadow cursor-pointer text-slate-800"
+                        >
+                          <option value="">{t.tourSelectDate || "Select a date"}</option>
+                          {validDates.map((date: string) => (
+                            <option key={date} value={date}>{date}</option>
+                          ))}
+                        </select>
+                      ) : (
+                        <input 
+                          type="date" 
+                          required
+                          value={travelDate}
+                          onChange={(e) => setTravelDate(e.target.value)}
+                          className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-brand-orange outline-none transition-shadow text-slate-800" 
+                        />
+                      )}
+                    </div>
+                    <button 
+                      type="submit" 
+                      disabled={loading}
+                      className="w-full py-3.5 mt-2 bg-brand-blue-deep hover:bg-brand-blue text-white font-bold rounded-lg transition-colors shadow-md flex items-center justify-center gap-2 cursor-pointer"
                     >
-                      <option value="">{t.tourSelectDate || "Select a date"}</option>
-                      {validDates.map((date: string) => (
-                        <option key={date} value={date}>{date}</option>
-                      ))}
-                    </select>
-                  ) : (
-                    <input type="date" name="travelDate" className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-brand-orange outline-none transition-shadow" />
-                  )}
-                </div>
-                <button 
-                  type="button" 
-                  className="w-full py-3.5 mt-2 bg-brand-blue-deep text-white font-bold rounded-lg hover:bg-brand-blue transition-colors shadow-md"
-                  onClick={() => window.dataLayer?.push({ event: 'submit_request', tour: data.title })}
-                >
-                  {t.tourSubmit || "Submit Request"}
-                </button>
-                <p className="text-xs text-center text-gray-500 mt-4">{t.tourContactSoon || "We will contact you within 24 hours."}</p>
-              </form>
+                      {loading ? (
+                        <>
+                          <svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                          </svg>
+                          {lang === 'mr' ? "सादर करत आहे..." : "Submitting..."}
+                        </>
+                      ) : (
+                        t.tourSubmit || "Submit Request"
+                      )}
+                    </button>
+                    <p className="text-xs text-center text-gray-500 mt-4">{t.tourContactSoon || "We will contact you within 24 hours."}</p>
+                  </form>
+                </>
+              )}
             </div>
           </div>
         </div>

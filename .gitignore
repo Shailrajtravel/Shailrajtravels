@@ -70,3 +70,7 @@ local_db.json
 # WhatsApp Web Session
 .wwebjs_auth
 .wwebjs_cache
+
+# Scratch / helper scripts
+scratch/
+

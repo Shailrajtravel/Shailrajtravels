@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, ChevronDown, BadgeIndianRupee, ShieldCheck, Headphones, Lock, User, Phone, MapPin, Users, Calendar, Minus, Plus, Snowflake, BedDouble, Compass, Loader2 } from 'lucide-react';
 import { Leaf } from '../core/icons';
 import { translations } from '../core/i18n';
@@ -20,11 +20,17 @@ export function getUpcomingDates(allowedDaysOfWeek: number[]) {
   return dates;
 }
 
-export function Hero({ lang, t, tripOptions = [] }: { lang: "en" | "mr"; t: typeof translations.mr; tripOptions?: any[] }) {
+export function Hero({ lang, t, tripOptions = [], activeTripId }: { lang: "en" | "mr"; t: typeof translations.mr; tripOptions?: any[]; activeTripId?: string }) {
   const [selectedTrip, setSelectedTrip] = useState<string>(tripOptions[0]?._id || "custom");
   const [persons, setPersons] = useState(2);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    if (activeTripId) {
+      setSelectedTrip(activeTripId);
+    }
+  }, [activeTripId]);
 
   const selectedTripData = tripOptions.find(t => t._id === selectedTrip);
   
@@ -143,7 +149,7 @@ export function Hero({ lang, t, tripOptions = [] }: { lang: "en" | "mr"; t: type
       </div>
 
       {/* Floating booking panel */}
-      <div className="relative z-30 mx-auto w-full max-w-[1600px] px-4 mt-5 md:px-6 lg:px-8">
+      <div id="homepage-booking-form" className="relative z-30 mx-auto w-full max-w-[1600px] px-4 mt-5 md:px-6 lg:px-8">
         <div
           className="rounded-3xl bg-white p-4 animate-reveal"
           style={{ boxShadow: "var(--shadow-luxury)", animationDelay: "0.4s" }}

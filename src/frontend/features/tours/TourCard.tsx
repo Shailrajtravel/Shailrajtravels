@@ -20,15 +20,17 @@ export interface TourData {
   price: string;
   itinerary: { day: string; title: string }[];
   includes: string[];
+  dates?: string[];
 }
 
 interface TourCardProps {
   tour: TourData;
   onOpenDetails: (tour: TourData) => void;
+  onBookSeat?: (tour: TourData) => void;
   t: any;
 }
 
-export function TourCard({ tour, onOpenDetails, t }: TourCardProps) {
+export function TourCard({ tour, onOpenDetails, onBookSeat, t }: TourCardProps) {
   const seatsPercentage = (tour.seatsAvailable / tour.seatsTotal) * 100;
 
   return (
@@ -140,12 +142,30 @@ export function TourCard({ tour, onOpenDetails, t }: TourCardProps) {
                 <Info className="w-4 h-4" /> {t?.cardDetails || "Details"}
               </button>
             )}
-            <a 
-              href="#book"
-              className="flex items-center justify-center px-6 py-2.5 rounded-xl bg-[#F59E0B] hover:bg-[#E5910A] text-[#112233] font-bold text-[14px] transition-colors"
-            >
-              {t?.cardBookSeat || "Book Seat"}
-            </a>
+            {onBookSeat ? (
+              <button 
+                onClick={() => onBookSeat(tour)}
+                className="flex items-center justify-center px-6 py-2.5 rounded-xl bg-[#F59E0B] hover:bg-[#E5910A] text-[#112233] font-bold text-[14px] transition-colors cursor-pointer"
+              >
+                {t?.cardBookSeat || "Book Seat"}
+              </button>
+            ) : tour.slug ? (
+              <Link
+                to="/tours/$tourSlug"
+                params={{ tourSlug: tour.slug }}
+                hash="sidebar-booking-form"
+                className="flex items-center justify-center px-6 py-2.5 rounded-xl bg-[#F59E0B] hover:bg-[#E5910A] text-[#112233] font-bold text-[14px] transition-colors"
+              >
+                {t?.cardBookSeat || "Book Seat"}
+              </Link>
+            ) : (
+              <a 
+                href="#sidebar-booking-form"
+                className="flex items-center justify-center px-6 py-2.5 rounded-xl bg-[#F59E0B] hover:bg-[#E5910A] text-[#112233] font-bold text-[14px] transition-colors"
+              >
+                {t?.cardBookSeat || "Book Seat"}
+              </a>
+            )}
           </div>
         </div>
 

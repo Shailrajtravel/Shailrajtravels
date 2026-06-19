@@ -18,16 +18,40 @@ export async function initWhatsApp() {
   initializationPromise = new Promise((resolve, reject) => {
     try {
       console.log('[WhatsApp] Initializing client...');
-      import('whatsapp-web.js').then(({ default: pkg, Client, LocalAuth }) => {
+      import('whatsapp-web.js').then(async ({ default: pkg, Client, LocalAuth }) => {
         const C = Client || pkg?.Client;
         const LA = LocalAuth || pkg?.LocalAuth;
-        client = new C({
-        authStrategy: new LA(),
-        puppeteer: {
-          headless: true,
-          args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+
+        const os = await import('os');
+        const path = await import('path');
+        const fs = await import('fs');
+
+        const cachePath = path.join(os.homedir(), '.cache', 'puppeteer', 'chrome', 'win64-149.0.7827.22', 'chrome-win64', 'chrome.exe');
+        let executablePath: string | undefined = undefined;
+
+        if (fs.existsSync(cachePath)) {
+          executablePath = cachePath;
+          console.log('[WhatsApp] Using cached Chrome:', executablePath);
+        } else {
+          const winChromePath = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
+          const winChromePathX86 = 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe';
+          if (fs.existsSync(winChromePath)) {
+            executablePath = winChromePath;
+            console.log('[WhatsApp] Using Windows system Chrome:', executablePath);
+          } else if (fs.existsSync(winChromePathX86)) {
+            executablePath = winChromePathX86;
+            console.log('[WhatsApp] Using Windows x86 system Chrome:', executablePath);
+          }
         }
-      });
+
+        client = new C({
+          authStrategy: new LA(),
+          puppeteer: {
+            headless: true,
+            executablePath,
+            args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+          }
+        });
 
         client.on('qr', (qr: string) => {
         console.log('[WhatsApp] QR RECEIVED');
@@ -136,6 +160,31 @@ export async function sendAdminNotification(message: string) {
     return true;
   } catch (error) {
     console.error('[WhatsApp] Failed to send notification:', error);
+    return false;
+  }
+}
+
+export async function sendWhatsAppMessage(phone: string, message: string) {
+  if (currentStatus !== 'Connected' || !client) {
+    console.warn('[WhatsApp] Cannot send message, client not connected');
+    return false;
+  }
+  try {
+    // Sanitize the phone number
+    let cleaned = phone.replace(/\D/g, '');
+    if (cleaned.startsWith('0')) {
+      cleaned = cleaned.substring(1);
+    }
+    if (cleaned.length === 10) {
+      cleaned = '91' + cleaned;
+    }
+    const targetId = `${cleaned}@c.us`;
+    
+    await client.sendMessage(targetId, message);
+    console.log(`[WhatsApp] Sent notification to ${targetId}`);
+    return true;
+  } catch (error) {
+    console.error('[WhatsApp] Failed to send message:', error);
     return false;
   }
 }

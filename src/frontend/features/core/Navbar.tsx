@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Instagram, MapPin, Phone, Menu, X } from 'lucide-react';
-import logo from '@/frontend/assets/logo11.png';
+import logo from '@/frontend/assets/Shailraj travels-Punelogo.png';
 import { translations } from './i18n';
 
 const NAV_KEYS = [
@@ -29,14 +29,14 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
   return (
     <header className="fixed inset-x-0 top-0 z-50 p-2 md:p-4 transition-all">
       <div
-        className={`mx-auto flex max-w-[1600px] items-center justify-between rounded-2xl pl-2 pr-4 py-3 transition-all duration-200 md:pl-2 md:pr-6 md:py-4 ${isScrolled ? "bg-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.08)] backdrop-blur-md" : "bg-transparent"
+        className={`mx-auto flex max-w-[1600px] items-center justify-between rounded-2xl pl-1 pr-4 py-3 transition-all duration-200 md:pl-2 md:pr-6 md:py-4 ${isScrolled ? "bg-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.08)] backdrop-blur-md" : "bg-transparent"
           }`}
       >
 
         {/* Left: Logo */}
         <div className="flex flex-1 justify-start">
-          <a href="#" className="flex items-center gap-4 md:gap-4">
-            <img src={logo} alt="Shailraj Travels Logo" className="mr-2 h-14 w-auto object-contain md:mr-4 md:h-16" />
+          <a href="#" className="flex items-center gap-[4mm]">
+            <img src={logo} alt="Shailraj Travels Logo" className="h-[110px] w-auto object-contain md:h-[140px] -my-10 md:-my-14 -ml-5 md:-ml-8 -mr-7 md:-mr-11" />
             <span className="leading-tight">
               <span className="block font-display text-xl font-semibold text-red-600 md:text-2xl">
                 Shailraj

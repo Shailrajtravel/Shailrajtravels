@@ -317,7 +317,14 @@ export function InvoicePrint({
                     <div className="w-[130px] font-medium">Payment Status</div>
                     <div className="w-3">:</div>
                     {isEditing ? (
-                      <input className="ml-2 flex-1 border border-slate-300 rounded px-1 py-0.5 outline-none focus:ring-1 focus:ring-brand-blue" value={data.paymentStatus} onChange={e => updateData("paymentStatus", e.target.value)} />
+                      <select 
+                        className="ml-2 flex-1 border border-slate-300 rounded px-1 py-0.5 outline-none focus:ring-1 focus:ring-brand-blue cursor-pointer font-semibold" 
+                        value={data.paymentStatus?.toUpperCase() || 'PENDING'} 
+                        onChange={e => updateData("paymentStatus", e.target.value)}
+                      >
+                        <option value="PENDING">PENDING</option>
+                        <option value="PAID">PAID</option>
+                      </select>
                     ) : (
                       <span className={`ml-2 rounded-sm px-2 py-0.5 text-[11px] font-bold text-white ${data.paymentStatus?.toLowerCase() === 'completed' || data.paymentStatus?.toLowerCase() === 'paid' ? 'bg-green-500' : 'bg-orange-500'}`}>
                         {data.paymentStatus?.toUpperCase() || 'PENDING'}

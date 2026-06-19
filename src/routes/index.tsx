@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useLanguage } from "./__root";
 import { getReviewsFn } from "../backend/lib/reviews";
@@ -12,23 +12,27 @@ import { FeaturesSection } from "../frontend/features/why-choose-us/FeaturesSect
 import { ToursSection } from "../frontend/features/tours/ToursSection";
 import { ReviewsSection } from "../frontend/features/reviews/ReviewsSection";
 import { GallerySection } from "../frontend/features/gallery/GallerySection";
+import { BookingModal } from "../frontend/features/tours/BookingModal";
 
 import { getPackagesFn } from "../backend/lib/packages";
 
 export const Route = createFileRoute("/")({
+  validateSearch: (search: Record<string, unknown>): { lang?: string } => ({ lang: search.lang as string | undefined }),
+  loaderDeps: ({ search: { lang } }) => ({ lang }),
   component: HomePage,
-  loader: async () => {
+  loader: async ({ deps: { lang } }) => {
     try {
-      const [reviews, packages, tripOptions, galleryPhotos] = await Promise.all([
+      const [reviews, packages, tripOptions, galleryPhotos, tours] = await Promise.all([
         getReviewsFn(),
         getPackagesFn(),
         import('../backend/lib/bookings').then(m => m.getTripOptionsFn()),
-        import('../backend/lib/gallery').then(m => m.getGalleryPhotosFn())
+        import('../backend/lib/gallery').then(m => m.getGalleryPhotosFn()),
+        import('../backend/lib/tours').then(m => m.getToursFn({ data: { lang: lang || 'en' } }))
       ]);
-      return { reviews, packages, tripOptions, galleryPhotos };
+      return { reviews, packages, tripOptions, galleryPhotos, tours };
     } catch (e) {
       console.error(e);
-      return { reviews: [], packages: [] };
+      return { reviews: [], packages: [], tripOptions: [], galleryPhotos: [], tours: [] };
     }
   },
 });
@@ -37,19 +41,33 @@ function HomePage() {
   const { lang } = useLanguage();
   const t = translations[lang];
 
-  const { reviews: dbReviews, packages: dbPackages, tripOptions = [], galleryPhotos = [] } = Route.useLoaderData() as any;
+  const { reviews: dbReviews, packages: dbPackages, tripOptions = [], galleryPhotos = [], tours = [] } = Route.useLoaderData() as any;
+
+  const [bookingTour, setBookingTour] = useState<any | null>(null);
+
+  const handleBookSeat = (tour: any) => {
+    setBookingTour(tour);
+  };
 
   return (
     <div className="font-sans text-slate-800 bg-white selection:bg-brand-green/20 selection:text-brand-blue-deep overflow-x-hidden">
       <Navbar t={t} />
       <main>
-        <Hero lang={lang} t={t} tripOptions={tripOptions} />
+        <Hero lang={lang} t={t} tripOptions={tripOptions} activeTripId="" />
         <AboutSection lang={lang} t={t} />
         <FeaturesSection lang={lang} t={t} />
-        <ToursSection lang={lang} t={t} packages={dbPackages} tripOptions={tripOptions} />
+        <ToursSection lang={lang} t={t} packages={dbPackages} tripOptions={tripOptions} tours={tours} onBookSeat={handleBookSeat} />
         <ReviewsSection lang={lang} t={t} />
         <GallerySection t={t} photos={galleryPhotos} />
       </main>
+      {bookingTour && (
+        <BookingModal
+          tour={bookingTour}
+          onClose={() => setBookingTour(null)}
+          t={t}
+          lang={lang}
+        />
+      )}
       <Footer t={t} lang={lang} />
     </div>
   );

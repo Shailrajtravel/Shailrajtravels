@@ -7,7 +7,7 @@ import Autoplay from 'embla-carousel-autoplay';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import bgFallback from '@/frontend/assets/hero-pandharpur.jpg';
 
-export function ToursSection({ lang, t, packages, tripOptions }: { lang: 'mr' | 'en', t: any, packages?: any[], tripOptions?: any[] }) {
+export function ToursSection({ lang, t, packages, tripOptions, tours, onBookSeat }: { lang: 'mr' | 'en', t: any, packages?: any[], tripOptions?: any[], tours?: any[], onBookSeat?: (tour: any) => void }) {
   const [selectedTour, setSelectedTour] = useState<TourData | null>(null);
 
   const mappedTripOptions = (tripOptions || []).map((trip: any) => ({
@@ -16,8 +16,9 @@ export function ToursSection({ lang, t, packages, tripOptions }: { lang: 'mr' | 
     durationBadge: "Weekly Trip",
     subtitle: trip.name,
     title: trip.name,
-    location: "Various",
+        location: "Various",
     schedule: trip.schedule || (Array.isArray(trip.dates) && trip.dates.length > 0 ? trip.dates.join(', ') : "Flexible"),
+    dates: trip.dates || [],
     frequency: "Weekly",
     route: trip.route || [],
     tags: ["Pilgrimage"],
@@ -28,8 +29,42 @@ export function ToursSection({ lang, t, packages, tripOptions }: { lang: 'mr' | 
     includes: trip.includes || []
   }));
 
-  // Display DB packages and mapped trip options
-  const displayPackages = [...(packages || []), ...mappedTripOptions];
+  const mappedTours = (tours || []).map((tour: any) => {
+    const packagePrice = tour.packages?.[0]?.price 
+      ? `₹${tour.packages[0].price}` 
+      : "On Request";
+    const inclusions = tour.packages?.[0]?.inclusions || [];
+    const tourRoute = tour.destinations && tour.destinations.length > 0 
+      ? tour.destinations 
+      : [tour.title];
+
+    return {
+      id: tour._id,
+      slug: tour.slug,
+      image: tour.heroContent?.image || bgFallback,
+      durationBadge: tour.packages?.[0]?.title || "Pilgrimage",
+      subtitle: tour.metaTitle || tour.title,
+      title: tour.title,
+      location: tour.destinations?.[0] || "Various",
+      schedule: Array.isArray(tour.dates) && tour.dates.length > 0 
+        ? tour.dates.join(', ') 
+        : "Flexible",
+      dates: tour.dates || [],
+      frequency: "Special Tour",
+      route: tourRoute,
+      tags: ["Popular", "Tour"],
+      seatsAvailable: 12,
+      seatsTotal: 16,
+      price: packagePrice,
+      itinerary: Array.isArray(tour.highlights) 
+        ? tour.highlights.map((h: string, idx: number) => ({ day: `Point ${idx+1}`, title: h }))
+        : [],
+      includes: inclusions
+    };
+  });
+
+  // Display DB packages, mapped trip options, and mapped popular tours
+  const displayPackages = [...(packages || []), ...mappedTripOptions, ...mappedTours];
 
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { loop: true, align: 'start' },
@@ -75,7 +110,7 @@ export function ToursSection({ lang, t, packages, tripOptions }: { lang: 'mr' | 
             <div className="flex gap-8">
               {displayPackages.map((tour: any) => (
                 <div key={tour.id || tour._id} className="flex-[0_0_100%] md:flex-[0_0_calc(50%-1rem)] lg:flex-[0_0_calc(33.333%-1.33rem)] min-w-0 flex flex-col">
-                  <TourCard tour={tour} onOpenDetails={setSelectedTour} t={t} />
+                  <TourCard tour={tour} onOpenDetails={setSelectedTour} onBookSeat={onBookSeat} t={t} />
                 </div>
               ))}
             </div>
@@ -97,7 +132,7 @@ export function ToursSection({ lang, t, packages, tripOptions }: { lang: 'mr' | 
       </div>
 
       {selectedTour && (
-        <TourModal tour={selectedTour} onClose={() => setSelectedTour(null)} t={t} />
+        <TourModal tour={selectedTour} onClose={() => setSelectedTour(null)} onBookSeat={onBookSeat} t={t} />
       )}
     </section>
   );
