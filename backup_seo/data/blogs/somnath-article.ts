@@ -1,53 +1,59 @@
-import { BlogPost } from '../../types/blog';
+import { BlogPost } from "../../types/blog";
 
 export const somnathArticle: BlogPost = {
-  slug: 'somnath-temple-history-darshan-guide',
-  title: 'Somnath Temple: The Shrine Eternal - History, Darshan & Architecture',
-  metaTitle: 'Somnath Temple Guide | History, Timings & Darshan Booking',
-  metaDescription: 'Explore the fascinating history of Somnath Temple, the first Jyotirlinga. Find complete details on darshan timings, light and sound show, and the best time to visit Gujarat.',
-  focusKeyword: 'Somnath Temple History',
-  category: 'Spiritual Tourism',
-  tags: ['Somnath', 'Gujarat Temples', 'Jyotirlinga', 'Lord Shiva', 'Indian History'],
-  authorId: 'shailesh-raj',
-  reviewerId: 'priya-deshmukh',
-  lastReviewedAt: '2026-06-14T09:00:00Z',
-  relatedTourSlugs: ['jyotirlinga-darshan'],
-  relatedArticleSlugs: ['12-jyotirlinga-temples-india-guide'],
-  featuredImage: '/images/tours/somnath.jpg', // Assuming a fallback jpg or webp
-  ogImage: '/images/tours/somnath.jpg',
+  slug: "somnath-temple-history-darshan-guide",
+  title: "Somnath Temple: The Shrine Eternal - History, Darshan & Architecture",
+  metaTitle: "Somnath Temple Guide | History, Timings & Darshan Booking",
+  metaDescription:
+    "Explore the fascinating history of Somnath Temple, the first Jyotirlinga. Find complete details on darshan timings, light and sound show, and the best time to visit Gujarat.",
+  focusKeyword: "Somnath Temple History",
+  category: "Spiritual Tourism",
+  tags: ["Somnath", "Gujarat Temples", "Jyotirlinga", "Lord Shiva", "Indian History"],
+  authorId: "shailesh-raj",
+  reviewerId: "priya-deshmukh",
+  lastReviewedAt: "2026-06-14T09:00:00Z",
+  relatedTourSlugs: ["jyotirlinga-darshan"],
+  relatedArticleSlugs: ["12-jyotirlinga-temples-india-guide"],
+  featuredImage: "/images/tours/somnath.jpg", // Assuming a fallback jpg or webp
+  ogImage: "/images/tours/somnath.jpg",
   readingTimeMinutes: 10,
-  publishedAt: '2026-06-09T10:00:00Z',
-  updatedAt: '2026-06-09T10:00:00Z',
-  excerpt: 'Destroyed and rebuilt seven times, the Somnath Temple is the ultimate symbol of India\'s cultural resilience. Discover the myth of the Moon God, the invasions, and how to plan your spiritual journey to Prabhas Patan.',
+  publishedAt: "2026-06-09T10:00:00Z",
+  updatedAt: "2026-06-09T10:00:00Z",
+  excerpt:
+    "Destroyed and rebuilt seven times, the Somnath Temple is the ultimate symbol of India's cultural resilience. Discover the myth of the Moon God, the invasions, and how to plan your spiritual journey to Prabhas Patan.",
   tableOfContents: [
-    { id: 'introduction', title: 'The Symbol of Resilience', level: 2 },
-    { id: 'mythology', title: 'Mythology: The Curse of the Moon God', level: 2 },
-    { id: 'history', title: 'A History of Destruction and Resurrection', level: 2 },
-    { id: 'reconstruction', title: 'The Final Reconstruction (1951)', level: 3 },
-    { id: 'architecture', title: 'Architectural Marvel: The Chalukya Style', level: 2 },
-    { id: 'baanasthambha', title: 'The Mysterious Baan Stambha (Arrow Pillar)', level: 3 },
-    { id: 'darshan', title: 'Darshan Timings and Temple Rules', level: 2 },
-    { id: 'light-sound', title: 'The Evening Light and Sound Show (Jay Somnath)', level: 2 },
-    { id: 'travel-tips', title: 'How to Reach and Best Time to Visit', level: 2 },
-    { id: 'conclusion', title: 'Conclusion: The Eternal Flame of Faith', level: 2 }
+    { id: "introduction", title: "The Symbol of Resilience", level: 2 },
+    { id: "mythology", title: "Mythology: The Curse of the Moon God", level: 2 },
+    { id: "history", title: "A History of Destruction and Resurrection", level: 2 },
+    { id: "reconstruction", title: "The Final Reconstruction (1951)", level: 3 },
+    { id: "architecture", title: "Architectural Marvel: The Chalukya Style", level: 2 },
+    { id: "baanasthambha", title: "The Mysterious Baan Stambha (Arrow Pillar)", level: 3 },
+    { id: "darshan", title: "Darshan Timings and Temple Rules", level: 2 },
+    { id: "light-sound", title: "The Evening Light and Sound Show (Jay Somnath)", level: 2 },
+    { id: "travel-tips", title: "How to Reach and Best Time to Visit", level: 2 },
+    { id: "conclusion", title: "Conclusion: The Eternal Flame of Faith", level: 2 },
   ],
   faqs: [
     {
-      question: 'Is photography allowed inside the Somnath Temple?',
-      answer: 'No. Photography, videography, and mobile phones are strictly prohibited inside the main temple complex. Lockers are provided at the entrance to store your electronics securely.'
+      question: "Is photography allowed inside the Somnath Temple?",
+      answer:
+        "No. Photography, videography, and mobile phones are strictly prohibited inside the main temple complex. Lockers are provided at the entrance to store your electronics securely.",
     },
     {
-      question: 'What are the timing for the Somnath Light and Sound Show?',
-      answer: 'The spectacular Jay Somnath Light and Sound show takes place every evening between 8:00 PM and 9:00 PM in the temple premises. Tickets can be purchased on the spot.'
+      question: "What are the timing for the Somnath Light and Sound Show?",
+      answer:
+        "The spectacular Jay Somnath Light and Sound show takes place every evening between 8:00 PM and 9:00 PM in the temple premises. Tickets can be purchased on the spot.",
     },
     {
-      question: 'Are there any dress code rules for entering the Somnath Temple?',
-      answer: 'Yes, devotees are expected to wear decent traditional or casual clothing. Shorts, mini-skirts, and sleeveless tops are not allowed. Belts made of animal leather must also be removed before entering the sanctum.'
+      question: "Are there any dress code rules for entering the Somnath Temple?",
+      answer:
+        "Yes, devotees are expected to wear decent traditional or casual clothing. Shorts, mini-skirts, and sleeveless tops are not allowed. Belts made of animal leather must also be removed before entering the sanctum.",
     },
     {
-      question: 'Which is the nearest airport to Somnath?',
-      answer: 'The nearest airport is Keshod (approx. 55 km away), but it has limited connectivity. The most convenient airport with regular flights is Diu Airport (85 km) or Rajkot International Airport (200 km).'
-    }
+      question: "Which is the nearest airport to Somnath?",
+      answer:
+        "The nearest airport is Keshod (approx. 55 km away), but it has limited connectivity. The most convenient airport with regular flights is Diu Airport (85 km) or Rajkot International Airport (200 km).",
+    },
   ],
   content: `
 <h2 id="introduction">The Symbol of Resilience</h2>
@@ -109,5 +115,5 @@ export const somnathArticle: BlogPost = {
 
 <h2 id="conclusion">Conclusion: The Eternal Flame of Faith</h2>
 <p>Somnath is more than a religious destination; it is a profound historical lesson carved in stone. Every pillar and every carving whispers the truth that while physical structures can be broken by force, the spirit of devotion and cultural identity cannot be extinguished. Standing before the Jyotirlinga, listening to the rhythmic chants echoing against the roar of the Arabian Sea, one truly understands why Somnath is, and always will be, the Shrine Eternal.</p>
-  `
+  `,
 };

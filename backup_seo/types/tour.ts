@@ -1,4 +1,4 @@
-import { SEOData } from './seo';
+import { SEOData } from "./seo";
 
 export interface TourPackage {
   title: string;

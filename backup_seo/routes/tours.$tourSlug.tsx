@@ -1,10 +1,10 @@
-import React from 'react';
-import { createFileRoute, notFound } from '@tanstack/react-router';
-import { tours } from '../data/tours.en';
-import { TourPageTemplate } from '../templates/TourPageTemplate';
-import { generateSEO, generateHreflangLinks } from '../lib/seo';
+import React from "react";
+import { createFileRoute, notFound } from "@tanstack/react-router";
+import { tours } from "../data/tours.en";
+import { TourPageTemplate } from "../templates/TourPageTemplate";
+import { generateSEO, generateHreflangLinks } from "../lib/seo";
 
-export const Route = createFileRoute('/tours/$tourSlug')({
+export const Route = createFileRoute("/tours/$tourSlug")({
   loader: ({ params }) => {
     let baseSlug = params.tourSlug;
     let citySlug: string | undefined;
@@ -21,7 +21,7 @@ export const Route = createFileRoute('/tours/$tourSlug')({
     }
 
     if (citySlug) {
-      const cityVariant = baseTour.cityVariants?.find(cv => cv.citySlug === citySlug);
+      const cityVariant = baseTour.cityVariants?.find((cv) => cv.citySlug === citySlug);
       if (!cityVariant) {
         throw notFound();
       }
@@ -41,11 +41,11 @@ export const Route = createFileRoute('/tours/$tourSlug')({
         overview: cityVariant.overview,
         faq: cityVariant.faq,
       };
-      
+
       if (cityVariant.packages && cityVariant.packages.length > 0) {
-         mergedTour.packages = cityVariant.packages;
+        mergedTour.packages = cityVariant.packages;
       }
-      
+
       // Merge schema specific to city
       if (mergedTour.schemaData) {
         mergedTour.schemaData = {
@@ -67,25 +67,22 @@ export const Route = createFileRoute('/tours/$tourSlug')({
   head: ({ loaderData }) => {
     if (!loaderData) {
       return {
-        meta: [
-          { title: '404 Not Found' },
-          { name: 'robots', content: 'noindex, nofollow' }
-        ]
+        meta: [{ title: "404 Not Found" }, { name: "robots", content: "noindex, nofollow" }],
       };
     }
-    
+
     return {
       meta: generateSEO({
         title: loaderData.metaTitle,
         description: loaderData.metaDescription,
         canonicalUrl: loaderData.canonicalUrl,
         ogImage: `https://www.shailrajtravels.com${loaderData.heroContent.image}`,
-        type: 'website'
+        type: "website",
       }),
       links: [
-        { rel: 'canonical', href: loaderData.canonicalUrl },
-        ...generateHreflangLinks(loaderData.canonicalUrl)
-      ]
+        { rel: "canonical", href: loaderData.canonicalUrl },
+        ...generateHreflangLinks(loaderData.canonicalUrl),
+      ],
     };
   },
   component: TourPageComponent,

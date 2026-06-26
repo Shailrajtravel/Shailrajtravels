@@ -15,7 +15,7 @@ export function generateSEO({
   canonicalUrl,
   ogImage = "https://www.shailrajtravels.com/og-image.jpg",
   type = "website",
-  lang = "en"
+  lang = "en",
 }: SEOProps): any {
   const meta: any[] = [
     { title },
@@ -40,19 +40,17 @@ export function generateSEO({
 export function generateHreflangLinks(currentUrl: string) {
   const urlObj = new URL(currentUrl);
   const path = urlObj.pathname;
-  
+
   // Basic logic to swap /mr/ to / and vice-versa
-  const enUrl = path.startsWith('/mr/') 
-    ? `${urlObj.origin}${path.replace('/mr/', '/')}`
+  const enUrl = path.startsWith("/mr/")
+    ? `${urlObj.origin}${path.replace("/mr/", "/")}`
     : currentUrl;
-    
-  const mrUrl = path.startsWith('/mr/')
-    ? currentUrl
-    : `${urlObj.origin}/mr${path}`;
+
+  const mrUrl = path.startsWith("/mr/") ? currentUrl : `${urlObj.origin}/mr${path}`;
 
   return [
-    { rel: 'alternate', hreflang: 'en', href: enUrl },
-    { rel: 'alternate', hreflang: 'mr', href: mrUrl },
-    { rel: 'alternate', hreflang: 'x-default', href: enUrl }
+    { rel: "alternate", hreflang: "en", href: enUrl },
+    { rel: "alternate", hreflang: "mr", href: mrUrl },
+    { rel: "alternate", hreflang: "x-default", href: enUrl },
   ];
 }

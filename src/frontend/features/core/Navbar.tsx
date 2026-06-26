@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Instagram, MapPin, Phone, Menu, X } from 'lucide-react';
-import logo from '@/frontend/assets/Shailraj travels-Punelogo.png';
-import { translations } from './i18n';
+import React, { useState, useEffect } from "react";
+import { Instagram, MapPin, Phone, Menu, X } from "lucide-react";
+import logo from "@/frontend/assets/Shailraj travels-Punelogo.png";
+import { translations } from "./i18n";
 
 const NAV_KEYS = [
   "navHome",
   "navAbout",
   "navTours",
+  "navAllTours",
   "navPilgrimage",
   "navReviews",
   "navGallery",
@@ -29,14 +30,20 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
   return (
     <header className="fixed inset-x-0 top-0 z-50 p-2 md:p-4 transition-all">
       <div
-        className={`mx-auto flex max-w-[1600px] items-center justify-between rounded-2xl pl-1 pr-4 py-3 transition-all duration-200 md:pl-2 md:pr-6 md:py-4 ${isScrolled ? "bg-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.08)] backdrop-blur-md" : "bg-transparent"
-          }`}
+        className={`mx-auto flex max-w-[1600px] items-center justify-between rounded-2xl pl-1 pr-4 py-3 transition-all duration-200 md:pl-2 md:pr-6 md:py-4 ${
+          isScrolled
+            ? "bg-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.08)] backdrop-blur-md"
+            : "bg-transparent"
+        }`}
       >
-
         {/* Left: Logo */}
         <div className="flex flex-1 justify-start">
           <a href="#" className="flex items-center gap-[4mm]">
-            <img src={logo} alt="Shailraj Travels Logo" className="h-[110px] w-auto object-contain md:h-[140px] -my-10 md:-my-14 -ml-5 md:-ml-8 -mr-7 md:-mr-11" />
+            <img
+              src={logo}
+              alt="Shailraj Travels Logo"
+              className="h-[110px] w-auto object-contain md:h-[140px] -my-10 md:-my-14 -ml-5 md:-ml-8 -mr-7 md:-mr-11"
+            />
             <span className="leading-tight">
               <span className="block font-display text-xl font-semibold text-red-600 md:text-2xl">
                 Shailraj
@@ -59,40 +66,54 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
             const isGallery = key === "navGallery";
             const isBlog = key === "navBlog";
             const isContact = key === "navContact";
+            const isAllTours = key === "navAllTours";
 
-            const className = `whitespace-nowrap text-[13px] xl:text-[14px] font-medium transition ${i === 0
-              ? "text-brand-blue-deep"
-              : "text-slate-700 hover:text-brand-blue"
-              }`;
+            const className = `whitespace-nowrap text-[13px] xl:text-[14px] font-medium transition ${
+              i === 0 ? "text-brand-blue-deep" : "text-slate-700 hover:text-brand-blue"
+            }`;
 
-            if (isAbout || isHome || isFeatures || isPackages || isReviews || isGallery || isContact) {
+            if (
+              isAbout ||
+              isHome ||
+              isFeatures ||
+              isPackages ||
+              isReviews ||
+              isGallery ||
+              isContact
+            ) {
               return (
                 <a
                   key={key}
-                  href={isHome ? "/" : isAbout ? "/#about" : isFeatures ? "/#features" : isPackages ? "/#tours" : isReviews ? "/#reviews" : isGallery ? "/#gallery" : "/#contact"}
+                  href={
+                    isHome
+                      ? "/"
+                      : isAbout
+                        ? "/#about"
+                        : isFeatures
+                          ? "/#features"
+                          : isPackages
+                            ? "/#tours"
+                            : isReviews
+                              ? "/#reviews"
+                              : isGallery
+                                ? "/#gallery"
+                                : "/#contact"
+                  }
                   className={className}
                 >
                   {t[key]}
                 </a>
               );
             }
-            if (isBlog) {
+            if (isBlog || isAllTours) {
               return (
-                <a
-                  key={key}
-                  href="/blog"
-                  className={className}
-                >
+                <a key={key} href={isBlog ? "/blog" : "/tours"} className={className}>
                   {t[key]}
                 </a>
               );
             }
             return (
-              <a
-                key={key}
-                href="#"
-                className={className}
-              >
+              <a key={key} href="#" className={className}>
                 {t[key]}
               </a>
             );
@@ -128,7 +149,6 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
             {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
-
       </div>
 
       {/* Mobile Menu Drawer */}
@@ -144,14 +164,38 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
               const isGallery = key === "navGallery";
               const isBlog = key === "navBlog";
               const isContact = key === "navContact";
+              const isAllTours = key === "navAllTours";
 
-              const className = "text-[16px] font-bold text-brand-blue-deep transition hover:text-brand-green";
+              const className =
+                "text-[16px] font-bold text-brand-blue-deep transition hover:text-brand-green";
 
-              if (isAbout || isHome || isFeatures || isPackages || isReviews || isGallery || isContact) {
+              if (
+                isAbout ||
+                isHome ||
+                isFeatures ||
+                isPackages ||
+                isReviews ||
+                isGallery ||
+                isContact
+              ) {
                 return (
                   <a
                     key={key}
-                    href={isHome ? "/" : isAbout ? "/#about" : isFeatures ? "/#features" : isPackages ? "/#tours" : isReviews ? "/#reviews" : isGallery ? "/#gallery" : "/#contact"}
+                    href={
+                      isHome
+                        ? "/"
+                        : isAbout
+                          ? "/#about"
+                          : isFeatures
+                            ? "/#features"
+                            : isPackages
+                              ? "/#tours"
+                              : isReviews
+                                ? "/#reviews"
+                                : isGallery
+                                  ? "/#gallery"
+                                  : "/#contact"
+                    }
                     onClick={() => setIsMobileMenuOpen(false)}
                     className={className}
                   >
@@ -159,11 +203,11 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
                   </a>
                 );
               }
-              if (isBlog) {
+              if (isBlog || isAllTours) {
                 return (
                   <a
                     key={key}
-                    href="/blog"
+                    href={isBlog ? "/blog" : "/tours"}
                     onClick={() => setIsMobileMenuOpen(false)}
                     className={className}
                   >

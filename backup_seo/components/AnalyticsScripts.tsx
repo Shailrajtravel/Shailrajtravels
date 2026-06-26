@@ -1,5 +1,5 @@
-import React from 'react';
-import { ANALYTICS_CONFIG } from '../config/analytics';
+import React from "react";
+import { ANALYTICS_CONFIG } from "../config/analytics";
 
 export function AnalyticsScripts() {
   return (
@@ -11,17 +11,20 @@ export function AnalyticsScripts() {
           new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
           j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-          })(window,document,'script','dataLayer','${ANALYTICS_CONFIG.GTM_CONTAINER_ID}');`
+          })(window,document,'script','dataLayer','${ANALYTICS_CONFIG.GTM_CONTAINER_ID}');`,
         }}
       />
       {/* Google Analytics (GA4) */}
-      <script async src={`https://www.googletagmanager.com/gtag/js?id=${ANALYTICS_CONFIG.GA_MEASUREMENT_ID}`} />
+      <script
+        async
+        src={`https://www.googletagmanager.com/gtag/js?id=${ANALYTICS_CONFIG.GA_MEASUREMENT_ID}`}
+      />
       <script
         dangerouslySetInnerHTML={{
           __html: `window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-          gtag('config', '${ANALYTICS_CONFIG.GA_MEASUREMENT_ID}');`
+          gtag('config', '${ANALYTICS_CONFIG.GA_MEASUREMENT_ID}');`,
         }}
       />
     </>

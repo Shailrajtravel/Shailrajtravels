@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { ChevronDown, ChevronUp } from 'lucide-react';
-import { SchemaMarkup } from './SchemaMarkup';
-import { generateFAQSchema } from '../../backend/lib/schema-generators';
+import React, { useState } from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { SchemaMarkup } from "./SchemaMarkup";
+import { generateFAQSchema } from "../../backend/lib/schema-generators";
 
 export interface FAQ {
   question: string;

@@ -1,23 +1,55 @@
-import React, { useState, useEffect } from 'react';
-import { createFileRoute, useNavigate, redirect } from '@tanstack/react-router';
-import { verifyAdminFn } from '../lib/auth';
-import { getPackagesFn, createPackageFn, updatePackageFn, deletePackageFn } from '../lib/packages';
-import { getReviewsFn, deleteReviewFn } from '../lib/reviews';
-import { getTripOptionsFn, createTripOptionFn, updateTripOptionFn, deleteTripOptionFn, getBookingsFn, deleteBookingFn, updateBookingStatusFn } from '../lib/bookings';
-import { getGalleryPhotosFn, addGalleryPhotoFn, deleteGalleryPhotoFn } from '../lib/gallery';
-import { getAuditLogsFn } from '../lib/audit';
-import * as XLSX from 'xlsx';
-import { LayoutDashboard, Package, LogOut, Plus, Trash2, Edit, Loader2, Search, ArrowLeft, Image as ImageIcon, MessageSquare, Menu, X, Map, CalendarCheck, MoreVertical, Clock, Users, Eye, FileSpreadsheet, Download, Activity, Printer } from 'lucide-react';
-import logo from '@/assets/logo11.png';
-import { Calendar } from '@/components/ui/calendar';
-import { format } from 'date-fns';
+import React, { useState, useEffect } from "react";
+import { createFileRoute, useNavigate, redirect } from "@tanstack/react-router";
+import { verifyAdminFn } from "../lib/auth";
+import { getPackagesFn, createPackageFn, updatePackageFn, deletePackageFn } from "../lib/packages";
+import { getReviewsFn, deleteReviewFn } from "../lib/reviews";
+import {
+  getTripOptionsFn,
+  createTripOptionFn,
+  updateTripOptionFn,
+  deleteTripOptionFn,
+  getBookingsFn,
+  deleteBookingFn,
+  updateBookingStatusFn,
+} from "../lib/bookings";
+import { getGalleryPhotosFn, addGalleryPhotoFn, deleteGalleryPhotoFn } from "../lib/gallery";
+import { getAuditLogsFn } from "../lib/audit";
+import * as XLSX from "xlsx";
+import {
+  LayoutDashboard,
+  Package,
+  LogOut,
+  Plus,
+  Trash2,
+  Edit,
+  Loader2,
+  Search,
+  ArrowLeft,
+  Image as ImageIcon,
+  MessageSquare,
+  Menu,
+  X,
+  Map,
+  CalendarCheck,
+  MoreVertical,
+  Clock,
+  Users,
+  Eye,
+  FileSpreadsheet,
+  Download,
+  Activity,
+  Printer,
+} from "lucide-react";
+import logo from "@/assets/logo11.png";
+import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns";
 
-export const Route = createFileRoute('/admin')({
+export const Route = createFileRoute("/admin")({
   beforeLoad: () => {
-    if (typeof window !== 'undefined') {
-      const token = sessionStorage.getItem('adminToken');
+    if (typeof window !== "undefined") {
+      const token = sessionStorage.getItem("adminToken");
       if (!token) {
-        throw redirect({ to: '/login' });
+        throw redirect({ to: "/login" });
       }
     }
   },
@@ -37,30 +69,47 @@ function AdminPage() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<any>(null); // Shared for editing
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'packages' | 'reviews' | 'trips' | 'bookings' | 'gallery' | 'customers' | 'reports' | 'invoices' | 'audit'>('dashboard');
+  const [activeTab, setActiveTab] = useState<
+    | "dashboard"
+    | "packages"
+    | "reviews"
+    | "trips"
+    | "bookings"
+    | "gallery"
+    | "customers"
+    | "reports"
+    | "invoices"
+    | "audit"
+  >("dashboard");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [deleteConfirm, setDeleteConfirm] = useState<{ isOpen: boolean; id: string; type: 'package' | 'review' | 'photo' | 'trip' | 'booking' } | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<{
+    isOpen: boolean;
+    id: string;
+    type: "package" | "review" | "photo" | "trip" | "booking";
+  } | null>(null);
 
   useEffect(() => {
-    const t = sessionStorage.getItem('adminToken');
+    const t = sessionStorage.getItem("adminToken");
     if (!t) {
-      navigate({ to: '/login' });
+      navigate({ to: "/login" });
       return;
     }
-    
+
     // Verify token
-    verifyAdminFn({ data: { token: t } }).then(res => {
-      if (res?.success) {
-        setToken(t);
-        loadData(t);
-      } else {
-        sessionStorage.removeItem('adminToken');
-        navigate({ to: '/login' });
-      }
-    }).catch(() => {
-      sessionStorage.removeItem('adminToken');
-      navigate({ to: '/login' });
-    });
+    verifyAdminFn({ data: { token: t } })
+      .then((res) => {
+        if (res?.success) {
+          setToken(t);
+          loadData(t);
+        } else {
+          sessionStorage.removeItem("adminToken");
+          navigate({ to: "/login" });
+        }
+      })
+      .catch(() => {
+        sessionStorage.removeItem("adminToken");
+        navigate({ to: "/login" });
+      });
   }, [navigate]);
 
   const loadData = async (activeToken?: string) => {
@@ -69,15 +118,42 @@ function AdminPage() {
     setErrorMsg(null);
     try {
       // Fetch individually so one failure doesn't break the whole dashboard
-      const pkgsPromise = getPackagesFn().catch(e => { console.error('Packages error:', e); return []; });
-      const revsPromise = getReviewsFn().catch(e => { console.error('Reviews error:', e); return []; });
-      const tripsPromise = getTripOptionsFn().catch(e => { console.error('Trips error:', e); return []; });
-      const bksPromise = tkn ? getBookingsFn({ data: { adminToken: tkn } }).catch(e => { console.error('Bookings error:', e); return []; }) : Promise.resolve([]);
-      const photosPromise = getGalleryPhotosFn().catch(e => { console.error('Photos error:', e); return []; });
-      const auditPromise = tkn ? getAuditLogsFn({ data: { adminToken: tkn } }).catch(e => { console.error('Audit error:', e); return []; }) : Promise.resolve([]);
+      const pkgsPromise = getPackagesFn().catch((e) => {
+        console.error("Packages error:", e);
+        return [];
+      });
+      const revsPromise = getReviewsFn().catch((e) => {
+        console.error("Reviews error:", e);
+        return [];
+      });
+      const tripsPromise = getTripOptionsFn().catch((e) => {
+        console.error("Trips error:", e);
+        return [];
+      });
+      const bksPromise = tkn
+        ? getBookingsFn({ data: { adminToken: tkn } }).catch((e) => {
+            console.error("Bookings error:", e);
+            return [];
+          })
+        : Promise.resolve([]);
+      const photosPromise = getGalleryPhotosFn().catch((e) => {
+        console.error("Photos error:", e);
+        return [];
+      });
+      const auditPromise = tkn
+        ? getAuditLogsFn({ data: { adminToken: tkn } }).catch((e) => {
+            console.error("Audit error:", e);
+            return [];
+          })
+        : Promise.resolve([]);
 
       const [pkgs, revs, trips, bks, photos, logs] = await Promise.all([
-        pkgsPromise, revsPromise, tripsPromise, bksPromise, photosPromise, auditPromise
+        pkgsPromise,
+        revsPromise,
+        tripsPromise,
+        bksPromise,
+        photosPromise,
+        auditPromise,
       ]);
 
       setPackages(pkgs);
@@ -87,7 +163,7 @@ function AdminPage() {
       setGalleryPhotos(photos);
       setAuditLogs(logs);
     } catch (e: any) {
-      console.error('loadData fatal error:', e);
+      console.error("loadData fatal error:", e);
       setErrorMsg(e.message || String(e));
     } finally {
       setLoading(false);
@@ -95,16 +171,16 @@ function AdminPage() {
   };
 
   const handleLogout = () => {
-    sessionStorage.removeItem('adminToken');
-    navigate({ to: '/login' });
+    sessionStorage.removeItem("adminToken");
+    navigate({ to: "/login" });
   };
 
   const handleDeletePackage = (id: string) => {
-    setDeleteConfirm({ isOpen: true, id, type: 'package' });
+    setDeleteConfirm({ isOpen: true, id, type: "package" });
   };
 
   const handleDeleteReview = (id: string) => {
-    setDeleteConfirm({ isOpen: true, id, type: 'review' });
+    setDeleteConfirm({ isOpen: true, id, type: "review" });
   };
 
   const handleEdit = (item: any) => {
@@ -113,18 +189,23 @@ function AdminPage() {
   };
 
   const handleDeletePhoto = (id: string) => {
-    setDeleteConfirm({ isOpen: true, id, type: 'photo' });
+    setDeleteConfirm({ isOpen: true, id, type: "photo" });
   };
 
   const confirmDelete = async () => {
     if (!deleteConfirm || !token) return;
     try {
-      if (deleteConfirm.type === 'package') await deletePackageFn({ data: { adminToken: token, id: deleteConfirm.id } });
-      else if (deleteConfirm.type === 'review') await deleteReviewFn({ data: { adminToken: token, id: deleteConfirm.id } });
-      else if (deleteConfirm.type === 'photo') await deleteGalleryPhotoFn({ data: { adminToken: token, id: deleteConfirm.id } });
-      else if (deleteConfirm.type === 'trip') await deleteTripOptionFn({ data: { adminToken: token, id: deleteConfirm.id } });
-      else if (deleteConfirm.type === 'booking') await deleteBookingFn({ data: { adminToken: token, id: deleteConfirm.id } });
-      
+      if (deleteConfirm.type === "package")
+        await deletePackageFn({ data: { adminToken: token, id: deleteConfirm.id } });
+      else if (deleteConfirm.type === "review")
+        await deleteReviewFn({ data: { adminToken: token, id: deleteConfirm.id } });
+      else if (deleteConfirm.type === "photo")
+        await deleteGalleryPhotoFn({ data: { adminToken: token, id: deleteConfirm.id } });
+      else if (deleteConfirm.type === "trip")
+        await deleteTripOptionFn({ data: { adminToken: token, id: deleteConfirm.id } });
+      else if (deleteConfirm.type === "booking")
+        await deleteBookingFn({ data: { adminToken: token, id: deleteConfirm.id } });
+
       loadData();
     } catch (e) {
       alert(`Failed to delete ${deleteConfirm.type}.`);
@@ -138,103 +219,158 @@ function AdminPage() {
     setIsFormOpen(true);
   };
 
-  if (!token) return <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-brand-green" /></div>;
+  if (!token)
+    return (
+      <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-brand-green" />
+      </div>
+    );
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex">
       {/* Mobile Sidebar Overlay */}
       {isMobileMenuOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-slate-900/50 z-40 md:hidden"
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}
 
       {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200 flex flex-col transform transition-transform duration-300 md:relative md:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200 flex flex-col transform transition-transform duration-300 md:relative md:translate-x-0 ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}
+      >
         <div className="h-20 flex items-center justify-between px-6 border-b border-slate-100">
           <div className="flex items-center">
             <img src={logo} alt="Shailraj" className="h-16 mr-3 object-contain" />
-            <span className="font-display font-bold text-xl text-brand-blue-deep tracking-tight">Admin</span>
+            <span className="font-display font-bold text-xl text-brand-blue-deep tracking-tight">
+              Admin
+            </span>
           </div>
-          <button className="md:hidden p-2 text-slate-400 hover:text-slate-700" onClick={() => setIsMobileMenuOpen(false)}>
+          <button
+            className="md:hidden p-2 text-slate-400 hover:text-slate-700"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
             <X className="w-5 h-5" />
           </button>
         </div>
         <div className="flex-1 py-6 px-4 flex flex-col gap-2">
-          <button 
-            onClick={() => { setActiveTab('dashboard'); setIsFormOpen(false); setIsMobileMenuOpen(false); }}
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${activeTab === 'dashboard' ? 'bg-brand-blue-deep text-white shadow-md' : 'text-slate-500 hover:bg-slate-50 hover:text-brand-blue-deep'}`}
+          <button
+            onClick={() => {
+              setActiveTab("dashboard");
+              setIsFormOpen(false);
+              setIsMobileMenuOpen(false);
+            }}
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${activeTab === "dashboard" ? "bg-brand-blue-deep text-white shadow-md" : "text-slate-500 hover:bg-slate-50 hover:text-brand-blue-deep"}`}
           >
             <LayoutDashboard className="w-5 h-5" />
             Dashboard
           </button>
-          <button 
-            onClick={() => { setActiveTab('packages'); setIsFormOpen(false); setIsMobileMenuOpen(false); }}
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${activeTab === 'packages' ? 'bg-brand-blue-deep text-white shadow-md' : 'text-slate-500 hover:bg-slate-50 hover:text-brand-blue-deep'}`}
+          <button
+            onClick={() => {
+              setActiveTab("packages");
+              setIsFormOpen(false);
+              setIsMobileMenuOpen(false);
+            }}
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${activeTab === "packages" ? "bg-brand-blue-deep text-white shadow-md" : "text-slate-500 hover:bg-slate-50 hover:text-brand-blue-deep"}`}
           >
             <Package className="w-5 h-5" />
             Packages
           </button>
-          <button 
-            onClick={() => { setActiveTab('reviews'); setIsFormOpen(false); setIsMobileMenuOpen(false); }}
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${activeTab === 'reviews' ? 'bg-brand-blue-deep text-white shadow-md' : 'text-slate-500 hover:bg-slate-50 hover:text-brand-blue-deep'}`}
+          <button
+            onClick={() => {
+              setActiveTab("reviews");
+              setIsFormOpen(false);
+              setIsMobileMenuOpen(false);
+            }}
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${activeTab === "reviews" ? "bg-brand-blue-deep text-white shadow-md" : "text-slate-500 hover:bg-slate-50 hover:text-brand-blue-deep"}`}
           >
             <MessageSquare className="w-5 h-5" />
             Reviews
           </button>
-          <button 
-            onClick={() => { setActiveTab('trips'); setIsFormOpen(false); setIsMobileMenuOpen(false); }}
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${activeTab === 'trips' ? 'bg-brand-blue-deep text-white shadow-md' : 'text-slate-500 hover:bg-slate-50 hover:text-brand-blue-deep'}`}
+          <button
+            onClick={() => {
+              setActiveTab("trips");
+              setIsFormOpen(false);
+              setIsMobileMenuOpen(false);
+            }}
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${activeTab === "trips" ? "bg-brand-blue-deep text-white shadow-md" : "text-slate-500 hover:bg-slate-50 hover:text-brand-blue-deep"}`}
           >
             <Map className="w-5 h-5" />
             Trip Options
           </button>
-          <button 
-            onClick={() => { setActiveTab('bookings'); setIsFormOpen(false); setIsMobileMenuOpen(false); }}
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${activeTab === 'bookings' ? 'bg-brand-blue-deep text-white shadow-md' : 'text-slate-500 hover:bg-slate-50 hover:text-brand-blue-deep'}`}
+          <button
+            onClick={() => {
+              setActiveTab("bookings");
+              setIsFormOpen(false);
+              setIsMobileMenuOpen(false);
+            }}
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${activeTab === "bookings" ? "bg-brand-blue-deep text-white shadow-md" : "text-slate-500 hover:bg-slate-50 hover:text-brand-blue-deep"}`}
           >
             <CalendarCheck className="w-5 h-5" />
             Bookings
           </button>
-          <button 
-            onClick={() => { setActiveTab('invoices'); setIsFormOpen(false); setIsMobileMenuOpen(false); }}
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${activeTab === 'invoices' ? 'bg-brand-blue-deep text-white shadow-md' : 'text-slate-500 hover:bg-slate-50 hover:text-brand-blue-deep'}`}
+          <button
+            onClick={() => {
+              setActiveTab("invoices");
+              setIsFormOpen(false);
+              setIsMobileMenuOpen(false);
+            }}
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${activeTab === "invoices" ? "bg-brand-blue-deep text-white shadow-md" : "text-slate-500 hover:bg-slate-50 hover:text-brand-blue-deep"}`}
           >
             <Printer className="w-5 h-5" />
             Invoices
           </button>
-          <button 
-            onClick={() => { setActiveTab('gallery'); setIsFormOpen(false); setIsMobileMenuOpen(false); }}
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${activeTab === 'gallery' ? 'bg-brand-blue-deep text-white shadow-md' : 'text-slate-500 hover:bg-slate-50 hover:text-brand-blue-deep'}`}
+          <button
+            onClick={() => {
+              setActiveTab("gallery");
+              setIsFormOpen(false);
+              setIsMobileMenuOpen(false);
+            }}
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${activeTab === "gallery" ? "bg-brand-blue-deep text-white shadow-md" : "text-slate-500 hover:bg-slate-50 hover:text-brand-blue-deep"}`}
           >
             <ImageIcon className="w-5 h-5" />
             Gallery
           </button>
-          <button 
-            onClick={() => { setActiveTab('customers'); setIsFormOpen(false); setIsMobileMenuOpen(false); }}
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${activeTab === 'customers' ? 'bg-brand-blue-deep text-white shadow-md' : 'text-slate-500 hover:bg-slate-50 hover:text-brand-blue-deep'}`}
+          <button
+            onClick={() => {
+              setActiveTab("customers");
+              setIsFormOpen(false);
+              setIsMobileMenuOpen(false);
+            }}
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${activeTab === "customers" ? "bg-brand-blue-deep text-white shadow-md" : "text-slate-500 hover:bg-slate-50 hover:text-brand-blue-deep"}`}
           >
             <Users className="w-5 h-5" />
             Customers
           </button>
-          <button 
-            onClick={() => { setActiveTab('reports'); setIsFormOpen(false); setIsMobileMenuOpen(false); }}
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${activeTab === 'reports' ? 'bg-brand-blue-deep text-white shadow-md' : 'text-slate-500 hover:bg-slate-50 hover:text-brand-blue-deep'}`}
+          <button
+            onClick={() => {
+              setActiveTab("reports");
+              setIsFormOpen(false);
+              setIsMobileMenuOpen(false);
+            }}
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${activeTab === "reports" ? "bg-brand-blue-deep text-white shadow-md" : "text-slate-500 hover:bg-slate-50 hover:text-brand-blue-deep"}`}
           >
             <FileSpreadsheet className="w-5 h-5" />
             Reports
           </button>
-          <button 
-            onClick={() => { setActiveTab('audit'); setIsFormOpen(false); setIsMobileMenuOpen(false); }}
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${activeTab === 'audit' ? 'bg-brand-blue-deep text-white shadow-md' : 'text-slate-500 hover:bg-slate-50 hover:text-brand-blue-deep'}`}
+          <button
+            onClick={() => {
+              setActiveTab("audit");
+              setIsFormOpen(false);
+              setIsMobileMenuOpen(false);
+            }}
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${activeTab === "audit" ? "bg-brand-blue-deep text-white shadow-md" : "text-slate-500 hover:bg-slate-50 hover:text-brand-blue-deep"}`}
           >
             <Activity className="w-5 h-5" />
             Audit Logs
           </button>
         </div>
         <div className="p-4 border-t border-slate-100">
-          <button onClick={handleLogout} className="flex items-center gap-3 px-4 py-3 w-full text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-xl font-bold transition-all">
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-3 px-4 py-3 w-full text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-xl font-bold transition-all"
+          >
             <LogOut className="w-5 h-5" />
             Logout
           </button>
@@ -246,29 +382,49 @@ function AdminPage() {
         {/* Header */}
         <header className="h-16 md:h-20 bg-white border-b border-slate-200 flex items-center justify-between px-4 md:px-8 shrink-0 gap-2">
           <div className="flex items-center gap-2 md:gap-3 min-w-0 flex-1">
-            <button className="md:hidden p-2 -ml-2 text-slate-500 hover:bg-slate-100 rounded-lg shrink-0" onClick={() => setIsMobileMenuOpen(true)}>
+            <button
+              className="md:hidden p-2 -ml-2 text-slate-500 hover:bg-slate-100 rounded-lg shrink-0"
+              onClick={() => setIsMobileMenuOpen(true)}
+            >
               <Menu className="w-6 h-6" />
             </button>
             <h1 className="text-lg sm:text-xl md:text-2xl font-bold font-display text-brand-blue-deep truncate">
-              {activeTab === 'dashboard' ? 'Overview' :
-               activeTab === 'packages' ? 'Packages Management' : 
-               activeTab === 'reviews' ? 'Reviews Management' :
-               activeTab === 'trips' ? 'Trip Options' : 
-               activeTab === 'gallery' ? 'Gallery Management' : 
-               activeTab === 'customers' ? 'Customers' : 
-               activeTab === 'reports' ? 'Reports & Exports' : 
-               activeTab === 'invoices' ? 'Generated Invoices' : 
-               activeTab === 'audit' ? 'Audit Logs' : 'Booking Management'}
+              {activeTab === "dashboard"
+                ? "Overview"
+                : activeTab === "packages"
+                  ? "Packages Management"
+                  : activeTab === "reviews"
+                    ? "Reviews Management"
+                    : activeTab === "trips"
+                      ? "Trip Options"
+                      : activeTab === "gallery"
+                        ? "Gallery Management"
+                        : activeTab === "customers"
+                          ? "Customers"
+                          : activeTab === "reports"
+                            ? "Reports & Exports"
+                            : activeTab === "invoices"
+                              ? "Generated Invoices"
+                              : activeTab === "audit"
+                                ? "Audit Logs"
+                                : "Booking Management"}
             </h1>
           </div>
           <div className="flex items-center gap-2 md:gap-4 shrink-0">
-            {(activeTab === 'packages' || activeTab === 'trips' || activeTab === 'gallery') && (
-              <button 
+            {(activeTab === "packages" || activeTab === "trips" || activeTab === "gallery") && (
+              <button
                 onClick={handleAddNew}
                 className="bg-brand-blue-deep hover:bg-brand-blue text-white px-3 py-2 md:px-5 md:py-2.5 rounded-xl font-bold flex items-center gap-1 md:gap-2 transition-colors shadow-lg shadow-brand-blue/20 text-sm md:text-base"
               >
                 <Plus className="w-4 h-4 md:w-5 md:h-5 shrink-0" />
-                <span className="hidden sm:inline">Add {activeTab === 'packages' ? 'Package' : activeTab === 'gallery' ? 'Photo' : 'Trip'}</span>
+                <span className="hidden sm:inline">
+                  Add{" "}
+                  {activeTab === "packages"
+                    ? "Package"
+                    : activeTab === "gallery"
+                      ? "Photo"
+                      : "Trip"}
+                </span>
                 <span className="sm:hidden">Add</span>
               </button>
             )}
@@ -283,31 +439,39 @@ function AdminPage() {
 
         {/* Scrollable Area */}
         <div className="flex-1 overflow-auto p-4 md:p-8 print:p-0 relative bg-slate-50/50">
-          
-          {activeTab === 'dashboard' ? (
-            <DashboardOverview packages={packages} bookings={bookings} reviews={reviews} photos={galleryPhotos} />
-          ) : activeTab === 'audit' ? (
+          {activeTab === "dashboard" ? (
+            <DashboardOverview
+              packages={packages}
+              bookings={bookings}
+              reviews={reviews}
+              photos={galleryPhotos}
+            />
+          ) : activeTab === "audit" ? (
             <AuditLogsPanel logs={auditLogs} />
-          ) : activeTab === 'packages' ? (
+          ) : activeTab === "packages" ? (
             isFormOpen ? (
-              <PackageForm 
-                token={token} 
-                initialData={editingItem} 
-                onClose={() => setIsFormOpen(false)} 
+              <PackageForm
+                token={token}
+                initialData={editingItem}
+                onClose={() => setIsFormOpen(false)}
                 onSuccess={() => {
                   setIsFormOpen(false);
                   loadData();
-                }} 
+                }}
               />
             ) : (
               <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden animate-reveal">
                 {loading ? (
-                  <div className="p-12 flex justify-center"><Loader2 className="w-8 h-8 animate-spin text-brand-green" /></div>
+                  <div className="p-12 flex justify-center">
+                    <Loader2 className="w-8 h-8 animate-spin text-brand-green" />
+                  </div>
                 ) : packages.length === 0 ? (
                   <div className="p-12 text-center text-slate-500">
                     <Package className="w-12 h-12 mx-auto mb-4 opacity-50" />
                     <p className="text-lg font-medium">No packages found.</p>
-                    <p className="text-sm mt-1">Click "Add Package" to create your first package.</p>
+                    <p className="text-sm mt-1">
+                      Click "Add Package" to create your first package.
+                    </p>
                   </div>
                 ) : (
                   <div className="flex flex-col w-full">
@@ -319,38 +483,69 @@ function AdminPage() {
                       <div className="col-span-2 text-right">Actions</div>
                     </div>
                     <div className="flex flex-col divide-y divide-slate-100">
-                      {packages.map(pkg => (
-                        <div key={pkg._id} className="flex flex-col md:grid md:grid-cols-12 md:gap-4 md:items-center hover:bg-slate-50/50 transition-colors p-4 md:px-6 md:py-4">
+                      {packages.map((pkg) => (
+                        <div
+                          key={pkg._id}
+                          className="flex flex-col md:grid md:grid-cols-12 md:gap-4 md:items-center hover:bg-slate-50/50 transition-colors p-4 md:px-6 md:py-4"
+                        >
                           <div className="flex items-center gap-4 md:col-span-6">
                             <div className="w-16 h-16 rounded-lg bg-slate-100 overflow-hidden shrink-0">
                               {pkg.image ? (
-                                <img src={pkg.image} alt="" className="w-full h-full object-cover" />
+                                <img
+                                  src={pkg.image}
+                                  alt=""
+                                  className="w-full h-full object-cover"
+                                />
                               ) : (
                                 <ImageIcon className="w-8 h-8 m-4 text-slate-300" />
                               )}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <p className="font-bold text-brand-blue-deep text-base truncate">{pkg.title}</p>
-                              <p className="text-sm text-brand-green font-medium mt-0.5 truncate">{pkg.durationBadge} • {pkg.location}</p>
+                              <p className="font-bold text-brand-blue-deep text-base truncate">
+                                {pkg.title}
+                              </p>
+                              <p className="text-sm text-brand-green font-medium mt-0.5 truncate">
+                                {pkg.durationBadge} • {pkg.location}
+                              </p>
                               <p className="md:hidden font-bold text-slate-700 mt-1">{pkg.price}</p>
                             </div>
                             <div className="md:hidden flex shrink-0">
-                              <button onClick={() => handleEdit(pkg)} className="p-2 text-slate-400 hover:text-brand-blue transition-colors" title="Edit">
+                              <button
+                                onClick={() => handleEdit(pkg)}
+                                className="p-2 text-slate-400 hover:text-brand-blue transition-colors"
+                                title="Edit"
+                              >
                                 <Edit className="w-5 h-5" />
                               </button>
-                              <button onClick={() => handleDeletePackage(pkg._id)} className="p-2 text-slate-400 hover:text-red-500 transition-colors" title="Delete">
+                              <button
+                                onClick={() => handleDeletePackage(pkg._id)}
+                                className="p-2 text-slate-400 hover:text-red-500 transition-colors"
+                                title="Delete"
+                              >
                                 <Trash2 className="w-5 h-5" />
                               </button>
                             </div>
                           </div>
-                          
-                          <div className="hidden md:block col-span-2 font-bold text-slate-700">{pkg.price}</div>
-                          <div className="hidden md:block col-span-2 text-sm text-slate-500">{pkg.schedule}</div>
+
+                          <div className="hidden md:block col-span-2 font-bold text-slate-700">
+                            {pkg.price}
+                          </div>
+                          <div className="hidden md:block col-span-2 text-sm text-slate-500">
+                            {pkg.schedule}
+                          </div>
                           <div className="hidden md:flex col-span-2 justify-end gap-2">
-                            <button onClick={() => handleEdit(pkg)} className="p-2 text-slate-400 hover:text-brand-blue bg-white rounded-lg border border-slate-200 shadow-sm transition-colors" title="Edit">
+                            <button
+                              onClick={() => handleEdit(pkg)}
+                              className="p-2 text-slate-400 hover:text-brand-blue bg-white rounded-lg border border-slate-200 shadow-sm transition-colors"
+                              title="Edit"
+                            >
                               <Edit className="w-4 h-4" />
                             </button>
-                            <button onClick={() => handleDeletePackage(pkg._id)} className="p-2 text-slate-400 hover:text-red-500 bg-white rounded-lg border border-slate-200 shadow-sm transition-colors" title="Delete">
+                            <button
+                              onClick={() => handleDeletePackage(pkg._id)}
+                              className="p-2 text-slate-400 hover:text-red-500 bg-white rounded-lg border border-slate-200 shadow-sm transition-colors"
+                              title="Delete"
+                            >
                               <Trash2 className="w-4 h-4" />
                             </button>
                           </div>
@@ -361,10 +556,12 @@ function AdminPage() {
                 )}
               </div>
             )
-          ) : activeTab === 'reviews' ? (
+          ) : activeTab === "reviews" ? (
             <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden animate-reveal">
               {loading ? (
-                <div className="p-12 flex justify-center"><Loader2 className="w-8 h-8 animate-spin text-brand-green" /></div>
+                <div className="p-12 flex justify-center">
+                  <Loader2 className="w-8 h-8 animate-spin text-brand-green" />
+                </div>
               ) : reviews.length === 0 ? (
                 <div className="p-12 text-center text-slate-500">
                   <MessageSquare className="w-12 h-12 mx-auto mb-4 opacity-50" />
@@ -383,14 +580,28 @@ function AdminPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {reviews.map(rev => (
-                        <tr key={rev._id} className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
+                      {reviews.map((rev) => (
+                        <tr
+                          key={rev._id}
+                          className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors"
+                        >
                           <td className="px-6 py-4 font-bold text-brand-blue-deep">{rev.name}</td>
                           <td className="px-6 py-4 font-bold text-yellow-500">{rev.rating} ★</td>
-                          <td className="px-6 py-4 max-w-md truncate text-sm text-slate-600" title={rev.textEn}>{rev.textEn}</td>
-                          <td className="px-6 py-4 text-sm text-slate-500">{new Date(rev.date).toLocaleDateString()}</td>
+                          <td
+                            className="px-6 py-4 max-w-md truncate text-sm text-slate-600"
+                            title={rev.textEn}
+                          >
+                            {rev.textEn}
+                          </td>
+                          <td className="px-6 py-4 text-sm text-slate-500">
+                            {new Date(rev.date).toLocaleDateString()}
+                          </td>
                           <td className="px-6 py-4 text-right">
-                            <button onClick={() => handleDeleteReview(rev._id)} className="p-2 text-slate-400 hover:text-red-500 bg-white rounded-lg border border-slate-200 shadow-sm transition-colors" title="Delete">
+                            <button
+                              onClick={() => handleDeleteReview(rev._id)}
+                              className="p-2 text-slate-400 hover:text-red-500 bg-white rounded-lg border border-slate-200 shadow-sm transition-colors"
+                              title="Delete"
+                            >
                               <Trash2 className="w-4 h-4" />
                             </button>
                           </td>
@@ -401,26 +612,30 @@ function AdminPage() {
                 </div>
               )}
             </div>
-          ) : activeTab === 'trips' ? (
+          ) : activeTab === "trips" ? (
             isFormOpen ? (
-              <TripOptionForm 
-                token={token} 
-                initialData={editingItem} 
-                onClose={() => setIsFormOpen(false)} 
+              <TripOptionForm
+                token={token}
+                initialData={editingItem}
+                onClose={() => setIsFormOpen(false)}
                 onSuccess={() => {
                   setIsFormOpen(false);
                   loadData();
-                }} 
+                }}
               />
             ) : (
               <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden animate-reveal">
                 {loading ? (
-                  <div className="p-12 flex justify-center"><Loader2 className="w-8 h-8 animate-spin text-brand-green" /></div>
+                  <div className="p-12 flex justify-center">
+                    <Loader2 className="w-8 h-8 animate-spin text-brand-green" />
+                  </div>
                 ) : tripOptions.length === 0 ? (
                   <div className="p-12 text-center text-slate-500">
                     <Map className="w-12 h-12 mx-auto mb-4 opacity-50" />
                     <p className="text-lg font-medium">No Trip Options found.</p>
-                    <p className="text-sm mt-1">Click "Add Trip" to create your first trip option.</p>
+                    <p className="text-sm mt-1">
+                      Click "Add Trip" to create your first trip option.
+                    </p>
                   </div>
                 ) : (
                   <div className="overflow-x-auto">
@@ -433,25 +648,47 @@ function AdminPage() {
                         </tr>
                       </thead>
                       <tbody>
-                        {tripOptions.map(trip => (
-                          <tr key={trip._id} className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
-                            <td className="px-6 py-4 font-bold text-brand-blue-deep">{trip.name}</td>
+                        {tripOptions.map((trip) => (
+                          <tr
+                            key={trip._id}
+                            className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors"
+                          >
+                            <td className="px-6 py-4 font-bold text-brand-blue-deep">
+                              {trip.name}
+                            </td>
                             <td className="px-6 py-4">
                               <div className="flex flex-wrap gap-2">
                                 {trip.dates.map((d: string, i: number) => (
-                                  <span key={i} className="px-3 py-1 bg-brand-green/10 text-brand-green-dark text-[13px] font-bold rounded-lg border border-brand-green/20">
+                                  <span
+                                    key={i}
+                                    className="px-3 py-1 bg-brand-green/10 text-brand-green-dark text-[13px] font-bold rounded-lg border border-brand-green/20"
+                                  >
                                     {d}
                                   </span>
                                 ))}
-                                {trip.dates.length === 0 && <span className="text-slate-400 italic text-sm">No dates added</span>}
+                                {trip.dates.length === 0 && (
+                                  <span className="text-slate-400 italic text-sm">
+                                    No dates added
+                                  </span>
+                                )}
                               </div>
                             </td>
                             <td className="px-6 py-4">
                               <div className="flex justify-end gap-2">
-                                <button onClick={() => handleEdit(trip)} className="p-2 text-slate-400 hover:text-brand-blue bg-white rounded-lg border border-slate-200 shadow-sm transition-colors" title="Edit">
+                                <button
+                                  onClick={() => handleEdit(trip)}
+                                  className="p-2 text-slate-400 hover:text-brand-blue bg-white rounded-lg border border-slate-200 shadow-sm transition-colors"
+                                  title="Edit"
+                                >
                                   <Edit className="w-4 h-4" />
                                 </button>
-                                <button onClick={() => setDeleteConfirm({ isOpen: true, id: trip._id, type: 'trip' })} className="p-2 text-slate-400 hover:text-red-500 bg-white rounded-lg border border-slate-200 shadow-sm transition-colors" title="Delete">
+                                <button
+                                  onClick={() =>
+                                    setDeleteConfirm({ isOpen: true, id: trip._id, type: "trip" })
+                                  }
+                                  className="p-2 text-slate-400 hover:text-red-500 bg-white rounded-lg border border-slate-200 shadow-sm transition-colors"
+                                  title="Delete"
+                                >
                                   <Trash2 className="w-4 h-4" />
                                 </button>
                               </div>
@@ -464,9 +701,9 @@ function AdminPage() {
                 )}
               </div>
             )
-          ) : activeTab === 'gallery' ? (
+          ) : activeTab === "gallery" ? (
             isFormOpen ? (
-              <GalleryForm 
+              <GalleryForm
                 token={token}
                 onClose={() => setIsFormOpen(false)}
                 onSuccess={() => {
@@ -477,7 +714,9 @@ function AdminPage() {
             ) : (
               <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden animate-reveal">
                 {loading ? (
-                  <div className="p-12 flex justify-center"><Loader2 className="w-8 h-8 animate-spin text-brand-green" /></div>
+                  <div className="p-12 flex justify-center">
+                    <Loader2 className="w-8 h-8 animate-spin text-brand-green" />
+                  </div>
                 ) : galleryPhotos.length === 0 ? (
                   <div className="p-12 text-center text-slate-500">
                     <ImageIcon className="w-12 h-12 mx-auto mb-4 opacity-50" />
@@ -487,17 +726,26 @@ function AdminPage() {
                 ) : (
                   <div className="p-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {galleryPhotos.map((photo: any) => (
-                      <div key={photo._id} className="relative group rounded-xl overflow-hidden aspect-square border border-slate-200 shadow-sm">
-                        <img src={photo.imageUrl} alt="Gallery" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                      <div
+                        key={photo._id}
+                        className="relative group rounded-xl overflow-hidden aspect-square border border-slate-200 shadow-sm"
+                      >
+                        <img
+                          src={photo.imageUrl}
+                          alt="Gallery"
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        />
                         <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                          <button 
+                          <button
                             onClick={async () => {
-                              if(!window.confirm("Delete this photo?")) return;
+                              if (!window.confirm("Delete this photo?")) return;
                               try {
-                                await deleteGalleryPhotoFn({ data: { adminToken: token, id: photo._id }});
+                                await deleteGalleryPhotoFn({
+                                  data: { adminToken: token, id: photo._id },
+                                });
                                 loadData();
-                              } catch(e) {}
-                            }} 
+                              } catch (e) {}
+                            }}
                             className="p-3 bg-red-500 text-white rounded-full hover:bg-red-600 shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all"
                             title="Delete Photo"
                           >
@@ -510,10 +758,12 @@ function AdminPage() {
                 )}
               </div>
             )
-          ) : activeTab === 'bookings' ? (
+          ) : activeTab === "bookings" ? (
             <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden animate-reveal">
               {loading ? (
-                <div className="p-12 flex justify-center"><Loader2 className="w-8 h-8 animate-spin text-brand-green" /></div>
+                <div className="p-12 flex justify-center">
+                  <Loader2 className="w-8 h-8 animate-spin text-brand-green" />
+                </div>
               ) : bookings.length === 0 ? (
                 <div className="p-12 text-center text-slate-500">
                   <CalendarCheck className="w-12 h-12 mx-auto mb-4 opacity-50" />
@@ -535,10 +785,13 @@ function AdminPage() {
                     </thead>
                     <tbody>
                       {bookings.map((bk, idx) => (
-                        <tr key={bk._id} className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
+                        <tr
+                          key={bk._id}
+                          className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors"
+                        >
                           <td className="px-6 py-4">
                             <span className="font-mono text-xs font-bold text-slate-500 bg-slate-100 px-2 py-1 rounded">
-                              b-{String(bookings.length - idx).padStart(5, '0')}
+                              b-{String(bookings.length - idx).padStart(5, "0")}
                             </span>
                           </td>
                           <td className="px-6 py-4">
@@ -546,28 +799,43 @@ function AdminPage() {
                             <p className="text-sm font-medium text-slate-500">{bk.phone}</p>
                           </td>
                           <td className="px-6 py-4">
-                            <p className="font-bold text-slate-700">{bk.tripName === 'custom' ? 'Custom Trip' : bk.tripName}</p>
+                            <p className="font-bold text-slate-700">
+                              {bk.tripName === "custom" ? "Custom Trip" : bk.tripName}
+                            </p>
                             <div className="flex gap-2 mt-1">
-                              <span className="px-2 py-0.5 bg-slate-100 text-slate-600 text-xs font-bold rounded">{bk.persons} Persons</span>
+                              <span className="px-2 py-0.5 bg-slate-100 text-slate-600 text-xs font-bold rounded">
+                                {bk.persons} Persons
+                              </span>
                               {bk.customDestination && (
-                                <span className="px-2 py-0.5 bg-brand-blue/10 text-brand-blue text-xs font-bold rounded max-w-[120px] truncate" title={bk.customDestination}>To: {bk.customDestination}</span>
+                                <span
+                                  className="px-2 py-0.5 bg-brand-blue/10 text-brand-blue text-xs font-bold rounded max-w-[120px] truncate"
+                                  title={bk.customDestination}
+                                >
+                                  To: {bk.customDestination}
+                                </span>
                               )}
                             </div>
                           </td>
-                          <td className="px-6 py-4 font-bold text-slate-700 text-sm">{bk.travelDate}</td>
+                          <td className="px-6 py-4 font-bold text-slate-700 text-sm">
+                            {bk.travelDate}
+                          </td>
                           <td className="px-6 py-4">
-                            <select 
+                            <select
                               value={bk.status}
                               onChange={async (e) => {
                                 try {
-                                  await updateBookingStatusFn({ data: { adminToken: token, id: bk._id, status: e.target.value }});
+                                  await updateBookingStatusFn({
+                                    data: { adminToken: token, id: bk._id, status: e.target.value },
+                                  });
                                   loadData();
                                 } catch (err) {}
                               }}
                               className={`text-sm font-bold px-3 py-1.5 rounded-lg border outline-none cursor-pointer ${
-                                bk.status === 'Confirmed' ? 'bg-green-50 text-green-700 border-green-200' : 
-                                bk.status === 'Cancelled' ? 'bg-red-50 text-red-700 border-red-200' : 
-                                'bg-yellow-50 text-yellow-700 border-yellow-200'
+                                bk.status === "Confirmed"
+                                  ? "bg-green-50 text-green-700 border-green-200"
+                                  : bk.status === "Cancelled"
+                                    ? "bg-red-50 text-red-700 border-red-200"
+                                    : "bg-yellow-50 text-yellow-700 border-yellow-200"
                               }`}
                             >
                               <option value="Pending">Pending</option>
@@ -579,7 +847,13 @@ function AdminPage() {
                             {new Date(bk.createdAt).toLocaleDateString()}
                           </td>
                           <td className="px-6 py-4 text-right">
-                            <button onClick={() => setDeleteConfirm({ isOpen: true, id: bk._id, type: 'booking' })} className="p-2 text-slate-400 hover:text-red-500 bg-white rounded-lg border border-slate-200 shadow-sm transition-colors" title="Delete Booking">
+                            <button
+                              onClick={() =>
+                                setDeleteConfirm({ isOpen: true, id: bk._id, type: "booking" })
+                              }
+                              className="p-2 text-slate-400 hover:text-red-500 bg-white rounded-lg border border-slate-200 shadow-sm transition-colors"
+                              title="Delete Booking"
+                            >
                               <Trash2 className="w-4 h-4" />
                             </button>
                           </td>
@@ -590,14 +864,13 @@ function AdminPage() {
                 </div>
               )}
             </div>
-          ) : activeTab === 'customers' ? (
+          ) : activeTab === "customers" ? (
             <CustomersView bookings={bookings} />
-          ) : activeTab === 'reports' ? (
+          ) : activeTab === "reports" ? (
             <ReportsView bookings={bookings} />
-          ) : activeTab === 'invoices' ? (
+          ) : activeTab === "invoices" ? (
             <InvoicesView bookings={bookings} />
           ) : null}
-          
         </div>
       </main>
 
@@ -607,17 +880,18 @@ function AdminPage() {
           <div className="bg-white rounded-2xl max-w-sm w-full p-6 shadow-xl">
             <h3 className="text-xl font-bold text-slate-800 mb-2">Confirm Delete</h3>
             <p className="text-slate-500 mb-6">
-              Are you sure you want to delete this {deleteConfirm.type}? This action cannot be undone.
+              Are you sure you want to delete this {deleteConfirm.type}? This action cannot be
+              undone.
             </p>
             <div className="flex justify-end gap-3">
-              <button 
-                onClick={() => setDeleteConfirm(null)} 
+              <button
+                onClick={() => setDeleteConfirm(null)}
                 className="px-4 py-2 font-bold text-slate-500 hover:bg-slate-100 rounded-xl transition-colors"
               >
                 Cancel
               </button>
-              <button 
-                onClick={confirmDelete} 
+              <button
+                onClick={confirmDelete}
                 className="px-4 py-2 font-bold text-white bg-red-500 hover:bg-red-600 rounded-xl transition-colors shadow-lg shadow-red-500/20"
               >
                 Delete
@@ -633,20 +907,22 @@ function AdminPage() {
 // Subcomponent for the Form
 function PackageForm({ token, initialData, onClose, onSuccess }: any) {
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState<any>(initialData || {
-    title: '',
-    subtitle: '',
-    durationBadge: '3D / 2N',
-    location: '',
-    schedule: 'Every Friday',
-    frequency: '',
-    price: '₹9,999',
-    image: '',
-    images: [],
-    route: '',
-    tags: '',
-    includes: '',
-  });
+  const [formData, setFormData] = useState<any>(
+    initialData || {
+      title: "",
+      subtitle: "",
+      durationBadge: "3D / 2N",
+      location: "",
+      schedule: "Every Friday",
+      frequency: "",
+      price: "₹9,999",
+      image: "",
+      images: [],
+      route: "",
+      tags: "",
+      includes: "",
+    },
+  );
 
   const handleChange = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -655,13 +931,25 @@ function PackageForm({ token, initialData, onClose, onSuccess }: any) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    
+
     // Convert comma-separated strings to arrays
     const payload = { ...formData };
-    if (typeof payload.route === 'string') payload.route = payload.route.split(',').map((s: string) => s.trim()).filter(Boolean);
-    if (typeof payload.tags === 'string') payload.tags = payload.tags.split(',').map((s: string) => s.trim()).filter(Boolean);
-    if (typeof payload.includes === 'string') payload.includes = payload.includes.split(',').map((s: string) => s.trim()).filter(Boolean);
-    
+    if (typeof payload.route === "string")
+      payload.route = payload.route
+        .split(",")
+        .map((s: string) => s.trim())
+        .filter(Boolean);
+    if (typeof payload.tags === "string")
+      payload.tags = payload.tags
+        .split(",")
+        .map((s: string) => s.trim())
+        .filter(Boolean);
+    if (typeof payload.includes === "string")
+      payload.includes = payload.includes
+        .split(",")
+        .map((s: string) => s.trim())
+        .filter(Boolean);
+
     try {
       if (initialData?._id) {
         await updatePackageFn({ data: { adminToken: token, id: initialData._id, data: payload } });
@@ -682,9 +970,9 @@ function PackageForm({ token, initialData, onClose, onSuccess }: any) {
       setFormData({
         ...initialData,
         images: initialData.images || (initialData.image ? [initialData.image] : []),
-        route: Array.isArray(initialData.route) ? initialData.route.join(', ') : '',
-        tags: Array.isArray(initialData.tags) ? initialData.tags.join(', ') : '',
-        includes: Array.isArray(initialData.includes) ? initialData.includes.join(', ') : '',
+        route: Array.isArray(initialData.route) ? initialData.route.join(", ") : "",
+        tags: Array.isArray(initialData.tags) ? initialData.tags.join(", ") : "",
+        includes: Array.isArray(initialData.includes) ? initialData.includes.join(", ") : "",
       });
     }
   }, [initialData]);
@@ -692,7 +980,10 @@ function PackageForm({ token, initialData, onClose, onSuccess }: any) {
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden animate-reveal p-8 max-w-4xl mx-auto">
       <div className="flex items-center gap-4 mb-8">
-        <button onClick={onClose} className="p-2 text-slate-400 hover:text-slate-700 bg-slate-50 rounded-lg transition-colors">
+        <button
+          onClick={onClose}
+          className="p-2 text-slate-400 hover:text-slate-700 bg-slate-50 rounded-lg transition-colors"
+        >
           <ArrowLeft className="w-5 h-5" />
         </button>
         <h2 className="text-2xl font-bold font-display text-brand-blue-deep">
@@ -702,25 +993,82 @@ function PackageForm({ token, initialData, onClose, onSuccess }: any) {
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Input label="Title" name="title" value={formData.title} onChange={handleChange} placeholder="e.g. Pune to Ujjain Mahakal Yatra" required />
-          <Input label="Subtitle" name="subtitle" value={formData.subtitle} onChange={handleChange} placeholder="e.g. The holy journey" />
-          <Input label="Location" name="location" value={formData.location} onChange={handleChange} placeholder="e.g. Pune" required />
-          <Input label="Duration Badge" name="durationBadge" value={formData.durationBadge} onChange={handleChange} placeholder="e.g. 3D / 2N" required />
-          <Input label="Price" name="price" value={formData.price} onChange={handleChange} placeholder="e.g. ₹9,999" required />
-          <Input label="Schedule" name="schedule" value={formData.schedule} onChange={handleChange} placeholder="e.g. Every Friday" />
+          <Input
+            label="Title"
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
+            placeholder="e.g. Pune to Ujjain Mahakal Yatra"
+            required
+          />
+          <Input
+            label="Subtitle"
+            name="subtitle"
+            value={formData.subtitle}
+            onChange={handleChange}
+            placeholder="e.g. The holy journey"
+          />
+          <Input
+            label="Location"
+            name="location"
+            value={formData.location}
+            onChange={handleChange}
+            placeholder="e.g. Pune"
+            required
+          />
+          <Input
+            label="Duration Badge"
+            name="durationBadge"
+            value={formData.durationBadge}
+            onChange={handleChange}
+            placeholder="e.g. 3D / 2N"
+            required
+          />
+          <Input
+            label="Price"
+            name="price"
+            value={formData.price}
+            onChange={handleChange}
+            placeholder="e.g. ₹9,999"
+            required
+          />
+          <Input
+            label="Schedule"
+            name="schedule"
+            value={formData.schedule}
+            onChange={handleChange}
+            placeholder="e.g. Every Friday"
+          />
           <div className="md:col-span-2">
-            <label className="block text-[13px] font-bold text-slate-700 uppercase tracking-wider mb-2">Package Images</label>
+            <label className="block text-[13px] font-bold text-slate-700 uppercase tracking-wider mb-2">
+              Package Images
+            </label>
             <div className="flex flex-col gap-4">
               {formData.images && formData.images.length > 0 && (
                 <div className="flex flex-wrap gap-4">
                   {formData.images.map((img: string, idx: number) => (
-                    <div key={idx} className="relative w-24 h-24 rounded-lg bg-slate-100 overflow-hidden shrink-0 border border-slate-200">
-                      <img src={img} alt={`Preview ${idx}`} className="w-full h-full object-cover" />
-                      <button type="button" onClick={() => {
-                        const newImages = [...formData.images];
-                        newImages.splice(idx, 1);
-                        setFormData({ ...formData, images: newImages, image: newImages[0] || '' });
-                      }} className="absolute top-1 right-1 bg-slate-900/60 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-500 transition-colors shadow-sm">
+                    <div
+                      key={idx}
+                      className="relative w-24 h-24 rounded-lg bg-slate-100 overflow-hidden shrink-0 border border-slate-200"
+                    >
+                      <img
+                        src={img}
+                        alt={`Preview ${idx}`}
+                        className="w-full h-full object-cover"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const newImages = [...formData.images];
+                          newImages.splice(idx, 1);
+                          setFormData({
+                            ...formData,
+                            images: newImages,
+                            image: newImages[0] || "",
+                          });
+                        }}
+                        className="absolute top-1 right-1 bg-slate-900/60 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-500 transition-colors shadow-sm"
+                      >
                         ×
                       </button>
                     </div>
@@ -728,8 +1076,8 @@ function PackageForm({ token, initialData, onClose, onSuccess }: any) {
                 </div>
               )}
               <div className="flex-1">
-                <input 
-                  type="file" 
+                <input
+                  type="file"
                   accept="image/*"
                   multiple
                   onChange={(e) => {
@@ -739,12 +1087,12 @@ function PackageForm({ token, initialData, onClose, onSuccess }: any) {
                     const newImages = [...(formData.images || [])];
                     let processedCount = 0;
 
-                    files.forEach(file => {
+                    files.forEach((file) => {
                       const reader = new FileReader();
                       reader.onloadend = () => {
                         newImages.push(reader.result as string);
                         processedCount++;
-                        
+
                         if (processedCount === files.length) {
                           setFormData({ ...formData, images: newImages, image: newImages[0] });
                         }
@@ -754,26 +1102,55 @@ function PackageForm({ token, initialData, onClose, onSuccess }: any) {
                   }}
                   className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-blue/50 focus:border-brand-blue transition-all file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-brand-blue/10 file:text-brand-blue-deep hover:file:bg-brand-blue/20 cursor-pointer text-sm text-slate-500"
                 />
-                <p className="text-xs text-slate-400 mt-2">Upload high-quality images from your device. Images are automatically backed up to Cloudinary.</p>
+                <p className="text-xs text-slate-400 mt-2">
+                  Upload high-quality images from your device. Images are automatically backed up to
+                  Cloudinary.
+                </p>
               </div>
             </div>
           </div>
           <div className="md:col-span-2">
-            <Input label="Route (comma separated)" name="route" value={formData.route} onChange={handleChange} placeholder="Pune, Omkareshwar, Ujjain" />
+            <Input
+              label="Route (comma separated)"
+              name="route"
+              value={formData.route}
+              onChange={handleChange}
+              placeholder="Pune, Omkareshwar, Ujjain"
+            />
           </div>
           <div className="md:col-span-2">
-            <Input label="Tags (comma separated)" name="tags" value={formData.tags} onChange={handleChange} placeholder="Mahakaleshwar, Bhasma Aarti" />
+            <Input
+              label="Tags (comma separated)"
+              name="tags"
+              value={formData.tags}
+              onChange={handleChange}
+              placeholder="Mahakaleshwar, Bhasma Aarti"
+            />
           </div>
           <div className="md:col-span-2">
-            <Input label="Includes (comma separated)" name="includes" value={formData.includes} onChange={handleChange} placeholder="AC Bus, Hotel, Meals" />
+            <Input
+              label="Includes (comma separated)"
+              name="includes"
+              value={formData.includes}
+              onChange={handleChange}
+              placeholder="AC Bus, Hotel, Meals"
+            />
           </div>
         </div>
 
         <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-slate-100">
-          <button type="button" onClick={onClose} className="px-6 py-3 font-bold text-slate-500 hover:bg-slate-50 rounded-xl transition-colors">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-6 py-3 font-bold text-slate-500 hover:bg-slate-50 rounded-xl transition-colors"
+          >
             Cancel
           </button>
-          <button type="submit" disabled={loading} className="px-6 py-3 bg-brand-green hover:bg-brand-green-dark text-white font-bold rounded-xl flex items-center gap-2 transition-all disabled:opacity-70 shadow-lg shadow-brand-green/20">
+          <button
+            type="submit"
+            disabled={loading}
+            className="px-6 py-3 bg-brand-green hover:bg-brand-green-dark text-white font-bold rounded-xl flex items-center gap-2 transition-all disabled:opacity-70 shadow-lg shadow-brand-green/20"
+          >
             {loading && <Loader2 className="w-5 h-5 animate-spin" />}
             Save Package
           </button>
@@ -786,10 +1163,12 @@ function PackageForm({ token, initialData, onClose, onSuccess }: any) {
 function Input({ label, ...props }: any) {
   return (
     <div className="flex flex-col gap-2">
-      <label className="text-[13px] font-bold text-slate-700 uppercase tracking-wider">{label}</label>
-      <input 
-        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[15px] font-medium text-brand-blue-deep placeholder-slate-400 focus:ring-2 focus:ring-brand-green focus:border-brand-green focus:bg-white transition-all outline-none" 
-        {...props} 
+      <label className="text-[13px] font-bold text-slate-700 uppercase tracking-wider">
+        {label}
+      </label>
+      <input
+        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[15px] font-medium text-brand-blue-deep placeholder-slate-400 focus:ring-2 focus:ring-brand-green focus:border-brand-green focus:bg-white transition-all outline-none"
+        {...props}
       />
     </div>
   );
@@ -797,15 +1176,16 @@ function Input({ label, ...props }: any) {
 
 function TripOptionForm({ token, initialData, onClose, onSuccess }: any) {
   const [loading, setLoading] = useState(false);
-  
+
   // Initialize with Date objects
-  const initialDates = initialData?.dates && Array.isArray(initialData.dates) 
-    ? initialData.dates.map((d: string) => new Date(d)).filter((d: Date) => !isNaN(d.getTime()))
-    : [];
+  const initialDates =
+    initialData?.dates && Array.isArray(initialData.dates)
+      ? initialData.dates.map((d: string) => new Date(d)).filter((d: Date) => !isNaN(d.getTime()))
+      : [];
 
   const [formData, setFormData] = useState({
     ...(initialData || {}),
-    name: initialData?.name || '',
+    name: initialData?.name || "",
     dates: initialDates as Date[],
   });
 
@@ -816,16 +1196,18 @@ function TripOptionForm({ token, initialData, onClose, onSuccess }: any) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    
+
     // Format dates back to string array
-    const payload = { 
+    const payload = {
       ...formData,
-      dates: formData.dates.map((d: Date) => format(d, 'MMM dd, yyyy'))
+      dates: formData.dates.map((d: Date) => format(d, "MMM dd, yyyy")),
     };
-    
+
     try {
       if (initialData?._id) {
-        await updateTripOptionFn({ data: { adminToken: token, id: initialData._id, data: payload } });
+        await updateTripOptionFn({
+          data: { adminToken: token, id: initialData._id, data: payload },
+        });
       } else {
         await createTripOptionFn({ data: { adminToken: token, data: payload } });
       }
@@ -839,9 +1221,12 @@ function TripOptionForm({ token, initialData, onClose, onSuccess }: any) {
 
   useEffect(() => {
     if (initialData) {
-      const parsedDates = initialData.dates && Array.isArray(initialData.dates) 
-        ? initialData.dates.map((d: string) => new Date(d)).filter((d: Date) => !isNaN(d.getTime()))
-        : [];
+      const parsedDates =
+        initialData.dates && Array.isArray(initialData.dates)
+          ? initialData.dates
+              .map((d: string) => new Date(d))
+              .filter((d: Date) => !isNaN(d.getTime()))
+          : [];
       setFormData({
         ...initialData,
         dates: parsedDates,
@@ -852,7 +1237,10 @@ function TripOptionForm({ token, initialData, onClose, onSuccess }: any) {
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden animate-reveal p-8 max-w-4xl mx-auto">
       <div className="flex items-center gap-4 mb-8">
-        <button onClick={onClose} className="p-2 text-slate-400 hover:text-slate-700 bg-slate-50 rounded-lg transition-colors">
+        <button
+          onClick={onClose}
+          className="p-2 text-slate-400 hover:text-slate-700 bg-slate-50 rounded-lg transition-colors"
+        >
           <ArrowLeft className="w-5 h-5" />
         </button>
         <h2 className="text-2xl font-bold font-display text-brand-blue-deep">
@@ -862,16 +1250,18 @@ function TripOptionForm({ token, initialData, onClose, onSuccess }: any) {
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-6">
         <div className="grid grid-cols-1 gap-6">
-          <Input 
-            label="Trip Name" 
-            name="name" 
-            value={formData.name} 
-            onChange={handleChange} 
-            placeholder="e.g. Pune - Ujjain - Pune" 
-            required 
+          <Input
+            label="Trip Name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            placeholder="e.g. Pune - Ujjain - Pune"
+            required
           />
           <div className="flex flex-col gap-2">
-            <label className="text-[13px] font-bold text-slate-700 uppercase tracking-wider">Select Travel Dates</label>
+            <label className="text-[13px] font-bold text-slate-700 uppercase tracking-wider">
+              Select Travel Dates
+            </label>
             <div className="border border-slate-200 rounded-xl p-4 bg-slate-50 flex justify-center">
               <Calendar
                 mode="multiple"
@@ -883,21 +1273,34 @@ function TripOptionForm({ token, initialData, onClose, onSuccess }: any) {
             {formData.dates.length > 0 && (
               <div className="mt-2 flex flex-wrap gap-2">
                 {formData.dates.map((date: Date, i: number) => (
-                  <span key={i} className="px-3 py-1 bg-brand-blue/10 text-brand-blue text-[13px] font-bold rounded-lg border border-brand-blue/20">
-                    {format(date, 'MMM dd, yyyy')}
+                  <span
+                    key={i}
+                    className="px-3 py-1 bg-brand-blue/10 text-brand-blue text-[13px] font-bold rounded-lg border border-brand-blue/20"
+                  >
+                    {format(date, "MMM dd, yyyy")}
                   </span>
                 ))}
               </div>
             )}
-            <p className="text-xs text-slate-400 mt-1">Click dates on the calendar to select multiple options.</p>
+            <p className="text-xs text-slate-400 mt-1">
+              Click dates on the calendar to select multiple options.
+            </p>
           </div>
         </div>
 
         <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-slate-100">
-          <button type="button" onClick={onClose} className="px-6 py-3 font-bold text-slate-500 hover:bg-slate-50 rounded-xl transition-colors">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-6 py-3 font-bold text-slate-500 hover:bg-slate-50 rounded-xl transition-colors"
+          >
             Cancel
           </button>
-          <button type="submit" disabled={loading} className="px-6 py-3 bg-brand-green hover:bg-brand-green-dark text-white font-bold rounded-xl flex items-center gap-2 transition-all disabled:opacity-70 shadow-lg shadow-brand-green/20">
+          <button
+            type="submit"
+            disabled={loading}
+            className="px-6 py-3 bg-brand-green hover:bg-brand-green-dark text-white font-bold rounded-xl flex items-center gap-2 transition-all disabled:opacity-70 shadow-lg shadow-brand-green/20"
+          >
             {loading && <Loader2 className="w-5 h-5 animate-spin" />}
             Save Trip
           </button>
@@ -909,7 +1312,7 @@ function TripOptionForm({ token, initialData, onClose, onSuccess }: any) {
 
 function GalleryForm({ token, onClose, onSuccess }: any) {
   const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState('');
+  const [imageUrl, setImageUrl] = useState("");
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -938,7 +1341,10 @@ function GalleryForm({ token, onClose, onSuccess }: any) {
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden animate-reveal p-8 max-w-2xl mx-auto">
       <div className="flex items-center gap-4 mb-8">
-        <button onClick={onClose} className="p-2 text-slate-400 hover:text-slate-700 bg-slate-50 rounded-lg transition-colors">
+        <button
+          onClick={onClose}
+          className="p-2 text-slate-400 hover:text-slate-700 bg-slate-50 rounded-lg transition-colors"
+        >
           <ArrowLeft className="w-5 h-5" />
         </button>
         <h2 className="text-2xl font-bold font-display text-brand-blue-deep">Add New Photo</h2>
@@ -946,8 +1352,10 @@ function GalleryForm({ token, onClose, onSuccess }: any) {
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
-          <label className="text-[13px] font-bold text-slate-700 uppercase tracking-wider">Upload Photo</label>
-          <input 
+          <label className="text-[13px] font-bold text-slate-700 uppercase tracking-wider">
+            Upload Photo
+          </label>
+          <input
             type="file"
             accept="image/*"
             onChange={handleFileChange}
@@ -957,15 +1365,29 @@ function GalleryForm({ token, onClose, onSuccess }: any) {
         </div>
         {imageUrl && (
           <div className="mt-4 rounded-xl overflow-hidden aspect-video bg-slate-100 border border-slate-200">
-            <img src={imageUrl} alt="Preview" className="w-full h-full object-cover" onError={(e) => (e.currentTarget.style.display = 'none')} onLoad={(e) => (e.currentTarget.style.display = 'block')} />
+            <img
+              src={imageUrl}
+              alt="Preview"
+              className="w-full h-full object-cover"
+              onError={(e) => (e.currentTarget.style.display = "none")}
+              onLoad={(e) => (e.currentTarget.style.display = "block")}
+            />
           </div>
         )}
 
         <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-slate-100">
-          <button type="button" onClick={onClose} className="px-6 py-3 font-bold text-slate-500 hover:bg-slate-50 rounded-xl transition-colors">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-6 py-3 font-bold text-slate-500 hover:bg-slate-50 rounded-xl transition-colors"
+          >
             Cancel
           </button>
-          <button type="submit" disabled={loading || !imageUrl} className="px-6 py-3 bg-brand-green hover:bg-brand-green-dark text-white font-bold rounded-xl flex items-center gap-2 transition-all disabled:opacity-70 shadow-lg shadow-brand-green/20">
+          <button
+            type="submit"
+            disabled={loading || !imageUrl}
+            className="px-6 py-3 bg-brand-green hover:bg-brand-green-dark text-white font-bold rounded-xl flex items-center gap-2 transition-all disabled:opacity-70 shadow-lg shadow-brand-green/20"
+          >
             {loading && <Loader2 className="w-5 h-5 animate-spin" />}
             Add Photo
           </button>
@@ -976,8 +1398,8 @@ function GalleryForm({ token, onClose, onSuccess }: any) {
 }
 
 function DashboardOverview({ packages, bookings, reviews, photos }: any) {
-  const pendingBookings = bookings.filter((b: any) => b.status === 'Pending').length;
-  
+  const pendingBookings = bookings.filter((b: any) => b.status === "Pending").length;
+
   return (
     <div className="flex flex-col gap-8 animate-reveal">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -986,8 +1408,12 @@ function DashboardOverview({ packages, bookings, reviews, photos }: any) {
             <CalendarCheck className="w-6 h-6" />
           </div>
           <div>
-            <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">Total Bookings</p>
-            <p className="text-3xl font-display font-bold text-brand-blue-deep">{bookings.length}</p>
+            <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">
+              Total Bookings
+            </p>
+            <p className="text-3xl font-display font-bold text-brand-blue-deep">
+              {bookings.length}
+            </p>
           </div>
         </div>
         <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4 hover:shadow-md transition-shadow">
@@ -996,7 +1422,9 @@ function DashboardOverview({ packages, bookings, reviews, photos }: any) {
           </div>
           <div>
             <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">Pending</p>
-            <p className="text-3xl font-display font-bold text-brand-blue-deep">{pendingBookings}</p>
+            <p className="text-3xl font-display font-bold text-brand-blue-deep">
+              {pendingBookings}
+            </p>
           </div>
         </div>
         <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4 hover:shadow-md transition-shadow">
@@ -1005,7 +1433,9 @@ function DashboardOverview({ packages, bookings, reviews, photos }: any) {
           </div>
           <div>
             <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">Packages</p>
-            <p className="text-3xl font-display font-bold text-brand-blue-deep">{packages.length}</p>
+            <p className="text-3xl font-display font-bold text-brand-blue-deep">
+              {packages.length}
+            </p>
           </div>
         </div>
         <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4 hover:shadow-md transition-shadow">
@@ -1025,7 +1455,9 @@ function DashboardOverview({ packages, bookings, reviews, photos }: any) {
         </div>
         <div className="overflow-x-auto">
           {bookings.length === 0 ? (
-            <div className="p-8 text-center text-slate-500 text-sm font-medium">No bookings yet.</div>
+            <div className="p-8 text-center text-slate-500 text-sm font-medium">
+              No bookings yet.
+            </div>
           ) : (
             <table className="w-full text-left border-collapse min-w-[600px]">
               <thead>
@@ -1038,21 +1470,30 @@ function DashboardOverview({ packages, bookings, reviews, photos }: any) {
               </thead>
               <tbody>
                 {bookings.slice(0, 5).map((bk: any) => (
-                  <tr key={bk._id} className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
+                  <tr
+                    key={bk._id}
+                    className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors"
+                  >
                     <td className="px-6 py-4">
                       <p className="font-bold text-brand-blue-deep text-sm">{bk.name}</p>
                       <p className="text-xs text-slate-500">{bk.phone}</p>
                     </td>
                     <td className="px-6 py-4">
-                      <p className="font-bold text-slate-700 text-sm">{bk.tripName === 'custom' ? 'Custom Trip' : bk.tripName}</p>
+                      <p className="font-bold text-slate-700 text-sm">
+                        {bk.tripName === "custom" ? "Custom Trip" : bk.tripName}
+                      </p>
                       <p className="text-xs text-slate-500">{bk.persons} Persons</p>
                     </td>
                     <td className="px-6 py-4">
-                      <span className={`px-2 py-1 rounded-md text-[11px] font-bold ${
-                        bk.status === 'Confirmed' ? 'bg-green-50 text-green-700' : 
-                        bk.status === 'Cancelled' ? 'bg-red-50 text-red-700' : 
-                        'bg-yellow-50 text-yellow-700'
-                      }`}>
+                      <span
+                        className={`px-2 py-1 rounded-md text-[11px] font-bold ${
+                          bk.status === "Confirmed"
+                            ? "bg-green-50 text-green-700"
+                            : bk.status === "Cancelled"
+                              ? "bg-red-50 text-red-700"
+                              : "bg-yellow-50 text-yellow-700"
+                        }`}
+                      >
                         {bk.status}
                       </span>
                     </td>
@@ -1074,27 +1515,38 @@ function CustomersView({ bookings = [] }: { bookings?: any[] }) {
   const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
   try {
     const customersMap = new globalThis.Map();
-    (bookings || []).forEach(bk => {
+    (bookings || []).forEach((bk) => {
       if (!bk) return;
-      const phone = bk.phone || 'Unknown';
+      const phone = bk.phone || "Unknown";
       if (!customersMap.has(phone)) {
         customersMap.set(phone, {
-          name: bk.name || 'Unknown',
+          name: bk.name || "Unknown",
           phone: phone,
           totalBookings: 1,
           latestBookingDate: bk.createdAt,
           firstBookingDate: bk.createdAt,
-          allTrips: [{ 
-            name: bk.tripName === 'custom' ? `Custom Trip${bk.customDestination ? ` to ${bk.customDestination}` : ''}` : bk.tripName || 'Unknown',
-            date: bk.travelDate || (bk.createdAt ? new Date(bk.createdAt).toLocaleDateString() : 'Unknown Date')
-          }]
+          allTrips: [
+            {
+              name:
+                bk.tripName === "custom"
+                  ? `Custom Trip${bk.customDestination ? ` to ${bk.customDestination}` : ""}`
+                  : bk.tripName || "Unknown",
+              date:
+                bk.travelDate ||
+                (bk.createdAt ? new Date(bk.createdAt).toLocaleDateString() : "Unknown Date"),
+            },
+          ],
         });
       } else {
         const cust = customersMap.get(phone);
         if (cust) {
           cust.totalBookings += 1;
-          const currentLatest = cust.latestBookingDate ? new Date(cust.latestBookingDate).getTime() : 0;
-          const currentFirst = cust.firstBookingDate ? new Date(cust.firstBookingDate).getTime() : Infinity;
+          const currentLatest = cust.latestBookingDate
+            ? new Date(cust.latestBookingDate).getTime()
+            : 0;
+          const currentFirst = cust.firstBookingDate
+            ? new Date(cust.firstBookingDate).getTime()
+            : Infinity;
           const newDate = bk.createdAt ? new Date(bk.createdAt).getTime() : 0;
           if (newDate > currentLatest) {
             cust.latestBookingDate = bk.createdAt;
@@ -1103,8 +1555,13 @@ function CustomersView({ bookings = [] }: { bookings?: any[] }) {
             cust.firstBookingDate = bk.createdAt;
           }
           cust.allTrips.push({
-            name: bk.tripName === 'custom' ? `Custom Trip${bk.customDestination ? ` to ${bk.customDestination}` : ''}` : bk.tripName || 'Unknown',
-            date: bk.travelDate || (bk.createdAt ? new Date(bk.createdAt).toLocaleDateString() : 'Unknown Date')
+            name:
+              bk.tripName === "custom"
+                ? `Custom Trip${bk.customDestination ? ` to ${bk.customDestination}` : ""}`
+                : bk.tripName || "Unknown",
+            date:
+              bk.travelDate ||
+              (bk.createdAt ? new Date(bk.createdAt).toLocaleDateString() : "Unknown Date"),
           });
         }
       }
@@ -1119,7 +1576,7 @@ function CustomersView({ bookings = [] }: { bookings?: any[] }) {
 
     // Assign sequential IDs
     sortedCustomers.forEach((cust, index) => {
-      cust.customerId = `cus-${String(index + 1).padStart(5, '0')}`;
+      cust.customerId = `cus-${String(index + 1).padStart(5, "0")}`;
     });
 
     // Reverse so newest customers appear at the top
@@ -1127,82 +1584,95 @@ function CustomersView({ bookings = [] }: { bookings?: any[] }) {
 
     return (
       <>
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden animate-reveal">
-        {displayCustomers.length === 0 ? (
-          <div className="p-12 text-center text-slate-500">
-            <Users className="w-12 h-12 mx-auto mb-4 opacity-50" />
-            <p className="text-lg font-medium">No customers yet.</p>
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse min-w-[800px]">
-              <thead>
-              <tr className="bg-slate-50 border-b border-slate-100 text-slate-500 text-[12px] uppercase tracking-wider font-bold">
-                  <th className="px-6 py-4">Customer ID</th>
-                  <th className="px-6 py-4">Customer Name</th>
-                  <th className="px-6 py-4">Phone Number</th>
-                  <th className="px-6 py-4">Total Bookings</th>
-                  <th className="px-6 py-4">Trips Taken</th>
-                  <th className="px-6 py-4 text-right">Latest Booking</th>
-                </tr>
-              </thead>
-              <tbody>
-                {displayCustomers.map((cust: any, i) => (
-                <tr key={i} className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
-                  <td className="px-6 py-4">
-                    <span className="font-mono text-xs font-bold text-slate-500 bg-slate-100 px-2 py-1 rounded">
-                      {cust.customerId}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 font-bold text-brand-blue-deep">{cust.name}</td>
-                    <td className="px-6 py-4 font-medium text-slate-600">{cust.phone}</td>
-                    <td className="px-6 py-4 font-bold text-slate-700">{cust.totalBookings}</td>
-                    <td className="px-6 py-4">
-                      <button 
-                        onClick={() => setSelectedCustomer(cust)}
-                        className="flex items-center gap-2 px-3 py-1.5 bg-brand-blue/10 hover:bg-brand-blue/20 text-brand-blue-deep rounded-lg transition-colors font-bold text-xs"
-                      >
-                        <Eye className="w-4 h-4" />
-                        View Trips
-                      </button>
-                    </td>
-                    <td className="px-6 py-4 text-right text-sm text-slate-500">
-                      {cust.latestBookingDate ? new Date(cust.latestBookingDate).toLocaleDateString() : 'N/A'}
-                    </td>
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden animate-reveal">
+          {displayCustomers.length === 0 ? (
+            <div className="p-12 text-center text-slate-500">
+              <Users className="w-12 h-12 mx-auto mb-4 opacity-50" />
+              <p className="text-lg font-medium">No customers yet.</p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse min-w-[800px]">
+                <thead>
+                  <tr className="bg-slate-50 border-b border-slate-100 text-slate-500 text-[12px] uppercase tracking-wider font-bold">
+                    <th className="px-6 py-4">Customer ID</th>
+                    <th className="px-6 py-4">Customer Name</th>
+                    <th className="px-6 py-4">Phone Number</th>
+                    <th className="px-6 py-4">Total Bookings</th>
+                    <th className="px-6 py-4">Trips Taken</th>
+                    <th className="px-6 py-4 text-right">Latest Booking</th>
                   </tr>
+                </thead>
+                <tbody>
+                  {displayCustomers.map((cust: any, i) => (
+                    <tr
+                      key={i}
+                      className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors"
+                    >
+                      <td className="px-6 py-4">
+                        <span className="font-mono text-xs font-bold text-slate-500 bg-slate-100 px-2 py-1 rounded">
+                          {cust.customerId}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 font-bold text-brand-blue-deep">{cust.name}</td>
+                      <td className="px-6 py-4 font-medium text-slate-600">{cust.phone}</td>
+                      <td className="px-6 py-4 font-bold text-slate-700">{cust.totalBookings}</td>
+                      <td className="px-6 py-4">
+                        <button
+                          onClick={() => setSelectedCustomer(cust)}
+                          className="flex items-center gap-2 px-3 py-1.5 bg-brand-blue/10 hover:bg-brand-blue/20 text-brand-blue-deep rounded-lg transition-colors font-bold text-xs"
+                        >
+                          <Eye className="w-4 h-4" />
+                          View Trips
+                        </button>
+                      </td>
+                      <td className="px-6 py-4 text-right text-sm text-slate-500">
+                        {cust.latestBookingDate
+                          ? new Date(cust.latestBookingDate).toLocaleDateString()
+                          : "N/A"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+
+        {selectedCustomer && (
+          <div className="fixed inset-0 bg-slate-900/50 z-[60] flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl animate-reveal">
+              <div className="flex justify-between items-center mb-6">
+                <div>
+                  <h2 className="text-xl font-bold text-brand-blue-deep">Trips Taken</h2>
+                  <p className="text-sm font-medium text-slate-500">by {selectedCustomer.name}</p>
+                </div>
+                <button
+                  onClick={() => setSelectedCustomer(null)}
+                  className="p-2 text-slate-400 hover:bg-slate-100 rounded-full transition-colors self-start"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <div className="flex flex-col gap-3 max-h-[60vh] overflow-y-auto pr-1">
+                {selectedCustomer.allTrips?.map((trip: any, idx: number) => (
+                  <div
+                    key={idx}
+                    className="flex items-center justify-between p-4 bg-slate-50 border border-slate-100 rounded-xl"
+                  >
+                    <div className="flex items-center gap-3">
+                      <Map className="w-5 h-5 text-brand-green" />
+                      <span className="font-bold text-slate-700">{trip.name}</span>
+                    </div>
+                    <span className="text-sm font-medium text-slate-500 bg-white px-3 py-1 rounded-lg border border-slate-200">
+                      {trip.date}
+                    </span>
+                  </div>
                 ))}
-              </tbody>
-            </table>
+              </div>
+            </div>
           </div>
         )}
-      </div>
-
-      {selectedCustomer && (
-        <div className="fixed inset-0 bg-slate-900/50 z-[60] flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl animate-reveal">
-            <div className="flex justify-between items-center mb-6">
-              <div>
-                <h2 className="text-xl font-bold text-brand-blue-deep">Trips Taken</h2>
-                <p className="text-sm font-medium text-slate-500">by {selectedCustomer.name}</p>
-              </div>
-              <button onClick={() => setSelectedCustomer(null)} className="p-2 text-slate-400 hover:bg-slate-100 rounded-full transition-colors self-start"><X className="w-5 h-5"/></button>
-            </div>
-            <div className="flex flex-col gap-3 max-h-[60vh] overflow-y-auto pr-1">
-              {selectedCustomer.allTrips?.map((trip: any, idx: number) => (
-                <div key={idx} className="flex items-center justify-between p-4 bg-slate-50 border border-slate-100 rounded-xl">
-                  <div className="flex items-center gap-3">
-                    <Map className="w-5 h-5 text-brand-green" />
-                    <span className="font-bold text-slate-700">{trip.name}</span>
-                  </div>
-                  <span className="text-sm font-medium text-slate-500 bg-white px-3 py-1 rounded-lg border border-slate-200">
-                    {trip.date}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
       </>
     );
   } catch (error: any) {
@@ -1217,27 +1687,37 @@ function CustomersView({ bookings = [] }: { bookings?: any[] }) {
 
 function ReportsView({ bookings = [] }: { bookings?: any[] }) {
   const exportBookings = () => {
-    const headers = ['Booking ID', 'Customer Name', 'Phone Number', 'Trip Name', 'Persons', 'Travel Date', 'Status', 'Submission Date', 'Custom Destination'];
-    
+    const headers = [
+      "Booking ID",
+      "Customer Name",
+      "Phone Number",
+      "Trip Name",
+      "Persons",
+      "Travel Date",
+      "Status",
+      "Submission Date",
+      "Custom Destination",
+    ];
+
     const rows = bookings.map((bk, idx) => {
-      const bId = `b-${String(bookings.length - idx).padStart(5, '0')}`;
-      const phoneStr = (bk.phone || '').replace(/[\r\n]+/g, ' ');
-      const dateStr = bk.createdAt ? new Date(bk.createdAt).toLocaleDateString() : '';
+      const bId = `b-${String(bookings.length - idx).padStart(5, "0")}`;
+      const phoneStr = (bk.phone || "").replace(/[\r\n]+/g, " ");
+      const dateStr = bk.createdAt ? new Date(bk.createdAt).toLocaleDateString() : "";
       return [
         bId,
-        (bk.name || '').replace(/[\r\n]+/g, ' '),
+        (bk.name || "").replace(/[\r\n]+/g, " "),
         phoneStr,
-        (bk.tripName === 'custom' ? 'Custom Trip' : (bk.tripName || '')).replace(/[\r\n]+/g, ' '),
-        bk.persons || '',
-        (bk.travelDate || '').replace(/[\r\n]+/g, ' '),
-        bk.status || '',
+        (bk.tripName === "custom" ? "Custom Trip" : bk.tripName || "").replace(/[\r\n]+/g, " "),
+        bk.persons || "",
+        (bk.travelDate || "").replace(/[\r\n]+/g, " "),
+        bk.status || "",
         dateStr,
-        (bk.customDestination || '').replace(/[\r\n]+/g, ' ')
+        (bk.customDestination || "").replace(/[\r\n]+/g, " "),
       ];
     });
-    
+
     const ws = XLSX.utils.aoa_to_sheet([headers, ...rows]);
-    ws['!cols'] = [
+    ws["!cols"] = [
       { wch: 15 }, // Booking ID
       { wch: 25 }, // Customer Name
       { wch: 20 }, // Phone Number
@@ -1246,40 +1726,42 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
       { wch: 20 }, // Travel Date
       { wch: 15 }, // Status
       { wch: 20 }, // Submission Date
-      { wch: 40 }  // Custom Destination
+      { wch: 40 }, // Custom Destination
     ];
-    
+
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Bookings");
-    XLSX.writeFile(wb, `bookings_report_${new Date().toISOString().split('T')[0]}.xlsx`);
+    XLSX.writeFile(wb, `bookings_report_${new Date().toISOString().split("T")[0]}.xlsx`);
   };
-
-
 
   const exportCustomers = () => {
     const customersMap = new globalThis.Map();
-    (bookings || []).forEach(bk => {
+    (bookings || []).forEach((bk) => {
       if (!bk) return;
-      const phone = bk.phone || 'Unknown';
+      const phone = bk.phone || "Unknown";
       if (!customersMap.has(phone)) {
         customersMap.set(phone, {
-          name: bk.name || 'Unknown',
+          name: bk.name || "Unknown",
           phone: phone,
           totalBookings: 1,
           firstBookingDate: bk.createdAt,
           latestBookingDate: bk.createdAt,
-          allTrips: new Set([bk.tripName === 'custom' ? 'Custom Trip' : bk.tripName || 'Unknown'])
+          allTrips: new Set([bk.tripName === "custom" ? "Custom Trip" : bk.tripName || "Unknown"]),
         });
       } else {
         const cust = customersMap.get(phone);
         if (cust) {
           cust.totalBookings += 1;
-          const currentLatest = cust.latestBookingDate ? new Date(cust.latestBookingDate).getTime() : 0;
-          const currentFirst = cust.firstBookingDate ? new Date(cust.firstBookingDate).getTime() : Infinity;
+          const currentLatest = cust.latestBookingDate
+            ? new Date(cust.latestBookingDate).getTime()
+            : 0;
+          const currentFirst = cust.firstBookingDate
+            ? new Date(cust.firstBookingDate).getTime()
+            : Infinity;
           const newDate = bk.createdAt ? new Date(bk.createdAt).getTime() : 0;
           if (newDate > currentLatest) cust.latestBookingDate = bk.createdAt;
           if (newDate > 0 && newDate < currentFirst) cust.firstBookingDate = bk.createdAt;
-          cust.allTrips.add(bk.tripName === 'custom' ? 'Custom Trip' : bk.tripName || 'Unknown');
+          cust.allTrips.add(bk.tripName === "custom" ? "Custom Trip" : bk.tripName || "Unknown");
         }
       }
     });
@@ -1291,44 +1773,56 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
     });
 
     sortedCustomers.forEach((cust, index) => {
-      cust.customerId = `cus-${String(index + 1).padStart(5, '0')}`;
+      cust.customerId = `cus-${String(index + 1).padStart(5, "0")}`;
     });
 
     const displayCustomers = [...sortedCustomers].reverse();
 
-    const headers = ['Customer ID', 'Customer Name', 'Phone Number', 'Total Bookings', 'First Booking Date', 'Latest Booking Date', 'Trips Taken'];
-    
+    const headers = [
+      "Customer ID",
+      "Customer Name",
+      "Phone Number",
+      "Total Bookings",
+      "First Booking Date",
+      "Latest Booking Date",
+      "Trips Taken",
+    ];
+
     const rows = displayCustomers.map((cust: any) => {
-      const tripsStr = Array.from(cust.allTrips).join('; ');
-      const phoneStr = (cust.phone || '').replace(/[\r\n]+/g, ' ');
-      const firstDateStr = cust.firstBookingDate ? new Date(cust.firstBookingDate).toLocaleDateString() : 'N/A';
-      const lastDateStr = cust.latestBookingDate ? new Date(cust.latestBookingDate).toLocaleDateString() : 'N/A';
+      const tripsStr = Array.from(cust.allTrips).join("; ");
+      const phoneStr = (cust.phone || "").replace(/[\r\n]+/g, " ");
+      const firstDateStr = cust.firstBookingDate
+        ? new Date(cust.firstBookingDate).toLocaleDateString()
+        : "N/A";
+      const lastDateStr = cust.latestBookingDate
+        ? new Date(cust.latestBookingDate).toLocaleDateString()
+        : "N/A";
 
       return [
         cust.customerId,
-        (cust.name || '').replace(/[\r\n]+/g, ' '),
+        (cust.name || "").replace(/[\r\n]+/g, " "),
         phoneStr,
         cust.totalBookings,
         firstDateStr,
         lastDateStr,
-        tripsStr.replace(/[\r\n]+/g, ' ')
+        tripsStr.replace(/[\r\n]+/g, " "),
       ];
     });
 
     const ws = XLSX.utils.aoa_to_sheet([headers, ...rows]);
-    ws['!cols'] = [
+    ws["!cols"] = [
       { wch: 15 }, // Customer ID
       { wch: 25 }, // Customer Name
       { wch: 20 }, // Phone Number
       { wch: 15 }, // Total Bookings
       { wch: 20 }, // First Booking Date
       { wch: 20 }, // Latest Booking Date
-      { wch: 60 }  // Trips Taken
+      { wch: 60 }, // Trips Taken
     ];
-    
+
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Customers");
-    XLSX.writeFile(wb, `customers_report_${new Date().toISOString().split('T')[0]}.xlsx`);
+    XLSX.writeFile(wb, `customers_report_${new Date().toISOString().split("T")[0]}.xlsx`);
   };
 
   return (
@@ -1341,7 +1835,7 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
         <p className="text-slate-500 text-sm mb-6 max-w-xs">
           Download a complete Excel spreadsheet of all your trip bookings.
         </p>
-        <button 
+        <button
           onClick={exportBookings}
           className="w-full max-w-xs bg-brand-blue-deep hover:bg-brand-blue text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-lg shadow-brand-blue/20"
         >
@@ -1358,7 +1852,7 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
         <p className="text-slate-500 text-sm mb-6 max-w-xs">
           Download an Excel summary of all your unique customers and their trips.
         </p>
-        <button 
+        <button
           onClick={exportCustomers}
           className="w-full max-w-xs bg-brand-green hover:bg-brand-green-dark text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-lg shadow-brand-green/20"
         >
@@ -1399,17 +1893,13 @@ function AuditLogsPanel({ logs }: { logs: any[] }) {
                 <td className="p-4 pl-6 text-slate-500 whitespace-nowrap">
                   {new Date(log.createdAt).toLocaleString()}
                 </td>
-                <td className="p-4 font-medium text-slate-800 whitespace-nowrap">
-                  {log.action}
-                </td>
+                <td className="p-4 font-medium text-slate-800 whitespace-nowrap">{log.action}</td>
                 <td className="p-4">
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full font-medium bg-slate-100 text-slate-700 text-xs">
                     {log.entityType}
                   </span>
                 </td>
-                <td className="p-4 pr-6 text-slate-600">
-                  {log.details}
-                </td>
+                <td className="p-4 pr-6 text-slate-600">{log.details}</td>
               </tr>
             ))}
           </tbody>
@@ -1419,14 +1909,14 @@ function AuditLogsPanel({ logs }: { logs: any[] }) {
   );
 }
 
-import { InvoicePrint } from '../components/InvoicePrint';
+import { InvoicePrint } from "../components/InvoicePrint";
 
 function InvoicesView({ bookings }: { bookings: any[] }) {
   const [selectedBooking, setSelectedBooking] = useState<any>(null);
 
   // Filter for confirmed bookings whose travelDate is today or in the past
-  const generatedInvoices = bookings.filter(b => {
-    if (b.status !== 'Confirmed') return false;
+  const generatedInvoices = bookings.filter((b) => {
+    if (b.status !== "Confirmed") return false;
     const travelTime = new Date(b.travelDate).getTime();
     if (isNaN(travelTime)) return true; // Show it if parsing fails
     return travelTime <= Date.now();
@@ -1436,20 +1926,23 @@ function InvoicesView({ bookings }: { bookings: any[] }) {
     return (
       <div className="animate-reveal">
         <div className="no-print flex items-center justify-between mb-6 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-          <button onClick={() => setSelectedBooking(null)} className="text-brand-blue-deep flex items-center font-bold hover:underline">
+          <button
+            onClick={() => setSelectedBooking(null)}
+            className="text-brand-blue-deep flex items-center font-bold hover:underline"
+          >
             <ArrowLeft className="w-4 h-4 mr-2" /> Back to List
           </button>
-          <button 
+          <button
             onClick={() => window.print()}
             className="bg-brand-blue-deep text-white px-6 py-2 rounded-xl font-bold hover:bg-brand-blue shadow-md flex items-center gap-2"
           >
             <Printer className="w-4 h-4" /> Print / Save as PDF
           </button>
         </div>
-        
+
         {/* We rely on .no-print classes and specific print resets for layout */}
         <div className="print-container">
-           <style>{`
+          <style>{`
              @media print {
                 /* Hide global layout wrappers */
                 aside, header { display: none !important; }
@@ -1465,7 +1958,7 @@ function InvoicesView({ bookings }: { bookings: any[] }) {
                 .no-print { display: none !important; }
              }
            `}</style>
-           <InvoicePrint booking={selectedBooking} />
+          <InvoicePrint booking={selectedBooking} />
         </div>
       </div>
     );
@@ -1477,7 +1970,10 @@ function InvoicesView({ bookings }: { bookings: any[] }) {
         <div className="p-12 text-center text-slate-500">
           <Printer className="w-12 h-12 mx-auto mb-4 opacity-50" />
           <h3 className="text-xl font-bold text-slate-600 mb-2">No Invoices Ready</h3>
-          <p className="text-sm">Invoices are automatically generated when a "Confirmed" booking reaches its Trip Start Date.</p>
+          <p className="text-sm">
+            Invoices are automatically generated when a "Confirmed" booking reaches its Trip Start
+            Date.
+          </p>
         </div>
       ) : (
         <div className="overflow-x-auto">
@@ -1496,7 +1992,7 @@ function InvoicesView({ bookings }: { bookings: any[] }) {
                 const invoiceNo = `INV-${new Date(bk.createdAt || Date.now()).getFullYear()}-${bk._id?.slice(-6).toUpperCase()}`;
                 const rate = 6000;
                 const total = rate * (bk.persons || 1);
-                
+
                 return (
                   <tr key={bk._id} className="hover:bg-slate-50/50 transition-colors">
                     <td className="px-6 py-4 font-bold text-brand-blue-deep">{invoiceNo}</td>
@@ -1507,9 +2003,11 @@ function InvoicesView({ bookings }: { bookings: any[] }) {
                     <td className="px-6 py-4 text-sm font-medium text-slate-600">
                       {new Date(bk.travelDate).toLocaleDateString()}
                     </td>
-                    <td className="px-6 py-4 font-bold text-brand-green-dark">₹ {total.toLocaleString()}</td>
+                    <td className="px-6 py-4 font-bold text-brand-green-dark">
+                      ₹ {total.toLocaleString()}
+                    </td>
                     <td className="px-6 py-4 text-right">
-                      <button 
+                      <button
                         onClick={() => setSelectedBooking(bk)}
                         className="inline-flex items-center gap-2 bg-brand-green/10 text-brand-green-dark px-4 py-2 rounded-lg font-bold hover:bg-brand-green/20 transition-colors"
                       >

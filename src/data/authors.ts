@@ -1,1 +1,1 @@
-export * from '../frontend/data/authors';
+export * from "../frontend/data/authors";

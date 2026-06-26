@@ -20,14 +20,22 @@ export function getMockTours(lang: "mr" | "en"): TourData[] {
   return [
     {
       id: "ujjain-1",
-      image: "https://images.unsplash.com/photo-1698223126743-3b10b78df025?q=80&w=1470&auto=format&fit=crop",
+      image:
+        "https://images.unsplash.com/photo-1698223126743-3b10b78df025?q=80&w=1470&auto=format&fit=crop",
       durationBadge: "3D / 2N",
       subtitle: "Pune to Ujjain Mahakal Yatra",
       title: "Pune to Ujjain Mahakal Yatra",
       location: "Pune",
       schedule: "Every Friday",
       frequency: "Every Friday - Sunday (Weekly)",
-      route: ["Pune", "Omkareshwar", "Mamleshwar", "Mahakaleshwar (Ujjain)", "Grishneshwar", "Pune"],
+      route: [
+        "Pune",
+        "Omkareshwar",
+        "Mamleshwar",
+        "Mahakaleshwar (Ujjain)",
+        "Grishneshwar",
+        "Pune",
+      ],
       tags: ["Mahakaleshwar", "Bhasma Aarti", "Omkareshwar", "Grishneshwar"],
       seatsAvailable: 11,
       seatsTotal: 17,
@@ -35,7 +43,7 @@ export function getMockTours(lang: "mr" | "en"): TourData[] {
       itinerary: [
         { day: "Day 1 (Fri)", title: "Pune departure → Omkareshwar & Mamleshwar darshan" },
         { day: "Day 2 (Sat)", title: "Mahakaleshwar Ujjain darshan & Bhasma Aarti" },
-        { day: "Day 3 (Sun)", title: "Grishneshwar Jyotirlinga → Return to Pune" }
+        { day: "Day 3 (Sun)", title: "Grishneshwar Jyotirlinga → Return to Pune" },
       ],
       includes: [
         "AC Force Urbania",
@@ -43,8 +51,8 @@ export function getMockTours(lang: "mr" | "en"): TourData[] {
         "Pure Veg Meals",
         "Tea & Breakfast",
         "Travel Insurance",
-        "Tour Manager"
-      ]
-    }
+        "Tour Manager",
+      ],
+    },
   ];
 }

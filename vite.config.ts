@@ -10,6 +10,7 @@ import Sitemap from "vite-plugin-sitemap";
 export default defineConfig({
   tanstackStart: {
     server: { entry: "server" },
+    serverFns: { disableCsrfMiddlewareWarning: true },
   },
   vite: {
     plugins: [
@@ -21,20 +22,20 @@ export default defineConfig({
           "/tours/pandharpur-wari",
           "/tours/char-dham-yatra",
           "/tours/shirdi-tour",
-          "/tours/tirupati-balaji-tour"
-        ]
-      })
+          "/tours/tirupati-balaji-tour",
+        ],
+      }),
     ],
     optimizeDeps: {
-      exclude: ['@aws-sdk/client-s3', 'whatsapp-web.js', 'puppeteer', 'pdfkit']
+      exclude: ["@aws-sdk/client-s3", "whatsapp-web.js", "puppeteer", "pdfkit"],
     },
     ssr: {
-      external: ['whatsapp-web.js', 'puppeteer', 'pdfkit', '@aws-sdk/client-s3', 'qrcode']
+      external: ["whatsapp-web.js", "puppeteer", "pdfkit", "@aws-sdk/client-s3", "qrcode"],
     },
     build: {
       rollupOptions: {
-        external: ['@aws-sdk/client-s3']
-      }
-    }
-  }
+        external: ["@aws-sdk/client-s3"],
+      },
+    },
+  },
 });

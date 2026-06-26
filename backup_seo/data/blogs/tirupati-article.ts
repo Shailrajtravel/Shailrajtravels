@@ -1,53 +1,63 @@
-import { BlogPost } from '../../types/blog';
+import { BlogPost } from "../../types/blog";
 
 export const tirupatiArticle: BlogPost = {
-  slug: 'tirupati-balaji-darshan-booking-guide',
-  title: 'Tirupati Balaji Darshan Guide: Online Booking, Tonsuring & Timings',
-  metaTitle: 'Tirupati Balaji Darshan Guide | Booking & Travel Tips',
-  metaDescription: 'Plan your trip to Tirumala with our comprehensive Tirupati Balaji Darshan Guide. Learn how to book ₹300 Special Entry tickets, tonsuring details, and accommodation tips.',
-  focusKeyword: 'Tirupati Balaji Darshan Booking',
-  category: 'Temple Guides',
-  tags: ['Tirupati', 'Lord Balaji', 'Andhra Pradesh', 'South India Temples', 'Pilgrimage'],
-  authorId: 'shailesh-raj',
-  reviewerId: 'priya-deshmukh',
-  lastReviewedAt: '2026-06-14T09:00:00Z',
-  relatedTourSlugs: ['tirupati-balaji-tour', 'jyotirlinga-darshan'],
-  relatedArticleSlugs: ['shirdi-sai-baba-darshan-guide'],
-  featuredImage: '/images/tours/tirupati.jpg', // Assuming a fallback jpg or webp
-  ogImage: '/images/tours/tirupati.jpg',
+  slug: "tirupati-balaji-darshan-booking-guide",
+  title: "Tirupati Balaji Darshan Guide: Online Booking, Tonsuring & Timings",
+  metaTitle: "Tirupati Balaji Darshan Guide | Booking & Travel Tips",
+  metaDescription:
+    "Plan your trip to Tirumala with our comprehensive Tirupati Balaji Darshan Guide. Learn how to book ₹300 Special Entry tickets, tonsuring details, and accommodation tips.",
+  focusKeyword: "Tirupati Balaji Darshan Booking",
+  category: "Temple Guides",
+  tags: ["Tirupati", "Lord Balaji", "Andhra Pradesh", "South India Temples", "Pilgrimage"],
+  authorId: "shailesh-raj",
+  reviewerId: "priya-deshmukh",
+  lastReviewedAt: "2026-06-14T09:00:00Z",
+  relatedTourSlugs: ["tirupati-balaji-tour", "jyotirlinga-darshan"],
+  relatedArticleSlugs: ["shirdi-sai-baba-darshan-guide"],
+  featuredImage: "/images/tours/tirupati.jpg", // Assuming a fallback jpg or webp
+  ogImage: "/images/tours/tirupati.jpg",
   readingTimeMinutes: 13,
-  publishedAt: '2026-06-10T10:00:00Z',
-  updatedAt: '2026-06-10T10:00:00Z',
-  excerpt: 'Navigating the world’s richest and most visited Hindu temple can be daunting. From securing online Darshan tickets to understanding the Alipiri walking route, here is your ultimate guide to Tirumala.',
+  publishedAt: "2026-06-10T10:00:00Z",
+  updatedAt: "2026-06-10T10:00:00Z",
+  excerpt:
+    "Navigating the world’s richest and most visited Hindu temple can be daunting. From securing online Darshan tickets to understanding the Alipiri walking route, here is your ultimate guide to Tirumala.",
   tableOfContents: [
-    { id: 'introduction', title: 'The Majestic Tirumala Hills', level: 2 },
-    { id: 'understanding', title: 'Understanding the TTD System', level: 2 },
-    { id: 'booking', title: 'How to Book Special Entry Darshan (₹300)', level: 2 },
-    { id: 'free-darshan', title: 'Sarva Darshan (Free Darshan) and Slotted Sarva Darshan (SSD)', level: 2 },
-    { id: 'walking', title: 'The Walking Paths: Alipiri and Srivari Mettu', level: 2 },
-    { id: 'tonsure', title: 'Mokku: The Hair Tonsuring Tradition (Kalyanakatta)', level: 2 },
-    { id: 'prasadam', title: 'The Legendary Tirupati Laddu', level: 2 },
-    { id: 'dress-code', title: 'Strict Dress Code and Rules', level: 2 },
-    { id: 'accommodation', title: 'Accommodation: Tirupati vs. Tirumala', level: 2 },
-    { id: 'conclusion', title: 'Conclusion: The Ultimate Devotion', level: 2 }
+    { id: "introduction", title: "The Majestic Tirumala Hills", level: 2 },
+    { id: "understanding", title: "Understanding the TTD System", level: 2 },
+    { id: "booking", title: "How to Book Special Entry Darshan (₹300)", level: 2 },
+    {
+      id: "free-darshan",
+      title: "Sarva Darshan (Free Darshan) and Slotted Sarva Darshan (SSD)",
+      level: 2,
+    },
+    { id: "walking", title: "The Walking Paths: Alipiri and Srivari Mettu", level: 2 },
+    { id: "tonsure", title: "Mokku: The Hair Tonsuring Tradition (Kalyanakatta)", level: 2 },
+    { id: "prasadam", title: "The Legendary Tirupati Laddu", level: 2 },
+    { id: "dress-code", title: "Strict Dress Code and Rules", level: 2 },
+    { id: "accommodation", title: "Accommodation: Tirupati vs. Tirumala", level: 2 },
+    { id: "conclusion", title: "Conclusion: The Ultimate Devotion", level: 2 },
   ],
   faqs: [
     {
-      question: 'When does TTD release the ₹300 Special Entry Darshan tickets?',
-      answer: 'The Tirumala Tirupati Devasthanams (TTD) usually releases the ₹300 Special Entry Darshan quota online between the 18th and 25th of the month, for dates falling two months ahead.'
+      question: "When does TTD release the ₹300 Special Entry Darshan tickets?",
+      answer:
+        "The Tirumala Tirupati Devasthanams (TTD) usually releases the ₹300 Special Entry Darshan quota online between the 18th and 25th of the month, for dates falling two months ahead.",
     },
     {
-      question: 'Is jeans allowed for Tirupati Darshan?',
-      answer: 'No. Men must wear a Dhoti/Pajama with a Kurta. Women must wear a Saree, Half-Saree, or a Chudidar with a Dupatta. Western wear like jeans, shorts, and T-shirts are strictly prohibited.'
+      question: "Is jeans allowed for Tirupati Darshan?",
+      answer:
+        "No. Men must wear a Dhoti/Pajama with a Kurta. Women must wear a Saree, Half-Saree, or a Chudidar with a Dupatta. Western wear like jeans, shorts, and T-shirts are strictly prohibited.",
     },
     {
-      question: 'How long is the Alipiri walking path?',
-      answer: 'The Alipiri Mettu walking path is approximately 9 kilometers long and consists of 3,550 steps. It takes a healthy adult around 3 to 5 hours to climb.'
+      question: "How long is the Alipiri walking path?",
+      answer:
+        "The Alipiri Mettu walking path is approximately 9 kilometers long and consists of 3,550 steps. It takes a healthy adult around 3 to 5 hours to climb.",
     },
     {
-      question: 'Can I carry my mobile phone inside the main temple?',
-      answer: 'No. Mobile phones, electronic gadgets, and footwear are strictly prohibited past the Vaikuntam Queue Complex. You must deposit them at the free locker counters before entering the queue.'
-    }
+      question: "Can I carry my mobile phone inside the main temple?",
+      answer:
+        "No. Mobile phones, electronic gadgets, and footwear are strictly prohibited past the Vaikuntam Queue Complex. You must deposit them at the free locker counters before entering the queue.",
+    },
   ],
   content: `
 <h2 id="introduction">The Majestic Tirumala Hills</h2>
@@ -117,5 +127,5 @@ export const tirupatiArticle: BlogPost = {
 <h2 id="conclusion">Conclusion: The Ultimate Devotion</h2>
 <p>The phrase <em>"Govinda! Govinda!"</em> echoing through the massive Vaikuntam queue complex will stay with you long after you return home. Getting a glimpse of Lord Balaji inside the dark, camphor-scented Ananda Nilayam sanctum lasts only a few seconds. The security guards will physically push you forward to keep the line moving. But in those fleeting seconds, gazing at the diamond-studded deity, devotees experience an overwhelming wave of grace that makes the exhaustion, the waiting, and the rules entirely worth it.</p>
 <p>With careful planning and a patient heart, the Tirupati Darshan is one of the most fulfilling spiritual journeys you will ever undertake.</p>
-  `
+  `,
 };

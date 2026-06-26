@@ -1,13 +1,27 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { TourCard } from './TourCard';
-import { TourModal } from './TourModal';
-import { getMockTours, TourData } from './data';
-import useEmblaCarousel from 'embla-carousel-react';
-import Autoplay from 'embla-carousel-autoplay';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import bgFallback from '@/frontend/assets/hero-pandharpur.jpg';
+import React, { useState, useEffect, useCallback } from "react";
+import { TourCard } from "./TourCard";
+import { TourModal } from "./TourModal";
+import { getMockTours, TourData } from "./data";
+import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import bgFallback from "@/frontend/assets/hero-pandharpur.jpg";
 
-export function ToursSection({ lang, t, packages, tripOptions, tours, onBookSeat }: { lang: 'mr' | 'en', t: any, packages?: any[], tripOptions?: any[], tours?: any[], onBookSeat?: (tour: any) => void }) {
+export function ToursSection({
+  lang,
+  t,
+  packages,
+  tripOptions,
+  tours,
+  onBookSeat,
+}: {
+  lang: "mr" | "en";
+  t: any;
+  packages?: any[];
+  tripOptions?: any[];
+  tours?: any[];
+  onBookSeat?: (tour: any) => void;
+}) {
   const [selectedTour, setSelectedTour] = useState<TourData | null>(null);
 
   const mappedTripOptions = (tripOptions || []).map((trip: any) => ({
@@ -16,8 +30,10 @@ export function ToursSection({ lang, t, packages, tripOptions, tours, onBookSeat
     durationBadge: "Weekly Trip",
     subtitle: trip.name,
     title: trip.name,
-        location: "Various",
-    schedule: trip.schedule || (Array.isArray(trip.dates) && trip.dates.length > 0 ? trip.dates.join(', ') : "Flexible"),
+    location: "Various",
+    schedule:
+      trip.schedule ||
+      (Array.isArray(trip.dates) && trip.dates.length > 0 ? trip.dates.join(", ") : "Flexible"),
     dates: trip.dates || [],
     frequency: "Weekly",
     route: trip.route || [],
@@ -26,17 +42,14 @@ export function ToursSection({ lang, t, packages, tripOptions, tours, onBookSeat
     seatsTotal: 20,
     price: trip.price || "On Request",
     itinerary: trip.itinerary || [],
-    includes: trip.includes || []
+    includes: trip.includes || [],
   }));
 
   const mappedTours = (tours || []).map((tour: any) => {
-    const packagePrice = tour.packages?.[0]?.price 
-      ? `₹${tour.packages[0].price}` 
-      : "On Request";
+    const packagePrice = tour.packages?.[0]?.price ? `₹${tour.packages[0].price}` : "On Request";
     const inclusions = tour.packages?.[0]?.inclusions || [];
-    const tourRoute = tour.destinations && tour.destinations.length > 0 
-      ? tour.destinations 
-      : [tour.title];
+    const tourRoute =
+      tour.destinations && tour.destinations.length > 0 ? tour.destinations : [tour.title];
 
     return {
       id: tour._id,
@@ -46,9 +59,8 @@ export function ToursSection({ lang, t, packages, tripOptions, tours, onBookSeat
       subtitle: tour.metaTitle || tour.title,
       title: tour.title,
       location: tour.destinations?.[0] || "Various",
-      schedule: Array.isArray(tour.dates) && tour.dates.length > 0 
-        ? tour.dates.join(', ') 
-        : "Flexible",
+      schedule:
+        Array.isArray(tour.dates) && tour.dates.length > 0 ? tour.dates.join(", ") : "Flexible",
       dates: tour.dates || [],
       frequency: "Special Tour",
       route: tourRoute,
@@ -56,20 +68,19 @@ export function ToursSection({ lang, t, packages, tripOptions, tours, onBookSeat
       seatsAvailable: 12,
       seatsTotal: 16,
       price: packagePrice,
-      itinerary: Array.isArray(tour.highlights) 
-        ? tour.highlights.map((h: string, idx: number) => ({ day: `Point ${idx+1}`, title: h }))
+      itinerary: Array.isArray(tour.highlights)
+        ? tour.highlights.map((h: string, idx: number) => ({ day: `Point ${idx + 1}`, title: h }))
         : [],
-      includes: inclusions
+      includes: inclusions,
     };
   });
 
   // Display DB packages, mapped trip options, and mapped popular tours
   const displayPackages = [...(packages || []), ...mappedTripOptions, ...mappedTours];
 
-  const [emblaRef, emblaApi] = useEmblaCarousel(
-    { loop: true, align: 'start' },
-    [Autoplay({ delay: 3000, stopOnInteraction: true })]
-  );
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "start" }, [
+    Autoplay({ delay: 3000, stopOnInteraction: true }),
+  ]);
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(true);
 
@@ -85,12 +96,15 @@ export function ToursSection({ lang, t, packages, tripOptions, tours, onBookSeat
   useEffect(() => {
     if (!emblaApi) return;
     onSelect();
-    emblaApi.on('select', onSelect);
-    emblaApi.on('reInit', onSelect);
+    emblaApi.on("select", onSelect);
+    emblaApi.on("reInit", onSelect);
   }, [emblaApi, onSelect]);
 
   return (
-    <section id="tours" className="w-full bg-[#F8FAFC] pt-12 pb-8 lg:pt-20 lg:pb-16 relative scroll-mt-28 md:scroll-mt-32">
+    <section
+      id="tours"
+      className="w-full bg-[#F8FAFC] pt-12 pb-8 lg:pt-20 lg:pb-16 relative scroll-mt-28 md:scroll-mt-32"
+    >
       <div className="mx-auto max-w-[1280px] px-6">
         <div className="flex flex-col items-center justify-center text-center mb-12 animate-reveal">
           <div className="flex items-center gap-4 mb-4">
@@ -101,7 +115,8 @@ export function ToursSection({ lang, t, packages, tripOptions, tours, onBookSeat
             <div className="h-[1px] w-10 bg-brand-green" />
           </div>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold font-display text-brand-blue-deep leading-tight">
-            {t.toursTitlePrefix || "Popular"} <span className="text-brand-green-dark">{t.toursTitleHighlight || "Journeys"}</span>
+            {t.toursTitlePrefix || "Popular"}{" "}
+            <span className="text-brand-green-dark">{t.toursTitleHighlight || "Journeys"}</span>
           </h2>
         </div>
 
@@ -109,13 +124,21 @@ export function ToursSection({ lang, t, packages, tripOptions, tours, onBookSeat
           <div className="overflow-hidden -mx-4 px-4 pb-4" ref={emblaRef}>
             <div className="flex gap-8">
               {displayPackages.map((tour: any) => (
-                <div key={tour.id || tour._id} className="flex-[0_0_100%] md:flex-[0_0_calc(50%-1rem)] lg:flex-[0_0_calc(33.333%-1.33rem)] min-w-0 flex flex-col">
-                  <TourCard tour={tour} onOpenDetails={setSelectedTour} onBookSeat={onBookSeat} t={t} />
+                <div
+                  key={tour.id || tour._id}
+                  className="flex-[0_0_100%] md:flex-[0_0_calc(50%-1rem)] lg:flex-[0_0_calc(33.333%-1.33rem)] min-w-0 flex flex-col"
+                >
+                  <TourCard
+                    tour={tour}
+                    onOpenDetails={setSelectedTour}
+                    onBookSeat={onBookSeat}
+                    t={t}
+                  />
                 </div>
               ))}
             </div>
           </div>
-          
+
           <button
             onClick={scrollPrev}
             className="hidden md:flex absolute -left-5 top-1/2 -translate-y-1/2 z-20 h-14 w-14 items-center justify-center rounded-full bg-white shadow-xl border border-slate-100 text-brand-blue-deep opacity-0 transition-all hover:bg-brand-green hover:text-white group-hover:opacity-100 hover:scale-110"
@@ -132,7 +155,12 @@ export function ToursSection({ lang, t, packages, tripOptions, tours, onBookSeat
       </div>
 
       {selectedTour && (
-        <TourModal tour={selectedTour} onClose={() => setSelectedTour(null)} onBookSeat={onBookSeat} t={t} />
+        <TourModal
+          tour={selectedTour}
+          onClose={() => setSelectedTour(null)}
+          onBookSeat={onBookSeat}
+          t={t}
+        />
       )}
     </section>
   );

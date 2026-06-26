@@ -1,59 +1,65 @@
-import { BlogPost } from '../../types/blog';
+import { BlogPost } from "../../types/blog";
 
 export const jyotirlingaArticle: BlogPost = {
-  slug: '12-jyotirlinga-temples-india-guide',
-  title: '12 Jyotirlinga Temples in India: Importance, Location, and Darshan Timings',
-  metaTitle: '12 Jyotirlinga Temples Guide | Locations, History & Itinerary',
-  metaDescription: 'A complete guide to the 12 Jyotirlinga temples in India. Learn about their mythological significance, locations, best time to visit, and how to plan your spiritual journey.',
-  focusKeyword: '12 Jyotirlinga Temples',
-  category: 'Spiritual Tourism',
-  tags: ['Jyotirlinga', 'Lord Shiva', 'India Temples', 'Pilgrimage Route', 'Mahadev'],
-  authorId: 'shailesh-raj',
-  reviewerId: 'priya-deshmukh',
-  lastReviewedAt: '2026-06-14T09:00:00Z',
-  relatedTourSlugs: ['jyotirlinga-darshan', 'ashtavinayak-yatra'],
-  relatedArticleSlugs: ['ashtavinayak-yatra-route-guide'],
-  featuredImage: '/images/tours/jyotirlinga.webp', 
-  ogImage: '/images/tours/jyotirlinga.webp',
+  slug: "12-jyotirlinga-temples-india-guide",
+  title: "12 Jyotirlinga Temples in India: Importance, Location, and Darshan Timings",
+  metaTitle: "12 Jyotirlinga Temples Guide | Locations, History & Itinerary",
+  metaDescription:
+    "A complete guide to the 12 Jyotirlinga temples in India. Learn about their mythological significance, locations, best time to visit, and how to plan your spiritual journey.",
+  focusKeyword: "12 Jyotirlinga Temples",
+  category: "Spiritual Tourism",
+  tags: ["Jyotirlinga", "Lord Shiva", "India Temples", "Pilgrimage Route", "Mahadev"],
+  authorId: "shailesh-raj",
+  reviewerId: "priya-deshmukh",
+  lastReviewedAt: "2026-06-14T09:00:00Z",
+  relatedTourSlugs: ["jyotirlinga-darshan", "ashtavinayak-yatra"],
+  relatedArticleSlugs: ["ashtavinayak-yatra-route-guide"],
+  featuredImage: "/images/tours/jyotirlinga.webp",
+  ogImage: "/images/tours/jyotirlinga.webp",
   readingTimeMinutes: 14,
-  publishedAt: '2026-06-14T10:00:00Z',
-  updatedAt: '2026-06-14T10:00:00Z',
-  excerpt: 'The 12 Jyotirlingas represent the radiant sign of The Almighty Shiva. Spread across the length and breadth of India, this pilgrimage is the ultimate spiritual quest for Shaivites. Discover the divine history of each temple.',
+  publishedAt: "2026-06-14T10:00:00Z",
+  updatedAt: "2026-06-14T10:00:00Z",
+  excerpt:
+    "The 12 Jyotirlingas represent the radiant sign of The Almighty Shiva. Spread across the length and breadth of India, this pilgrimage is the ultimate spiritual quest for Shaivites. Discover the divine history of each temple.",
   tableOfContents: [
-    { id: 'introduction', title: 'What is a Jyotirlinga?', level: 2 },
-    { id: 'somnath', title: '1. Somnath Temple, Gujarat', level: 3 },
-    { id: 'mallikarjuna', title: '2. Mallikarjuna, Andhra Pradesh', level: 3 },
-    { id: 'mahakaleshwar', title: '3. Mahakaleshwar, Madhya Pradesh', level: 3 },
-    { id: 'omkareshwar', title: '4. Omkareshwar, Madhya Pradesh', level: 3 },
-    { id: 'kedarnath', title: '5. Kedarnath, Uttarakhand', level: 3 },
-    { id: 'bhimashankar', title: '6. Bhimashankar, Maharashtra', level: 3 },
-    { id: 'kashivishwanath', title: '7. Kashi Vishwanath, Uttar Pradesh', level: 3 },
-    { id: 'trimbakeshwar', title: '8. Trimbakeshwar, Maharashtra', level: 3 },
-    { id: 'baidyanath', title: '9. Baidyanath, Jharkhand', level: 3 },
-    { id: 'nageshwar', title: '10. Nageshwar, Gujarat', level: 3 },
-    { id: 'rameshwaram', title: '11. Rameshwaram, Tamil Nadu', level: 3 },
-    { id: 'grishneshwar', title: '12. Grishneshwar, Maharashtra', level: 3 },
-    { id: 'maharashtra-circuit', title: 'The Maharashtra Jyotirlinga Circuit', level: 2 },
-    { id: 'planning', title: 'How to Plan Your Jyotirlinga Yatra', level: 2 },
-    { id: 'conclusion', title: 'Conclusion: The Ultimate Liberation', level: 2 }
+    { id: "introduction", title: "What is a Jyotirlinga?", level: 2 },
+    { id: "somnath", title: "1. Somnath Temple, Gujarat", level: 3 },
+    { id: "mallikarjuna", title: "2. Mallikarjuna, Andhra Pradesh", level: 3 },
+    { id: "mahakaleshwar", title: "3. Mahakaleshwar, Madhya Pradesh", level: 3 },
+    { id: "omkareshwar", title: "4. Omkareshwar, Madhya Pradesh", level: 3 },
+    { id: "kedarnath", title: "5. Kedarnath, Uttarakhand", level: 3 },
+    { id: "bhimashankar", title: "6. Bhimashankar, Maharashtra", level: 3 },
+    { id: "kashivishwanath", title: "7. Kashi Vishwanath, Uttar Pradesh", level: 3 },
+    { id: "trimbakeshwar", title: "8. Trimbakeshwar, Maharashtra", level: 3 },
+    { id: "baidyanath", title: "9. Baidyanath, Jharkhand", level: 3 },
+    { id: "nageshwar", title: "10. Nageshwar, Gujarat", level: 3 },
+    { id: "rameshwaram", title: "11. Rameshwaram, Tamil Nadu", level: 3 },
+    { id: "grishneshwar", title: "12. Grishneshwar, Maharashtra", level: 3 },
+    { id: "maharashtra-circuit", title: "The Maharashtra Jyotirlinga Circuit", level: 2 },
+    { id: "planning", title: "How to Plan Your Jyotirlinga Yatra", level: 2 },
+    { id: "conclusion", title: "Conclusion: The Ultimate Liberation", level: 2 },
   ],
   faqs: [
     {
-      question: 'How many Jyotirlingas are there in Maharashtra?',
-      answer: 'There are 5 Jyotirlingas in Maharashtra, though traditionally 3 are unanimously accepted by all scriptures: Trimbakeshwar, Bhimashankar, and Grishneshwar. Aundha Nagnath and Parli Vaijnath are also highly revered in the state.'
+      question: "How many Jyotirlingas are there in Maharashtra?",
+      answer:
+        "There are 5 Jyotirlingas in Maharashtra, though traditionally 3 are unanimously accepted by all scriptures: Trimbakeshwar, Bhimashankar, and Grishneshwar. Aundha Nagnath and Parli Vaijnath are also highly revered in the state.",
     },
     {
-      question: 'Which is the oldest Jyotirlinga in India?',
-      answer: 'Somnath Temple in Gujarat is traditionally considered the first and oldest of the 12 Jyotirlingas.'
+      question: "Which is the oldest Jyotirlinga in India?",
+      answer:
+        "Somnath Temple in Gujarat is traditionally considered the first and oldest of the 12 Jyotirlingas.",
     },
     {
-      question: 'Can all 12 Jyotirlingas be visited in a single trip?',
-      answer: 'While possible, it is extremely difficult to cover all 12 in a single continuous trip due to the vast geographical distances (from the Himalayas in the north to Tamil Nadu in the south). Pilgrims usually divide the yatra into regional circuits over several years.'
+      question: "Can all 12 Jyotirlingas be visited in a single trip?",
+      answer:
+        "While possible, it is extremely difficult to cover all 12 in a single continuous trip due to the vast geographical distances (from the Himalayas in the north to Tamil Nadu in the south). Pilgrims usually divide the yatra into regional circuits over several years.",
     },
     {
-      question: 'Which Jyotirlinga temple is known for the Bhasma Aarti?',
-      answer: 'Mahakaleshwar in Ujjain is world-famous for its early morning Bhasma Aarti, where the deity is worshipped with sacred ash.'
-    }
+      question: "Which Jyotirlinga temple is known for the Bhasma Aarti?",
+      answer:
+        "Mahakaleshwar in Ujjain is world-famous for its early morning Bhasma Aarti, where the deity is worshipped with sacred ash.",
+    },
   ],
   content: `
 <h2 id="introduction">What is a Jyotirlinga?</h2>
@@ -143,5 +149,5 @@ export const jyotirlingaArticle: BlogPost = {
 
 <h2 id="conclusion">Conclusion: The Ultimate Liberation</h2>
 <p>The journey to the 12 Jyotirlingas is not just a physical pilgrimage; it is an internal voyage from ignorance to illumination. Each temple vibrates with a unique cosmic frequency, and standing before the Swayambhu Lingams evokes an inexplicable surge of devotion. Whether you visit one or all twelve, the blessings of Mahadev remain eternally with those who seek Him with a pure heart. <em>Om Namah Shivaya!</em></p>
-  `
+  `,
 };

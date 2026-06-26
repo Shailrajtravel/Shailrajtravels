@@ -1,8 +1,8 @@
-import React from 'react';
-import { Link } from '@tanstack/react-router';
-import { ChevronRight, Home } from 'lucide-react';
-import { SchemaMarkup } from './SchemaMarkup';
-import { generateBreadcrumbSchema } from '../lib/schema-generators';
+import React from "react";
+import { Link } from "@tanstack/react-router";
+import { ChevronRight, Home } from "lucide-react";
+import { SchemaMarkup } from "./SchemaMarkup";
+import { generateBreadcrumbSchema } from "../lib/schema-generators";
 
 export interface BreadcrumbItem {
   name: string;
@@ -14,12 +14,15 @@ interface SEOBreadcrumbsProps {
 }
 
 export function SEOBreadcrumbs({ items }: SEOBreadcrumbsProps) {
-  const allItems = [{ name: 'Home', url: '/' }, ...items];
+  const allItems = [{ name: "Home", url: "/" }, ...items];
 
   // Provide full absolute URLs for the schema
   const schemaItems = allItems.map((item) => ({
     name: item.name,
-    url: item.url === '/' ? 'https://www.shailrajtravels.com/' : `https://www.shailrajtravels.com${item.url}`
+    url:
+      item.url === "/"
+        ? "https://www.shailrajtravels.com/"
+        : `https://www.shailrajtravels.com${item.url}`,
   }));
 
   return (
@@ -31,15 +34,18 @@ export function SEOBreadcrumbs({ items }: SEOBreadcrumbsProps) {
           return (
             <li key={index} className="flex items-center">
               {index === 0 ? (
-                <Link to={item.url} className="hover:text-brand-orange transition-colors flex items-center">
+                <Link
+                  to={item.url}
+                  className="hover:text-brand-orange transition-colors flex items-center"
+                >
                   <Home className="w-4 h-4 mr-1" />
                   <span className="sr-only">Home</span>
                 </Link>
               ) : (
                 <Link
                   to={item.url}
-                  className={`transition-colors ${isLast ? 'text-gray-900 font-semibold' : 'hover:text-brand-orange'}`}
-                  aria-current={isLast ? 'page' : undefined}
+                  className={`transition-colors ${isLast ? "text-gray-900 font-semibold" : "hover:text-brand-orange"}`}
+                  aria-current={isLast ? "page" : undefined}
                 >
                   {item.name}
                 </Link>

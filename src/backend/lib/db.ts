@@ -1,22 +1,22 @@
-import { MongoClient } from 'mongodb';
-import fs from 'node:fs';
-import path from 'node:path';
+import { MongoClient } from "mongodb";
+import fs from "node:fs";
+import path from "node:path";
 
 // Load .env variables into process.env in Node.js environment
-if (typeof window === 'undefined') {
+if (typeof window === "undefined") {
   try {
-    const envPath = path.join(process.cwd(), '.env');
+    const envPath = path.join(process.cwd(), ".env");
     console.log("[DB Env Debug] process.cwd():", process.cwd());
     console.log("[DB Env Debug] Expected .env path:", envPath);
     console.log("[DB Env Debug] .env file exists?:", fs.existsSync(envPath));
-    
+
     if (fs.existsSync(envPath)) {
-      const envContent = fs.readFileSync(envPath, 'utf8');
+      const envContent = fs.readFileSync(envPath, "utf8");
       let loadedKeysCount = 0;
       envContent.split(/\r?\n/).forEach((line) => {
         const trimmed = line.trim();
-        if (trimmed && !trimmed.startsWith('#')) {
-          const firstEq = trimmed.indexOf('=');
+        if (trimmed && !trimmed.startsWith("#")) {
+          const firstEq = trimmed.indexOf("=");
           if (firstEq !== -1) {
             const key = trimmed.substring(0, firstEq).trim();
             let val = trimmed.substring(firstEq + 1).trim();
@@ -32,7 +32,9 @@ if (typeof window === 'undefined') {
           }
         }
       });
-      console.log(`[DB Env Debug] Successfully loaded ${loadedKeysCount} environment variables from .env`);
+      console.log(
+        `[DB Env Debug] Successfully loaded ${loadedKeysCount} environment variables from .env`,
+      );
     } else {
       console.warn("[DB Env Debug] .env file was NOT found at", envPath);
     }
@@ -41,14 +43,10 @@ if (typeof window === 'undefined') {
   }
 }
 
-const uri = process.env.MONGO_URI || process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/shailraj";
-console.log("[DB Env Debug] Final MongoDB URI resolved:", uri.replace(/:[^:@]+@/, ':***@'));
-
-
 // Helper to generate a 24-character hex ID (similar to MongoDB ObjectId)
 function generateHexId(): string {
-  const chars = '0123456789abcdef';
-  let result = '';
+  const chars = "0123456789abcdef";
+  let result = "";
   for (let i = 0; i < 24; i++) {
     result += chars[Math.floor(Math.random() * chars.length)];
   }
@@ -61,21 +59,21 @@ function matches(doc: any, filter: any): boolean {
   for (const key of Object.keys(filter)) {
     const filterVal = filter[key];
     const docVal = doc[key];
-    
-    if (key === '_id') {
+
+    if (key === "_id") {
       const filterIdStr = filterVal?.toString();
       const docIdStr = docVal?.toString();
       if (filterIdStr !== docIdStr) return false;
       continue;
     }
-    
-    if (filterVal && typeof filterVal === 'object' && !Array.isArray(filterVal)) {
-      if ('$ne' in filterVal) {
+
+    if (filterVal && typeof filterVal === "object" && !Array.isArray(filterVal)) {
+      if ("$ne" in filterVal) {
         if (docVal === filterVal.$ne) return false;
         continue;
       }
     }
-    
+
     if (docVal !== filterVal) return false;
   }
   return true;
@@ -85,7 +83,10 @@ class LocalCursor {
   private _sortFn: any = null;
   private _limit: number | null = null;
 
-  constructor(private collection: LocalCollection, private filter: any) {}
+  constructor(
+    private collection: LocalCollection,
+    private filter: any,
+  ) {}
 
   sort(sortObj: any) {
     const key = Object.keys(sortObj)[0];
@@ -120,15 +121,18 @@ class LocalCursor {
 }
 
 class LocalCollection {
-  constructor(public dbName: string, public name: string) {}
+  constructor(
+    public dbName: string,
+    public name: string,
+  ) {}
 
   async _readData(): Promise<any> {
-    if (typeof window !== 'undefined') return {};
+    if (typeof window !== "undefined") return {};
     try {
-      const fs = await import('fs');
-      const path = await import('path');
-      const dbFilePath = path.join(process.cwd(), 'local_db.json');
-      const data = await fs.promises.readFile(dbFilePath, 'utf8');
+      const fs = await import("fs");
+      const path = await import("path");
+      const dbFilePath = path.join(process.cwd(), "local_db.json");
+      const data = await fs.promises.readFile(dbFilePath, "utf8");
       return JSON.parse(data);
     } catch (error) {
       return {};
@@ -136,12 +140,12 @@ class LocalCollection {
   }
 
   async _writeData(data: any): Promise<void> {
-    if (typeof window !== 'undefined') return;
+    if (typeof window !== "undefined") return;
     try {
-      const fs = await import('fs');
-      const path = await import('path');
-      const dbFilePath = path.join(process.cwd(), 'local_db.json');
-      await fs.promises.writeFile(dbFilePath, JSON.stringify(data, null, 2), 'utf8');
+      const fs = await import("fs");
+      const path = await import("path");
+      const dbFilePath = path.join(process.cwd(), "local_db.json");
+      await fs.promises.writeFile(dbFilePath, JSON.stringify(data, null, 2), "utf8");
     } catch (error) {
       console.error("Failed to write to local DB file:", error);
     }
@@ -174,8 +178,8 @@ class LocalCollection {
       acknowledged: true,
       insertedId: {
         toString: () => id,
-        equals: (other: any) => other?.toString() === id
-      }
+        equals: (other: any) => other?.toString() === id,
+      },
     };
   }
 
@@ -232,17 +236,23 @@ class LocalMongoClient {
 let clientPromise: Promise<any>;
 
 async function initClient() {
+  const connectionUri =
+    process.env.MONGO_URI || process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/shailraj";
+
   try {
-    const client = new MongoClient(uri, {
-      serverSelectionTimeoutMS: 2000 // fail fast in 2 seconds if MongoDB is not running
+    const client = new MongoClient(connectionUri, {
+      serverSelectionTimeoutMS: 10000, // 10 seconds timeout
     });
     await client.connect();
     // Ping the server to verify it is actually online
-    await client.db('admin').command({ ping: 1 });
+    await client.db("admin").command({ ping: 1 });
     console.log("Successfully connected to MongoDB server");
     return client;
   } catch (err: any) {
-    console.warn("MongoDB connection failed, falling back to local JSON database. Error:", err.message);
+    console.warn(
+      "MongoDB connection failed, falling back to local JSON database. Error:",
+      err.message,
+    );
     return new LocalMongoClient();
   }
 }
@@ -250,7 +260,7 @@ async function initClient() {
 if (process.env.NODE_ENV === "development") {
   // In development mode, use a global variable so that the value
   // is preserved across module reloads caused by HMR (Hot Module Replacement).
-  let globalWithMongo = global as typeof globalThis & {
+  const globalWithMongo = global as typeof globalThis & {
     _mongoClientPromise?: Promise<any>;
   };
 

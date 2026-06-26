@@ -1,58 +1,64 @@
-import { BlogPost } from '../../types/blog';
+import { BlogPost } from "../../types/blog";
 
 export const mahabaleshwarArticle: BlogPost = {
-  slug: 'mahabaleshwar-travel-guide-panchgani',
-  title: 'Mahabaleshwar and Panchgani: The Ultimate Hill Station Travel Guide',
-  metaTitle: 'Mahabaleshwar Travel Guide | Viewpoints, Strawberries & Map',
-  metaDescription: 'Plan your trip to Mahabaleshwar and Panchgani. Explore the best viewpoints, the ancient Shiva temple, Pratapgad fort, Mapro Garden, and strawberry farms.',
-  focusKeyword: 'Mahabaleshwar Travel Guide',
-  category: 'Travel Guides',
-  tags: ['Mahabaleshwar', 'Panchgani', 'Hill Station', 'Maharashtra Tourism', 'Weekend Getaway'],
-  authorId: 'shailesh-raj',
-  reviewerId: 'priya-deshmukh',
-  lastReviewedAt: '2026-06-14T09:00:00Z',
-  relatedTourSlugs: ['ashtavinayak-yatra', 'pandharpur-wari'], // linking generically
-  relatedArticleSlugs: ['bhimashankar-trek-darshan-guide'],
-  featuredImage: '/images/tours/mahabaleshwar.jpg', // Assuming a fallback
-  ogImage: '/images/tours/mahabaleshwar.jpg',
+  slug: "mahabaleshwar-travel-guide-panchgani",
+  title: "Mahabaleshwar and Panchgani: The Ultimate Hill Station Travel Guide",
+  metaTitle: "Mahabaleshwar Travel Guide | Viewpoints, Strawberries & Map",
+  metaDescription:
+    "Plan your trip to Mahabaleshwar and Panchgani. Explore the best viewpoints, the ancient Shiva temple, Pratapgad fort, Mapro Garden, and strawberry farms.",
+  focusKeyword: "Mahabaleshwar Travel Guide",
+  category: "Travel Guides",
+  tags: ["Mahabaleshwar", "Panchgani", "Hill Station", "Maharashtra Tourism", "Weekend Getaway"],
+  authorId: "shailesh-raj",
+  reviewerId: "priya-deshmukh",
+  lastReviewedAt: "2026-06-14T09:00:00Z",
+  relatedTourSlugs: ["ashtavinayak-yatra", "pandharpur-wari"], // linking generically
+  relatedArticleSlugs: ["bhimashankar-trek-darshan-guide"],
+  featuredImage: "/images/tours/mahabaleshwar.jpg", // Assuming a fallback
+  ogImage: "/images/tours/mahabaleshwar.jpg",
   readingTimeMinutes: 12,
-  publishedAt: '2026-06-06T10:00:00Z',
-  updatedAt: '2026-06-06T10:00:00Z',
-  excerpt: 'Escape the heat and dive into the strawberry-scented mist of Mahabaleshwar. This complete guide covers the top viewpoints, the ancient origin of 5 rivers, boating on Venna Lake, and historical forts.',
+  publishedAt: "2026-06-06T10:00:00Z",
+  updatedAt: "2026-06-06T10:00:00Z",
+  excerpt:
+    "Escape the heat and dive into the strawberry-scented mist of Mahabaleshwar. This complete guide covers the top viewpoints, the ancient origin of 5 rivers, boating on Venna Lake, and historical forts.",
   tableOfContents: [
-    { id: 'introduction', title: 'The Queen of Maharashtra’s Hill Stations', level: 2 },
-    { id: 'history', title: 'A Blend of Mythology and Colonial History', level: 2 },
-    { id: 'viewpoints', title: 'The Spectacular Viewpoints', level: 2 },
-    { id: 'arthurs-seat', title: '1. Arthur’s Seat: The Queen of all Points', level: 3 },
-    { id: 'elephant-head', title: '2. Elephant’s Head Point & Kate’s Point', level: 3 },
-    { id: 'wilson-point', title: '3. Wilson Point (Sunrise Point)', level: 3 },
-    { id: 'spirituality', title: 'Old Mahabaleshwar: The Spiritual Core', level: 2 },
-    { id: 'panchganga', title: 'The Panchganga Temple (Origin of 5 Rivers)', level: 3 },
-    { id: 'activities', title: 'Top Activities and Experiences', level: 2 },
-    { id: 'venna-lake', title: 'Boating on Venna Lake', level: 3 },
-    { id: 'mapro', title: 'Strawberries and Mapro Garden', level: 3 },
-    { id: 'pratapgad', title: 'Exploring Pratapgad Fort', level: 3 },
-    { id: 'panchgani', title: 'A Quick Stop at Panchgani', level: 2 },
-    { id: 'travel-tips', title: 'Best Time to Visit and Travel Tips', level: 2 },
-    { id: 'conclusion', title: 'Conclusion: A Perfect Weekend Retreat', level: 2 }
+    { id: "introduction", title: "The Queen of Maharashtra’s Hill Stations", level: 2 },
+    { id: "history", title: "A Blend of Mythology and Colonial History", level: 2 },
+    { id: "viewpoints", title: "The Spectacular Viewpoints", level: 2 },
+    { id: "arthurs-seat", title: "1. Arthur’s Seat: The Queen of all Points", level: 3 },
+    { id: "elephant-head", title: "2. Elephant’s Head Point & Kate’s Point", level: 3 },
+    { id: "wilson-point", title: "3. Wilson Point (Sunrise Point)", level: 3 },
+    { id: "spirituality", title: "Old Mahabaleshwar: The Spiritual Core", level: 2 },
+    { id: "panchganga", title: "The Panchganga Temple (Origin of 5 Rivers)", level: 3 },
+    { id: "activities", title: "Top Activities and Experiences", level: 2 },
+    { id: "venna-lake", title: "Boating on Venna Lake", level: 3 },
+    { id: "mapro", title: "Strawberries and Mapro Garden", level: 3 },
+    { id: "pratapgad", title: "Exploring Pratapgad Fort", level: 3 },
+    { id: "panchgani", title: "A Quick Stop at Panchgani", level: 2 },
+    { id: "travel-tips", title: "Best Time to Visit and Travel Tips", level: 2 },
+    { id: "conclusion", title: "Conclusion: A Perfect Weekend Retreat", level: 2 },
   ],
   faqs: [
     {
-      question: 'What is the best time to eat fresh strawberries in Mahabaleshwar?',
-      answer: 'The strawberry season runs from December to April. To pick fresh strawberries directly from the farms, visit between January and March.'
+      question: "What is the best time to eat fresh strawberries in Mahabaleshwar?",
+      answer:
+        "The strawberry season runs from December to April. To pick fresh strawberries directly from the farms, visit between January and March.",
     },
     {
-      question: 'How far is Mahabaleshwar from Pune and Mumbai?',
-      answer: 'Mahabaleshwar is approximately 120 km from Pune (about a 3-hour drive) and 260 km from Mumbai (about a 5 to 6-hour drive via the Expressway).'
+      question: "How far is Mahabaleshwar from Pune and Mumbai?",
+      answer:
+        "Mahabaleshwar is approximately 120 km from Pune (about a 3-hour drive) and 260 km from Mumbai (about a 5 to 6-hour drive via the Expressway).",
     },
     {
-      question: 'Is it safe to visit Mahabaleshwar during the monsoon?',
-      answer: 'Mahabaleshwar receives extremely heavy rainfall during July and August. While the lush green scenery is stunning, many viewpoints are engulfed in thick fog (zero visibility), and outdoor activities like boating are closed.'
+      question: "Is it safe to visit Mahabaleshwar during the monsoon?",
+      answer:
+        "Mahabaleshwar receives extremely heavy rainfall during July and August. While the lush green scenery is stunning, many viewpoints are engulfed in thick fog (zero visibility), and outdoor activities like boating are closed.",
     },
     {
-      question: 'What is special about the Panchganga Temple?',
-      answer: 'The Panchganga Temple in Old Mahabaleshwar is believed to be the origin point of five holy rivers: Krishna, Koyna, Venna, Savitri, and Gayatri.'
-    }
+      question: "What is special about the Panchganga Temple?",
+      answer:
+        "The Panchganga Temple in Old Mahabaleshwar is believed to be the origin point of five holy rivers: Krishna, Koyna, Venna, Savitri, and Gayatri.",
+    },
   ],
   content: `
 <h2 id="introduction">The Queen of Maharashtra’s Hill Stations</h2>
@@ -131,5 +137,5 @@ export const mahabaleshwarArticle: BlogPost = {
 
 <h2 id="conclusion">Conclusion: A Perfect Weekend Retreat</h2>
 <p>Mahabaleshwar is a place where time slows down. It is a place to wake up early, walk through the misty forest trails, eat more strawberries than you should, and stand at the edge of a cliff feeling the cold mountain wind against your face. Whether you are exploring the historical ruins of Pratapgad or simply sipping a hot cup of tea by the Venna Lake, the Queen of Maharashtra’s Hill Stations never fails to leave you refreshed and rejuvenated.</p>
-  `
+  `,
 };

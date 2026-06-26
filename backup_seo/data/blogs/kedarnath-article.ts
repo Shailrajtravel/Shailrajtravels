@@ -1,54 +1,60 @@
-import { BlogPost } from '../../types/blog';
+import { BlogPost } from "../../types/blog";
 
 export const kedarnathArticle: BlogPost = {
-  slug: 'kedarnath-temple-history-trek-guide',
-  title: 'Kedarnath Temple: The Ultimate Trekking and Darshan Guide',
-  metaTitle: 'Kedarnath Trek Guide | History, Route, Helicopter & Stay',
-  metaDescription: 'A complete guide to conquering the Kedarnath trek. Learn about the ancient history of the temple, helicopter bookings, trekking difficulty, and where to stay in Kedarnath.',
-  focusKeyword: 'Kedarnath Trek Guide',
-  category: 'Travel Guides',
-  tags: ['Kedarnath', 'Char Dham', 'Himalayas', 'Lord Shiva', 'Trekking'],
-  authorId: 'shailesh-raj',
-  reviewerId: 'priya-deshmukh',
-  lastReviewedAt: '2026-06-14T09:00:00Z',
-  relatedTourSlugs: ['char-dham-yatra', 'jyotirlinga-darshan'],
-  relatedArticleSlugs: ['complete-char-dham-yatra-itinerary'],
-  featuredImage: '/images/tours/chardham.webp', // Assuming a fallback jpg or webp
-  ogImage: '/images/tours/chardham.webp',
+  slug: "kedarnath-temple-history-trek-guide",
+  title: "Kedarnath Temple: The Ultimate Trekking and Darshan Guide",
+  metaTitle: "Kedarnath Trek Guide | History, Route, Helicopter & Stay",
+  metaDescription:
+    "A complete guide to conquering the Kedarnath trek. Learn about the ancient history of the temple, helicopter bookings, trekking difficulty, and where to stay in Kedarnath.",
+  focusKeyword: "Kedarnath Trek Guide",
+  category: "Travel Guides",
+  tags: ["Kedarnath", "Char Dham", "Himalayas", "Lord Shiva", "Trekking"],
+  authorId: "shailesh-raj",
+  reviewerId: "priya-deshmukh",
+  lastReviewedAt: "2026-06-14T09:00:00Z",
+  relatedTourSlugs: ["char-dham-yatra", "jyotirlinga-darshan"],
+  relatedArticleSlugs: ["complete-char-dham-yatra-itinerary"],
+  featuredImage: "/images/tours/chardham.webp", // Assuming a fallback jpg or webp
+  ogImage: "/images/tours/chardham.webp",
   readingTimeMinutes: 14,
-  publishedAt: '2026-06-07T10:00:00Z',
-  updatedAt: '2026-06-07T10:00:00Z',
-  excerpt: 'Standing at 11,755 feet, surrounded by massive glaciers, Kedarnath is the most awe-inspiring shrine in India. Read our exhaustive guide on how to prepare for the 16km trek and secure a safe Darshan.',
+  publishedAt: "2026-06-07T10:00:00Z",
+  updatedAt: "2026-06-07T10:00:00Z",
+  excerpt:
+    "Standing at 11,755 feet, surrounded by massive glaciers, Kedarnath is the most awe-inspiring shrine in India. Read our exhaustive guide on how to prepare for the 16km trek and secure a safe Darshan.",
   tableOfContents: [
-    { id: 'introduction', title: 'The Pinnacle of Devotion', level: 2 },
-    { id: 'mythology', title: 'Mythology: The Pandavas and the Bull', level: 2 },
-    { id: 'history', title: 'History and the 2013 Tragedy', level: 2 },
-    { id: 'the-trek', title: 'Conquering the 16km Trek from Gaurikund', level: 2 },
-    { id: 'trek-phases', title: 'The Trek in Three Phases', level: 3 },
-    { id: 'alternatives', title: 'Alternatives to Walking: Ponies and Palkis', level: 3 },
-    { id: 'helicopter', title: 'Helicopter Services: The Fastest Route', level: 2 },
-    { id: 'weather', title: 'Weather and The Best Time to Visit', level: 2 },
-    { id: 'accommodation', title: 'Where to Stay: Base Camps vs. Temple Town', level: 2 },
-    { id: 'darshan', title: 'Darshan and the Evening Aarti', level: 2 },
-    { id: 'conclusion', title: 'Conclusion: The Embrace of the Himalayas', level: 2 }
+    { id: "introduction", title: "The Pinnacle of Devotion", level: 2 },
+    { id: "mythology", title: "Mythology: The Pandavas and the Bull", level: 2 },
+    { id: "history", title: "History and the 2013 Tragedy", level: 2 },
+    { id: "the-trek", title: "Conquering the 16km Trek from Gaurikund", level: 2 },
+    { id: "trek-phases", title: "The Trek in Three Phases", level: 3 },
+    { id: "alternatives", title: "Alternatives to Walking: Ponies and Palkis", level: 3 },
+    { id: "helicopter", title: "Helicopter Services: The Fastest Route", level: 2 },
+    { id: "weather", title: "Weather and The Best Time to Visit", level: 2 },
+    { id: "accommodation", title: "Where to Stay: Base Camps vs. Temple Town", level: 2 },
+    { id: "darshan", title: "Darshan and the Evening Aarti", level: 2 },
+    { id: "conclusion", title: "Conclusion: The Embrace of the Himalayas", level: 2 },
   ],
   faqs: [
     {
-      question: 'How long does the Kedarnath trek take?',
-      answer: 'For a person with average fitness, the 16-kilometer uphill trek from Gaurikund takes about 8 to 10 hours. The descent takes about 5 to 7 hours.'
+      question: "How long does the Kedarnath trek take?",
+      answer:
+        "For a person with average fitness, the 16-kilometer uphill trek from Gaurikund takes about 8 to 10 hours. The descent takes about 5 to 7 hours.",
     },
     {
-      question: 'Is oxygen cylinder required for Kedarnath?',
-      answer: 'While young and healthy individuals generally do not need supplemental oxygen, the air is thin at 11,755 feet. It is highly recommended for elderly pilgrims or those with respiratory issues to carry portable oxygen cans. Medical camps are stationed along the route.'
+      question: "Is oxygen cylinder required for Kedarnath?",
+      answer:
+        "While young and healthy individuals generally do not need supplemental oxygen, the air is thin at 11,755 feet. It is highly recommended for elderly pilgrims or those with respiratory issues to carry portable oxygen cans. Medical camps are stationed along the route.",
     },
     {
-      question: 'Can I book a helicopter ticket on the spot at Phata or Guptkashi?',
-      answer: 'Technically yes, but practically it is highly unlikely. Helicopter tickets sell out months in advance via the IRCTC portal. Relying on on-the-spot booking leaves you at the mercy of massive crowds and black-market pricing.'
+      question: "Can I book a helicopter ticket on the spot at Phata or Guptkashi?",
+      answer:
+        "Technically yes, but practically it is highly unlikely. Helicopter tickets sell out months in advance via the IRCTC portal. Relying on on-the-spot booking leaves you at the mercy of massive crowds and black-market pricing.",
     },
     {
-      question: 'Is it safe to visit Kedarnath after the 2013 floods?',
-      answer: 'Yes, it is very safe. The government has completely rebuilt the infrastructure, widened the trekking paths, constructed massive retaining walls, and implemented strict daily quota limits for pilgrims.'
-    }
+      question: "Is it safe to visit Kedarnath after the 2013 floods?",
+      answer:
+        "Yes, it is very safe. The government has completely rebuilt the infrastructure, widened the trekking paths, constructed massive retaining walls, and implemented strict daily quota limits for pilgrims.",
+    },
   ],
   content: `
 <h2 id="introduction">The Pinnacle of Devotion</h2>
@@ -114,5 +120,5 @@ export const kedarnathArticle: BlogPost = {
 <h2 id="conclusion">Conclusion: The Embrace of the Himalayas</h2>
 <p>The trek to Kedarnath is brutal. Your legs will ache, your lungs will burn for oxygen, and the freezing wind will test your resolve. Yet, the moment you catch the first glimpse of the grey stone temple standing defiantly against the white glaciers, all the pain vanishes.</p>
 <p>Kedarnath is not just a destination; it is an emotional and spiritual transformation. It forces you to shed the comforts of modern life and realize the fragile beauty of existence. Whether you walk, ride a pony, or fly, the journey to the realm of Lord Shiva is a pilgrimage that will echo in your soul for the rest of your life. <em>Har Har Mahadev!</em></p>
-  `
+  `,
 };

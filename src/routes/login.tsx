@@ -1,37 +1,37 @@
-import React, { useState } from 'react';
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { verifyAdminFn } from '../backend/lib/auth';
-import { Lock, Mail, Loader2, ArrowRight } from 'lucide-react';
-import logo from '@/frontend/assets/Shailraj travels-Punelogo.png';
+import React, { useState } from "react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { verifyAdminFn } from "../backend/lib/auth";
+import { Lock, Mail, Loader2, ArrowRight } from "lucide-react";
+import logo from "@/frontend/assets/Shailraj travels-Punelogo.png";
 
-export const Route = createFileRoute('/login')({
+export const Route = createFileRoute("/login")({
   component: LoginPage,
 });
 
 function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) return;
-    
+
     setLoading(true);
-    setError('');
-    
+    setError("");
+
     try {
       const res = await verifyAdminFn({ data: { email, password } });
       if (res.success && res.token) {
-        sessionStorage.setItem('adminToken', res.token);
-        navigate({ to: '/admin' });
+        sessionStorage.setItem("adminToken", res.token);
+        navigate({ to: "/admin" });
       } else {
-        setError('Invalid password');
+        setError("Invalid password");
       }
     } catch (err: any) {
-      setError(err.message || 'Login failed');
+      setError(err.message || "Login failed");
     } finally {
       setLoading(false);
     }
@@ -52,7 +52,6 @@ function LoginPage() {
 
         <div className="bg-white rounded-[24px] p-8 shadow-xl shadow-brand-blue/5 border border-slate-100">
           <form onSubmit={handleLogin} className="flex flex-col gap-6">
-            
             <div className="flex flex-col gap-2">
               <label className="text-[13px] font-bold text-slate-700 uppercase tracking-wider">
                 Email Address
@@ -88,9 +87,7 @@ function LoginPage() {
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3.5 text-[15px] font-medium text-brand-blue-deep placeholder-slate-400 focus:ring-2 focus:ring-brand-green focus:border-brand-green focus:bg-white transition-all outline-none"
                 />
               </div>
-              {error && (
-                <p className="text-red-500 text-sm font-medium animate-pulse">{error}</p>
-              )}
+              {error && <p className="text-red-500 text-sm font-medium animate-pulse">{error}</p>}
             </div>
 
             <button
@@ -103,9 +100,12 @@ function LoginPage() {
             </button>
           </form>
         </div>
-        
+
         <div className="text-center mt-8">
-          <a href="/" className="text-sm font-medium text-slate-500 hover:text-brand-green transition-colors">
+          <a
+            href="/"
+            className="text-sm font-medium text-slate-500 hover:text-brand-green transition-colors"
+          >
             &larr; Back to Website
           </a>
         </div>

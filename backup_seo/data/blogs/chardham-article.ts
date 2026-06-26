@@ -1,54 +1,60 @@
-import { BlogPost } from '../../types/blog';
+import { BlogPost } from "../../types/blog";
 
 export const chardhamArticle: BlogPost = {
-  slug: 'complete-char-dham-yatra-itinerary',
-  title: 'A Complete Guide to Char Dham Yatra: Weather, Preparation, and Itinerary',
-  metaTitle: 'Char Dham Yatra Guide 2026 | Route, Cost & Itinerary',
-  metaDescription: 'Plan your ultimate spiritual journey to Yamunotri, Gangotri, Kedarnath, and Badrinath. Comprehensive guide covering routes, weather, fitness prep, and travel itineraries.',
-  focusKeyword: 'Char Dham Yatra Guide',
-  category: 'Travel Guides',
-  tags: ['Char Dham', 'Kedarnath', 'Badrinath', 'Himalayas', 'Pilgrimage'],
-  authorId: 'shailesh-raj',
-  reviewerId: 'priya-deshmukh',
-  lastReviewedAt: '2026-06-14T09:00:00Z',
-  relatedTourSlugs: ['char-dham-yatra', 'jyotirlinga-darshan'],
-  relatedArticleSlugs: ['12-jyotirlinga-temples-india-guide'],
-  featuredImage: '/images/tours/chardham.webp',
-  ogImage: '/images/tours/chardham.webp',
+  slug: "complete-char-dham-yatra-itinerary",
+  title: "A Complete Guide to Char Dham Yatra: Weather, Preparation, and Itinerary",
+  metaTitle: "Char Dham Yatra Guide 2026 | Route, Cost & Itinerary",
+  metaDescription:
+    "Plan your ultimate spiritual journey to Yamunotri, Gangotri, Kedarnath, and Badrinath. Comprehensive guide covering routes, weather, fitness prep, and travel itineraries.",
+  focusKeyword: "Char Dham Yatra Guide",
+  category: "Travel Guides",
+  tags: ["Char Dham", "Kedarnath", "Badrinath", "Himalayas", "Pilgrimage"],
+  authorId: "shailesh-raj",
+  reviewerId: "priya-deshmukh",
+  lastReviewedAt: "2026-06-14T09:00:00Z",
+  relatedTourSlugs: ["char-dham-yatra", "jyotirlinga-darshan"],
+  relatedArticleSlugs: ["12-jyotirlinga-temples-india-guide"],
+  featuredImage: "/images/tours/chardham.webp",
+  ogImage: "/images/tours/chardham.webp",
   readingTimeMinutes: 16,
-  publishedAt: '2026-06-12T10:00:00Z',
-  updatedAt: '2026-06-12T10:00:00Z',
-  excerpt: 'The Chhota Char Dham Yatra in Uttarakhand is the crown jewel of Hindu pilgrimages. Learn the scriptural sequence, acclimatization strategies, and detailed route plans to conquer the majestic Himalayan shrines.',
+  publishedAt: "2026-06-12T10:00:00Z",
+  updatedAt: "2026-06-12T10:00:00Z",
+  excerpt:
+    "The Chhota Char Dham Yatra in Uttarakhand is the crown jewel of Hindu pilgrimages. Learn the scriptural sequence, acclimatization strategies, and detailed route plans to conquer the majestic Himalayan shrines.",
   tableOfContents: [
-    { id: 'introduction', title: 'The Spiritual Significance of Char Dham', level: 2 },
-    { id: 'sequence', title: 'The Scriptural Sequence: West to East', level: 2 },
-    { id: 'yamunotri', title: '1. Yamunotri: The Source of the Yamuna', level: 3 },
-    { id: 'gangotri', title: '2. Gangotri: The Origin of the Ganga', level: 3 },
-    { id: 'kedarnath', title: '3. Kedarnath: The Realm of Lord Shiva', level: 3 },
-    { id: 'badrinath', title: '4. Badrinath: The Abode of Lord Vishnu', level: 3 },
-    { id: 'weather', title: 'Understanding Himalayan Weather and Seasons', level: 2 },
-    { id: 'preparation', title: 'Physical Fitness and Preparation', level: 2 },
-    { id: 'itinerary', title: 'The Ideal 10-Day Itinerary from Haridwar', level: 2 },
-    { id: 'cost', title: 'Budgeting and Cost Considerations', level: 2 },
-    { id: 'conclusion', title: 'Conclusion: A Journey of a Lifetime', level: 2 }
+    { id: "introduction", title: "The Spiritual Significance of Char Dham", level: 2 },
+    { id: "sequence", title: "The Scriptural Sequence: West to East", level: 2 },
+    { id: "yamunotri", title: "1. Yamunotri: The Source of the Yamuna", level: 3 },
+    { id: "gangotri", title: "2. Gangotri: The Origin of the Ganga", level: 3 },
+    { id: "kedarnath", title: "3. Kedarnath: The Realm of Lord Shiva", level: 3 },
+    { id: "badrinath", title: "4. Badrinath: The Abode of Lord Vishnu", level: 3 },
+    { id: "weather", title: "Understanding Himalayan Weather and Seasons", level: 2 },
+    { id: "preparation", title: "Physical Fitness and Preparation", level: 2 },
+    { id: "itinerary", title: "The Ideal 10-Day Itinerary from Haridwar", level: 2 },
+    { id: "cost", title: "Budgeting and Cost Considerations", level: 2 },
+    { id: "conclusion", title: "Conclusion: A Journey of a Lifetime", level: 2 },
   ],
   faqs: [
     {
-      question: 'When do the portals (Kapat) of Char Dham open?',
-      answer: 'The portals typically open on the auspicious day of Akshay Tritiya (usually late April or early May) and close on Bhai Dooj (around Diwali in October/November).'
+      question: "When do the portals (Kapat) of Char Dham open?",
+      answer:
+        "The portals typically open on the auspicious day of Akshay Tritiya (usually late April or early May) and close on Bhai Dooj (around Diwali in October/November).",
     },
     {
-      question: 'Which is the most difficult trek in the Char Dham Yatra?',
-      answer: 'Kedarnath is physically the most demanding. It requires a steep 16-kilometer trek from Gaurikund. Yamunotri involves a 6-kilometer trek. Gangotri and Badrinath are accessible by motorable roads.'
+      question: "Which is the most difficult trek in the Char Dham Yatra?",
+      answer:
+        "Kedarnath is physically the most demanding. It requires a steep 16-kilometer trek from Gaurikund. Yamunotri involves a 6-kilometer trek. Gangotri and Badrinath are accessible by motorable roads.",
     },
     {
-      question: 'Is it safe to travel during the monsoon season?',
-      answer: 'July and August experience heavy rainfall leading to frequent landslides and road blockages in the Garhwal Himalayas. It is highly recommended to avoid the Yatra during peak monsoon.'
+      question: "Is it safe to travel during the monsoon season?",
+      answer:
+        "July and August experience heavy rainfall leading to frequent landslides and road blockages in the Garhwal Himalayas. It is highly recommended to avoid the Yatra during peak monsoon.",
     },
     {
-      question: 'Do I need mandatory registration to undertake the Yatra?',
-      answer: 'Yes, the Uttarakhand Government requires mandatory biometric registration for all pilgrims undertaking the Char Dham Yatra. It is essential for crowd control and safety.'
-    }
+      question: "Do I need mandatory registration to undertake the Yatra?",
+      answer:
+        "Yes, the Uttarakhand Government requires mandatory biometric registration for all pilgrims undertaking the Char Dham Yatra. It is essential for crowd control and safety.",
+    },
   ],
   content: `
 <h2 id="introduction">The Spiritual Significance of Char Dham</h2>
@@ -138,5 +144,5 @@ export const chardhamArticle: BlogPost = {
 
 <h2 id="conclusion">Conclusion: A Journey of a Lifetime</h2>
 <p>The Char Dham Yatra is the pinnacle of physical endurance and spiritual surrender. To see the mighty Himalayas standing as silent sentinels guarding these ancient shrines is an experience that humbles the human ego. You will return from this journey physically exhausted but spiritually rejuvenated, carrying the divine blessings of Yamuna, Ganga, Mahadev, and Narayan in your heart.</p>
-  `
+  `,
 };

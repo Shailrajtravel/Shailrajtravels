@@ -1,14 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import { Search, ChevronDown, BadgeIndianRupee, ShieldCheck, Headphones, Lock, User, Phone, MapPin, Users, Calendar, Minus, Plus, Snowflake, BedDouble, Compass, Loader2 } from 'lucide-react';
-import { Leaf } from '../core/icons';
-import { translations } from '../core/i18n';
-import bgMobile from '@/frontend/assets/hero-pandharpur.jpg';
-import temple from '@/frontend/assets/hero-pandharpur.jpg'; // fallback until correct image is found
-import { createBookingFn } from '../../../backend/lib/bookings';
+import React, { useState, useEffect } from "react";
+import {
+  Search,
+  ChevronDown,
+  BadgeIndianRupee,
+  ShieldCheck,
+  Headphones,
+  Lock,
+  User,
+  Phone,
+  MapPin,
+  Users,
+  Calendar,
+  Minus,
+  Plus,
+  Snowflake,
+  BedDouble,
+  Compass,
+  Loader2,
+} from "lucide-react";
+import { Leaf } from "../core/icons";
+import { translations } from "../core/i18n";
+import bgMobile from "@/frontend/assets/hero-pandharpur.jpg";
+import temple from "@/frontend/assets/hero-pandharpur.jpg"; // fallback until correct image is found
+import { createBookingFn } from "../../../backend/lib/bookings";
 
 export function getUpcomingDates(allowedDaysOfWeek: number[]) {
   const dates = [];
-  let d = new Date();
+  const d = new Date();
   const currentMonth = d.getMonth();
   d.setDate(d.getDate() + 1);
   while (d.getMonth() === currentMonth) {
@@ -20,7 +38,17 @@ export function getUpcomingDates(allowedDaysOfWeek: number[]) {
   return dates;
 }
 
-export function Hero({ lang, t, tripOptions = [], activeTripId }: { lang: "en" | "mr"; t: typeof translations.mr; tripOptions?: any[]; activeTripId?: string }) {
+export function Hero({
+  lang,
+  t,
+  tripOptions = [],
+  activeTripId,
+}: {
+  lang: "en" | "mr";
+  t: typeof translations.mr;
+  tripOptions?: any[];
+  activeTripId?: string;
+}) {
   const [selectedTrip, setSelectedTrip] = useState<string>(tripOptions[0]?._id || "custom");
   const [persons, setPersons] = useState(2);
   const [loading, setLoading] = useState(false);
@@ -32,10 +60,10 @@ export function Hero({ lang, t, tripOptions = [], activeTripId }: { lang: "en" |
     }
   }, [activeTripId]);
 
-  const selectedTripData = tripOptions.find(t => t._id === selectedTrip);
-  
+  const selectedTripData = tripOptions.find((t) => t._id === selectedTrip);
+
   const isUpcomingDate = (dateStr: string) => {
-    if (typeof dateStr !== 'string') return false;
+    if (typeof dateStr !== "string") return false;
     const match = dateStr.match(/(\d+)\s+([a-zA-Z]+)(?:\s+(\d{4}))?/);
     if (!match) return true;
     const now = new Date();
@@ -51,9 +79,7 @@ export function Hero({ lang, t, tripOptions = [], activeTripId }: { lang: "en" |
     : [];
 
   return (
-    <section
-      className="relative w-full overflow-hidden bg-brand-mist flex flex-col justify-start pt-[104px] pb-5 lg:pt-[136px]"
-    >
+    <section className="relative w-full overflow-hidden bg-brand-mist flex flex-col justify-start pt-[104px] pb-5 lg:pt-[136px]">
       {/* Background split */}
       <div className="absolute inset-0">
         {/* image right */}
@@ -82,13 +108,22 @@ export function Hero({ lang, t, tripOptions = [], activeTripId }: { lang: "en" |
       </div>
 
       {/* Floating leaves */}
-      <span className="absolute left-[75%] top-[12%] animate-float-leaf lg:left-[42%] lg:top-[18%] opacity-80 blur-[1px]" style={{ animationDuration: "8s", animationDelay: "0s" }}>
+      <span
+        className="absolute left-[75%] top-[12%] animate-float-leaf lg:left-[42%] lg:top-[18%] opacity-80 blur-[1px]"
+        style={{ animationDuration: "8s", animationDelay: "0s" }}
+      >
         <Leaf className="h-4 w-4 text-brand-green/80 lg:h-6 lg:w-6 fill-current" />
       </span>
-      <span className="absolute right-[8%] top-[25%] animate-float-leaf lg:right-[12%] lg:top-[14%] opacity-60 blur-[1.5px]" style={{ animationDuration: "12s", animationDelay: "3s" }}>
+      <span
+        className="absolute right-[8%] top-[25%] animate-float-leaf lg:right-[12%] lg:top-[14%] opacity-60 blur-[1.5px]"
+        style={{ animationDuration: "12s", animationDelay: "3s" }}
+      >
         <Leaf className="h-3 w-3 text-brand-green-dark/70 lg:h-5 lg:w-5 fill-current" />
       </span>
-      <span className="absolute left-[15%] top-[38%] animate-float-leaf lg:left-auto lg:right-[28%] lg:top-[42%] opacity-90 blur-[0.5px]" style={{ animationDuration: "10s", animationDelay: "1.5s" }}>
+      <span
+        className="absolute left-[15%] top-[38%] animate-float-leaf lg:left-auto lg:right-[28%] lg:top-[42%] opacity-90 blur-[0.5px]"
+        style={{ animationDuration: "10s", animationDelay: "1.5s" }}
+      >
         <Leaf className="h-5 w-5 text-brand-green/90 lg:h-7 lg:w-7 fill-current" />
       </span>
 
@@ -103,18 +138,25 @@ export function Hero({ lang, t, tripOptions = [], activeTripId }: { lang: "en" |
 
           <h1
             className="mt-4 text-[38px] sm:text-[42px] font-bold leading-[1.1] text-brand-blue-deep md:mt-4 md:text-[52px] lg:text-[56px] md:leading-[1.15]"
-            style={lang === 'mr' ? { fontFamily: "'Tiro Devanagari Marathi', serif" } : {}}
+            style={lang === "mr" ? { fontFamily: "'Tiro Devanagari Marathi', serif" } : {}}
           >
-            <span className="whitespace-nowrap">{lang === 'mr' ? "श्रद्धेपासून" : "From Devotion to"}</span>
+            <span className="whitespace-nowrap">
+              {lang === "mr" ? "श्रद्धेपासून" : "From Devotion to"}
+            </span>
             <br />
-            <span className="text-brand-green-dark">{lang === 'mr' ? "समाधानापर्यंत" : "Satisfaction"}</span>
+            <span className="text-brand-green-dark">
+              {lang === "mr" ? "समाधानापर्यंत" : "Satisfaction"}
+            </span>
           </h1>
 
           <p className="mt-4 max-w-[550px] text-[15px] leading-relaxed text-slate-600 md:mt-4 md:text-[16px]">
             {t.heroDesc}
           </p>
 
-          <div className="mt-6 md:mt-8 w-full max-w-[800px] animate-reveal rounded-2xl bg-white/75 p-4 shadow-lg backdrop-blur-md lg:p-5" style={{ animationDelay: "0.2s" }}>
+          <div
+            className="mt-6 md:mt-8 w-full max-w-[800px] animate-reveal rounded-2xl bg-white/75 p-4 shadow-lg backdrop-blur-md lg:p-5"
+            style={{ animationDelay: "0.2s" }}
+          >
             <p className="text-[15px] font-bold text-brand-blue-deep md:text-[17px]">
               {t.heroHighlight}
             </p>
@@ -149,7 +191,10 @@ export function Hero({ lang, t, tripOptions = [], activeTripId }: { lang: "en" |
       </div>
 
       {/* Floating booking panel */}
-      <div id="homepage-booking-form" className="relative z-30 mx-auto w-full max-w-[1600px] px-4 mt-5 md:px-6 lg:px-8">
+      <div
+        id="homepage-booking-form"
+        className="relative z-30 mx-auto w-full max-w-[1600px] px-4 mt-5 md:px-6 lg:px-8"
+      >
         <div
           className="rounded-3xl bg-white p-4 animate-reveal"
           style={{ boxShadow: "var(--shadow-luxury)", animationDelay: "0.4s" }}
@@ -161,9 +206,10 @@ export function Hero({ lang, t, tripOptions = [], activeTripId }: { lang: "en" |
               </div>
               <h3 className="text-xl font-bold text-brand-blue-deep mb-2">Booking Received!</h3>
               <p className="text-slate-600 text-center mb-6 max-w-sm">
-                Thank you for choosing Shailraj. We have received your booking request and will contact you shortly to confirm the details.
+                Thank you for choosing Shailraj. We have received your booking request and will
+                contact you shortly to confirm the details.
               </p>
-              <button 
+              <button
                 onClick={() => setSuccess(false)}
                 className="px-6 py-2 bg-brand-blue-deep text-white rounded-xl font-bold"
               >
@@ -171,19 +217,21 @@ export function Hero({ lang, t, tripOptions = [], activeTripId }: { lang: "en" |
               </button>
             </div>
           ) : (
-            <form 
+            <form
               onSubmit={async (e) => {
                 e.preventDefault();
                 const formData = new FormData(e.currentTarget);
                 const data = Object.fromEntries(formData.entries());
-                
+
                 // Add specific logic for trips
                 if (selectedTripData) {
                   data.tripName = selectedTripData.name;
-                } else if (selectedTrip === 'custom') {
-                  data.tripName = 'custom';
+                } else if (selectedTrip === "custom") {
+                  data.tripName = "custom";
                 }
-                
+
+                data.idempotencyKey = crypto.randomUUID();
+
                 setLoading(true);
                 try {
                   await createBookingFn({ data });
@@ -194,15 +242,27 @@ export function Hero({ lang, t, tripOptions = [], activeTripId }: { lang: "en" |
                 } finally {
                   setLoading(false);
                 }
-              }} 
+              }}
               className="grid grid-cols-1 gap-3 md:grid-cols-3"
             >
               <FieldBox icon={<User className="h-5 w-5" />} label={t.formName}>
-                <input type="text" name="name" required placeholder={t.formNamePlace} className="w-full bg-transparent text-[15px] font-semibold text-brand-blue-deep placeholder:text-slate-400 placeholder:font-medium focus:outline-none" />
+                <input
+                  type="text"
+                  name="name"
+                  required
+                  placeholder={t.formNamePlace}
+                  className="w-full bg-transparent text-[15px] font-semibold text-brand-blue-deep placeholder:text-slate-400 placeholder:font-medium focus:outline-none"
+                />
               </FieldBox>
 
               <FieldBox icon={<Phone className="h-5 w-5" />} label={t.formContact}>
-                <input type="tel" name="phone" required placeholder="+91 00000 00000" className="w-full bg-transparent text-[15px] font-semibold text-brand-blue-deep placeholder:text-slate-400 placeholder:font-medium focus:outline-none" />
+                <input
+                  type="tel"
+                  name="phone"
+                  required
+                  placeholder="+91 00000 00000"
+                  className="w-full bg-transparent text-[15px] font-semibold text-brand-blue-deep placeholder:text-slate-400 placeholder:font-medium focus:outline-none"
+                />
               </FieldBox>
 
               <FieldBox icon={<MapPin className="h-5 w-5" />} label={t.formTrip}>
@@ -212,8 +272,10 @@ export function Hero({ lang, t, tripOptions = [], activeTripId }: { lang: "en" |
                     value={selectedTrip}
                     onChange={(e) => setSelectedTrip(e.target.value)}
                   >
-                    {tripOptions.map(trip => (
-                      <option key={trip._id} value={trip._id}>{trip.name}</option>
+                    {tripOptions.map((trip) => (
+                      <option key={trip._id} value={trip._id}>
+                        {trip.name}
+                      </option>
                     ))}
                     <option value="custom">{t.tripCustom}</option>
                   </select>
@@ -223,7 +285,13 @@ export function Hero({ lang, t, tripOptions = [], activeTripId }: { lang: "en" |
 
               {selectedTrip === "custom" && (
                 <FieldBox icon={<MapPin className="h-5 w-5" />} label={t.formCustom}>
-                  <input type="text" name="customDestination" required placeholder={t.formCustomPlace} className="w-full bg-transparent text-[15px] font-semibold text-brand-blue-deep placeholder:text-slate-400 placeholder:font-medium focus:outline-none" />
+                  <input
+                    type="text"
+                    name="customDestination"
+                    required
+                    placeholder={t.formCustomPlace}
+                    className="w-full bg-transparent text-[15px] font-semibold text-brand-blue-deep placeholder:text-slate-400 placeholder:font-medium focus:outline-none"
+                  />
                 </FieldBox>
               )}
 
@@ -232,7 +300,7 @@ export function Hero({ lang, t, tripOptions = [], activeTripId }: { lang: "en" |
                   <input type="hidden" name="persons" value={persons} />
                   <button
                     type="button"
-                    onClick={() => setPersons(p => Math.max(1, p - 1))}
+                    onClick={() => setPersons((p) => Math.max(1, p - 1))}
                     className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 transition"
                   >
                     <Minus className="h-4 w-4" />
@@ -242,7 +310,7 @@ export function Hero({ lang, t, tripOptions = [], activeTripId }: { lang: "en" |
                   </span>
                   <button
                     type="button"
-                    onClick={() => setPersons(p => Math.min(16, p + 1))}
+                    onClick={() => setPersons((p) => Math.min(16, p + 1))}
                     className="flex h-7 w-7 items-center justify-center rounded-full bg-brand-green/10 text-brand-green-dark hover:bg-brand-green/20 transition"
                   >
                     <Plus className="h-4 w-4" />
@@ -260,22 +328,33 @@ export function Hero({ lang, t, tripOptions = [], activeTripId }: { lang: "en" |
                     >
                       <option value="">Select a date</option>
                       {validDates.map((date: string) => (
-                        <option key={date} value={date}>{date}</option>
+                        <option key={date} value={date}>
+                          {date}
+                        </option>
                       ))}
                     </select>
                     <ChevronDown className="absolute right-0 h-4 w-4 text-slate-400 pointer-events-none" />
                   </div>
                 ) : (
-                  <input type="datetime-local" name="travelDate" required className="w-full bg-transparent text-[14px] md:text-[15px] font-semibold text-brand-blue-deep focus:outline-none cursor-pointer" />
+                  <input
+                    type="datetime-local"
+                    name="travelDate"
+                    required
+                    className="w-full bg-transparent text-[14px] md:text-[15px] font-semibold text-brand-blue-deep focus:outline-none cursor-pointer"
+                  />
                 )}
               </FieldBox>
 
               <button
                 type="submit"
                 disabled={loading}
-                className={`btn-cta flex h-[70px] items-center justify-center gap-2.5 rounded-2xl px-8 text-base font-semibold ${selectedTrip === 'custom' ? 'md:col-span-3' : ''} disabled:opacity-70`}
+                className={`btn-cta flex h-[70px] items-center justify-center gap-2.5 rounded-2xl px-8 text-base font-semibold ${selectedTrip === "custom" ? "md:col-span-3" : ""} disabled:opacity-70`}
               >
-                {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Search className="h-5 w-5" />}
+                {loading ? (
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                ) : (
+                  <Search className="h-5 w-5" />
+                )}
                 {t.formBook}
               </button>
             </form>

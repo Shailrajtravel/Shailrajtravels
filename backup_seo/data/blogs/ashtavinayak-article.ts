@@ -1,60 +1,66 @@
-import { BlogPost } from '../../types/blog';
+import { BlogPost } from "../../types/blog";
 
 export const ashtavinayakArticle: BlogPost = {
-  slug: 'ashtavinayak-yatra-route-guide',
-  title: 'The Ultimate Ashtavinayak Yatra Route Guide: Complete Darshan in 2 Days',
-  metaTitle: 'Ashtavinayak Yatra Route Guide 2026 | Sequence & Map',
-  metaDescription: 'Plan your Ashtavinayak Yatra with our comprehensive 2-day route guide. Discover the exact sequence, temple timings, history, and travel tips for all 8 Ganesha temples in Maharashtra.',
-  focusKeyword: 'Ashtavinayak Yatra Route',
-  category: 'Pilgrimage Planning',
-  tags: ['Ashtavinayak', 'Maharashtra Temples', 'Ganesha', 'Pilgrimage Route', 'Travel Itinerary'],
-  authorId: 'shailesh-raj',
-  reviewerId: 'priya-deshmukh',
-  lastReviewedAt: '2026-06-14T09:00:00Z',
-  relatedTourSlugs: ['ashtavinayak-yatra', 'jyotirlinga-darshan'],
+  slug: "ashtavinayak-yatra-route-guide",
+  title: "The Ultimate Ashtavinayak Yatra Route Guide: Complete Darshan in 2 Days",
+  metaTitle: "Ashtavinayak Yatra Route Guide 2026 | Sequence & Map",
+  metaDescription:
+    "Plan your Ashtavinayak Yatra with our comprehensive 2-day route guide. Discover the exact sequence, temple timings, history, and travel tips for all 8 Ganesha temples in Maharashtra.",
+  focusKeyword: "Ashtavinayak Yatra Route",
+  category: "Pilgrimage Planning",
+  tags: ["Ashtavinayak", "Maharashtra Temples", "Ganesha", "Pilgrimage Route", "Travel Itinerary"],
+  authorId: "shailesh-raj",
+  reviewerId: "priya-deshmukh",
+  lastReviewedAt: "2026-06-14T09:00:00Z",
+  relatedTourSlugs: ["ashtavinayak-yatra", "jyotirlinga-darshan"],
   relatedArticleSlugs: [], // Will populate as we create more
-  featuredImage: '/images/tours/ashtavinayak.webp', // Using existing tour image
-  ogImage: '/images/tours/ashtavinayak.webp',
+  featuredImage: "/images/tours/ashtavinayak.webp", // Using existing tour image
+  ogImage: "/images/tours/ashtavinayak.webp",
   readingTimeMinutes: 12,
-  publishedAt: '2026-06-15T10:00:00Z',
-  updatedAt: '2026-06-15T10:00:00Z',
-  excerpt: 'Embark on the divine Ashtavinayak Yatra with this meticulously planned route guide. Learn the scriptural sequence, travel logistics, and hidden spiritual significance of the 8 self-manifested Ganesha temples of Maharashtra.',
+  publishedAt: "2026-06-15T10:00:00Z",
+  updatedAt: "2026-06-15T10:00:00Z",
+  excerpt:
+    "Embark on the divine Ashtavinayak Yatra with this meticulously planned route guide. Learn the scriptural sequence, travel logistics, and hidden spiritual significance of the 8 self-manifested Ganesha temples of Maharashtra.",
   tableOfContents: [
-    { id: 'introduction', title: 'Introduction to Ashtavinayak Yatra', level: 2 },
-    { id: 'significance', title: 'The Spiritual Significance of the 8 Temples', level: 2 },
-    { id: 'sequence', title: 'The Scriptural Darshan Sequence (Shastra)', level: 2 },
-    { id: 'morshwar', title: '1. Moreshwar (Mayureshwar) of Morgaon', level: 3 },
-    { id: 'siddhivinayak', title: '2. Siddhivinayak of Siddhatek', level: 3 },
-    { id: 'ballaleshwar', title: '3. Ballaleshwar of Pali', level: 3 },
-    { id: 'varadvinayak', title: '4. Varadvinayak of Mahad', level: 3 },
-    { id: 'chintamani', title: '5. Chintamani of Theur', level: 3 },
-    { id: 'girijatmaj', title: '6. Girijatmaj of Lenyadri', level: 3 },
-    { id: 'vighneshwar', title: '7. Vighneshwar of Ozar', level: 3 },
-    { id: 'mahasaganapati', title: '8. Mahaganapati of Ranjangaon', level: 3 },
-    { id: 'completion', title: 'Returning to Morgaon: The Completion', level: 2 },
-    { id: 'itinerary', title: 'The Perfect 2-Day Itinerary from Pune', level: 2 },
-    { id: 'day1', title: 'Day 1 Route Plan', level: 3 },
-    { id: 'day2', title: 'Day 2 Route Plan', level: 3 },
-    { id: 'tips', title: 'Essential Travel Tips and Preparations', level: 2 },
-    { id: 'conclusion', title: 'Conclusion: Bringing Home the Blessings', level: 2 }
+    { id: "introduction", title: "Introduction to Ashtavinayak Yatra", level: 2 },
+    { id: "significance", title: "The Spiritual Significance of the 8 Temples", level: 2 },
+    { id: "sequence", title: "The Scriptural Darshan Sequence (Shastra)", level: 2 },
+    { id: "morshwar", title: "1. Moreshwar (Mayureshwar) of Morgaon", level: 3 },
+    { id: "siddhivinayak", title: "2. Siddhivinayak of Siddhatek", level: 3 },
+    { id: "ballaleshwar", title: "3. Ballaleshwar of Pali", level: 3 },
+    { id: "varadvinayak", title: "4. Varadvinayak of Mahad", level: 3 },
+    { id: "chintamani", title: "5. Chintamani of Theur", level: 3 },
+    { id: "girijatmaj", title: "6. Girijatmaj of Lenyadri", level: 3 },
+    { id: "vighneshwar", title: "7. Vighneshwar of Ozar", level: 3 },
+    { id: "mahasaganapati", title: "8. Mahaganapati of Ranjangaon", level: 3 },
+    { id: "completion", title: "Returning to Morgaon: The Completion", level: 2 },
+    { id: "itinerary", title: "The Perfect 2-Day Itinerary from Pune", level: 2 },
+    { id: "day1", title: "Day 1 Route Plan", level: 3 },
+    { id: "day2", title: "Day 2 Route Plan", level: 3 },
+    { id: "tips", title: "Essential Travel Tips and Preparations", level: 2 },
+    { id: "conclusion", title: "Conclusion: Bringing Home the Blessings", level: 2 },
   ],
   faqs: [
     {
-      question: 'In what sequence should the Ashtavinayak Yatra be completed?',
-      answer: 'According to the Shastras, the yatra must begin at Moreshwar (Morgaon), followed by Siddhatek, Pali, Mahad, Theur, Lenyadri, Ozar, and Ranjangaon. Finally, one must return to Morgaon to complete the pilgrimage.'
+      question: "In what sequence should the Ashtavinayak Yatra be completed?",
+      answer:
+        "According to the Shastras, the yatra must begin at Moreshwar (Morgaon), followed by Siddhatek, Pali, Mahad, Theur, Lenyadri, Ozar, and Ranjangaon. Finally, one must return to Morgaon to complete the pilgrimage.",
     },
     {
-      question: 'How many days are required for the Ashtavinayak Yatra?',
-      answer: 'A comfortable yatra from Pune takes exactly 2 Days and 1 Night. It is possible to do it in 3 days if you prefer a slower, more relaxed pace with senior citizens.'
+      question: "How many days are required for the Ashtavinayak Yatra?",
+      answer:
+        "A comfortable yatra from Pune takes exactly 2 Days and 1 Night. It is possible to do it in 3 days if you prefer a slower, more relaxed pace with senior citizens.",
     },
     {
-      question: 'Which is the most difficult Ashtavinayak temple to reach?',
-      answer: 'Girijatmaj at Lenyadri is the most physically demanding as it is situated inside a mountain cave. Devotees must climb approximately 300+ steps to reach the temple.'
+      question: "Which is the most difficult Ashtavinayak temple to reach?",
+      answer:
+        "Girijatmaj at Lenyadri is the most physically demanding as it is situated inside a mountain cave. Devotees must climb approximately 300+ steps to reach the temple.",
     },
     {
-      question: 'What is the best time of year to undertake the Ashtavinayak Yatra?',
-      answer: 'The ideal time is between September and March. The monsoon season (July-August) offers lush green scenery, though some roads can be challenging. Summers (April-May) should generally be avoided due to the intense heat in Maharashtra.'
-    }
+      question: "What is the best time of year to undertake the Ashtavinayak Yatra?",
+      answer:
+        "The ideal time is between September and March. The monsoon season (July-August) offers lush green scenery, though some roads can be challenging. Summers (April-May) should generally be avoided due to the intense heat in Maharashtra.",
+    },
   ],
   content: `
 <h2 id="introduction">Introduction to Ashtavinayak Yatra</h2>
@@ -170,5 +176,5 @@ export const ashtavinayakArticle: BlogPost = {
 <h2 id="conclusion">Conclusion: Bringing Home the Blessings</h2>
 <p>The Ashtavinayak Yatra is a profound test of devotion, endurance, and faith. Traversing across the majestic Sahyadri ranges to bow before the eight self-manifested forms of Lord Ganesha brings an unparalleled sense of inner peace. As the Vighnaharta removes the physical obstacles of your journey, he simultaneously removes the mental and spiritual blockages in your life.</p>
 <p>If you wish to embark on this holy pilgrimage without the stress of driving, navigation, and hotel booking, Shailraj Travels is here to serve you. With our experienced tour managers, premium vehicles, and deeply devotional approach, we ensure that your only focus remains on the divine Darshan of Ganpati Bappa. <em>Ganpati Bappa Morya!</em></p>
-  `
+  `,
 };

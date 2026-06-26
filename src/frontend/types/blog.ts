@@ -1,10 +1,10 @@
-import { Author } from './author';
+import { Author } from "./author";
 
-export type BlogCategory = 
-  | 'Travel Guides'
-  | 'Temple Guides'
-  | 'Pilgrimage Planning'
-  | 'Spiritual Tourism';
+export type BlogCategory =
+  | "Travel Guides"
+  | "Temple Guides"
+  | "Pilgrimage Planning"
+  | "Spiritual Tourism";
 
 export interface TOCItem {
   id: string;
@@ -29,27 +29,27 @@ export interface BlogPost {
   metaTitle: string;
   metaDescription: string;
   focusKeyword: string;
-  
+
   // Content
   excerpt: string;
   content: string; // The rich HTML content (1800-2500 words)
   tableOfContents: TOCItem[];
   faqs: BlogFAQ[];
-  
+
   // Taxonomy
   category: BlogCategory;
   tags: string[];
-  
+
   // Relations
   authorId: string;
   reviewerId?: string; // Optional reviewer
   relatedTourSlugs: string[]; // At least 2
   relatedArticleSlugs: string[]; // At least 2
-  
+
   // Media
   featuredImage: string;
   ogImage: string;
-  
+
   // Metadata
   readingTimeMinutes: number;
   publishedAt: string; // ISO Date String

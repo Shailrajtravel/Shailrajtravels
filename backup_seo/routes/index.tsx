@@ -13,9 +13,9 @@ import { ReviewsSection } from "../features/reviews/ReviewsSection";
 import { GallerySection } from "../features/gallery/GallerySection";
 
 import { getPackagesFn } from "../lib/packages";
-import { TrustBadges } from '../components/TrustBadges';
-import { BusinessStats } from '../components/BusinessStats';
-import { AreasWeServe } from '../components/AreasWeServe';
+import { TrustBadges } from "../components/TrustBadges";
+import { BusinessStats } from "../components/BusinessStats";
+import { AreasWeServe } from "../components/AreasWeServe";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
@@ -24,8 +24,8 @@ export const Route = createFileRoute("/")({
       const [reviews, packages, tripOptions, galleryPhotos] = await Promise.all([
         getReviewsFn(),
         getPackagesFn(),
-        import('../lib/bookings').then(m => m.getTripOptionsFn()),
-        import('../lib/gallery').then(m => m.getGalleryPhotosFn())
+        import("../lib/bookings").then((m) => m.getTripOptionsFn()),
+        import("../lib/gallery").then((m) => m.getGalleryPhotosFn()),
       ]);
       return { reviews, packages, tripOptions, galleryPhotos };
     } catch (e) {
@@ -39,7 +39,12 @@ function HomePage() {
   const lang = "en";
   const t = translations[lang];
 
-  const { reviews: dbReviews, packages: dbPackages, tripOptions = [], galleryPhotos = [] } = Route.useLoaderData() as any;
+  const {
+    reviews: dbReviews,
+    packages: dbPackages,
+    tripOptions = [],
+    galleryPhotos = [],
+  } = Route.useLoaderData() as any;
 
   return (
     <div className="font-sans text-slate-800 bg-white selection:bg-brand-green/20 selection:text-brand-blue-deep overflow-x-hidden">

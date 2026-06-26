@@ -25,9 +25,17 @@ export function InvoicePrint({ booking }: { booking: any }) {
     const d = new Date(dateStr);
     return isNaN(d.getTime()) ? new Date() : d;
   };
-  const invoiceNo = `INV-${safeDate(booking.createdAt).getFullYear()}-${booking._id ? booking._id.slice(-6).toUpperCase() : '0001'}`;
-  const invoiceDate = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-  const dueDate = safeDate(booking.travelDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+  const invoiceNo = `INV-${safeDate(booking.createdAt).getFullYear()}-${booking._id ? booking._id.slice(-6).toUpperCase() : "0001"}`;
+  const invoiceDate = new Date().toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+  const dueDate = safeDate(booking.travelDate).toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
 
   // Rate logic: we can just invent a dummy rate for now or calculate based on persons if it's missing
   const rate = 6000;
@@ -49,15 +57,29 @@ export function InvoicePrint({ booking }: { booking: any }) {
       {/* ZOOM CONTROLS */}
       <div className="no-print sticky top-4 z-50 mb-8 flex justify-center">
         <div className="bg-white/90 backdrop-blur-md rounded-full shadow-lg border border-slate-200 px-4 py-2 flex items-center gap-3">
-          <button onClick={() => setScale(s => Math.max(0.3, s - 0.1))} className="p-1.5 hover:bg-slate-100 rounded-full transition-colors text-slate-700" title="Zoom Out">
+          <button
+            onClick={() => setScale((s) => Math.max(0.3, s - 0.1))}
+            className="p-1.5 hover:bg-slate-100 rounded-full transition-colors text-slate-700"
+            title="Zoom Out"
+          >
             <ZoomOut size={20} />
           </button>
-          <span className="font-semibold text-sm w-12 text-center text-slate-700">{Math.round(scale * 100)}%</span>
-          <button onClick={() => setScale(s => Math.min(2, s + 0.1))} className="p-1.5 hover:bg-slate-100 rounded-full transition-colors text-slate-700" title="Zoom In">
+          <span className="font-semibold text-sm w-12 text-center text-slate-700">
+            {Math.round(scale * 100)}%
+          </span>
+          <button
+            onClick={() => setScale((s) => Math.min(2, s + 0.1))}
+            className="p-1.5 hover:bg-slate-100 rounded-full transition-colors text-slate-700"
+            title="Zoom In"
+          >
             <ZoomIn size={20} />
           </button>
           <div className="w-px h-6 bg-slate-300 mx-1" />
-          <button onClick={() => setScale(window.innerWidth < 800 ? window.innerWidth / 840 : 1)} className="p-1.5 hover:bg-slate-100 rounded-full transition-colors text-slate-700" title="Fit to Screen">
+          <button
+            onClick={() => setScale(window.innerWidth < 800 ? window.innerWidth / 840 : 1)}
+            className="p-1.5 hover:bg-slate-100 rounded-full transition-colors text-slate-700"
+            title="Fit to Screen"
+          >
             <Maximize size={18} />
           </button>
         </div>
@@ -68,7 +90,7 @@ export function InvoicePrint({ booking }: { booking: any }) {
         className="relative mx-auto mb-10 transition-all duration-200 print-wrapper"
         style={{
           width: `calc(210mm * ${scale})`,
-          height: `calc(297mm * ${scale})`
+          height: `calc(297mm * ${scale})`,
         }}
       >
         <div
@@ -76,7 +98,7 @@ export function InvoicePrint({ booking }: { booking: any }) {
           style={{
             transform: `scale(${scale})`,
             transformOrigin: "top left",
-            transition: "transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)"
+            transition: "transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
           }}
         >
           <div
@@ -88,32 +110,51 @@ export function InvoicePrint({ booking }: { booking: any }) {
             <div className="w-full pt-2">
               {/* Left Logo */}
               <div className="absolute top-1 left-1">
-                <img src={logo} alt="Shailraj Travel" className="h-[150px] w-[150px] object-contain scale-[1.3] origin-top-left" />
+                <img
+                  src={logo}
+                  alt="Shailraj Travel"
+                  className="h-[150px] w-[150px] object-contain scale-[1.3] origin-top-left"
+                />
               </div>
 
               {/* Middle Logo & Contact */}
               <div className="flex flex-col items-center">
                 {/* Wrapper provides physical space for scaled logo */}
                 <div className="h-[140px] flex items-center justify-center w-full">
-                  <img src={onlyNameLogo} alt="Shailraj Travels" className="h-[190px] object-contain scale-[2.4] origin-center -ml-12" />
+                  <img
+                    src={onlyNameLogo}
+                    alt="Shailraj Travels"
+                    className="h-[190px] object-contain scale-[2.4] origin-center -ml-12"
+                  />
                 </div>
                 {/* Negative margin pulls contact info up to eliminate transparent gap from image */}
                 <div className="-mt-5 text-[15px] font-medium text-slate-600 flex items-center justify-center gap-4 w-full">
-                  <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5" /> Pune, Maharashtra, India</span>
+                  <span className="flex items-center gap-1">
+                    <MapPin className="h-3.5 w-3.5" /> Pune, Maharashtra, India
+                  </span>
                   <span className="opacity-50">|</span>
-                  <span className="flex items-center gap-1"><Phone className="h-3.5 w-3.5" /> +91 98765 43210</span>
+                  <span className="flex items-center gap-1">
+                    <Phone className="h-3.5 w-3.5" /> +91 98765 43210
+                  </span>
                 </div>
                 <div className="mt-1 text-[15px] font-medium text-slate-600 flex items-center justify-center gap-4 w-full">
-                  <span className="flex items-center gap-1"><Mail className="h-3.5 w-3.5" /> info@shailrajtravels.com</span>
+                  <span className="flex items-center gap-1">
+                    <Mail className="h-3.5 w-3.5" /> info@shailrajtravels.com
+                  </span>
                   <span className="opacity-50">|</span>
-                  <span className="flex items-center gap-1"><Globe className="h-3.5 w-3.5" /> www.shailrajtravels.com</span>
+                  <span className="flex items-center gap-1">
+                    <Globe className="h-3.5 w-3.5" /> www.shailrajtravels.com
+                  </span>
                 </div>
               </div>
             </div>
 
             {/* INVOICE BADGE */}
             <div className="mt-4 flex justify-center">
-              <div className="rounded-[8px] px-10 py-1.5 text-[22px] font-black tracking-widest text-white shadow-sm" style={{ background: DARK }}>
+              <div
+                className="rounded-[8px] px-10 py-1.5 text-[22px] font-black tracking-widest text-white shadow-sm"
+                style={{ background: DARK }}
+              >
                 INVOICE
               </div>
             </div>
@@ -124,12 +165,21 @@ export function InvoicePrint({ booking }: { booking: any }) {
                 <div className="p-3 border-r" style={{ borderColor: BORDER }}>
                   <InfoLine label="Invoice No." value={invoiceNo} />
                   <div className="mt-2" />
-                  <InfoLine label="Invoice Date" value={format(safeDate(booking.createdAt), 'dd MMM yyyy')} />
+                  <InfoLine
+                    label="Invoice Date"
+                    value={format(safeDate(booking.createdAt), "dd MMM yyyy")}
+                  />
                 </div>
                 <div className="p-3">
-                  <InfoLine label="Booking ID" value={booking.bookingId || booking._id?.slice(-8).toUpperCase()} />
+                  <InfoLine
+                    label="Booking ID"
+                    value={booking.bookingId || booking._id?.slice(-8).toUpperCase()}
+                  />
                   <div className="mt-2" />
-                  <InfoLine label="Travel Date" value={format(safeDate(booking.travelDate), 'dd MMM yyyy')} />
+                  <InfoLine
+                    label="Travel Date"
+                    value={format(safeDate(booking.travelDate), "dd MMM yyyy")}
+                  />
                 </div>
               </div>
             </div>
@@ -140,35 +190,59 @@ export function InvoicePrint({ booking }: { booking: any }) {
                 <div className="flex flex-col h-full gap-1">
                   <DetailRow label="Name" value={booking.customerName} />
                   <DetailRow label="Mobile" value={booking.customerPhone} />
-
                 </div>
               </Card>
 
               <Card title="TRIP DETAILS">
-                <DetailRow label="Package Name" value={booking.packageId?.name || booking.packageName || 'Custom Trip'} />
-                <DetailRow label="Travel Date" value={format(safeDate(booking.travelDate), 'dd MMM yyyy, HH:mm')} />
+                <DetailRow
+                  label="Package Name"
+                  value={booking.packageId?.name || booking.packageName || "Custom Trip"}
+                />
+                <DetailRow
+                  label="Travel Date"
+                  value={format(safeDate(booking.travelDate), "dd MMM yyyy, HH:mm")}
+                />
 
-                <DetailRow label="Pickup Point" value={booking.pickupPoint || 'Pune'} />
+                <DetailRow label="Pickup Point" value={booking.pickupPoint || "Pune"} />
               </Card>
             </div>
 
             {/* TABLE */}
-            <div className="mt-6 overflow-hidden rounded-[8px] border flex flex-col" style={{ borderColor: BORDER }}>
+            <div
+              className="mt-6 overflow-hidden rounded-[8px] border flex flex-col"
+              style={{ borderColor: BORDER }}
+            >
               <table className="w-full text-left text-[13px]">
                 <thead className="text-white" style={{ background: DARK }}>
                   <tr>
-                    <th className="px-5 py-3 text-left font-bold uppercase tracking-wide text-[12px]">Description</th>
-                    <th className="px-5 py-3 text-center font-bold uppercase tracking-wide text-[12px] w-[100px]">Qty</th>
-                    <th className="px-5 py-3 text-center font-bold uppercase tracking-wide text-[12px] w-[140px]">Rate (₹)</th>
-                    <th className="px-5 py-3 text-center font-bold uppercase tracking-wide text-[12px] w-[160px]">Amount (₹)</th>
+                    <th className="px-5 py-3 text-left font-bold uppercase tracking-wide text-[12px]">
+                      Description
+                    </th>
+                    <th className="px-5 py-3 text-center font-bold uppercase tracking-wide text-[12px] w-[100px]">
+                      Qty
+                    </th>
+                    <th className="px-5 py-3 text-center font-bold uppercase tracking-wide text-[12px] w-[140px]">
+                      Rate (₹)
+                    </th>
+                    <th className="px-5 py-3 text-center font-bold uppercase tracking-wide text-[12px] w-[160px]">
+                      Amount (₹)
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td className="px-5 py-4 font-medium text-[#222]">Package Price (Per Person)</td>
-                    <td className="px-5 py-4 text-center font-medium text-[#222]">{booking.persons || 1}</td>
-                    <td className="px-5 py-4 text-center font-medium text-[#222]">{rate.toLocaleString()}</td>
-                    <td className="px-5 py-4 text-center font-medium text-[#222]">{totalAmount.toLocaleString()}</td>
+                    <td className="px-5 py-4 font-medium text-[#222]">
+                      Package Price (Per Person)
+                    </td>
+                    <td className="px-5 py-4 text-center font-medium text-[#222]">
+                      {booking.persons || 1}
+                    </td>
+                    <td className="px-5 py-4 text-center font-medium text-[#222]">
+                      {rate.toLocaleString()}
+                    </td>
+                    <td className="px-5 py-4 text-center font-medium text-[#222]">
+                      {totalAmount.toLocaleString()}
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -177,7 +251,10 @@ export function InvoicePrint({ booking }: { booking: any }) {
                 <div className="w-[140px] px-5 py-1 flex items-center justify-center text-[15px] font-bold uppercase tracking-widest text-slate-700">
                   Total
                 </div>
-                <div className="w-[160px] px-5 py-1 flex items-center justify-center text-[22px] font-black leading-none" style={{ color: DARK }}>
+                <div
+                  className="w-[160px] px-5 py-1 flex items-center justify-center text-[22px] font-black leading-none"
+                  style={{ color: DARK }}
+                >
                   ₹ {totalAmount.toLocaleString()}
                 </div>
               </div>
@@ -192,24 +269,30 @@ export function InvoicePrint({ booking }: { booking: any }) {
                   <div className="mt-1 flex items-center text-[13px]">
                     <div className="w-[130px] font-medium">Payment Status</div>
                     <div className="w-3">:</div>
-                    <span className={`ml-2 rounded-sm px-2 py-0.5 text-[11px] font-bold text-white ${booking.paymentStatus === 'Completed' ? 'bg-green-500' : 'bg-orange-500'}`}>
-                      {booking.paymentStatus?.toUpperCase() || 'PENDING'}
+                    <span
+                      className={`ml-2 rounded-sm px-2 py-0.5 text-[11px] font-bold text-white ${booking.paymentStatus === "Completed" ? "bg-green-500" : "bg-orange-500"}`}
+                    >
+                      {booking.paymentStatus?.toUpperCase() || "PENDING"}
                     </span>
                   </div>
                 </div>
               </Card>
               <Card title="AUTHORIZED SIGNATURE">
                 <div className="flex flex-col h-full justify-between relative">
-
-
                   {/* STAMP */}
                   <div className="absolute bottom-3 right-22 w-[44%] opacity-85 pointer-events-none select-none mix-blend-multiply z-10">
-                    <img src={stamp} alt="Official Seal" className="w-full h-auto object-contain drop-shadow-sm" />
+                    <img
+                      src={stamp}
+                      alt="Official Seal"
+                      className="w-full h-auto object-contain drop-shadow-sm"
+                    />
                   </div>
 
                   <div className="mt-auto pt-22 relative z-0">
                     <div className="mx-auto h-px w-3/4 bg-slate-800" />
-                    <p className="mt-2 text-center text-[12px] text-slate-600">Authorized Signatory</p>
+                    <p className="mt-2 text-center text-[12px] text-slate-600">
+                      Authorized Signatory
+                    </p>
                   </div>
                 </div>
               </Card>
@@ -218,9 +301,17 @@ export function InvoicePrint({ booking }: { booking: any }) {
             {/* THANK YOU */}
             <div className="mt-auto flex w-full flex-col items-center pb-2 pt-6">
               <div className="flex w-[80%] items-center gap-6 opacity-60">
-                <div className="h-[1px] flex-1" style={{ background: `linear-gradient(to right, transparent, ${BORDER})` }} />
-                <div className="script text-[42px] leading-none" style={{ color: DARK }}>Thank You!</div>
-                <div className="h-[1px] flex-1" style={{ background: `linear-gradient(to left, transparent, ${BORDER})` }} />
+                <div
+                  className="h-[1px] flex-1"
+                  style={{ background: `linear-gradient(to right, transparent, ${BORDER})` }}
+                />
+                <div className="script text-[42px] leading-none" style={{ color: DARK }}>
+                  Thank You!
+                </div>
+                <div
+                  className="h-[1px] flex-1"
+                  style={{ background: `linear-gradient(to left, transparent, ${BORDER})` }}
+                />
               </div>
               <div className="mt-3 flex flex-col items-center text-center">
                 <div className="text-[13px] font-bold tracking-widest" style={{ color: DARK }}>
@@ -240,11 +331,18 @@ export function InvoicePrint({ booking }: { booking: any }) {
               className="absolute bottom-0 left-0 w-full flex items-center justify-around px-6 py-3 text-[13px] font-medium text-white"
               style={{ background: DARK }}
             >
-              <span className="flex items-center gap-2"><Phone className="h-4 w-4" />+91 72765 31897</span>
+              <span className="flex items-center gap-2">
+                <Phone className="h-4 w-4" />
+                +91 72765 31897
+              </span>
               <span className="opacity-50">|</span>
-              <span className="flex items-center gap-2"><Mail className="h-4 w-4" /> shailrajtravels9999@gmail.com.com</span>
+              <span className="flex items-center gap-2">
+                <Mail className="h-4 w-4" /> shailrajtravels9999@gmail.com.com
+              </span>
               <span className="opacity-50">|</span>
-              <span className="flex items-center gap-2"><Globe className="h-4 w-4" /> www.shailrajtravels.com</span>
+              <span className="flex items-center gap-2">
+                <Globe className="h-4 w-4" /> www.shailrajtravels.com
+              </span>
             </div>
           </div>
         </div>
@@ -266,7 +364,10 @@ function InfoLine({ label, value }: { label: string; value: string }) {
 function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="overflow-hidden rounded-[6px] border h-full" style={{ borderColor: BORDER }}>
-      <div className="px-5 py-2.5 text-[14px] font-bold uppercase text-white" style={{ background: DARK }}>
+      <div
+        className="px-5 py-2.5 text-[14px] font-bold uppercase text-white"
+        style={{ background: DARK }}
+      >
         {title}
       </div>
       <div className="px-5 py-4">{children}</div>

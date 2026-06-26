@@ -7,5 +7,5 @@ export const businessConfig = {
   fleetSize: 45,
   founderName: "Shailesh Raj",
   supportPhone: "+91 97634 33556",
-  headOffice: "Pune, Maharashtra"
+  headOffice: "Pune, Maharashtra",
 };

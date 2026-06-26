@@ -11,7 +11,18 @@ async function main() {
   if (!fs.existsSync("src/frontend")) fs.mkdirSync("src/frontend");
   if (!fs.existsSync("src/backend")) fs.mkdirSync("src/backend");
 
-  const frontendDirs = ["assets", "components", "config", "data", "features", "hooks", "invioce", "routes", "templates", "types"];
+  const frontendDirs = [
+    "assets",
+    "components",
+    "config",
+    "data",
+    "features",
+    "hooks",
+    "invioce",
+    "routes",
+    "templates",
+    "types",
+  ];
   const backendDirs = ["lib"];
 
   // Move backend directories

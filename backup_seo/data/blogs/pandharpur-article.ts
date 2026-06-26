@@ -1,54 +1,64 @@
-import { BlogPost } from '../../types/blog';
+import { BlogPost } from "../../types/blog";
 
 export const pandharpurArticle: BlogPost = {
-  slug: 'pandharpur-wari-spiritual-guide',
-  title: 'Pandharpur Wari: Understanding Maharashtra’s Greatest Spiritual Journey',
-  metaTitle: 'Pandharpur Wari Guide | History, Route & Vithoba Darshan',
-  metaDescription: 'Discover the profound spiritual tradition of the Pandharpur Wari. Learn about its 800-year history, the Palkhi routes of Sant Dnyaneshwar and Sant Tukaram, and how to plan your Vithoba Darshan.',
-  focusKeyword: 'Pandharpur Wari',
-  category: 'Travel Guides',
-  tags: ['Pandharpur', 'Wari', 'Vithoba', 'Maharashtra Culture', 'Pilgrimage'],
-  authorId: 'shailesh-raj',
-  reviewerId: 'priya-deshmukh',
-  lastReviewedAt: '2026-06-14T09:00:00Z',
-  relatedTourSlugs: ['pandharpur-wari', 'ashtavinayak-yatra'],
-  relatedArticleSlugs: ['ashtavinayak-yatra-route-guide'],
-  featuredImage: '/images/tours/pandharpur.webp',
-  ogImage: '/images/tours/pandharpur.webp',
+  slug: "pandharpur-wari-spiritual-guide",
+  title: "Pandharpur Wari: Understanding Maharashtra’s Greatest Spiritual Journey",
+  metaTitle: "Pandharpur Wari Guide | History, Route & Vithoba Darshan",
+  metaDescription:
+    "Discover the profound spiritual tradition of the Pandharpur Wari. Learn about its 800-year history, the Palkhi routes of Sant Dnyaneshwar and Sant Tukaram, and how to plan your Vithoba Darshan.",
+  focusKeyword: "Pandharpur Wari",
+  category: "Travel Guides",
+  tags: ["Pandharpur", "Wari", "Vithoba", "Maharashtra Culture", "Pilgrimage"],
+  authorId: "shailesh-raj",
+  reviewerId: "priya-deshmukh",
+  lastReviewedAt: "2026-06-14T09:00:00Z",
+  relatedTourSlugs: ["pandharpur-wari", "ashtavinayak-yatra"],
+  relatedArticleSlugs: ["ashtavinayak-yatra-route-guide"],
+  featuredImage: "/images/tours/pandharpur.webp",
+  ogImage: "/images/tours/pandharpur.webp",
   readingTimeMinutes: 12,
-  publishedAt: '2026-06-13T10:00:00Z',
-  updatedAt: '2026-06-13T10:00:00Z',
-  excerpt: 'Every year, millions of Warkaris walk hundreds of kilometers singing the abhangas to meet their beloved Lord Vithoba in Pandharpur. Explore the history, the route, and the deep emotional connection of Maharashtra’s greatest pilgrimage.',
+  publishedAt: "2026-06-13T10:00:00Z",
+  updatedAt: "2026-06-13T10:00:00Z",
+  excerpt:
+    "Every year, millions of Warkaris walk hundreds of kilometers singing the abhangas to meet their beloved Lord Vithoba in Pandharpur. Explore the history, the route, and the deep emotional connection of Maharashtra’s greatest pilgrimage.",
   tableOfContents: [
-    { id: 'introduction', title: 'What is the Pandharpur Wari?', level: 2 },
-    { id: 'history', title: 'The 800-Year History of the Wari Tradition', level: 2 },
-    { id: 'saints', title: 'The Pillars of the Bhakti Movement', level: 2 },
-    { id: 'palkhi', title: 'The Great Palkhi Routes', level: 2 },
-    { id: 'dnyaneshwar', title: 'Sant Dnyaneshwar Maharaj Palkhi (Alandi to Pandharpur)', level: 3 },
-    { id: 'tukaram', title: 'Sant Tukaram Maharaj Palkhi (Dehu to Pandharpur)', level: 3 },
-    { id: 'experience', title: 'Life Inside the Wari: The Dindi System', level: 2 },
-    { id: 'ringan', title: 'The Majestic Ringan Ceremony', level: 2 },
-    { id: 'darshan', title: 'Vithoba Darshan: The Ultimate Goal', level: 2 },
-    { id: 'planning', title: 'How to Plan Your Pandharpur Darshan', level: 2 },
-    { id: 'conclusion', title: 'Conclusion: A Walk of Equality and Love', level: 2 }
+    { id: "introduction", title: "What is the Pandharpur Wari?", level: 2 },
+    { id: "history", title: "The 800-Year History of the Wari Tradition", level: 2 },
+    { id: "saints", title: "The Pillars of the Bhakti Movement", level: 2 },
+    { id: "palkhi", title: "The Great Palkhi Routes", level: 2 },
+    {
+      id: "dnyaneshwar",
+      title: "Sant Dnyaneshwar Maharaj Palkhi (Alandi to Pandharpur)",
+      level: 3,
+    },
+    { id: "tukaram", title: "Sant Tukaram Maharaj Palkhi (Dehu to Pandharpur)", level: 3 },
+    { id: "experience", title: "Life Inside the Wari: The Dindi System", level: 2 },
+    { id: "ringan", title: "The Majestic Ringan Ceremony", level: 2 },
+    { id: "darshan", title: "Vithoba Darshan: The Ultimate Goal", level: 2 },
+    { id: "planning", title: "How to Plan Your Pandharpur Darshan", level: 2 },
+    { id: "conclusion", title: "Conclusion: A Walk of Equality and Love", level: 2 },
   ],
   faqs: [
     {
-      question: 'When does the Pandharpur Wari take place?',
-      answer: 'The most significant Wari happens during the Hindu month of Ashadh (usually June or July), culminating on the auspicious day of Ashadhi Ekadashi. Another prominent Wari occurs during Kartiki Ekadashi (around November).'
+      question: "When does the Pandharpur Wari take place?",
+      answer:
+        "The most significant Wari happens during the Hindu month of Ashadh (usually June or July), culminating on the auspicious day of Ashadhi Ekadashi. Another prominent Wari occurs during Kartiki Ekadashi (around November).",
     },
     {
-      question: 'How long is the Palkhi journey?',
-      answer: 'The journey from Alandi (Sant Dnyaneshwar Palkhi) and Dehu (Sant Tukaram Palkhi) takes approximately 21 days, covering over 250 kilometers entirely on foot.'
+      question: "How long is the Palkhi journey?",
+      answer:
+        "The journey from Alandi (Sant Dnyaneshwar Palkhi) and Dehu (Sant Tukaram Palkhi) takes approximately 21 days, covering over 250 kilometers entirely on foot.",
     },
     {
-      question: 'What is a Dindi?',
-      answer: 'A Dindi is an organized group of Warkaris (pilgrims) that travel together. Each Dindi has a designated number, a leader (Veenekari), and specific duties during the march.'
+      question: "What is a Dindi?",
+      answer:
+        "A Dindi is an organized group of Warkaris (pilgrims) that travel together. Each Dindi has a designated number, a leader (Veenekari), and specific duties during the march.",
     },
     {
-      question: 'Can anyone join the Pandharpur Wari?',
-      answer: 'Absolutely. The core philosophy of the Warkari sect is absolute equality. People from all castes, creeds, genders, and economic backgrounds walk shoulder to shoulder in the Wari.'
-    }
+      question: "Can anyone join the Pandharpur Wari?",
+      answer:
+        "Absolutely. The core philosophy of the Warkari sect is absolute equality. People from all castes, creeds, genders, and economic backgrounds walk shoulder to shoulder in the Wari.",
+    },
   ],
   content: `
 <h2 id="introduction">What is the Pandharpur Wari?</h2>
@@ -128,5 +138,5 @@ export const pandharpurArticle: BlogPost = {
 <h2 id="conclusion">Conclusion: A Walk of Equality and Love</h2>
 <p>The Pandharpur Wari is not just a Maharashtrian festival; it is a profound sociological phenomenon. It proves that millions of people can organize themselves organically without central corporate management. It proves that rich landowners and poor farmers can eat from the same plate, sleep in the same tent, and sing the same song in absolute harmony.</p>
 <p>Lord Vitthal is affectionately called "Vithu Mauli" (Mother Vithu) by the Warkaris. This maternal affection forms the core of the Wari. If you ever get the chance, spend a day walking with a Dindi. The dust of the Wari, the taste of the simple food, and the echoing chants of <em>"Dnyanba Tukaram"</em> will leave an indelible mark on your soul.</p>
-  `
+  `,
 };

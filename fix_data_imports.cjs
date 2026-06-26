@@ -1,12 +1,15 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 const replacements = [
   { from: /from\s+['"]\.\.\/data\/([^'"]+)['"]/g, to: "from '../frontend/data/$1'" },
   { from: /from\s+['"]\.\.\/\.\.\/data\/([^'"]+)['"]/g, to: "from '../../frontend/data/$1'" },
-  { from: /from\s+['"]\.\.\/\.\.\/\.\.\/data\/([^'"]+)['"]/g, to: "from '../../../frontend/data/$1'" },
+  {
+    from: /from\s+['"]\.\.\/\.\.\/\.\.\/data\/([^'"]+)['"]/g,
+    to: "from '../../../frontend/data/$1'",
+  },
   { from: /from\s+['"]\.\.\/config\/([^'"]+)['"]/g, to: "from '../frontend/config/$1'" },
-  { from: /from\s+['"]\.\.\/\.\.\/config\/([^'"]+)['"]/g, to: "from '../../frontend/config/$1'" }
+  { from: /from\s+['"]\.\.\/\.\.\/config\/([^'"]+)['"]/g, to: "from '../../frontend/config/$1'" },
 ];
 
 function processFilesDir(dir) {
@@ -15,8 +18,8 @@ function processFilesDir(dir) {
     const fullPath = path.join(dir, file);
     if (fs.statSync(fullPath).isDirectory()) {
       processFilesDir(fullPath);
-    } else if (fullPath.endsWith('.ts') || fullPath.endsWith('.tsx')) {
-      let content = fs.readFileSync(fullPath, 'utf8');
+    } else if (fullPath.endsWith(".ts") || fullPath.endsWith(".tsx")) {
+      let content = fs.readFileSync(fullPath, "utf8");
       let original = content;
 
       for (const rule of replacements) {
@@ -24,11 +27,11 @@ function processFilesDir(dir) {
       }
 
       if (content !== original) {
-        fs.writeFileSync(fullPath, content, 'utf8');
+        fs.writeFileSync(fullPath, content, "utf8");
         console.log(`Fixed data imports in ${fullPath}`);
       }
     }
   }
 }
 
-processFilesDir('src/routes');
+processFilesDir("src/routes");

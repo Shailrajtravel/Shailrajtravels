@@ -17,7 +17,9 @@ import { BookingModal } from "../frontend/features/tours/BookingModal";
 import { getPackagesFn } from "../backend/lib/packages";
 
 export const Route = createFileRoute("/")({
-  validateSearch: (search: Record<string, unknown>): { lang?: string } => ({ lang: search.lang as string | undefined }),
+  validateSearch: (search: Record<string, unknown>): { lang?: string } => ({
+    lang: search.lang as string | undefined,
+  }),
   loaderDeps: ({ search: { lang } }) => ({ lang }),
   component: HomePage,
   loader: async ({ deps: { lang } }) => {
@@ -25,9 +27,9 @@ export const Route = createFileRoute("/")({
       const [reviews, packages, tripOptions, galleryPhotos, tours] = await Promise.all([
         getReviewsFn(),
         getPackagesFn(),
-        import('../backend/lib/bookings').then(m => m.getTripOptionsFn()),
-        import('../backend/lib/gallery').then(m => m.getGalleryPhotosFn()),
-        import('../backend/lib/tours').then(m => m.getToursFn({ data: { lang: lang || 'en' } }))
+        import("../backend/lib/bookings").then((m) => m.getTripOptionsFn()),
+        import("../backend/lib/gallery").then((m) => m.getGalleryPhotosFn()),
+        import("../backend/lib/tours").then((m) => m.getToursFn({ data: { lang: lang || "en" } })),
       ]);
       return { reviews, packages, tripOptions, galleryPhotos, tours };
     } catch (e) {
@@ -41,7 +43,13 @@ function HomePage() {
   const { lang } = useLanguage();
   const t = translations[lang];
 
-  const { reviews: dbReviews, packages: dbPackages, tripOptions = [], galleryPhotos = [], tours = [] } = Route.useLoaderData() as any;
+  const {
+    reviews: dbReviews,
+    packages: dbPackages,
+    tripOptions = [],
+    galleryPhotos = [],
+    tours = [],
+  } = Route.useLoaderData() as any;
 
   const [bookingTour, setBookingTour] = useState<any | null>(null);
 
@@ -56,17 +64,19 @@ function HomePage() {
         <Hero lang={lang} t={t} tripOptions={tripOptions} activeTripId="" />
         <AboutSection lang={lang} t={t} />
         <FeaturesSection lang={lang} t={t} />
-        <ToursSection lang={lang} t={t} packages={dbPackages} tripOptions={tripOptions} tours={tours} onBookSeat={handleBookSeat} />
+        <ToursSection
+          lang={lang}
+          t={t}
+          packages={dbPackages}
+          tripOptions={tripOptions}
+          tours={tours}
+          onBookSeat={handleBookSeat}
+        />
         <ReviewsSection lang={lang} t={t} />
         <GallerySection t={t} photos={galleryPhotos} />
       </main>
       {bookingTour && (
-        <BookingModal
-          tour={bookingTour}
-          onClose={() => setBookingTour(null)}
-          t={t}
-          lang={lang}
-        />
+        <BookingModal tour={bookingTour} onClose={() => setBookingTour(null)} t={t} lang={lang} />
       )}
       <Footer t={t} lang={lang} />
     </div>

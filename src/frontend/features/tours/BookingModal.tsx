@@ -1,5 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { X, User, Phone, MapPin, Users, Calendar, Minus, Plus, Loader2, ShieldCheck } from "lucide-react";
+import {
+  X,
+  User,
+  Phone,
+  MapPin,
+  Users,
+  Calendar,
+  Minus,
+  Plus,
+  Loader2,
+  ShieldCheck,
+} from "lucide-react";
 import { TourData } from "./TourCard";
 import { createBookingFn } from "../../../backend/lib/bookings";
 
@@ -28,7 +39,7 @@ export function BookingModal({ tour, onClose, t, lang }: BookingModalProps) {
   }, []);
 
   const isUpcomingDate = (dateStr: string) => {
-    if (typeof dateStr !== 'string') return false;
+    if (typeof dateStr !== "string") return false;
     const match = dateStr.match(/(\d+)\s+([a-zA-Z]+)(?:\s+(\d{4}))?/);
     if (!match) return true;
     const now = new Date();
@@ -40,9 +51,7 @@ export function BookingModal({ tour, onClose, t, lang }: BookingModalProps) {
   };
 
   // Extract valid dates if present
-  const validDates = Array.isArray(tour.dates)
-    ? tour.dates.filter(isUpcomingDate)
-    : [];
+  const validDates = Array.isArray(tour.dates) ? tour.dates.filter(isUpcomingDate) : [];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,6 +64,7 @@ export function BookingModal({ tour, onClose, t, lang }: BookingModalProps) {
         tripName: tour.title,
         persons: Number(persons),
         travelDate: travelDate,
+        idempotencyKey: crypto.randomUUID(),
       };
 
       await createBookingFn({ data: bookingData });
@@ -68,13 +78,11 @@ export function BookingModal({ tour, onClose, t, lang }: BookingModalProps) {
 
   return (
     <div className="fixed inset-0 z-[1100] flex items-center justify-center p-4 sm:p-6 bg-[#112233]/45 backdrop-blur-sm animate-in fade-in duration-200">
-      
       {/* Backdrop */}
       <div className="absolute inset-0" onClick={onClose} />
 
       {/* Modal Card */}
       <div className="relative w-full max-w-[500px] max-h-[95vh] bg-white rounded-[28px] sm:rounded-[36px] flex flex-col overflow-hidden shadow-2xl animate-in zoom-in-95 duration-250">
-        
         {/* Header */}
         <div className="flex justify-between items-start p-6 pb-4 border-b border-slate-100">
           <div>
@@ -85,7 +93,7 @@ export function BookingModal({ tour, onClose, t, lang }: BookingModalProps) {
               {t.bookingModalDesc || `Reserving seats for ${tour.title}`}
             </p>
           </div>
-          <button 
+          <button
             onClick={onClose}
             className="p-2 -mr-2 -mt-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors"
           >
@@ -104,9 +112,10 @@ export function BookingModal({ tour, onClose, t, lang }: BookingModalProps) {
                 {t.bookingModalSuccessTitle || "Booking Received!"}
               </h3>
               <p className="text-slate-600 text-sm max-w-sm mb-8 leading-relaxed">
-                {t.bookingModalSuccessDesc || "We have received your booking request for this tour and will contact you shortly to confirm the details."}
+                {t.bookingModalSuccessDesc ||
+                  "We have received your booking request for this tour and will contact you shortly to confirm the details."}
               </p>
-              <button 
+              <button
                 onClick={onClose}
                 className="w-full sm:w-auto px-8 py-3 bg-[#F59E0B] hover:bg-[#E5910A] text-[#112233] font-bold rounded-xl transition-all shadow-md hover:shadow-lg"
               >
@@ -115,7 +124,6 @@ export function BookingModal({ tour, onClose, t, lang }: BookingModalProps) {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
-              
               {/* Full Name */}
               <div className="space-y-1">
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">
@@ -155,7 +163,8 @@ export function BookingModal({ tour, onClose, t, lang }: BookingModalProps) {
               {/* Pickup Location */}
               <div className="space-y-1">
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">
-                  {t.formPickupLocation || "Pickup Location"} <span className="text-red-500">*</span>
+                  {t.formPickupLocation || "Pickup Location"}{" "}
+                  <span className="text-red-500">*</span>
                 </label>
                 <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 h-[56px] transition focus-within:border-[#F59E0B] focus-within:ring-2 focus-within:ring-[#F59E0B]/15">
                   <MapPin className="h-5 w-5 text-slate-400 shrink-0" />
@@ -180,17 +189,18 @@ export function BookingModal({ tour, onClose, t, lang }: BookingModalProps) {
                   <div className="flex items-center justify-between flex-grow">
                     <button
                       type="button"
-                      onClick={() => setPersons(p => Math.max(1, p - 1))}
+                      onClick={() => setPersons((p) => Math.max(1, p - 1))}
                       className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 transition cursor-pointer"
                     >
                       <Minus className="h-4 w-4" />
                     </button>
                     <span className="text-[15px] font-semibold text-brand-blue-deep">
-                      {persons} {persons === 1 ? t.formPerson || "Person" : t.formPersonsPlural || "Persons"}
+                      {persons}{" "}
+                      {persons === 1 ? t.formPerson || "Person" : t.formPersonsPlural || "Persons"}
                     </span>
                     <button
                       type="button"
-                      onClick={() => setPersons(p => Math.min(16, p + 1))}
+                      onClick={() => setPersons((p) => Math.min(16, p + 1))}
                       className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-50 text-[#F59E0B] hover:bg-amber-100 transition cursor-pointer"
                     >
                       <Plus className="h-4 w-4" />
@@ -217,11 +227,13 @@ export function BookingModal({ tour, onClose, t, lang }: BookingModalProps) {
                       >
                         <option value="">{t.tourSelectDate || "Select a date"}</option>
                         {validDates.map((date: string) => (
-                          <option key={date} value={date}>{date}</option>
+                          <option key={date} value={date}>
+                            {date}
+                          </option>
                         ))}
                       </select>
                     ) : (
-                      <input 
+                      <input
                         type="date"
                         name="travelDate"
                         required
@@ -246,16 +258,12 @@ export function BookingModal({ tour, onClose, t, lang }: BookingModalProps) {
                     {lang === "mr" ? "पाठवत आहे..." : "Submitting..."}
                   </>
                 ) : (
-                  <>
-                    {t.formBook || "Book Now"}
-                  </>
+                  <>{t.formBook || "Book Now"}</>
                 )}
               </button>
-
             </form>
           )}
         </div>
-
       </div>
     </div>
   );

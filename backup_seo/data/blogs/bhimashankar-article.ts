@@ -1,53 +1,59 @@
-import { BlogPost } from '../../types/blog';
+import { BlogPost } from "../../types/blog";
 
 export const bhimashankarArticle: BlogPost = {
-  slug: 'bhimashankar-trek-darshan-guide',
-  title: 'Bhimashankar Jyotirlinga: A Guide to Trekking, Darshan, and Wildlife',
-  metaTitle: 'Bhimashankar Trek & Darshan Guide | Route, Timings, Wildlife',
-  metaDescription: 'Plan your trip to Bhimashankar Jyotirlinga. Complete guide covering the ancient temple history, the challenging monsoon treks, and the wildlife sanctuary.',
-  focusKeyword: 'Bhimashankar Trek',
-  category: 'Spiritual Tourism',
-  tags: ['Bhimashankar', 'Maharashtra Temples', 'Jyotirlinga', 'Trekking', 'Sahyadri'],
-  authorId: 'shailesh-raj',
-  reviewerId: 'priya-deshmukh',
-  lastReviewedAt: '2026-06-14T09:00:00Z',
-  relatedTourSlugs: ['jyotirlinga-darshan'],
-  relatedArticleSlugs: ['12-jyotirlinga-temples-india-guide'],
-  featuredImage: '/images/tours/bhimashankar.jpg', // Assuming a fallback jpg or webp
-  ogImage: '/images/tours/bhimashankar.jpg',
+  slug: "bhimashankar-trek-darshan-guide",
+  title: "Bhimashankar Jyotirlinga: A Guide to Trekking, Darshan, and Wildlife",
+  metaTitle: "Bhimashankar Trek & Darshan Guide | Route, Timings, Wildlife",
+  metaDescription:
+    "Plan your trip to Bhimashankar Jyotirlinga. Complete guide covering the ancient temple history, the challenging monsoon treks, and the wildlife sanctuary.",
+  focusKeyword: "Bhimashankar Trek",
+  category: "Spiritual Tourism",
+  tags: ["Bhimashankar", "Maharashtra Temples", "Jyotirlinga", "Trekking", "Sahyadri"],
+  authorId: "shailesh-raj",
+  reviewerId: "priya-deshmukh",
+  lastReviewedAt: "2026-06-14T09:00:00Z",
+  relatedTourSlugs: ["jyotirlinga-darshan"],
+  relatedArticleSlugs: ["12-jyotirlinga-temples-india-guide"],
+  featuredImage: "/images/tours/bhimashankar.jpg", // Assuming a fallback jpg or webp
+  ogImage: "/images/tours/bhimashankar.jpg",
   readingTimeMinutes: 11,
-  publishedAt: '2026-06-08T10:00:00Z',
-  updatedAt: '2026-06-08T10:00:00Z',
-  excerpt: 'Nestled in the lush forests of the Sahyadri ranges, Bhimashankar offers a unique blend of intense spirituality and thrilling adventure. Discover the ancient Jyotirlinga and the famous monsoon trekking routes.',
+  publishedAt: "2026-06-08T10:00:00Z",
+  updatedAt: "2026-06-08T10:00:00Z",
+  excerpt:
+    "Nestled in the lush forests of the Sahyadri ranges, Bhimashankar offers a unique blend of intense spirituality and thrilling adventure. Discover the ancient Jyotirlinga and the famous monsoon trekking routes.",
   tableOfContents: [
-    { id: 'introduction', title: 'Spirituality Meets Wilderness', level: 2 },
-    { id: 'mythology', title: 'The Legend of Tripurasura and Bhima River', level: 2 },
-    { id: 'temple', title: 'The Ancient Nagara Architecture', level: 2 },
-    { id: 'trekking', title: 'Trekking to Bhimashankar: A Monsoon Thrill', level: 2 },
-    { id: 'shidi-ghat', title: '1. The Shidi Ghat Route (Ladder Route)', level: 3 },
-    { id: 'ganesh-ghat', title: '2. The Ganesh Ghat Route', level: 3 },
-    { id: 'wildlife', title: 'The Bhimashankar Wildlife Sanctuary', level: 2 },
-    { id: 'darshan', title: 'Darshan Timings and Planning', level: 2 },
-    { id: 'travel-tips', title: 'Essential Travel Tips', level: 2 },
-    { id: 'conclusion', title: 'Conclusion: The Call of the Sahyadris', level: 2 }
+    { id: "introduction", title: "Spirituality Meets Wilderness", level: 2 },
+    { id: "mythology", title: "The Legend of Tripurasura and Bhima River", level: 2 },
+    { id: "temple", title: "The Ancient Nagara Architecture", level: 2 },
+    { id: "trekking", title: "Trekking to Bhimashankar: A Monsoon Thrill", level: 2 },
+    { id: "shidi-ghat", title: "1. The Shidi Ghat Route (Ladder Route)", level: 3 },
+    { id: "ganesh-ghat", title: "2. The Ganesh Ghat Route", level: 3 },
+    { id: "wildlife", title: "The Bhimashankar Wildlife Sanctuary", level: 2 },
+    { id: "darshan", title: "Darshan Timings and Planning", level: 2 },
+    { id: "travel-tips", title: "Essential Travel Tips", level: 2 },
+    { id: "conclusion", title: "Conclusion: The Call of the Sahyadris", level: 2 },
   ],
   faqs: [
     {
-      question: 'Can we reach Bhimashankar by car without trekking?',
-      answer: 'Yes, absolutely. There is a very good motorable road right up to the temple from Pune (via Manchar). The trek from the base village of Khandas is purely optional for adventure enthusiasts.'
+      question: "Can we reach Bhimashankar by car without trekking?",
+      answer:
+        "Yes, absolutely. There is a very good motorable road right up to the temple from Pune (via Manchar). The trek from the base village of Khandas is purely optional for adventure enthusiasts.",
     },
     {
-      question: 'Is the Shidi Ghat trek safe for beginners?',
-      answer: 'No. The Shidi Ghat (ladder route) is considered a medium-to-hard trek and can be extremely slippery and dangerous during heavy monsoons. Beginners should use the Ganesh Ghat route or travel by road.'
+      question: "Is the Shidi Ghat trek safe for beginners?",
+      answer:
+        "No. The Shidi Ghat (ladder route) is considered a medium-to-hard trek and can be extremely slippery and dangerous during heavy monsoons. Beginners should use the Ganesh Ghat route or travel by road.",
     },
     {
-      question: 'What is the best time to visit Bhimashankar?',
-      answer: 'For trekking and waterfalls, the monsoon season (July to September) is best. For a peaceful Darshan and wildlife spotting, post-monsoon and winter (October to February) are ideal.'
+      question: "What is the best time to visit Bhimashankar?",
+      answer:
+        "For trekking and waterfalls, the monsoon season (July to September) is best. For a peaceful Darshan and wildlife spotting, post-monsoon and winter (October to February) are ideal.",
     },
     {
-      question: 'Where can I spot the Indian Giant Squirrel (Shekru)?',
-      answer: 'The Shekru is the state animal of Maharashtra. They are usually found high up in the dense canopy of the Bhimashankar Wildlife Sanctuary, particularly early in the morning.'
-    }
+      question: "Where can I spot the Indian Giant Squirrel (Shekru)?",
+      answer:
+        "The Shekru is the state animal of Maharashtra. They are usually found high up in the dense canopy of the Bhimashankar Wildlife Sanctuary, particularly early in the morning.",
+    },
   ],
   content: `
 <h2 id="introduction">Spirituality Meets Wilderness</h2>
@@ -109,5 +115,5 @@ export const bhimashankarArticle: BlogPost = {
 
 <h2 id="conclusion">Conclusion: The Call of the Sahyadris</h2>
 <p>A visit to Bhimashankar satisfies both the soul and the senses. Whether you choose the arduous path of climbing the Shidi Ghat through a roaring waterfall or the comfortable drive through the misty green hills, the destination remains equally rewarding. Stepping into the dark, ancient sanctum to witness the Swayambhu Lingam, feeling the cool mountain air, and hearing the distant calls of the forest—it is here that you realize the divine is not just inside the temple, but in every tree, rock, and river of the Sahyadris.</p>
-  `
+  `,
 };

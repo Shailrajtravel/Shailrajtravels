@@ -1,20 +1,22 @@
-import React from 'react';
+import React from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
-export function GallerySection({ t, photos = [] }: { t: any, photos?: any[] }) {
+export function GallerySection({ t, photos = [] }: { t: any; photos?: any[] }) {
   if (!photos || photos.length === 0) return null;
-  const [emblaRef, emblaApi] = useEmblaCarousel(
-    { loop: true, align: "start" },
-    [Autoplay({ delay: 3000, stopOnInteraction: false })]
-  );
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "start" }, [
+    Autoplay({ delay: 3000, stopOnInteraction: false }),
+  ]);
 
   const scrollPrev = () => emblaApi && emblaApi.scrollPrev();
   const scrollNext = () => emblaApi && emblaApi.scrollNext();
 
   return (
-    <section id="gallery" className="w-full bg-[#FCFCFC] py-12 lg:py-20 scroll-mt-28 md:scroll-mt-32 relative">
+    <section
+      id="gallery"
+      className="w-full bg-[#FCFCFC] py-12 lg:py-20 scroll-mt-28 md:scroll-mt-32 relative"
+    >
       <div className="mx-auto max-w-[1280px] px-6">
         <div className="flex flex-col items-center text-center mb-16 animate-reveal">
           <p className="flex items-center gap-3 text-[13px] md:text-[15px] font-bold tracking-[0.2em] text-brand-green-dark mb-4 uppercase">
@@ -31,7 +33,10 @@ export function GallerySection({ t, photos = [] }: { t: any, photos?: any[] }) {
           <div className="overflow-hidden -mx-4 px-4 pb-4" ref={emblaRef}>
             <div className="flex gap-4 md:gap-6">
               {photos.map((photo, idx) => (
-                <div key={photo._id || idx} className="flex-[0_0_100%] md:flex-[0_0_calc(50%-0.75rem)] lg:flex-[0_0_calc(33.333%-1rem)] min-w-0 flex flex-col transition-transform">
+                <div
+                  key={photo._id || idx}
+                  className="flex-[0_0_100%] md:flex-[0_0_calc(50%-0.75rem)] lg:flex-[0_0_calc(33.333%-1rem)] min-w-0 flex flex-col transition-transform"
+                >
                   <div className="relative h-[300px] md:h-[400px] w-full overflow-hidden rounded-2xl group/item border border-slate-100 shadow-sm bg-white flex items-center justify-center p-4">
                     <img
                       src={photo.imageUrl}

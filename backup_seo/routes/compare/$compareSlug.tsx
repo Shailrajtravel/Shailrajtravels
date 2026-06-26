@@ -1,12 +1,12 @@
-import React from 'react';
-import { createFileRoute, Link, notFound } from '@tanstack/react-router';
-import { generateSEO, SchemaMarkup } from '../../lib/seo';
-import { comparisons } from '../../data/comparisons';
-import { tours } from '../../data/tours.en';
+import React from "react";
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { generateSEO, SchemaMarkup } from "../../lib/seo";
+import { comparisons } from "../../data/comparisons";
+import { tours } from "../../data/tours.en";
 
-export const Route = createFileRoute('/compare/$compareSlug')({
+export const Route = createFileRoute("/compare/$compareSlug")({
   loader: ({ params }) => {
-    const comparison = comparisons.find(c => c.slug === params.compareSlug);
+    const comparison = comparisons.find((c) => c.slug === params.compareSlug);
     if (!comparison) throw notFound();
     return comparison;
   },
@@ -16,34 +16,38 @@ export const Route = createFileRoute('/compare/$compareSlug')({
       description: loaderData.metaDescription,
       canonicalUrl: `https://www.shailrajtravels.com/compare/${loaderData.slug}`,
     }),
-    links: [{ rel: 'canonical', href: `https://www.shailrajtravels.com/compare/${loaderData.slug}` }],
+    links: [
+      { rel: "canonical", href: `https://www.shailrajtravels.com/compare/${loaderData.slug}` },
+    ],
   }),
   component: ComparePageTemplate,
 });
 
 function ComparePageTemplate() {
   const comparison = Route.useLoaderData();
-  const tourA = tours.find(t => t.slug === comparison.toursCompared[0]);
-  const tourB = tours.find(t => t.slug === comparison.toursCompared[1]);
+  const tourA = tours.find((t) => t.slug === comparison.toursCompared[0]);
+  const tourB = tours.find((t) => t.slug === comparison.toursCompared[1]);
 
   const articleSchema = {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": comparison.title,
-    "description": comparison.metaDescription,
-    "author": {
+    headline: comparison.title,
+    description: comparison.metaDescription,
+    author: {
       "@type": "Organization",
-      "name": "Shailraj Travels Editorial"
-    }
+      name: "Shailraj Travels Editorial",
+    },
   };
 
   return (
     <main className="w-full bg-slate-50 pb-20 pt-24 px-4 sm:px-6 lg:px-8">
       <SchemaMarkup schema={articleSchema} />
-      
+
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-12">
-          <div className="text-sm font-bold text-brand-orange uppercase tracking-wider mb-4">Tour Comparison Guide</div>
+          <div className="text-sm font-bold text-brand-orange uppercase tracking-wider mb-4">
+            Tour Comparison Guide
+          </div>
           <h1 className="text-4xl font-extrabold text-brand-blue-deep mb-4">{comparison.title}</h1>
           <p className="text-lg text-slate-600">{comparison.metaDescription}</p>
         </div>
@@ -62,8 +66,13 @@ function ComparePageTemplate() {
 
           {/* Table Body */}
           {comparison.keyDifferences.map((diff, idx) => (
-            <div key={idx} className="grid grid-cols-3 border-b border-slate-100 last:border-0 hover:bg-slate-50 transition-colors">
-              <div className="p-6 font-semibold text-slate-900 flex items-center bg-slate-50/50">{diff.aspect}</div>
+            <div
+              key={idx}
+              className="grid grid-cols-3 border-b border-slate-100 last:border-0 hover:bg-slate-50 transition-colors"
+            >
+              <div className="p-6 font-semibold text-slate-900 flex items-center bg-slate-50/50">
+                {diff.aspect}
+              </div>
               <div className="p-6 text-slate-700 border-l border-slate-100">{diff.optionA}</div>
               <div className="p-6 text-slate-700 border-l border-slate-100">{diff.optionB}</div>
             </div>
@@ -83,7 +92,10 @@ function ComparePageTemplate() {
           {tourA && (
             <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 text-center flex flex-col items-center">
               <h3 className="text-xl font-bold text-slate-900 mb-4">Ready for {tourA.title}?</h3>
-              <Link to={`/tours/${tourA.slug}`} className="px-8 py-3 bg-brand-blue-deep text-white font-bold rounded-lg hover:bg-brand-blue transition-colors w-full">
+              <Link
+                to={`/tours/${tourA.slug}`}
+                className="px-8 py-3 bg-brand-blue-deep text-white font-bold rounded-lg hover:bg-brand-blue transition-colors w-full"
+              >
                 View Package Details
               </Link>
             </div>
@@ -91,7 +103,10 @@ function ComparePageTemplate() {
           {tourB && (
             <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 text-center flex flex-col items-center">
               <h3 className="text-xl font-bold text-slate-900 mb-4">Ready for {tourB.title}?</h3>
-              <Link to={`/tours/${tourB.slug}`} className="px-8 py-3 bg-brand-orange text-white font-bold rounded-lg hover:bg-brand-orange-dark transition-colors w-full">
+              <Link
+                to={`/tours/${tourB.slug}`}
+                className="px-8 py-3 bg-brand-orange text-white font-bold rounded-lg hover:bg-brand-orange-dark transition-colors w-full"
+              >
                 View Package Details
               </Link>
             </div>

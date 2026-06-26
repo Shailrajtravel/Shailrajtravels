@@ -1,12 +1,28 @@
-import React from 'react';
-import { ShieldCheck, Award, ThumbsUp, Headset } from 'lucide-react';
+import React from "react";
+import { ShieldCheck, Award, ThumbsUp, Headset } from "lucide-react";
 
 export const TrustBadges: React.FC = () => {
   const badges = [
-    { icon: <Award className="w-8 h-8 text-brand-green" />, title: '15+ Years Experience', desc: 'Trusted by thousands since 2011' },
-    { icon: <ThumbsUp className="w-8 h-8 text-brand-green" />, title: '5000+ Happy Yatris', desc: 'Consistently 5-star rated journeys' },
-    { icon: <ShieldCheck className="w-8 h-8 text-brand-green" />, title: 'Verified Local Drivers', desc: 'Expert route & safety knowledge' },
-    { icon: <Headset className="w-8 h-8 text-brand-green" />, title: '24/7 Trip Support', desc: 'We are always with you on the road' },
+    {
+      icon: <Award className="w-8 h-8 text-brand-green" />,
+      title: "15+ Years Experience",
+      desc: "Trusted by thousands since 2011",
+    },
+    {
+      icon: <ThumbsUp className="w-8 h-8 text-brand-green" />,
+      title: "5000+ Happy Yatris",
+      desc: "Consistently 5-star rated journeys",
+    },
+    {
+      icon: <ShieldCheck className="w-8 h-8 text-brand-green" />,
+      title: "Verified Local Drivers",
+      desc: "Expert route & safety knowledge",
+    },
+    {
+      icon: <Headset className="w-8 h-8 text-brand-green" />,
+      title: "24/7 Trip Support",
+      desc: "We are always with you on the road",
+    },
   ];
 
   return (

@@ -1,55 +1,61 @@
-import { BlogPost } from '../../types/blog';
+import { BlogPost } from "../../types/blog";
 
 export const shirdiArticle: BlogPost = {
-  slug: 'shirdi-sai-baba-darshan-guide',
-  title: 'Shirdi Sai Baba Darshan: Best Time to Visit and VIP Pass Guide',
-  metaTitle: 'Shirdi Sai Baba Darshan Guide 2026 | Timings, Aarti & VIP Pass',
-  metaDescription: 'Complete guide for Shirdi Sai Baba Darshan. Learn about temple timings, how to book VIP passes online, attending Kakad Aarti, and places to visit around Shirdi.',
-  focusKeyword: 'Shirdi Sai Baba Darshan Guide',
-  category: 'Temple Guides',
-  tags: ['Shirdi', 'Sai Baba', 'Maharashtra Temples', 'Spiritual Tourism', 'Pilgrimage'],
-  authorId: 'shailesh-raj',
-  reviewerId: 'priya-deshmukh',
-  lastReviewedAt: '2026-06-14T09:00:00Z',
-  relatedTourSlugs: ['shirdi-tour', 'ashtavinayak-yatra'],
-  relatedArticleSlugs: ['pandharpur-wari-spiritual-guide'],
-  featuredImage: '/images/tours/shirdi.jpg', // Assuming a fallback jpg or webp
-  ogImage: '/images/tours/shirdi.jpg',
+  slug: "shirdi-sai-baba-darshan-guide",
+  title: "Shirdi Sai Baba Darshan: Best Time to Visit and VIP Pass Guide",
+  metaTitle: "Shirdi Sai Baba Darshan Guide 2026 | Timings, Aarti & VIP Pass",
+  metaDescription:
+    "Complete guide for Shirdi Sai Baba Darshan. Learn about temple timings, how to book VIP passes online, attending Kakad Aarti, and places to visit around Shirdi.",
+  focusKeyword: "Shirdi Sai Baba Darshan Guide",
+  category: "Temple Guides",
+  tags: ["Shirdi", "Sai Baba", "Maharashtra Temples", "Spiritual Tourism", "Pilgrimage"],
+  authorId: "shailesh-raj",
+  reviewerId: "priya-deshmukh",
+  lastReviewedAt: "2026-06-14T09:00:00Z",
+  relatedTourSlugs: ["shirdi-tour", "ashtavinayak-yatra"],
+  relatedArticleSlugs: ["pandharpur-wari-spiritual-guide"],
+  featuredImage: "/images/tours/shirdi.jpg", // Assuming a fallback jpg or webp
+  ogImage: "/images/tours/shirdi.jpg",
   readingTimeMinutes: 11,
-  publishedAt: '2026-06-11T10:00:00Z',
-  updatedAt: '2026-06-11T10:00:00Z',
-  excerpt: 'Planning a visit to Shirdi? Navigate the massive crowds with our comprehensive guide on booking VIP Darshan passes, attending the four daily Aartis, and exploring the sacred spots associated with Sai Baba.',
+  publishedAt: "2026-06-11T10:00:00Z",
+  updatedAt: "2026-06-11T10:00:00Z",
+  excerpt:
+    "Planning a visit to Shirdi? Navigate the massive crowds with our comprehensive guide on booking VIP Darshan passes, attending the four daily Aartis, and exploring the sacred spots associated with Sai Baba.",
   tableOfContents: [
-    { id: 'introduction', title: 'The Miracle of Shirdi Sai Baba', level: 2 },
-    { id: 'temple-complex', title: 'Understanding the Temple Complex (Samadhi Mandir)', level: 2 },
-    { id: 'darshan-types', title: 'Types of Darshan: Free vs. VIP', level: 2 },
-    { id: 'vip-booking', title: 'How to Book VIP Darshan Passes Online', level: 3 },
-    { id: 'aarti-schedule', title: 'The Four Divine Aartis: Timings and Significance', level: 2 },
-    { id: 'kakad', title: '1. Kakad Aarti (Early Morning)', level: 3 },
-    { id: 'madhyan', title: '2. Madhyan Aarti (Noon)', level: 3 },
-    { id: 'dhoop', title: '3. Dhoop Aarti (Evening)', level: 3 },
-    { id: 'shej', title: '4. Shej Aarti (Night)', level: 3 },
-    { id: 'sacred-spots', title: 'Other Sacred Spots in Shirdi', level: 2 },
-    { id: 'travel-tips', title: 'Essential Travel Tips for Shirdi', level: 2 },
-    { id: 'conclusion', title: 'Conclusion: Shraddha and Saburi', level: 2 }
+    { id: "introduction", title: "The Miracle of Shirdi Sai Baba", level: 2 },
+    { id: "temple-complex", title: "Understanding the Temple Complex (Samadhi Mandir)", level: 2 },
+    { id: "darshan-types", title: "Types of Darshan: Free vs. VIP", level: 2 },
+    { id: "vip-booking", title: "How to Book VIP Darshan Passes Online", level: 3 },
+    { id: "aarti-schedule", title: "The Four Divine Aartis: Timings and Significance", level: 2 },
+    { id: "kakad", title: "1. Kakad Aarti (Early Morning)", level: 3 },
+    { id: "madhyan", title: "2. Madhyan Aarti (Noon)", level: 3 },
+    { id: "dhoop", title: "3. Dhoop Aarti (Evening)", level: 3 },
+    { id: "shej", title: "4. Shej Aarti (Night)", level: 3 },
+    { id: "sacred-spots", title: "Other Sacred Spots in Shirdi", level: 2 },
+    { id: "travel-tips", title: "Essential Travel Tips for Shirdi", level: 2 },
+    { id: "conclusion", title: "Conclusion: Shraddha and Saburi", level: 2 },
   ],
   faqs: [
     {
-      question: 'How far in advance should I book the Shirdi VIP Darshan pass?',
-      answer: 'It is highly recommended to book the VIP Darshan or Aarti passes at least 30-45 days in advance on the official Shri Saibaba Sansthan Trust website, especially if you plan to visit on a Thursday or a public holiday.'
+      question: "How far in advance should I book the Shirdi VIP Darshan pass?",
+      answer:
+        "It is highly recommended to book the VIP Darshan or Aarti passes at least 30-45 days in advance on the official Shri Saibaba Sansthan Trust website, especially if you plan to visit on a Thursday or a public holiday.",
     },
     {
-      question: 'Is mobile phone allowed inside the Samadhi Mandir?',
-      answer: 'No. Mobile phones, cameras, laptops, and smartwatches are strictly prohibited inside the main temple complex. Free locker facilities are provided outside the temple to store your electronics.'
+      question: "Is mobile phone allowed inside the Samadhi Mandir?",
+      answer:
+        "No. Mobile phones, cameras, laptops, and smartwatches are strictly prohibited inside the main temple complex. Free locker facilities are provided outside the temple to store your electronics.",
     },
     {
-      question: 'What is the dress code for Shirdi Darshan?',
-      answer: 'While there is no strictly enforced uniform, devotees are requested to dress modestly. Traditional Indian wear like kurtas, sarees, and decent casuals are recommended. Shorts and revealing clothes are frowned upon.'
+      question: "What is the dress code for Shirdi Darshan?",
+      answer:
+        "While there is no strictly enforced uniform, devotees are requested to dress modestly. Traditional Indian wear like kurtas, sarees, and decent casuals are recommended. Shorts and revealing clothes are frowned upon.",
     },
     {
-      question: 'How long does the free Darshan queue take?',
-      answer: 'On normal weekdays, the free darshan line takes about 2 to 3 hours. On Thursdays, weekends, and festival days (like Guru Purnima or Ramnavami), the wait time can exceed 6 to 8 hours.'
-    }
+      question: "How long does the free Darshan queue take?",
+      answer:
+        "On normal weekdays, the free darshan line takes about 2 to 3 hours. On Thursdays, weekends, and festival days (like Guru Purnima or Ramnavami), the wait time can exceed 6 to 8 hours.",
+    },
   ],
   content: `
 <h2 id="introduction">The Miracle of Shirdi Sai Baba</h2>
@@ -137,5 +143,5 @@ export const shirdiArticle: BlogPost = {
 <h2 id="conclusion">Conclusion: Shraddha and Saburi</h2>
 <p>Sai Baba asked for only two coins from his devotees: <em>Shraddha</em> (Faith) and <em>Saburi</em> (Patience). A trip to Shirdi often tests both. Standing in the queue, surrounded by thousands of people from all walks of life, you realize the equalizing power of true devotion.</p>
 <p>When you finally step into the sanctum, the chaotic noise of the world outside fades away. As you look into the incredibly lifelike eyes of the marble statue, a deep, unexplainable sense of calm washes over you. Your worries seem trivial, and you understand why millions return to this dusty village year after year. Let Shailraj Travels handle the logistics of your journey, so you can focus entirely on your devotion to Sai Baba.</p>
-  `
+  `,
 };

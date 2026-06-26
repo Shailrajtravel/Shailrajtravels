@@ -1,7 +1,8 @@
 export const translations = {
   mr: {
     heroTagline: "श्रद्धेपासून समाधानापर्यंत",
-    heroDesc: "देवदर्शन हा फक्त प्रवास नसून एक भावनिक आणि आध्यात्मिक अनुभव आहे. शैलराज ट्रॅव्हल्ससोबत भारतातील पवित्र तीर्थक्षेत्रांना भेट द्या आणि आरामदायी व्यवस्था, विश्वासू सेवा व भक्तीमय वातावरणासह अविस्मरणीय आठवणी तयार करा.",
+    heroDesc:
+      "देवदर्शन हा फक्त प्रवास नसून एक भावनिक आणि आध्यात्मिक अनुभव आहे. शैलराज ट्रॅव्हल्ससोबत भारतातील पवित्र तीर्थक्षेत्रांना भेट द्या आणि आरामदायी व्यवस्था, विश्वासू सेवा व भक्तीमय वातावरणासह अविस्मरणीय आठवणी तयार करा.",
     heroHighlight: "भारतातील ५०+ पवित्र तीर्थक्षेत्रांकडे विश्वासाने वाटचाल करा..!",
     feat1: "वातानुकूलित प्रवास",
     feat2: "कुटुंबांसाठी अनुकूल",
@@ -19,7 +20,8 @@ export const translations = {
     bookingModalTitle: "सीट बुक करा",
     bookingModalDesc: "खालील माहिती भरा आणि तुमची सीट आरक्षित करा.",
     bookingModalSuccessTitle: "बुकिंग यशस्वी झाले!",
-    bookingModalSuccessDesc: "आम्हाला तुमची बुकिंग विनंती मिळाली आहे. आम्ही लवकरच तुमच्याशी संपर्क साधू.",
+    bookingModalSuccessDesc:
+      "आम्हाला तुमची बुकिंग विनंती मिळाली आहे. आम्ही लवकरच तुमच्याशी संपर्क साधू.",
     formPersons: "प्रवासी संख्या",
     formPerson: "प्रवासी",
     formPersonsPlural: "प्रवासी",
@@ -32,6 +34,7 @@ export const translations = {
     navReviews: "प्रतिक्रिया",
     navContact: "संपर्क",
     navBlog: "ब्लॉग",
+    navAllTours: "सर्व टूर्स",
     tripUjjain: "पुणे - उज्जैन - पुणे",
     tripAshta: "पुणे - अष्टविनायक यात्रा",
     tripCustom: "इतर ट्रिप",
@@ -45,22 +48,30 @@ export const translations = {
     storyLabel: "आमची गोष्ट",
     heroHeadingPrefix: "केवळ प्रवास नाही, तर",
     heroHeadingHighlight: "श्रद्धेशी जोडणारा एक पवित्र अनुभव",
-    heroP1: "प्रत्येक यात्रेची सुरुवात एका भावनेतून होते — देवदर्शनाची ओढ, मनःशांतीची आस आणि कुटुंबासोबत काही पवित्र क्षण अनुभवण्याची इच्छा. मंदिर, तीर्थक्षेत्र किंवा देवस्थान हे केवळ एक गंतव्य नसते; ते आपल्या श्रद्धेचे, संस्कृतीचे आणि आध्यात्मिक नात्याचे प्रतीक असते.",
-    heroP2: "शैलराज ट्रॅव्हल्समध्ये आम्ही या भावनेची किंमत जाणतो. म्हणूनच आमच्यासाठी प्रत्येक यात्रा ही फक्त एका ठिकाणाहून दुसऱ्या ठिकाणी जाण्याची व्यवस्था नसून, ती भक्ती, विश्वास आणि समाधानाने भरलेली एक सुंदर अनुभूती असते. यात्रेतील प्रत्येक क्षण आरामदायी, सुरक्षित आणि संस्मरणीय व्हावा यासाठी आम्ही नियोजनापासून ते देवदर्शनापर्यंत प्रत्येक गोष्टीची विशेष काळजी घेतो.",
-    heroP3: "अष्टविनायकाच्या मंगल दर्शनापासून ते ज्योतिर्लिंगांच्या पवित्र भूमीपर्यंत, पंढरपूरच्या विठुरायापासून ते भारतातील विविध तीर्थक्षेत्रांपर्यंत हजारो भाविकांच्या श्रद्धायात्रेला आम्ही विश्वासाची साथ दिली आहे. आमच्या अनुभवी टीमचे मार्गदर्शन, आरामदायी प्रवास व्यवस्था, निवडक निवास आणि मनापासून दिलेली सेवा यामुळे प्रत्येक यात्रेकरूला घरच्यासारखी आपुलकी आणि समाधानाची अनुभूती मिळते.",
-    heroP4: "आज अनेक कुटुंबे आणि भाविक आपल्या पवित्र यात्रेसाठी शैलराज ट्रॅव्हल्सवर विश्वास ठेवतात. कारण आम्ही केवळ प्रवास घडवत नाही, तर भक्तीने भरलेले असे क्षण निर्माण करतो जे आयुष्यभर स्मरणात राहतात.",
+    heroP1:
+      "प्रत्येक यात्रेची सुरुवात एका भावनेतून होते — देवदर्शनाची ओढ, मनःशांतीची आस आणि कुटुंबासोबत काही पवित्र क्षण अनुभवण्याची इच्छा. मंदिर, तीर्थक्षेत्र किंवा देवस्थान हे केवळ एक गंतव्य नसते; ते आपल्या श्रद्धेचे, संस्कृतीचे आणि आध्यात्मिक नात्याचे प्रतीक असते.",
+    heroP2:
+      "शैलराज ट्रॅव्हल्समध्ये आम्ही या भावनेची किंमत जाणतो. म्हणूनच आमच्यासाठी प्रत्येक यात्रा ही फक्त एका ठिकाणाहून दुसऱ्या ठिकाणी जाण्याची व्यवस्था नसून, ती भक्ती, विश्वास आणि समाधानाने भरलेली एक सुंदर अनुभूती असते. यात्रेतील प्रत्येक क्षण आरामदायी, सुरक्षित आणि संस्मरणीय व्हावा यासाठी आम्ही नियोजनापासून ते देवदर्शनापर्यंत प्रत्येक गोष्टीची विशेष काळजी घेतो.",
+    heroP3:
+      "अष्टविनायकाच्या मंगल दर्शनापासून ते ज्योतिर्लिंगांच्या पवित्र भूमीपर्यंत, पंढरपूरच्या विठुरायापासून ते भारतातील विविध तीर्थक्षेत्रांपर्यंत हजारो भाविकांच्या श्रद्धायात्रेला आम्ही विश्वासाची साथ दिली आहे. आमच्या अनुभवी टीमचे मार्गदर्शन, आरामदायी प्रवास व्यवस्था, निवडक निवास आणि मनापासून दिलेली सेवा यामुळे प्रत्येक यात्रेकरूला घरच्यासारखी आपुलकी आणि समाधानाची अनुभूती मिळते.",
+    heroP4:
+      "आज अनेक कुटुंबे आणि भाविक आपल्या पवित्र यात्रेसाठी शैलराज ट्रॅव्हल्सवर विश्वास ठेवतात. कारण आम्ही केवळ प्रवास घडवत नाही, तर भक्तीने भरलेले असे क्षण निर्माण करतो जे आयुष्यभर स्मरणात राहतात.",
     statDestinations: "पवित्र तीर्थक्षेत्रे",
     statYatris: "आनंदी यात्रेकरू",
     statExperience: "वर्षांचा अनुभव",
     statRating: "सरासरी रेटिंग",
     whyChooseTitle: "शैलराज ट्रॅव्हल्स का निवडावे?",
-    whyChooseDesc: "आम्ही केवळ टूर्स आयोजित करत नाही; आम्ही अत्यंत काळजीपूर्वक आणि भक्तीने आध्यात्मिक अनुभव सुलभ करतो.",
+    whyChooseDesc:
+      "आम्ही केवळ टूर्स आयोजित करत नाही; आम्ही अत्यंत काळजीपूर्वक आणि भक्तीने आध्यात्मिक अनुभव सुलभ करतो.",
     feat1Title: "सुरक्षेशी कोणतीही तडजोड नाही",
-    feat1Desc: "तुमचे आरोग्य आणि सुरक्षितता आमची प्राथमिकता आहे. निवडक निवास आणि अनुभवी ड्रायव्हर्ससह आम्ही सुरक्षित प्रवासाची हमी देतो.",
+    feat1Desc:
+      "तुमचे आरोग्य आणि सुरक्षितता आमची प्राथमिकता आहे. निवडक निवास आणि अनुभवी ड्रायव्हर्ससह आम्ही सुरक्षित प्रवासाची हमी देतो.",
     feat2Title: "भक्तीमय काळजी",
-    feat2Desc: "आमचे मार्गदर्शक तुमच्या तीर्थयात्रेचे महत्त्व जाणतात आणि प्रत्येक पावलावर सहृदयतेने मदत करतात.",
+    feat2Desc:
+      "आमचे मार्गदर्शक तुमच्या तीर्थयात्रेचे महत्त्व जाणतात आणि प्रत्येक पावलावर सहृदयतेने मदत करतात.",
     feat3Title: "त्रासमुक्त अनुभव",
-    feat3Desc: "आम्ही प्रवास, निवास आणि दर्शनाची सर्व व्यवस्था पाहतो, जेणेकरून तुम्ही तुमच्या आध्यात्मिक प्रवासावर पूर्ण लक्ष केंद्रित करू शकाल.",
+    feat3Desc:
+      "आम्ही प्रवास, निवास आणि दर्शनाची सर्व व्यवस्था पाहतो, जेणेकरून तुम्ही तुमच्या आध्यात्मिक प्रवासावर पूर्ण लक्ष केंद्रित करू शकाल.",
     ctaTitle: "तुमच्या आध्यात्मिक प्रवासासाठी तयार आहात?",
     ctaDesc: "तुम्ही भक्तीमध्ये तल्लीन व्हा, आम्ही बाकी सर्व गोष्टींची काळजी घेऊ.",
     ctaBtn1: "आमच्या टूर्स पहा",
@@ -68,9 +79,11 @@ export const translations = {
     whyChooseUs: "आम्हाला का निवडावे",
     titlePrefix: "का",
     titleHighlight: "शैलराज ट्रॅव्हल्स?",
-    subtitle: "आम्ही पारदर्शकता, आराम आणि काळजीसह व्यावसायिक प्रवास सेवा देतो.\nसुरक्षित, विश्वासार्ह आणि संस्मरणीय प्रवासासाठी तुमचा विश्वासू साथीदार.",
+    subtitle:
+      "आम्ही पारदर्शकता, आराम आणि काळजीसह व्यावसायिक प्रवास सेवा देतो.\nसुरक्षित, विश्वासार्ह आणि संस्मरणीय प्रवासासाठी तुमचा विश्वासू साथीदार.",
     card1Title: "सुरक्षित आणि निश्चिंत\nप्रवास",
-    card1Desc: "उत्तम स्थितीत असलेली वाहने आणि प्रशिक्षित ड्रायव्हर्ससह तुमची सुरक्षितता आमची प्राथमिकता आहे.",
+    card1Desc:
+      "उत्तम स्थितीत असलेली वाहने आणि प्रशिक्षित ड्रायव्हर्ससह तुमची सुरक्षितता आमची प्राथमिकता आहे.",
     card2Title: "आरामदायी\nएसी कोचेस",
     card2Desc: "सुरळीत आणि आरामदायी प्रवासासाठी आधुनिक, स्वच्छ आणि प्रशस्त कोचेस.",
     card3Title: "उत्कृष्ट किंमतीची\nहमी",
@@ -137,12 +150,14 @@ export const translations = {
     tourContactSoon: "आम्ही २४ तासांत आपल्याशी संपर्क साधू.",
     breadcrumbTours: "टूर्स",
     toursIndexTitle: "आमच्या पवित्र यात्रा",
-    toursIndexDesc: "पुण्याहून आमच्या परिपूर्ण नियोजित, आरामदायी आणि मार्गदर्शित तीर्थयात्रा पॅकेजसह आध्यात्मिक प्रवासाला सुरुवात करा.",
-    toursIndexViewDetails: "टूरचे तपशील पहा \u2192"
+    toursIndexDesc:
+      "पुण्याहून आमच्या परिपूर्ण नियोजित, आरामदायी आणि मार्गदर्शित तीर्थयात्रा पॅकेजसह आध्यात्मिक प्रवासाला सुरुवात करा.",
+    toursIndexViewDetails: "टूरचे तपशील पहा \u2192",
   },
   en: {
     heroTagline: "From Devotion to Satisfaction",
-    heroDesc: "Darshan is not just a journey, but an emotional and spiritual experience. Visit India's holy pilgrimage sites with Shailraj Travels and create unforgettable memories with comfortable arrangements, trusted service, and a devotional atmosphere.",
+    heroDesc:
+      "Darshan is not just a journey, but an emotional and spiritual experience. Visit India's holy pilgrimage sites with Shailraj Travels and create unforgettable memories with comfortable arrangements, trusted service, and a devotional atmosphere.",
     heroHighlight: "Step forward with faith towards 50+ holy pilgrimage sites in India..!",
     feat1: "AC Travel",
     feat2: "Family Friendly",
@@ -160,7 +175,8 @@ export const translations = {
     bookingModalTitle: "Book Seat",
     bookingModalDesc: "Fill in the details below to reserve your seat.",
     bookingModalSuccessTitle: "Booking Confirmed!",
-    bookingModalSuccessDesc: "Thank you for choosing Shailraj. We have received your booking request and will contact you shortly.",
+    bookingModalSuccessDesc:
+      "Thank you for choosing Shailraj. We have received your booking request and will contact you shortly.",
     formPersons: "Persons",
     formPerson: "Person",
     formPersonsPlural: "Persons",
@@ -173,6 +189,7 @@ export const translations = {
     navReviews: "Reviews",
     navContact: "Contact",
     navBlog: "Blog",
+    navAllTours: "Tours",
     tripUjjain: "Pune - Ujjain - Pune",
     tripAshta: "Pune - Ashtavinayak Yatra",
     tripCustom: "Custom Trip",
@@ -186,22 +203,30 @@ export const translations = {
     storyLabel: "OUR STORY",
     heroHeadingPrefix: "Not just a journey, but",
     heroHeadingHighlight: "A sacred experience connecting with faith",
-    heroP1: "Every journey begins with an emotion — a longing for Darshan, a quest for peace of mind, and a desire to experience sacred moments with family. A temple, pilgrimage site, or shrine is not just a destination; it represents our faith, culture, and spiritual connection.",
-    heroP2: "At Shailraj Travels, we value this sentiment. That is why for us, every journey is not just an arrangement to go from one place to another, but a beautiful experience filled with devotion, trust, and satisfaction. We take special care of everything from planning to Darshan to ensure every moment of the journey is comfortable, safe, and memorable.",
-    heroP3: "From the auspicious Darshan of Ashtavinayak to the holy lands of Jyotirlingas, from Vithuraya of Pandharpur to various pilgrimage sites across India, we have been a trusted companion to thousands of devotees. Our experienced team's guidance, comfortable travel arrangements, selected accommodations, and heartfelt service ensure every pilgrim feels a sense of belonging and satisfaction.",
-    heroP4: "Today, many families and devotees trust Shailraj Travels for their sacred journeys. Because we don't just facilitate travel, we create moments filled with devotion that will be remembered for a lifetime.",
+    heroP1:
+      "Every journey begins with an emotion — a longing for Darshan, a quest for peace of mind, and a desire to experience sacred moments with family. A temple, pilgrimage site, or shrine is not just a destination; it represents our faith, culture, and spiritual connection.",
+    heroP2:
+      "At Shailraj Travels, we value this sentiment. That is why for us, every journey is not just an arrangement to go from one place to another, but a beautiful experience filled with devotion, trust, and satisfaction. We take special care of everything from planning to Darshan to ensure every moment of the journey is comfortable, safe, and memorable.",
+    heroP3:
+      "From the auspicious Darshan of Ashtavinayak to the holy lands of Jyotirlingas, from Vithuraya of Pandharpur to various pilgrimage sites across India, we have been a trusted companion to thousands of devotees. Our experienced team's guidance, comfortable travel arrangements, selected accommodations, and heartfelt service ensure every pilgrim feels a sense of belonging and satisfaction.",
+    heroP4:
+      "Today, many families and devotees trust Shailraj Travels for their sacred journeys. Because we don't just facilitate travel, we create moments filled with devotion that will be remembered for a lifetime.",
     statDestinations: "Sacred Destinations",
     statYatris: "Happy Yatris",
     statExperience: "Years Experience",
     statRating: "Average Rating",
     whyChooseTitle: "Why Choose Shailraj Travels?",
-    whyChooseDesc: "We don't just organize tours; we facilitate profound spiritual experiences tailored with the utmost care and devotion.",
+    whyChooseDesc:
+      "We don't just organize tours; we facilitate profound spiritual experiences tailored with the utmost care and devotion.",
     feat1Title: "Uncompromised Safety",
-    feat1Desc: "Your well-being is our priority. From thoroughly vetted accommodations to experienced drivers, we ensure a secure journey.",
+    feat1Desc:
+      "Your well-being is our priority. From thoroughly vetted accommodations to experienced drivers, we ensure a secure journey.",
     feat2Title: "Devotional Care",
-    feat2Desc: "Our guides understand the significance of your pilgrimage and offer compassionate assistance every step of the way.",
+    feat2Desc:
+      "Our guides understand the significance of your pilgrimage and offer compassionate assistance every step of the way.",
     feat3Title: "Hassle-Free Experience",
-    feat3Desc: "We handle all the logistics—travel, stay, and darshan arrangements—so you can focus entirely on your spiritual path.",
+    feat3Desc:
+      "We handle all the logistics—travel, stay, and darshan arrangements—so you can focus entirely on your spiritual path.",
     ctaTitle: "Ready to Embark on Your Spiritual Journey?",
     ctaDesc: "Let us take care of the details while you immerse yourself in devotion.",
     ctaBtn1: "Explore Our Tours",
@@ -209,7 +234,8 @@ export const translations = {
     whyChooseUs: "WHY CHOOSE US",
     titlePrefix: "Why",
     titleHighlight: "Shailraj Travels?",
-    subtitle: "We provide professional travel solutions with transparency, comfort and care.\nYour trusted partner for safe, reliable and memorable journeys.",
+    subtitle:
+      "We provide professional travel solutions with transparency, comfort and care.\nYour trusted partner for safe, reliable and memorable journeys.",
     card1Title: "Safe & Secure\nTravel",
     card1Desc: "Your safety is our priority with well-maintained vehicles and trained drivers.",
     card2Title: "Comfortable\nAC Coaches",
@@ -248,7 +274,8 @@ export const translations = {
     footerAbout: "About Us",
     footerQuickLinks: "Quick Links",
     footerContact: "Contact Us",
-    footerAddress: "Shailraj Travels, Gopal Patti Manjri budruk, Hadapsar, Pune, Maharashtra 412307",
+    footerAddress:
+      "Shailraj Travels, Gopal Patti Manjri budruk, Hadapsar, Pune, Maharashtra 412307",
     footerRights: "All rights reserved.",
     toursSubtitle: "PACKAGES",
     toursTitlePrefix: "Popular",
@@ -278,7 +305,8 @@ export const translations = {
     tourContactSoon: "We will contact you within 24 hours.",
     breadcrumbTours: "Tours",
     toursIndexTitle: "Our Pilgrimage Tours",
-    toursIndexDesc: "Embark on a spiritual journey with our perfectly planned, comfortable, and guided pilgrimage tour packages from Pune.",
-    toursIndexViewDetails: "View Tour Details \u2192"
-  }
+    toursIndexDesc:
+      "Embark on a spiritual journey with our perfectly planned, comfortable, and guided pilgrimage tour packages from Pune.",
+    toursIndexViewDetails: "View Tour Details \u2192",
+  },
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 export function FeatherMark() {
   return (
@@ -9,12 +9,7 @@ export function FeatherMark() {
         strokeWidth="1.8"
         strokeLinecap="round"
       />
-      <path
-        d="M9 18c1-5 4-9 9-10"
-        stroke="#0B4DBA"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-      />
+      <path d="M9 18c1-5 4-9 9-10" stroke="#0B4DBA" strokeWidth="1.8" strokeLinecap="round" />
       <circle cx="15" cy="9" r="1.6" fill="#0B4DBA" />
     </svg>
   );

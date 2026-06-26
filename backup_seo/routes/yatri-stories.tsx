@@ -36,7 +36,6 @@ function BlogPage() {
     <div className="font-sans text-slate-800 bg-slate-50 min-h-screen selection:bg-brand-green/20 selection:text-brand-blue-deep overflow-x-hidden flex flex-col">
       <Navbar t={t} />
       <main className="flex-1 pt-32 pb-20 px-4 md:px-8 max-w-[1200px] mx-auto w-full">
-        
         <div className="text-center mb-16 animate-reveal">
           <span className="inline-block py-1 px-3 rounded-full bg-brand-green/10 text-brand-green-dark font-bold text-sm mb-4">
             {t.navBlog}
@@ -45,7 +44,8 @@ function BlogPage() {
             Yatri Stories & Experiences
           </h1>
           <p className="text-slate-600 max-w-2xl mx-auto text-lg">
-            Read about the beautiful spiritual journeys and experiences of our Yatris who traveled with Shailraj Travels.
+            Read about the beautiful spiritual journeys and experiences of our Yatris who traveled
+            with Shailraj Travels.
           </p>
         </div>
 
@@ -56,8 +56,8 @@ function BlogPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {reviews.map((review: any, idx: number) => (
-              <article 
-                key={review._id || idx} 
+              <article
+                key={review._id || idx}
                 className="bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col animate-reveal"
                 style={{ animationDelay: `${idx * 100}ms` }}
               >
@@ -67,15 +67,15 @@ function BlogPage() {
                       <Star key={i} className="w-4 h-4 fill-brand-green text-brand-green" />
                     ))}
                   </div>
-                  
+
                   <h3 className="text-xl font-bold text-brand-blue-deep mb-4 line-clamp-2">
                     {review.blogTitle}
                   </h3>
-                  
+
                   <div className="text-slate-600 mb-6 flex-1 relative z-10 whitespace-pre-wrap line-clamp-6">
                     {review.blogContent}
                   </div>
-                  
+
                   <div className="pt-6 border-t border-slate-100 mt-auto flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-500">
@@ -85,7 +85,9 @@ function BlogPage() {
                         <p className="font-bold text-brand-blue-deep text-sm">{review.name}</p>
                         <p className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
                           <Calendar className="w-3 h-3" />
-                          {review.createdAt ? new Date(review.createdAt).toLocaleDateString() : getReviewDate(idx)}
+                          {review.createdAt
+                            ? new Date(review.createdAt).toLocaleDateString()
+                            : getReviewDate(idx)}
                         </p>
                       </div>
                     </div>
