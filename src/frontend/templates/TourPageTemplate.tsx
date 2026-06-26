@@ -9,6 +9,7 @@ import { RelatedBlogs } from '../components/RelatedBlogs';
 import { useLanguage } from '../../routes/__root';
 import { translations } from '../features/core/i18n';
 import { createBookingFn } from '../../backend/lib/bookings';
+import { LazyImage } from '../components/ui/lazy-image';
 
 interface TourPageTemplateProps {
   data: Tour;
@@ -54,24 +55,27 @@ export function TourPageTemplate({ data }: TourPageTemplateProps) {
         {/* Image Area */}
         <div className="relative w-full md:absolute md:inset-0 md:h-full z-0 flex flex-col items-center justify-center">
           {/* Desktop blurred background */}
-          <img 
+          <LazyImage 
             src={data.heroContent.image} 
             alt={data.title} 
             className="hidden md:block absolute inset-0 w-full h-full object-cover blur-2xl opacity-50 scale-110"
+            loading="eager"
           />
           
           {/* Mobile Image */}
-          <img 
+          <LazyImage 
             src={data.heroContent.mobileImage || data.heroContent.image} 
             alt={data.title} 
             className="block md:hidden w-full h-auto object-contain relative z-10"
+            loading="eager"
           />
           
           {/* Desktop Main Image */}
-          <img 
+          <LazyImage 
             src={data.heroContent.image} 
             alt={data.title} 
             className="hidden md:block w-full h-full object-contain relative z-10"
+            loading="eager"
           />
           
           {/* Desktop Overlay only */}
