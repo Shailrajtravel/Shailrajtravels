@@ -38,16 +38,35 @@ export function BookingModal({ tour, onClose, t, lang }: BookingModalProps) {
     };
   }, []);
 
-  const isUpcomingDate = (dateStr: string) => {
+  const isUpcomingDate = (dateStr: string): boolean => {
     if (typeof dateStr !== "string") return false;
-    const match = dateStr.match(/(\d+)\s+([a-zA-Z]+)(?:\s+(\d{4}))?/);
-    if (!match) return true;
-    const now = new Date();
-    const year = match[3] || now.getFullYear();
-    const parsedDate = new Date(`${match[1]} ${match[2]} ${year}`);
-    if (isNaN(parsedDate.getTime())) return true;
-    now.setHours(0, 0, 0, 0);
-    return parsedDate >= now;
+    
+    const cleanStr = dateStr.trim();
+    
+    // Extract year from string if present, otherwise default to current year
+    const yearMatch = cleanStr.match(/\b(\d{4})\b/);
+    const year = yearMatch ? yearMatch[1] : String(new Date().getFullYear());
+    
+    // Parse start date from range if it's a range
+    const startPart = cleanStr.split(/\s+to\s+/i)[0].trim();
+    
+    // Clean startPart: remove day names (Sun, Mon, etc.) to help parser
+    const cleanStart = startPart.replace(/^(Sun|Mon|Tue|Wed|Thu|Fri|Sat)\.?\s+/i, "").trim();
+    
+    // If the cleanStart doesn't end with a year, append the extracted year
+    const finalParseString = /\b\d{4}\b/.test(cleanStart) 
+      ? cleanStart 
+      : `${cleanStart} ${year}`;
+      
+    const parsedDate = new Date(finalParseString);
+    
+    if (!isNaN(parsedDate.getTime())) {
+      const now = new Date();
+      now.setHours(0, 0, 0, 0);
+      return parsedDate >= now;
+    }
+    
+    return true;
   };
 
   // Extract valid dates if present
@@ -115,12 +134,27 @@ export function BookingModal({ tour, onClose, t, lang }: BookingModalProps) {
                 {t.bookingModalSuccessDesc ||
                   "We have received your booking request for this tour and will contact you shortly to confirm the details."}
               </p>
-              <button
-                onClick={onClose}
-                className="w-full sm:w-auto px-8 py-3 bg-[#F59E0B] hover:bg-[#E5910A] text-[#112233] font-bold rounded-xl transition-all shadow-md hover:shadow-lg"
-              >
-                {lang === "mr" ? "बंद करा" : "Close"}
-              </button>
+              <div className="flex flex-col sm:flex-row gap-3 w-full justify-center">
+                <button 
+                  onClick={() => {
+                    setSuccess(false);
+                    setName("");
+                    setPhone("");
+                    setPickupLocation("");
+                    setTravelDate("");
+                    setPersons(2);
+                  }}
+                  className="px-6 py-3 bg-[#F59E0B] hover:bg-[#E5910A] text-[#112233] font-bold rounded-xl transition-all shadow-md cursor-pointer"
+                >
+                  {lang === "mr" ? "दुसरी बुकिंग करा" : "Book Another Trip"}
+                </button>
+                <button 
+                  onClick={onClose}
+                  className="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition-all border border-slate-200/50 cursor-pointer"
+                >
+                  {lang === "mr" ? "बंद करा" : "Close"}
+                </button>
+              </div>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">

@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { verifyAdminFn } from "../lib/auth";
+import { verifyAdminFn } from "../../src/backend/lib/auth";
 import { Lock, Mail, Loader2, ArrowRight } from "lucide-react";
-import logo from "@/assets/logo11.png";
+// @ts-ignore
+import logo from "../../src/frontend/assets/Shailraj travels-Punelogo.png";
 
-export const Route = createFileRoute("/login")({
+export const Route = createFileRoute("/login" as any)({
   component: LoginPage,
 });
 
@@ -31,7 +32,16 @@ function LoginPage() {
         setError("Invalid password");
       }
     } catch (err: any) {
-      setError(err.message || "Login failed");
+      const rawMsg = err.message || "";
+      if (
+        rawMsg.includes("<!doctype html>") ||
+        rawMsg.includes("<html>") ||
+        rawMsg.includes("<html")
+      ) {
+        setError("Login failed due to a server error. Please try again later.");
+      } else {
+        setError(rawMsg || "Login failed");
+      }
     } finally {
       setLoading(false);
     }

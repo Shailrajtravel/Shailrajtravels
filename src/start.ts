@@ -2,10 +2,20 @@ import { createStart, createMiddleware, createCsrfMiddleware } from "@tanstack/r
 
 import { renderErrorPage } from "./backend/lib/error-page";
 
-const errorMiddleware = createMiddleware().server(async ({ next }) => {
+const errorMiddleware = createMiddleware().server(async ({ next, request }) => {
   try {
     return await next();
   } catch (error) {
+    // If it's a server function (RPC) request, let TanStack Start handle the error serialization
+    if (request) {
+      try {
+        const url = new URL(request.url);
+        if (url.pathname.startsWith("/_server-fn")) {
+          throw error;
+        }
+      } catch (e) {}
+    }
+
     if (error != null && typeof error === "object" && "statusCode" in error) {
       throw error;
     }

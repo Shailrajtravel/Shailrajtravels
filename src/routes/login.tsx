@@ -31,7 +31,16 @@ function LoginPage() {
         setError("Invalid password");
       }
     } catch (err: any) {
-      setError(err.message || "Login failed");
+      const rawMsg = err.message || "";
+      if (
+        rawMsg.includes("<!doctype html>") ||
+        rawMsg.includes("<html>") ||
+        rawMsg.includes("<html")
+      ) {
+        setError("Login failed due to a server error. Please try again later.");
+      } else {
+        setError(rawMsg || "Login failed");
+      }
     } finally {
       setLoading(false);
     }

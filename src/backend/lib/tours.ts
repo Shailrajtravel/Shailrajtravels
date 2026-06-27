@@ -5,6 +5,7 @@ import { ObjectId } from "mongodb";
 import { uploadImageToCloudinary } from "./cloudinary";
 import { logAuditAction } from "./audit";
 import { getCachedData, setCachedData, invalidateCache } from "./redis";
+import { isUpcomingDate } from "./bookings";
 
 export const getToursFn = createServerFn({ method: "POST" })
   .validator((data?: { lang?: string }) => data || {})
@@ -38,7 +39,7 @@ export const getToursFn = createServerFn({ method: "POST" })
         overview: t.overview,
         highlights: t.highlights || [],
         destinations: t.destinations || [],
-        dates: t.dates || [],
+        dates: Array.isArray(t.dates) ? t.dates.filter(isUpcomingDate) : [],
         packages: t.packages || [],
         faq: t.faq || [],
         relatedTours: t.relatedTours || [],
@@ -83,7 +84,7 @@ export const getTourBySlugFn = createServerFn({ method: "POST" })
         overview: tour.overview,
         highlights: tour.highlights || [],
         destinations: tour.destinations || [],
-        dates: tour.dates || [],
+        dates: Array.isArray(tour.dates) ? tour.dates.filter(isUpcomingDate) : [],
         packages: tour.packages || [],
         faq: tour.faq || [],
         relatedTours: tour.relatedTours || [],

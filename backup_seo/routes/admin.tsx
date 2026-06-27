@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { createFileRoute, useNavigate, redirect } from "@tanstack/react-router";
-import { verifyAdminFn } from "../lib/auth";
-import { getPackagesFn, createPackageFn, updatePackageFn, deletePackageFn } from "../lib/packages";
-import { getReviewsFn, deleteReviewFn } from "../lib/reviews";
+import { verifyAdminFn } from "../../src/backend/lib/auth";
+import { getPackagesFn, createPackageFn, updatePackageFn, deletePackageFn } from "../../src/backend/lib/packages";
+import { getReviewsFn, deleteReviewFn } from "../../src/backend/lib/reviews";
 import {
   getTripOptionsFn,
   createTripOptionFn,
@@ -11,9 +11,9 @@ import {
   getBookingsFn,
   deleteBookingFn,
   updateBookingStatusFn,
-} from "../lib/bookings";
-import { getGalleryPhotosFn, addGalleryPhotoFn, deleteGalleryPhotoFn } from "../lib/gallery";
-import { getAuditLogsFn } from "../lib/audit";
+} from "../../src/backend/lib/bookings";
+import { getGalleryPhotosFn, addGalleryPhotoFn, deleteGalleryPhotoFn } from "../../src/backend/lib/gallery";
+import { getAuditLogsFn } from "../../src/backend/lib/audit";
 import * as XLSX from "xlsx";
 import {
   LayoutDashboard,
@@ -40,11 +40,12 @@ import {
   Activity,
   Printer,
 } from "lucide-react";
-import logo from "@/assets/logo11.png";
-import { Calendar } from "@/components/ui/calendar";
+// @ts-ignore
+import logo from "../../src/frontend/assets/Shailraj travels-Punelogo.png";
+import { Calendar } from "../../src/frontend/components/ui/calendar";
 import { format } from "date-fns";
 
-export const Route = createFileRoute("/admin")({
+export const Route = createFileRoute("/admin" as any)({
   beforeLoad: () => {
     if (typeof window !== "undefined") {
       const token = sessionStorage.getItem("adminToken");
@@ -97,7 +98,7 @@ function AdminPage() {
 
     // Verify token
     verifyAdminFn({ data: { token: t } })
-      .then((res) => {
+      .then((res: any) => {
         if (res?.success) {
           setToken(t);
           loadData(t);
@@ -118,30 +119,30 @@ function AdminPage() {
     setErrorMsg(null);
     try {
       // Fetch individually so one failure doesn't break the whole dashboard
-      const pkgsPromise = getPackagesFn().catch((e) => {
+      const pkgsPromise = getPackagesFn().catch((e: any) => {
         console.error("Packages error:", e);
         return [];
       });
-      const revsPromise = getReviewsFn().catch((e) => {
+      const revsPromise = getReviewsFn().catch((e: any) => {
         console.error("Reviews error:", e);
         return [];
       });
-      const tripsPromise = getTripOptionsFn().catch((e) => {
+      const tripsPromise = getTripOptionsFn().catch((e: any) => {
         console.error("Trips error:", e);
         return [];
       });
       const bksPromise = tkn
-        ? getBookingsFn({ data: { adminToken: tkn } }).catch((e) => {
+        ? getBookingsFn({ data: { adminToken: tkn } }).catch((e: any) => {
             console.error("Bookings error:", e);
             return [];
           })
         : Promise.resolve([]);
-      const photosPromise = getGalleryPhotosFn().catch((e) => {
+      const photosPromise = getGalleryPhotosFn().catch((e: any) => {
         console.error("Photos error:", e);
         return [];
       });
       const auditPromise = tkn
-        ? getAuditLogsFn({ data: { adminToken: tkn } }).catch((e) => {
+        ? getAuditLogsFn({ data: { adminToken: tkn } }).catch((e: any) => {
             console.error("Audit error:", e);
             return [];
           })
@@ -1266,7 +1267,7 @@ function TripOptionForm({ token, initialData, onClose, onSuccess }: any) {
               <Calendar
                 mode="multiple"
                 selected={formData.dates}
-                onSelect={(dates) => setFormData({ ...formData, dates: dates || [] })}
+                onSelect={(dates: any) => setFormData({ ...formData, dates: dates || [] })}
                 className="bg-white rounded-lg shadow-sm"
               />
             </div>

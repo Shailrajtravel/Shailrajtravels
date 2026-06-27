@@ -131,6 +131,7 @@ function AdminPage() {
     id: string;
     type: "package" | "review" | "photo" | "trip" | "booking" | "tour";
   } | null>(null);
+  const [bookingSearch, setBookingSearch] = useState("");
 
   useEffect(() => {
     const t = sessionStorage.getItem("adminToken");
@@ -283,6 +284,29 @@ function AdminPage() {
     setEditingItem(null);
     setIsFormOpen(true);
   };
+
+  const filteredBookings = bookings.filter((bk) => {
+    const query = bookingSearch.toLowerCase().trim();
+    if (!query) return true;
+
+    const bookingId = (bk.generatedBookingId || "").toLowerCase();
+    const name = (bk.name || "").toLowerCase();
+    const phone = (bk.phone || "").toLowerCase();
+    const tripName = (bk.tripName === "custom" ? "custom trip" : bk.tripName || "").toLowerCase();
+    const customDest = (bk.customDestination || "").toLowerCase();
+    const pickup = (bk.pickupLocation || "").toLowerCase();
+    const travelDate = (bk.travelDate || "").toLowerCase();
+
+    return (
+      bookingId.includes(query) ||
+      name.includes(query) ||
+      phone.includes(query) ||
+      tripName.includes(query) ||
+      customDest.includes(query) ||
+      pickup.includes(query) ||
+      travelDate.includes(query)
+    );
+  });
 
   if (!token)
     return (
@@ -918,37 +942,66 @@ function AdminPage() {
               </div>
             )
           ) : activeTab === "bookings" ? (
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden animate-reveal">
-              {loading ? (
-                <div className="p-12 flex justify-center">
-                  <Loader2 className="w-8 h-8 animate-spin text-brand-green" />
+            <div className="flex flex-col gap-6 animate-reveal">
+              {/* Search Bar */}
+              <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center gap-4">
+                <div className="relative flex-1">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                  <input
+                    type="text"
+                    placeholder="Search bookings by customer, phone, booking ID, destination, etc..."
+                    value={bookingSearch}
+                    onChange={(e) => setBookingSearch(e.target.value)}
+                    className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-blue-deep/20 focus:border-brand-blue-deep transition-all text-sm font-medium"
+                  />
+                  {bookingSearch && (
+                    <button
+                      onClick={() => setBookingSearch("")}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 font-bold"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
                 </div>
-              ) : bookings.length === 0 ? (
-                <div className="p-12 text-center text-slate-500">
-                  <CalendarCheck className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                  <p className="text-lg font-medium">No bookings yet.</p>
-                </div>
-              ) : (
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left border-collapse min-w-[1000px]">
-                    <thead>
-                      <tr className="bg-slate-50 border-b border-slate-100 text-slate-500 text-[12px] uppercase tracking-wider font-bold">
-                        <th className="px-6 py-4">Booking ID</th>
-                        <th className="px-6 py-4">Customer</th>
-                        <th className="px-6 py-4">Trip Details</th>
-                        <th className="px-6 py-4">Travel Date</th>
-                        <th className="px-6 py-4">Status</th>
-                        <th className="px-6 py-4">Payment Status</th>
-                        <th className="px-6 py-4">Submitted On</th>
-                        <th className="px-6 py-4 text-right">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {bookings.map((bk, idx) => (
-                        <tr
-                          key={bk._id}
-                          className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors"
-                        >
+              </div>
+
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                {loading ? (
+                  <div className="p-12 flex justify-center">
+                    <Loader2 className="w-8 h-8 animate-spin text-brand-green" />
+                  </div>
+                ) : bookings.length === 0 ? (
+                  <div className="p-12 text-center text-slate-500">
+                    <CalendarCheck className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                    <p className="text-lg font-medium">No bookings yet.</p>
+                  </div>
+                ) : filteredBookings.length === 0 ? (
+                  <div className="p-12 text-center text-slate-500">
+                    <Search className="w-12 h-12 mx-auto mb-4 opacity-50 text-slate-400" />
+                    <p className="text-lg font-medium">No match found.</p>
+                    <p className="text-sm mt-1 text-slate-400">Try searching for something else.</p>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse min-w-[1000px]">
+                      <thead>
+                        <tr className="bg-slate-50 border-b border-slate-100 text-slate-500 text-[12px] uppercase tracking-wider font-bold">
+                          <th className="px-6 py-4">Booking ID</th>
+                          <th className="px-6 py-4">Customer</th>
+                          <th className="px-6 py-4">Trip Details</th>
+                          <th className="px-6 py-4">Travel Date</th>
+                          <th className="px-6 py-4">Status</th>
+                          <th className="px-6 py-4">Payment Status</th>
+                          <th className="px-6 py-4">Submitted On</th>
+                          <th className="px-6 py-4 text-right">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {filteredBookings.map((bk, idx) => (
+                          <tr
+                            key={bk._id}
+                            className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors"
+                          >
                           <td className="px-6 py-4">
                             <span className="font-mono text-xs font-bold text-slate-500 bg-slate-100 px-2 py-1 rounded">
                               {bk.generatedBookingId}
@@ -1069,6 +1122,7 @@ function AdminPage() {
                   </table>
                 </div>
               )}
+            </div>
             </div>
           ) : activeTab === "customers" ? (
             <CustomersView bookings={bookings} />
@@ -1498,6 +1552,86 @@ function TripOptionForm({ token, initialData, onClose, onSuccess }: any) {
     Array.isArray(initialData?.itinerary) ? initialData.itinerary : [],
   );
 
+  // Generator states
+  const [genMode, setGenMode] = useState<'individual' | 'range'>('individual');
+  const [selectedDays, setSelectedDays] = useState<number[]>([5, 6]); // Default Friday, Saturday
+  const [rangeStartDay, setRangeStartDay] = useState<number>(5); // Default Friday
+  const [rangeEndDay, setRangeEndDay] = useState<number>(0); // Default Sunday
+  const [genMonth, setGenMonth] = useState<number>(new Date().getMonth());
+  const [genYear, setGenYear] = useState<number>(new Date().getFullYear());
+  const [previewDates, setPreviewDates] = useState<string[]>([]);
+  const [showGenerator, setShowGenerator] = useState(false);
+  const [isAutoRollover, setIsAutoRollover] = useState<boolean>(false);
+
+  const getDaysInMonth = (year: number, month: number) => {
+    return new Date(year, month + 1, 0).getDate();
+  };
+
+  const generateIndividualDates = (year: number, month: number, days: number[]) => {
+    const dates: string[] = [];
+    const daysInMonth = getDaysInMonth(year, month);
+    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = new Date(year, month, day);
+      if (days.includes(date.getDay())) {
+        const dayName = dayNames[date.getDay()];
+        const monthName = monthNames[month];
+        dates.push(`${dayName} ${day} ${monthName} ${year}`);
+      }
+    }
+    return dates;
+  };
+
+  const generateRangeDates = (year: number, month: number, startDay: number, endDay: number) => {
+    const dates: string[] = [];
+    const daysInMonth = getDaysInMonth(year, month);
+    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = new Date(year, month, day);
+      if (date.getDay() === startDay) {
+        let endDayOffset = (endDay - startDay + 7) % 7;
+        if (endDayOffset === 0) endDayOffset = 7;
+        
+        const endDate = new Date(year, month, day + endDayOffset);
+        
+        const startDayName = dayNames[startDay];
+        const startMonthName = monthNames[month];
+        
+        const endDayName = dayNames[endDay];
+        const endMonthName = monthNames[endDate.getMonth()];
+        
+        dates.push(`${startDayName} ${day} ${startMonthName} to ${endDayName} ${endDate.getDate()} ${endMonthName} ${endDate.getFullYear()}`);
+      }
+    }
+    return dates;
+  };
+
+  useEffect(() => {
+    if (genMode === 'individual') {
+      const dates = generateIndividualDates(genYear, genMonth, selectedDays);
+      setPreviewDates(dates);
+    } else {
+      const dates = generateRangeDates(genYear, genMonth, rangeStartDay, rangeEndDay);
+      setPreviewDates(dates);
+    }
+  }, [genMode, selectedDays, rangeStartDay, rangeEndDay, genMonth, genYear]);
+
+  const handleAppendDates = () => {
+    if (previewDates.length === 0) return;
+    const current = datesInput.split(',').map((s: string) => s.trim()).filter(Boolean);
+    const merged = [...current];
+    previewDates.forEach(d => {
+      if (!merged.includes(d)) {
+        merged.push(d);
+      }
+    });
+    setDatesInput(merged.join(', '));
+  };
+
   const handleChange = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -1545,6 +1679,13 @@ function TripOptionForm({ token, initialData, onClose, onSuccess }: any) {
       itinerary: itinerary
         .map((item) => ({ day: item.day.trim(), title: item.title.trim() }))
         .filter((item) => item.day || item.title),
+      recurringPattern: {
+        active: isAutoRollover,
+        mode: genMode,
+        days: selectedDays,
+        startDay: rangeStartDay,
+        endDay: rangeEndDay,
+      },
     };
 
     try {
@@ -1576,6 +1717,27 @@ function TripOptionForm({ token, initialData, onClose, onSuccess }: any) {
       });
       setDatesInput(Array.isArray(initialData.dates) ? initialData.dates.join(", ") : "");
       setItinerary(Array.isArray(initialData.itinerary) ? initialData.itinerary : []);
+      
+      // Load recurring pattern settings if present
+      if (initialData.recurringPattern) {
+        setIsAutoRollover(!!initialData.recurringPattern.active);
+        setGenMode(initialData.recurringPattern.mode || 'individual');
+        if (Array.isArray(initialData.recurringPattern.days)) {
+          setSelectedDays(initialData.recurringPattern.days);
+        }
+        if (typeof initialData.recurringPattern.startDay === 'number') {
+          setRangeStartDay(initialData.recurringPattern.startDay);
+        }
+        if (typeof initialData.recurringPattern.endDay === 'number') {
+          setRangeEndDay(initialData.recurringPattern.endDay);
+        }
+        // If it was already active, show the generator open by default so they can configure it easily
+        if (initialData.recurringPattern.active) {
+          setShowGenerator(true);
+        }
+      } else {
+        setIsAutoRollover(false);
+      }
     }
   }, [initialData]);
 
@@ -1652,13 +1814,196 @@ function TripOptionForm({ token, initialData, onClose, onSuccess }: any) {
             onChange={handleChange}
             placeholder="e.g. Every month friday to sunday"
           />
-          <Input
-            label="Available Dates (comma separated)"
-            name="dates"
-            value={datesInput}
-            onChange={(e: any) => setDatesInput(e.target.value)}
-            placeholder="e.g. Sat 12 june to 13 june, 19 june to 20 june, 25 june to 26 june"
-          />
+          <div className="flex flex-col gap-2">
+            <Input
+              label="Available Dates (comma separated)"
+              name="dates"
+              value={datesInput}
+              onChange={(e: any) => setDatesInput(e.target.value)}
+              placeholder="e.g. Sat 12 june to 13 june, 19 june to 20 june, 25 june to 26 june"
+            />
+            <div className="flex justify-start">
+              <button
+                type="button"
+                onClick={() => setShowGenerator(!showGenerator)}
+                className="text-xs font-bold text-brand-blue hover:text-brand-blue-deep flex items-center gap-1.5 px-3 py-1.5 bg-brand-blue/5 hover:bg-brand-blue/10 rounded-xl transition-all border border-brand-blue/15 mt-1 cursor-pointer"
+              >
+                <span>📅 {showGenerator ? "Hide Recurring Date Generator" : "Use Recurring Date Generator"}</span>
+              </button>
+            </div>
+
+            {showGenerator && (
+              <div className="mt-2 p-5 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col gap-4 animate-reveal">
+                <div className="flex flex-col gap-1 border-b border-slate-100 pb-3">
+                  <h4 className="font-bold text-sm text-brand-blue-deep flex items-center gap-1.5">
+                    <span>📅 Recurring Date Generator</span>
+                  </h4>
+                  <p className="text-[11px] text-slate-500 font-medium">Select recurring days of the week, target month, and year to automatically generate dates.</p>
+                </div>
+
+                <div className="flex items-start gap-3 p-4 bg-white border border-slate-200 rounded-2xl shadow-sm">
+                  <input
+                    type="checkbox"
+                    id="autoRolloverCheckbox"
+                    checked={isAutoRollover}
+                    onChange={(e) => setIsAutoRollover(e.target.checked)}
+                    className="w-5 h-5 text-brand-green border-slate-300 rounded focus:ring-brand-green accent-brand-green mt-0.5 cursor-pointer"
+                  />
+                  <div className="flex flex-col gap-1">
+                    <label htmlFor="autoRolloverCheckbox" className="text-xs font-bold text-slate-800 cursor-pointer flex items-center gap-1.5">
+                      🔄 Enable Dynamic Auto-Rollover for this trip option
+                    </label>
+                    <p className="text-[11px] text-slate-500 font-medium font-sans">
+                      When enabled, the website will dynamically generate and display travel dates for the current and next month based on the settings below. This ensures there are always active dates for customers to choose from, without requiring manual monthly updates.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="flex flex-col gap-3">
+                    <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider">Recurrence Mode</label>
+                    <div className="flex gap-2 p-1 bg-slate-200/60 rounded-xl w-fit">
+                      <button
+                        type="button"
+                        onClick={() => setGenMode("individual")}
+                        className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                          genMode === "individual"
+                            ? "bg-white text-brand-blue-deep shadow-sm"
+                            : "text-slate-500 hover:text-slate-700"
+                        }`}
+                      >
+                        Individual Days
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setGenMode("range")}
+                        className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                          genMode === "range"
+                            ? "bg-white text-brand-blue-deep shadow-sm"
+                            : "text-slate-500 hover:text-slate-700"
+                        }`}
+                      >
+                        Weekly Ranges
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider">Target Schedule</label>
+                    {genMode === "individual" ? (
+                      <div className="flex flex-wrap gap-1.5">
+                        {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((dayName, idx) => {
+                          const isSelected = selectedDays.includes(idx);
+                          return (
+                            <button
+                              key={idx}
+                              type="button"
+                              onClick={() => {
+                                if (isSelected) {
+                                  setSelectedDays(selectedDays.filter((d) => d !== idx));
+                                } else {
+                                  setSelectedDays([...selectedDays, idx]);
+                                }
+                              }}
+                              className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all border cursor-pointer ${
+                                isSelected
+                                  ? "bg-brand-green border-brand-green text-white shadow-sm shadow-brand-green/20"
+                                  : "bg-white border-slate-200 text-slate-600 hover:bg-slate-100"
+                              }`}
+                            >
+                              {dayName}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <div className="flex gap-2">
+                        <div className="flex flex-col gap-1 flex-1">
+                          <span className="text-[10px] font-bold text-slate-500 font-sans">From</span>
+                          <select
+                            value={rangeStartDay}
+                            onChange={(e) => setRangeStartDay(Number(e.target.value))}
+                            className="bg-white border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-brand-blue-deep focus:outline-none cursor-pointer"
+                          >
+                            {["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"].map((d, i) => (
+                              <option key={i} value={i}>{d}</option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="flex flex-col gap-1 flex-1">
+                          <span className="text-[10px] font-bold text-slate-500 font-sans">To</span>
+                          <select
+                            value={rangeEndDay}
+                            onChange={(e) => setRangeEndDay(Number(e.target.value))}
+                            className="bg-white border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-brand-blue-deep focus:outline-none cursor-pointer"
+                          >
+                            {["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"].map((d, i) => (
+                              <option key={i} value={i}>{d}</option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="flex gap-2">
+                    <div className="flex flex-col gap-1.5 flex-1">
+                      <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider">Month</label>
+                      <select
+                        value={genMonth}
+                        onChange={(e) => setGenMonth(Number(e.target.value))}
+                        className="bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-brand-blue-deep focus:outline-none cursor-pointer w-full"
+                      >
+                        {["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].map((m, i) => (
+                          <option key={i} value={i}>{m}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="flex flex-col gap-1.5 flex-1">
+                      <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider">Year</label>
+                      <select
+                        value={genYear}
+                        onChange={(e) => setGenYear(Number(e.target.value))}
+                        className="bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-brand-blue-deep focus:outline-none cursor-pointer w-full"
+                      >
+                        {[new Date().getFullYear(), new Date().getFullYear() + 1, new Date().getFullYear() + 2].map((y) => (
+                          <option key={y} value={y}>{y}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider">Generated Dates Preview ({previewDates.length})</label>
+                    <div className="bg-white border border-slate-200 rounded-xl p-2.5 max-h-[85px] overflow-y-auto text-[11px] font-semibold text-slate-600 flex flex-wrap gap-1">
+                      {previewDates.length === 0 ? (
+                        <span className="text-slate-400 italic font-sans font-medium">No dates generated</span>
+                      ) : (
+                        previewDates.map((d, i) => (
+                          <span key={i} className="px-2 py-0.5 bg-slate-100 rounded text-slate-700 border border-slate-200/50">
+                            {d}
+                          </span>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex justify-end pt-2 border-t border-slate-100">
+                  <button
+                    type="button"
+                    disabled={previewDates.length === 0}
+                    onClick={handleAppendDates}
+                    className="px-4 py-2 bg-brand-green hover:bg-brand-green-dark text-white font-bold rounded-xl text-xs flex items-center gap-1.5 transition-all disabled:opacity-50 cursor-pointer shadow-md shadow-brand-green/10"
+                  >
+                    <span>Append Generated Dates</span>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
           <Input
             label="Route (comma separated)"
             name="route"
@@ -2910,13 +3255,12 @@ function RevenueView({ bookings }: { bookings: any[] }) {
 
   const totalPotentialRevenue = confirmedRevenue + pendingRevenue;
   const activeBookingsCount = confirmedBookings.length + pendingBookings.length;
-  const averageBookingRevenue =
-    activeBookingsCount > 0 ? totalPotentialRevenue / activeBookingsCount : 0;
+  const averageBookingRevenue = confirmedBookings.length > 0 ? confirmedRevenue / confirmedBookings.length : 0;
 
   // Destination Breakdown
   const tripBreakdown: { [key: string]: { name: string; count: number; revenue: number } } = {};
   bookings
-    .filter((b) => b.status !== "Cancelled")
+    .filter((b) => b.status === "Confirmed")
     .forEach((b) => {
       const name = b.tripName === "custom" ? "Custom Trip" : b.tripName;
       const rev = getBookingRevenue(b);
@@ -2932,7 +3276,7 @@ function RevenueView({ bookings }: { bookings: any[] }) {
   // Monthly Breakdown
   const monthlyData: { [key: string]: number } = {};
   bookings
-    .filter((b) => b.status !== "Cancelled")
+    .filter((b) => b.status === "Confirmed")
     .forEach((b) => {
       const d = b.createdAt ? new Date(b.createdAt) : new Date();
       if (isNaN(d.getTime())) return;
@@ -2940,7 +3284,7 @@ function RevenueView({ bookings }: { bookings: any[] }) {
       monthlyData[key] = (monthlyData[key] || 0) + getBookingRevenue(b);
     });
   const sortedMonths = Object.keys(monthlyData).sort(
-    (a, b) => new Date(a).getTime() - new Date(b).getTime(),
+    (a, b) => new Date(a).getTime() - new Date(b).getTime()
   );
   const maxMonthRevenue = sortedMonths.length > 0 ? Math.max(...Object.values(monthlyData)) : 1;
 
@@ -3144,7 +3488,7 @@ function RevenueView({ bookings }: { bookings: any[] }) {
             </thead>
             <tbody className="divide-y divide-slate-100 text-sm">
               {bookings
-                .filter((b) => b.status !== "Cancelled")
+                .filter((b) => b.status === "Confirmed")
                 .map((bk) => {
                   const custom = bk.invoiceCustomData || {};
                   const isCustomUnlocked = bk.tripName === "custom" && !bk.isInvoiceLocked;

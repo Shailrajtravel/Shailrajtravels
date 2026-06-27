@@ -30,6 +30,93 @@ const formatDateSafe = (d: any): string => {
   return String(d);
 };
 
+export const isUpcomingDate = (dateStr: string): boolean => {
+  if (typeof dateStr !== 'string') return false;
+  
+  const cleanStr = dateStr.trim();
+  
+  // Extract year from string if present, otherwise default to current year
+  const yearMatch = cleanStr.match(/\b(\d{4})\b/);
+  const year = yearMatch ? yearMatch[1] : String(new Date().getFullYear());
+  
+  // Parse start date from range if it's a range
+  const startPart = cleanStr.split(/\s+to\s+/i)[0].trim();
+  
+  // Clean startPart: remove day names (Sun, Mon, etc.) to help parser
+  const cleanStart = startPart.replace(/^(Sun|Mon|Tue|Wed|Thu|Fri|Sat)\.?\s+/i, '').trim();
+  
+  // If the cleanStart doesn't end with a year, append the extracted year
+  const finalParseString = /\b\d{4}\b/.test(cleanStart) 
+    ? cleanStart 
+    : `${cleanStart} ${year}`;
+    
+  const parsedDate = new Date(finalParseString);
+  
+  if (!isNaN(parsedDate.getTime())) {
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
+    return parsedDate >= now;
+  }
+  
+  return true;
+};
+
+const generateRecurringDatesForCurrentAndNextMonth = (pattern: any): string[] => {
+  if (!pattern || !pattern.active) return [];
+  
+  const now = new Date();
+  const currentMonth = now.getMonth();
+  const currentYear = now.getFullYear();
+  
+  const monthsToGenerate = [
+    { month: currentMonth, year: currentYear },
+    { month: (currentMonth + 1) % 12, year: currentMonth === 11 ? currentYear + 1 : currentYear }
+  ];
+  
+  const generated: string[] = [];
+  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  
+  for (const item of monthsToGenerate) {
+    const { month, year } = item;
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    
+    if (pattern.mode === 'individual' && Array.isArray(pattern.days)) {
+      for (let day = 1; day <= daysInMonth; day++) {
+        const date = new Date(year, month, day);
+        if (pattern.days.includes(date.getDay())) {
+          const dayName = dayNames[date.getDay()];
+          const monthName = monthNames[month];
+          generated.push(`${dayName} ${day} ${monthName} ${year}`);
+        }
+      }
+    } else if (pattern.mode === 'range') {
+      const { startDay, endDay } = pattern;
+      if (typeof startDay === 'number' && typeof endDay === 'number') {
+        for (let day = 1; day <= daysInMonth; day++) {
+          const date = new Date(year, month, day);
+          if (date.getDay() === startDay) {
+            let endDayOffset = (endDay - startDay + 7) % 7;
+            if (endDayOffset === 0) endDayOffset = 7;
+            
+            const endDate = new Date(year, month, day + endDayOffset);
+            
+            const startDayName = dayNames[startDay];
+            const startMonthName = monthNames[month];
+            
+            const endDayName = dayNames[endDay];
+            const endMonthName = monthNames[endDate.getMonth()];
+            
+            generated.push(`${startDayName} ${day} ${startMonthName} to ${endDayName} ${endDate.getDate()} ${endMonthName} ${endDate.getFullYear()}`);
+          }
+        }
+      }
+    }
+  }
+  
+  return generated;
+};
+
 export const getTripOptionsFn = createServerFn({ method: "POST" }).handler(async () => {
   try {
     const cached = await getCachedData<any[]>("admin:trip_options");
@@ -38,24 +125,37 @@ export const getTripOptionsFn = createServerFn({ method: "POST" }).handler(async
     const client = await clientPromise;
     const db = client.db("shailraj");
     const options = await db.collection("trip_options").find({}).toArray();
-    const mapped = options.map((o: any) => ({
-      _id: o._id.toString(),
-      name: o.name,
-      dates: Array.isArray(o.dates)
+    const mapped = options.map((o: any) => {
+      let combinedDates = Array.isArray(o.dates)
         ? o.dates.map((d: any) => formatDateSafe(d))
         : typeof o.dates === "string"
-          ? o.dates
-              .split(",")
-              .map((s: string) => s.trim())
-              .filter(Boolean)
-          : [],
-      schedule: o.schedule || "",
-      price: o.price || "",
-      image: o.image || "",
-      route: o.route || [],
-      itinerary: o.itinerary || [],
-      includes: o.includes || [],
-    }));
+          ? o.dates.split(",").map((s: string) => s.trim()).filter(Boolean)
+          : [];
+      
+      if (o.recurringPattern && o.recurringPattern.active) {
+        const generated = generateRecurringDatesForCurrentAndNextMonth(o.recurringPattern);
+        generated.forEach((d: string) => {
+          if (!combinedDates.includes(d)) {
+            combinedDates.push(d);
+          }
+        });
+      }
+
+      const upcomingDates = combinedDates.filter(isUpcomingDate);
+
+      return {
+        _id: o._id.toString(),
+        name: o.name,
+        dates: upcomingDates,
+        recurringPattern: o.recurringPattern || null,
+        schedule: o.schedule || "",
+        price: o.price || "",
+        image: o.image || "",
+        route: o.route || [],
+        itinerary: o.itinerary || [],
+        includes: o.includes || [],
+      };
+    });
     await setCachedData("admin:trip_options", mapped);
     return mapped;
   } catch (error) {
@@ -333,7 +433,8 @@ export const createBookingFn = createServerFn({ method: "POST" })
         }
       }
 
-      // Prevent overbooking
+      // Prevent overbooking (Disabled to allow unlimited capacity)
+      /*
       const existingBookings = await db
         .collection("bookings")
         .find({
@@ -353,6 +454,7 @@ export const createBookingFn = createServerFn({ method: "POST" })
           `Not enough seats available. Only ${Math.max(0, seatsLimit - totalExistingPersons)} seats left.`,
         );
       }
+      */
 
       const newBooking = {
         ...data,
