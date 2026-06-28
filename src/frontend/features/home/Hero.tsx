@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { Leaf } from "../core/icons";
 import { translations } from "../core/i18n";
+import { highlightBrandName } from "../core/BrandHighlight";
 import bgMobile from "@/frontend/assets/hero-pandharpur.webp";
 import temple from "@/frontend/assets/hero-pandharpur.webp"; // fallback until correct image is found
 import { createBookingFn } from "../../../backend/lib/bookings";
@@ -201,7 +202,7 @@ export function Hero({
           </h1>
 
           <p className="mt-4 max-w-[550px] text-[15px] leading-relaxed text-slate-600 md:mt-4 md:text-[16px]">
-            {t.heroDesc}
+            {highlightBrandName(t.heroDesc)}
           </p>
 
           <div
@@ -209,7 +210,7 @@ export function Hero({
             style={{ animationDelay: "0.2s" }}
           >
             <p className="text-[15px] font-bold text-brand-blue-deep md:text-[17px]">
-              {t.heroHighlight}
+              {highlightBrandName(t.heroHighlight)}
             </p>
             <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 md:mt-5 md:gap-4">
               <div className="flex items-center gap-3 text-brand-blue-deep">

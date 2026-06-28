@@ -1,4 +1,5 @@
 import React from "react";
+import { BrandHighlight } from "../core/BrandHighlight";
 import { ArrowRight } from "lucide-react";
 import iconPin from "@/frontend/assets/icon-pin.webp";
 import iconTag from "@/frontend/assets/icon-tag.webp";
@@ -36,7 +37,7 @@ export function FeaturesSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
           className="text-5xl md:text-7xl lg:text-[80px] font-bold font-display text-[#112233] mb-8 text-center leading-tight tracking-tight"
           style={lang === "mr" ? { fontFamily: "'Tiro Devanagari Marathi', serif" } : {}}
         >
-          {t.titlePrefix} <span className="text-[#10A34A]">{t.titleHighlight}</span>
+          {t.titlePrefix} <span className="inline-block"><BrandHighlight text={t.titleHighlight} /></span>
         </h2>
 
         <p className="text-[16px] md:text-[19px] text-slate-600 text-center max-w-3xl leading-relaxed whitespace-pre-line mb-16 md:mb-24 font-medium">

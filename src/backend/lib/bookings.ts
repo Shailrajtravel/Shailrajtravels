@@ -610,3 +610,49 @@ export const deleteBookingFn = createServerFn({ method: "POST" })
     await invalidateCache("admin:bookings");
     return { success: true };
   });
+
+export const getPublicStatsFn = createServerFn({ method: "GET" }).handler(async () => {
+  try {
+    const client = await clientPromise;
+    const db = client.db("shailraj");
+    
+    // Confirmed travelers count (sum of persons in confirmed bookings)
+    const confirmedBookings = await db.collection("bookings")
+      .find({ status: "Confirmed" }, { projection: { persons: 1 } })
+      .toArray();
+      
+    const travelersCount = confirmedBookings.reduce((sum: number, b: any) => {
+      const p = parseInt(b.persons);
+      return sum + (isNaN(p) ? 1 : p);
+    }, 0);
+    
+    // Total destinations / packages / tours
+    const packagesCount = await db.collection("packages").countDocuments();
+    const toursCount = await db.collection("tours").countDocuments();
+    const tripOptionsCount = await db.collection("trip_options").countDocuments();
+
+    // Average rating
+    const reviews = await db.collection("reviews")
+      .find({}, { projection: { rating: 1 } })
+      .toArray();
+    const totalRating = reviews.reduce((sum: number, r: any) => sum + (Number(r.rating) || 5), 0);
+    const avgRating = reviews.length > 0 ? (totalRating / reviews.length) : 4.9;
+
+    return {
+      travelersCount,
+      packagesCount,
+      toursCount,
+      tripOptionsCount,
+      avgRating,
+    };
+  } catch (error) {
+    console.error("Failed to fetch public stats", error);
+    return {
+      travelersCount: 0,
+      packagesCount: 0,
+      toursCount: 0,
+      tripOptionsCount: 0,
+      avgRating: 4.9,
+    };
+  }
+});
