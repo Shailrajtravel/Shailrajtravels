@@ -46,6 +46,27 @@ function LoginPage() {
     }
   };
 
+  const handleFormKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+    if (e.key === "Enter") {
+      const target = e.target as HTMLElement;
+      if (
+        (target.tagName === "INPUT" && (target as HTMLInputElement).type !== "button" && (target as HTMLInputElement).type !== "submit") ||
+        target.tagName === "SELECT"
+      ) {
+        const form = e.currentTarget;
+        const inputs = Array.from(
+          form.querySelectorAll("input:not([type='hidden']):not([disabled]), select:not([disabled]), textarea:not([disabled])")
+        ) as HTMLElement[];
+        
+        const index = inputs.indexOf(target);
+        if (index > -1 && index < inputs.length - 1) {
+          e.preventDefault();
+          inputs[index + 1].focus();
+        }
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6 relative overflow-hidden">
       {/* Decorative background elements */}
@@ -60,7 +81,11 @@ function LoginPage() {
         </div>
 
         <div className="bg-white rounded-[24px] p-8 shadow-xl shadow-brand-blue/5 border border-slate-100">
-          <form onSubmit={handleLogin} className="flex flex-col gap-6">
+          <form
+            onSubmit={handleLogin}
+            onKeyDown={handleFormKeyDown}
+            className="flex flex-col gap-6"
+          >
             <div className="flex flex-col gap-2">
               <label className="text-[13px] font-bold text-slate-700 uppercase tracking-wider">
                 Email Address

@@ -38,6 +38,17 @@ export function getUpcomingDates(allowedDaysOfWeek: number[]) {
   return dates;
 }
 
+function generateUUID() {
+  if (typeof window !== "undefined" && window.crypto && window.crypto.randomUUID) {
+    return window.crypto.randomUUID();
+  }
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+
 export function Hero({
   lang,
   t,
@@ -50,9 +61,30 @@ export function Hero({
   activeTripId?: string;
 }) {
   const [selectedTrip, setSelectedTrip] = useState<string>(tripOptions[0]?._id || "custom");
-  const [persons, setPersons] = useState(2);
+  const [persons, setPersons] = useState(1);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+
+  const handleFormKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+    if (e.key === "Enter") {
+      const target = e.target as HTMLElement;
+      if (
+        (target.tagName === "INPUT" && (target as HTMLInputElement).type !== "button" && (target as HTMLInputElement).type !== "submit") ||
+        target.tagName === "SELECT"
+      ) {
+        const form = e.currentTarget;
+        const inputs = Array.from(
+          form.querySelectorAll("input:not([type='hidden']):not([disabled]), select:not([disabled])")
+        ) as HTMLElement[];
+        
+        const index = inputs.indexOf(target);
+        if (index > -1 && index < inputs.length - 1) {
+          e.preventDefault();
+          inputs[index + 1].focus();
+        }
+      }
+    }
+  };
 
   useEffect(() => {
     if (activeTripId) {
@@ -237,6 +269,7 @@ export function Hero({
             </div>
           ) : (
             <form
+              onKeyDown={handleFormKeyDown}
               onSubmit={async (e) => {
                 e.preventDefault();
                 const formData = new FormData(e.currentTarget);
@@ -249,7 +282,7 @@ export function Hero({
                   data.tripName = "custom";
                 }
 
-                data.idempotencyKey = crypto.randomUUID();
+                data.idempotencyKey = generateUUID();
 
                 setLoading(true);
                 try {

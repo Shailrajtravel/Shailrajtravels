@@ -21,10 +21,31 @@ export function TourPageTemplate({ data }: TourPageTemplateProps) {
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  const [persons, setPersons] = useState(2);
+  const [persons, setPersons] = useState(1);
   const [travelDate, setTravelDate] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+
+  const handleFormKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+    if (e.key === "Enter") {
+      const target = e.target as HTMLElement;
+      if (
+        (target.tagName === "INPUT" && (target as HTMLInputElement).type !== "button" && (target as HTMLInputElement).type !== "submit") ||
+        target.tagName === "SELECT"
+      ) {
+        const form = e.currentTarget;
+        const inputs = Array.from(
+          form.querySelectorAll("input:not([type='hidden']):not([disabled]), select:not([disabled])")
+        ) as HTMLElement[];
+        
+        const index = inputs.indexOf(target);
+        if (index > -1 && index < inputs.length - 1) {
+          e.preventDefault();
+          inputs[index + 1].focus();
+        }
+      }
+    }
+  };
 
   const breadcrumbs: BreadcrumbItem[] = [
     { name: t.breadcrumbTours || "Tours", url: "/tours" },
@@ -264,7 +285,7 @@ export function TourPageTemplate({ data }: TourPageTemplateProps) {
                     setName("");
                     setPhone("");
                     setTravelDate("");
-                    setPersons(2);
+                    setPersons(1);
                   }}
                   className="px-6 py-2 bg-brand-blue-deep text-white text-sm rounded-xl font-bold hover:bg-brand-blue transition-colors cursor-pointer"
                 >
@@ -277,6 +298,7 @@ export function TourPageTemplate({ data }: TourPageTemplateProps) {
                   {t.tourCustomQuote || "Request a Custom Quote"}
                 </h3>
                 <form
+                  onKeyDown={handleFormKeyDown}
                   onSubmit={async (e) => {
                     e.preventDefault();
                     setLoading(true);

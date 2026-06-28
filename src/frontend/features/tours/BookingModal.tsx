@@ -21,14 +21,46 @@ interface BookingModalProps {
   lang: "en" | "mr";
 }
 
+function generateUUID() {
+  if (typeof window !== "undefined" && window.crypto && window.crypto.randomUUID) {
+    return window.crypto.randomUUID();
+  }
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+
 export function BookingModal({ tour, onClose, t, lang }: BookingModalProps) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [pickupLocation, setPickupLocation] = useState("");
-  const [persons, setPersons] = useState(2);
+  const [persons, setPersons] = useState(1);
   const [travelDate, setTravelDate] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+
+  const handleFormKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+    if (e.key === "Enter") {
+      const target = e.target as HTMLElement;
+      if (
+        (target.tagName === "INPUT" && (target as HTMLInputElement).type !== "button" && (target as HTMLInputElement).type !== "submit") ||
+        target.tagName === "SELECT"
+      ) {
+        const form = e.currentTarget;
+        const inputs = Array.from(
+          form.querySelectorAll("input:not([type='hidden']):not([disabled]), select:not([disabled])")
+        ) as HTMLElement[];
+        
+        const index = inputs.indexOf(target);
+        if (index > -1 && index < inputs.length - 1) {
+          e.preventDefault();
+          inputs[index + 1].focus();
+        }
+      }
+    }
+  };
 
   // Prevent background scrolling when open
   useEffect(() => {
@@ -83,7 +115,7 @@ export function BookingModal({ tour, onClose, t, lang }: BookingModalProps) {
         tripName: tour.title,
         persons: Number(persons),
         travelDate: travelDate,
-        idempotencyKey: crypto.randomUUID(),
+        idempotencyKey: generateUUID(),
       };
 
       await createBookingFn({ data: bookingData });
@@ -142,7 +174,7 @@ export function BookingModal({ tour, onClose, t, lang }: BookingModalProps) {
                     setPhone("");
                     setPickupLocation("");
                     setTravelDate("");
-                    setPersons(2);
+                    setPersons(1);
                   }}
                   className="px-6 py-3 bg-[#F59E0B] hover:bg-[#E5910A] text-[#112233] font-bold rounded-xl transition-all shadow-md cursor-pointer"
                 >
@@ -157,7 +189,11 @@ export function BookingModal({ tour, onClose, t, lang }: BookingModalProps) {
               </div>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form
+              onKeyDown={handleFormKeyDown}
+              onSubmit={handleSubmit}
+              className="space-y-4"
+            >
               {/* Full Name */}
               <div className="space-y-1">
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">
