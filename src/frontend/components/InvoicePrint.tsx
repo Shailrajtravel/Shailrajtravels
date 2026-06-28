@@ -37,6 +37,10 @@ export function InvoicePrint({
 
   const getInitialData = (b: any) => {
     const custom = b.invoiceCustomData || {};
+    // Root-level paymentStatus is always the source of truth — it's updated
+    // by the Bookings tab dropdown. invoiceCustomData.paymentStatus may be stale
+    // if the invoice was locked before payment was marked as PAID.
+    const livePaymentStatus = b.paymentStatus || custom.paymentStatus || "PENDING";
     return {
       invoiceNo:
         custom.invoiceNo ||
@@ -68,7 +72,7 @@ export function InvoicePrint({
             ? 0
             : b.defaultRate || 6000,
       persons: custom.persons !== undefined ? Number(custom.persons) : b.persons || 1,
-      paymentStatus: custom.paymentStatus || b.paymentStatus || "PENDING",
+      paymentStatus: livePaymentStatus,
     };
   };
 

@@ -17,6 +17,7 @@ import {
   deleteBookingFn,
   updateBookingStatusFn,
   updateBookingPaymentStatusFn,
+  sendBookingReplyFn,
 } from "../backend/lib/bookings";
 import {
   getGalleryPhotosFn,
@@ -31,7 +32,6 @@ import {
   logoutWhatsAppFn,
 } from "../backend/lib/whatsapp-api";
 import { ToursAdmin } from "../frontend/features/admin/ToursAdmin";
-import * as XLSX from "xlsx-js-style";
 import {
   LayoutDashboard,
   Package,
@@ -132,6 +132,9 @@ function AdminPage() {
     type: "package" | "review" | "photo" | "trip" | "booking" | "tour";
   } | null>(null);
   const [bookingSearch, setBookingSearch] = useState("");
+  const [replyModal, setReplyModal] = useState<{isOpen: boolean, booking: any}>({isOpen: false, booking: null});
+  const [replyMessage, setReplyMessage] = useState("");
+  const [replying, setReplying] = useState(false);
 
   useEffect(() => {
     const t = sessionStorage.getItem("adminToken");
@@ -1106,15 +1109,27 @@ function AdminPage() {
                             {new Date(bk.createdAt).toLocaleDateString()}
                           </td>
                           <td className="px-6 py-4 text-right">
-                            <button
-                              onClick={() =>
-                                setDeleteConfirm({ isOpen: true, id: bk._id, type: "booking" })
-                              }
-                              className="p-2 text-slate-400 hover:text-red-500 bg-white rounded-lg border border-slate-200 shadow-sm transition-colors"
-                              title="Delete Booking"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
+                            <div className="flex justify-end gap-2">
+                              <button
+                                onClick={() => {
+                                  setReplyModal({ isOpen: true, booking: bk });
+                                  setReplyMessage(`Hi ${bk.name || "Customer"},\nWe received your inquiry regarding the ${bk.tripName === "custom" ? bk.customDestination || "Custom Trip" : bk.tripName || "Trip"}. `);
+                                }}
+                                className="p-2 text-slate-400 hover:text-green-500 bg-white rounded-lg border border-slate-200 shadow-sm transition-colors"
+                                title="Reply via WhatsApp"
+                              >
+                                <MessageSquare className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={() =>
+                                  setDeleteConfirm({ isOpen: true, id: bk._id, type: "booking" })
+                                }
+                                className="p-2 text-slate-400 hover:text-red-500 bg-white rounded-lg border border-slate-200 shadow-sm transition-colors"
+                                title="Delete Booking"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       ))}
@@ -1159,6 +1174,59 @@ function AdminPage() {
                 className="px-4 py-2 font-bold text-white bg-red-500 hover:bg-red-600 rounded-xl transition-colors shadow-lg shadow-red-500/20"
               >
                 Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Reply via WhatsApp Modal */}
+      {replyModal && replyModal.isOpen && replyModal.booking && (
+        <div className="fixed inset-0 bg-slate-900/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl">
+            <h3 className="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2">
+              <MessageSquare className="w-5 h-5 text-green-500" /> Reply to {replyModal.booking.name}
+            </h3>
+            <p className="text-slate-500 text-sm mb-4">
+              Send a direct WhatsApp message to {replyModal.booking.phone}.
+            </p>
+            <textarea
+              value={replyMessage}
+              onChange={(e) => setReplyMessage(e.target.value)}
+              className="w-full h-32 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-blue-deep focus:border-brand-blue-deep outline-none resize-none mb-6"
+              placeholder="Type your message here..."
+            />
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setReplyModal({ isOpen: false, booking: null })}
+                className="px-4 py-2 text-slate-600 font-bold hover:bg-slate-100 rounded-lg transition-colors"
+                disabled={replying}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={async () => {
+                  setReplying(true);
+                  try {
+                    await sendBookingReplyFn({
+                      data: {
+                        adminToken: token,
+                        id: replyModal.booking._id,
+                        message: replyMessage,
+                      },
+                    });
+                    setReplyModal({ isOpen: false, booking: null });
+                    alert("Message sent successfully!");
+                  } catch (err: any) {
+                    alert(err.message || "Failed to send message.");
+                  } finally {
+                    setReplying(false);
+                  }
+                }}
+                disabled={replying}
+                className="px-6 py-2 bg-green-500 hover:bg-green-600 text-white font-bold rounded-lg shadow-md transition-colors flex items-center gap-2"
+              >
+                {replying ? <Loader2 className="w-4 h-4 animate-spin" /> : "Send Message"}
               </button>
             </div>
           </div>
@@ -2509,7 +2577,7 @@ function CustomersView({ bookings = [] }: { bookings?: any[] }) {
   }
 }
 
-const applyTableStyles = (ws: any, titleSz = 16, subtitleSz = 14) => {
+const applyTableStyles = (XLSX: any, ws: any, titleSz = 16, subtitleSz = 14) => {
   if (ws["A1"])
     ws["A1"].s = {
       font: { bold: true, sz: titleSz, color: { rgb: "000000" } },
@@ -2550,7 +2618,8 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
   const [endDate, setEndDate] = React.useState<string>("");
   const [dateFilterType, setDateFilterType] = React.useState<"created" | "travel">("created");
 
-  const exportBookings = () => {
+  const exportBookings = async () => {
+    const XLSX = await import("xlsx-js-style/dist/xlsx.bundle.js");
     let targetBookings = bookings;
 
     if (startDate || endDate) {
@@ -2636,7 +2705,7 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
       ...rows,
     ]);
 
-    applyTableStyles(ws);
+    applyTableStyles(XLSX, ws);
 
     ws["!merges"] = [
       { s: { r: 0, c: 0 }, e: { r: 0, c: headers.length - 1 } },
@@ -2673,7 +2742,8 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
     XLSX.writeFile(wb, `bookings_report_${new Date().toISOString().split("T")[0]}.xlsx`);
   };
 
-  const exportCustomers = () => {
+  const exportCustomers = async () => {
+    const XLSX = await import("xlsx-js-style/dist/xlsx.bundle.js");
     const customersMap = new globalThis.Map();
     (bookings || []).forEach((bk) => {
       if (!bk) return;
@@ -2756,7 +2826,7 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
       ...rows,
     ]);
 
-    applyTableStyles(ws);
+    applyTableStyles(XLSX, ws);
 
     ws["!merges"] = [
       { s: { r: 0, c: 0 }, e: { r: 0, c: headers.length - 1 } },
@@ -2808,8 +2878,9 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
     }
   }, [tripGroups, selectedTripGroup]);
 
-  const exportSpecificTrip = () => {
+  const exportSpecificTrip = async () => {
     if (!selectedTripGroup) return;
+    const XLSX = await import("xlsx-js-style/dist/xlsx.bundle.js");
     const group = tripGroups.find((g) => g[0] === selectedTripGroup);
     if (!group) return;
 
@@ -2851,7 +2922,7 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
       ...rows,
     ]);
 
-    applyTableStyles(ws);
+    applyTableStyles(XLSX, ws);
 
     ws["!merges"] = [
       { s: { r: 0, c: 0 }, e: { r: 0, c: headers.length - 1 } },

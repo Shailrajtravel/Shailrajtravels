@@ -1,15 +1,11 @@
 import { MongoClient } from "mongodb";
-import fs from "node:fs";
-import path from "node:path";
+import * as fs from "node:fs";
+import * as path from "node:path";
 
 // Load .env variables into process.env in Node.js environment
 if (typeof window === "undefined") {
   try {
     const envPath = path.join(process.cwd(), ".env");
-    console.log("[DB Env Debug] process.cwd():", process.cwd());
-    console.log("[DB Env Debug] Expected .env path:", envPath);
-    console.log("[DB Env Debug] .env file exists?:", fs.existsSync(envPath));
-
     if (fs.existsSync(envPath)) {
       const envContent = fs.readFileSync(envPath, "utf8");
       let loadedKeysCount = 0;
@@ -32,20 +28,16 @@ if (typeof window === "undefined") {
           }
         }
       });
-      console.log(
-        `[DB Env Debug] Successfully loaded ${loadedKeysCount} environment variables from .env`,
-      );
     } else {
-      console.warn("[DB Env Debug] .env file was NOT found at", envPath);
+      console.warn("[DB] .env file not found at", envPath);
     }
   } catch (e: any) {
-    console.error("[DB Env Debug] Failed to load .env file manually:", e.message);
+    console.error("[DB] Failed to load .env file:", e.message);
   }
 }
 
 const uri =
   process.env.MONGO_URI || process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/shailraj";
-console.log("[DB Env Debug] Final MongoDB URI resolved:", uri.replace(/:[^:@]+@/, ":***@"));
 // Helper to generate a 24-character hex ID (similar to MongoDB ObjectId)
 function generateHexId(): string {
   const chars = "0123456789abcdef";

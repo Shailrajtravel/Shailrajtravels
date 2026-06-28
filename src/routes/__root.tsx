@@ -111,6 +111,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         { name: "google", content: "notranslate" },
       ],
       links: [
+        { rel: "icon", type: "image/png", href: "/favicon.png" },
         { rel: "preconnect", href: "https://fonts.googleapis.com" },
         { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
         {
@@ -158,6 +159,7 @@ function LanguageToggle() {
   const { lang, toggleLang } = useLanguage();
   return (
     <button
+      suppressHydrationWarning
       type="button"
       onClick={(e) => {
         e.preventDefault();
@@ -200,7 +202,7 @@ function RootComponent() {
   const lang = (search.lang || langState) as Language;
   const navigate = useNavigate();
   const location = useLocation();
-  const isAdmin = location.pathname.startsWith("/admin");
+  const isExcludedView = location.pathname.startsWith("/admin") || location.pathname.startsWith("/invoice-print");
 
   const toggleLang = () => {
     const newLang = lang === "mr" ? "en" : "mr";
@@ -213,7 +215,7 @@ function RootComponent() {
       <LanguageContext.Provider value={{ lang, toggleLang }}>
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
-        {!isAdmin && (
+        {!isExcludedView && (
           <>
             <LanguageToggle />
             <FloatingWhatsApp />

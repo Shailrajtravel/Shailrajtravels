@@ -28,7 +28,7 @@ function LoginPage() {
         sessionStorage.setItem("adminToken", res.token);
         navigate({ to: "/admin" });
       } else {
-        setError("Invalid password");
+        setError(res.message || "Invalid email or password");
       }
     } catch (err: any) {
       const rawMsg = err.message || "";
@@ -62,7 +62,7 @@ function LoginPage() {
         <div className="bg-white rounded-[24px] p-8 shadow-xl shadow-brand-blue/5 border border-slate-100">
           <form onSubmit={handleLogin} className="flex flex-col gap-6">
             <div className="flex flex-col gap-2">
-              <label className="text-[13px] font-bold text-slate-700 uppercase tracking-wider">
+              <label htmlFor="email" className="text-[13px] font-bold text-slate-700 uppercase tracking-wider">
                 Email Address
               </label>
               <div className="relative">
@@ -70,6 +70,10 @@ function LoginPage() {
                   <Mail className="w-5 h-5" />
                 </div>
                 <input
+                  suppressHydrationWarning
+                  id="email"
+                  name="email"
+                  autoComplete="username"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -81,7 +85,7 @@ function LoginPage() {
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-[13px] font-bold text-slate-700 uppercase tracking-wider">
+              <label htmlFor="password" className="text-[13px] font-bold text-slate-700 uppercase tracking-wider">
                 Master Password
               </label>
               <div className="relative">
@@ -89,6 +93,10 @@ function LoginPage() {
                   <Lock className="w-5 h-5" />
                 </div>
                 <input
+                  suppressHydrationWarning
+                  id="password"
+                  name="password"
+                  autoComplete="current-password"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}

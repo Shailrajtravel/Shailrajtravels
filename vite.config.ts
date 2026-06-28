@@ -27,10 +27,15 @@ export default defineConfig({
       }),
     ],
     optimizeDeps: {
-      exclude: ["@aws-sdk/client-s3", "whatsapp-web.js", "puppeteer", "pdfkit"],
+      exclude: ["@aws-sdk/client-s3", "@open-wa/wa-automate", "puppeteer-core", "puppeteer", "pdfkit"],
     },
     ssr: {
-      external: ["whatsapp-web.js", "puppeteer", "pdfkit", "@aws-sdk/client-s3", "qrcode"],
+      external: ["@open-wa/wa-automate", "puppeteer-core", "puppeteer", "pdfkit", "@aws-sdk/client-s3", "qrcode", "http-auth", "buffer-crc32"],
+    },
+    server: {
+      watch: {
+        ignored: ["**/.wwebjs_auth/**", "**/.wwebjs_cache/**"],
+      },
     },
     build: {
       rollupOptions: {

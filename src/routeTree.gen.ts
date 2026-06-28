@@ -16,6 +16,7 @@ import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as PilgrimageGuidesRouteImport } from './routes/pilgrimage-guides'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as InvoicePrintRouteImport } from './routes/invoice-print'
 import { Route as FeaturesRouteImport } from './routes/features'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -73,6 +74,11 @@ const PilgrimageGuidesRoute = PilgrimageGuidesRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InvoicePrintRoute = InvoicePrintRouteImport.update({
+  id: '/invoice-print',
+  path: '/invoice-print',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FeaturesRoute = FeaturesRouteImport.update({
@@ -197,6 +203,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/features': typeof FeaturesRoute
+  '/invoice-print': typeof InvoicePrintRoute
   '/login': typeof LoginRoute
   '/pilgrimage-guides': typeof PilgrimageGuidesRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
@@ -228,6 +235,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/features': typeof FeaturesRoute
+  '/invoice-print': typeof InvoicePrintRoute
   '/login': typeof LoginRoute
   '/pilgrimage-guides': typeof PilgrimageGuidesRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
@@ -260,6 +268,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/features': typeof FeaturesRoute
+  '/invoice-print': typeof InvoicePrintRoute
   '/login': typeof LoginRoute
   '/pilgrimage-guides': typeof PilgrimageGuidesRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
@@ -293,6 +302,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/faq'
     | '/features'
+    | '/invoice-print'
     | '/login'
     | '/pilgrimage-guides'
     | '/privacy-policy'
@@ -324,6 +334,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/faq'
     | '/features'
+    | '/invoice-print'
     | '/login'
     | '/pilgrimage-guides'
     | '/privacy-policy'
@@ -355,6 +366,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/faq'
     | '/features'
+    | '/invoice-print'
     | '/login'
     | '/pilgrimage-guides'
     | '/privacy-policy'
@@ -387,6 +399,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   FaqRoute: typeof FaqRoute
   FeaturesRoute: typeof FeaturesRoute
+  InvoicePrintRoute: typeof InvoicePrintRoute
   LoginRoute: typeof LoginRoute
   PilgrimageGuidesRoute: typeof PilgrimageGuidesRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
@@ -458,6 +471,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/invoice-print': {
+      id: '/invoice-print'
+      path: '/invoice-print'
+      fullPath: '/invoice-print'
+      preLoaderRoute: typeof InvoicePrintRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/features': {
@@ -627,6 +647,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   FaqRoute: FaqRoute,
   FeaturesRoute: FeaturesRoute,
+  InvoicePrintRoute: InvoicePrintRoute,
   LoginRoute: LoginRoute,
   PilgrimageGuidesRoute: PilgrimageGuidesRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,

@@ -279,7 +279,7 @@ export function ReviewsSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
                     <div>
                       <h4 className="font-bold text-brand-blue-deep text-[15px]">{review.name}</h4>
                       <p className="text-slate-500 text-[13px] font-medium">
-                        {new Date(review.date).toLocaleDateString()}
+                        {isNaN(new Date(review.date).getTime()) ? review.date : new Date(review.date).toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit", year: "numeric" })}
                       </p>
                     </div>
                   </div>

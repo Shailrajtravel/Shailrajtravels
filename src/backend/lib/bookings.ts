@@ -471,11 +471,18 @@ export const createBookingFn = createServerFn({ method: "POST" })
         }); // 24 hours
       }
 
-      // Send WhatsApp Notification
+      // Send WhatsApp Notification to Admin
       try {
-        const { sendAdminNotification } = await import("./whatsapp");
+        const { sendAdminNotification, sendWhatsAppMessage } = await import("./whatsapp");
         const msg = `*New Booking Received!*\nName: ${newBooking.name}\nPhone: ${newBooking.phone}\nTrip: ${newBooking.tripName || newBooking.customDestination}\nPersons: ${newBooking.persons}\nDate: ${newBooking.travelDate || "N/A"}${newBooking.pickupLocation ? `\nPickup: ${newBooking.pickupLocation}` : ""}`;
         await sendAdminNotification(msg);
+        
+        // Send Automated Welcome/Acknowledgment to Customer
+        if (newBooking.phone) {
+          const tripName = newBooking.tripName === "custom" ? newBooking.customDestination || "Custom Trip" : newBooking.tripName;
+          const customerMsg = `*Welcome to Shailraj Travels!* 🙏\n\nHi *${newBooking.name}*,\nThank you for reaching out to us regarding the *${tripName}*. We have successfully received your inquiry.\n\nOur team will review your request and get back to you shortly with the best package options and details.\n\nIf you have any urgent queries, feel free to reply to this message or call us!\n\n— Shailraj Travels, Pune 🚩`;
+          await sendWhatsAppMessage(newBooking.phone, customerMsg);
+        }
       } catch (waErr) {
         console.error("Failed to send WhatsApp notification", waErr);
       }
@@ -541,6 +548,36 @@ export const updateBookingStatusFn = createServerFn({ method: "POST" })
     return { success: true };
   });
 
+export const sendBookingReplyFn = createServerFn({ method: "POST" })
+  .validator((data: { adminToken: string; id: string; message: string }) => data)
+  .handler(async ({ data }) => {
+    if (data.adminToken !== getAdminToken()) throw new Error("Unauthorized");
+    const client = await clientPromise;
+    const db = client.db("shailraj");
+
+    const booking = await db.collection("bookings").findOne({ _id: new ObjectId(data.id) });
+    if (!booking) throw new Error("Booking not found");
+    if (!booking.phone) throw new Error("Customer phone number is missing");
+
+    try {
+      const { sendWhatsAppMessage } = await import("./whatsapp");
+      await sendWhatsAppMessage(booking.phone, data.message);
+
+      await logAuditAction({
+        data: {
+          action: "Reply to Booking",
+          entityType: "Booking",
+          details: `Sent custom WhatsApp reply to ${booking.name || "Customer"}`,
+          entityId: data.id,
+        },
+      });
+      return { success: true };
+    } catch (waErr: any) {
+      console.error("Failed to send WhatsApp reply", waErr);
+      throw new Error(waErr.message || "Failed to send WhatsApp reply. Make sure the engine is connected.");
+    }
+  });
+
 export const updateBookingPaymentStatusFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string; id: string; paymentStatus: string }) => data)
   .handler(async ({ data }) => {
@@ -551,12 +588,13 @@ export const updateBookingPaymentStatusFn = createServerFn({ method: "POST" })
     const booking = await db.collection("bookings").findOne({ _id: new ObjectId(data.id) });
     if (!booking) throw new Error("Booking not found");
 
+    // Always sync both root paymentStatus AND invoiceCustomData.paymentStatus
+    // so the invoice PDF always reflects the correct status whether locked or not
     const updateFields: any = { paymentStatus: data.paymentStatus };
+    // Always update invoiceCustomData.paymentStatus if invoiceCustomData exists
     if (booking.invoiceCustomData) {
       updateFields["invoiceCustomData.paymentStatus"] = data.paymentStatus;
-      booking.invoiceCustomData.paymentStatus = data.paymentStatus;
     }
-    booking.paymentStatus = data.paymentStatus;
 
     await db
       .collection("bookings")
@@ -571,19 +609,63 @@ export const updateBookingPaymentStatusFn = createServerFn({ method: "POST" })
       },
     });
 
-    // Auto-send PDF invoice via WhatsApp if status is PAID
+    // ── PIPELINE: Pending → PAID ────────────────────────────────────────────
+    // Re-fetch AFTER the DB write so the invoice reflects the new PAID status
     let whatsappSent = false;
-    let whatsappError = undefined;
+    let whatsappError: string | undefined = undefined;
 
     if (data.paymentStatus === "PAID") {
       try {
-        const { sendBookingInvoicePDF } = await import("./whatsapp");
-        whatsappSent = await sendBookingInvoicePDF(booking);
+        const updatedBooking = await db
+          .collection("bookings")
+          .findOne({ _id: new ObjectId(data.id) });
+
+        if (updatedBooking) {
+          const { sendBookingInvoicePDF, sendWhatsAppMessage } = await import("./whatsapp");
+
+          // Compute the sequential invoice number the same way the Invoices section does.
+          // We pass this to the /invoice-print route so Puppeteer renders INV-V0048 etc.
+          const invoiceNo =
+            updatedBooking.invoiceCustomData?.invoiceNo ||
+            updatedBooking.generatedInvoiceNo ||
+            `INV-${new Date(updatedBooking.createdAt || Date.now()).getFullYear()}-${updatedBooking._id.toString().slice(-6).toUpperCase()}`;
+
+          // 1. Open the /invoice-print route in Puppeteer and capture the EXACT
+          //    same invoice the admin sees → send PDF to customer via WhatsApp
+          whatsappSent = await sendBookingInvoicePDF(
+            updatedBooking,
+            data.adminToken,
+            invoiceNo,
+          );
+
+          // 2. Also send a payment confirmation text message to the customer
+          if (whatsappSent && updatedBooking.phone) {
+            const customerName = updatedBooking.name || "Customer";
+            const tripName =
+              updatedBooking.invoiceCustomData?.packageName ||
+              (updatedBooking.tripName === "custom"
+                ? updatedBooking.customDestination || "Custom Trip"
+                : updatedBooking.tripName || "Your Trip");
+            const travelDate = updatedBooking.travelDate || "N/A";
+
+            const confirmationMsg =
+              `✅ *Payment Confirmed — Shailraj Travels* 🙏\n\n` +
+              `Hello *${customerName}*,\n\n` +
+              `Your payment for *${tripName}* (Travel Date: ${travelDate}) has been marked as *PAID*.\n\n` +
+              `📄 Invoice No: *${invoiceNo}*\n\n` +
+              `The official invoice PDF is attached above. Please keep it for your records.\n\n` +
+              `We wish you a blessed and comfortable journey! 🚩\n\n` +
+              `— Shailraj Travels, Pune`;
+
+            await sendWhatsAppMessage(updatedBooking.phone, confirmationMsg);
+          }
+        }
       } catch (err: any) {
-        console.error("Failed to auto-send PDF invoice from updateBookingPaymentStatusFn:", err);
+        console.error("[Pipeline] Failed to send PAID invoice via WhatsApp:", err);
         whatsappError = err.message || String(err);
       }
     }
+    // ────────────────────────────────────────────────────────────────────────
 
     await invalidateCache("admin:bookings");
     return { success: true, whatsappSent, whatsappError };
@@ -609,4 +691,20 @@ export const deleteBookingFn = createServerFn({ method: "POST" })
     }
     await invalidateCache("admin:bookings");
     return { success: true };
+  });
+
+// ── Invoice Print Route — fetch booking for PDF generation ───────────────────
+// Used by the /invoice-print route so Puppeteer can render InvoicePrint exactly
+export const getBookingForPrintFn = createServerFn({ method: "POST" })
+  .validator((data: { adminToken: string; bookingId: string }) => data)
+  .handler(async ({ data }) => {
+    if (data.adminToken !== getAdminToken()) throw new Error("Unauthorized");
+    const client = await clientPromise;
+    const db = client.db("shailraj");
+    const booking = await db
+      .collection("bookings")
+      .findOne({ _id: new ObjectId(data.bookingId) });
+    if (!booking) throw new Error("Booking not found");
+    // Return as plain JSON (no MongoDB ObjectId)
+    return JSON.parse(JSON.stringify(booking));
   });
