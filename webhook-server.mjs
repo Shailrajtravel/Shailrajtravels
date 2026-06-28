@@ -29,6 +29,7 @@ const SESSION_NAME = "shailraj-bot";
 const PORT = 3001;
 
 let activeSessionId = null;
+const processedMessageIds = new Set();
 
 /** Resolve the session UUID once at startup */
 async function resolveSessionId() {
@@ -79,10 +80,36 @@ async function sendReply(chatId, text) {
 
 /** Process an incoming message and auto-reply if matched */
 function handleMessage(msg) {
-  const text = (msg.body || "").toLowerCase();
+  // 1. Skip messages sent BY the bot (outgoing messages)
+  if (msg.fromMe || (msg.id && msg.id.fromMe)) {
+    return;
+  }
+
   const senderId = msg.from; // e.g. 919876543210@c.us or @lid
 
-  if (!senderId || senderId.includes("-") || !text) return; // skip groups
+  // 2. Only respond to standard individual chats (ends with @c.us or @lid)
+  const isIndividual = senderId && (senderId.endsWith("@c.us") || senderId.endsWith("@lid"));
+  if (!isIndividual) {
+    console.log(`[Webhook] ℹ️ Skipping non-individual chat or newsletter: ${senderId}`);
+    return;
+  }
+
+  // 3. Prevent duplicate processing of the same message ID (webhook retries)
+  const msgId = msg.id && (msg.id._serialized || msg.id.id);
+  if (msgId) {
+    if (processedMessageIds.has(msgId)) {
+      console.log(`[Webhook] ℹ️ Skipping duplicate message ID: ${msgId}`);
+      return;
+    }
+    processedMessageIds.add(msgId);
+    if (processedMessageIds.size > 1000) {
+      const firstVal = processedMessageIds.values().next().value;
+      processedMessageIds.delete(firstVal);
+    }
+  }
+
+  const text = (msg.body || "").toLowerCase().trim();
+  if (!text) return;
 
   console.log(`[Webhook] 📩 From ${senderId}: "${text}"`);
 
@@ -94,7 +121,8 @@ function handleMessage(msg) {
       const rulesData = JSON.parse(fs.readFileSync(rulesPath, "utf-8"));
       if (Array.isArray(rulesData.rules)) {
         for (const rule of rulesData.rules) {
-          const match = rule.keywords.some(keyword => text.includes(keyword.toLowerCase()));
+          // Exact match on the keyword (trimmed, case-insensitive)
+          const match = rule.keywords.some(keyword => text === keyword.trim().toLowerCase());
           if (match) {
             reply = rule.reply;
             break;
@@ -106,13 +134,13 @@ function handleMessage(msg) {
     console.error("[Webhook] Error reading chatbot-rules.json:", err.message);
   }
 
-  // Fallback in case JSON read fails or doesn't match
+  // Fallback exact matches in case JSON read fails or doesn't match
   if (!reply) {
-    if (text.includes("ujjain")) {
+    if (text === "ujjain" || text === "mahakal") {
       reply = "🙏 *Ujjain Package Details* 🙏\n\nExperience the spiritual bliss of Ujjain Mahakaleshwar!\n\n*Duration:* 2 Nights / 3 Days\n*Price:* Starting from ₹4,999 per person.\n\nReply with 'BOOK UJJAIN' to confirm your trip!";
-    } else if (text.includes("kedarnath")) {
+    } else if (text === "kedarnath" || text === "chardham") {
       reply = "🚩 *Kedarnath Yatra Details* 🚩\n\nJoin our premium Kedarnath Yatra!\n\n*Duration:* 4 Nights / 5 Days\n*Price:* Starting from ₹9,500 per person.\n\nReply with 'BOOK KEDARNATH' for availability!";
-    } else if (text.includes("inquiry") || text.includes("hi") || text.includes("hello") || text.includes("hii")) {
+    } else if (["inquiry", "hi", "hello", "hii"].includes(text)) {
       reply = "Welcome to *Shailraj Travels Pune*! 🌍\n\nHow can we help you today?\n\nAvailable Commands:\n- Type *Ujjain* for Ujjain package details.\n- Type *Kedarnath* for Kedarnath Yatra details.\n- Or just type your question and our agent will reply shortly!";
     }
   }
