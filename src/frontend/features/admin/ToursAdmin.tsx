@@ -32,13 +32,13 @@ export function ToursAdmin({ token, tours, loadData, setDeleteConfirm }: any) {
 
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden animate-reveal">
-      <div className="flex justify-between items-center p-6 border-b border-slate-100">
-        <h2 className="text-xl font-bold font-display text-brand-blue-deep">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center p-4 sm:p-6 border-b border-slate-100 gap-4">
+        <h2 className="text-lg sm:text-xl font-bold font-display text-brand-blue-deep">
           Manage Popular Tours
         </h2>
         <button
           onClick={handleAddNew}
-          className="bg-brand-blue-deep hover:bg-brand-blue text-white px-4 py-2 rounded-xl font-bold flex items-center gap-2 transition-colors shadow-lg shadow-brand-blue/20"
+          className="bg-brand-blue-deep hover:bg-brand-blue text-white px-4 py-2.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-brand-blue/20 text-sm"
         >
           <Plus className="w-5 h-5 shrink-0" />
           <span>Add Tour</span>
@@ -64,32 +64,40 @@ export function ToursAdmin({ token, tours, loadData, setDeleteConfirm }: any) {
                 key={tour._id}
                 className="flex flex-col md:grid md:grid-cols-12 md:gap-4 md:items-center hover:bg-slate-50/50 transition-colors p-4 md:px-6 md:py-4"
               >
-                <div className="md:col-span-4">
+                <div className="md:col-span-4 mb-2 md:mb-0">
                   <p className="font-bold text-brand-blue-deep text-base truncate">{tour.title}</p>
-                  <p className="text-sm text-brand-green font-medium mt-0.5 truncate">
+                  <p className="text-xs text-brand-green font-semibold mt-0.5 truncate">
                     /{tour.slug}
                   </p>
                 </div>
-                <div className="md:col-span-3 text-sm text-slate-500">
-                  {tour.packages?.length || 0} packages
+                <div className="md:col-span-3 text-sm text-slate-600 mb-1.5 md:mb-0 flex items-center gap-2">
+                  <span className="md:hidden font-semibold text-slate-400 w-24 text-[11px] uppercase tracking-wider">Packages:</span>
+                  <span className="px-2 py-0.5 bg-slate-100 text-slate-700 text-xs font-bold rounded">
+                    {tour.packages?.length || 0} packages
+                  </span>
                 </div>
-                <div className="md:col-span-3 text-sm text-slate-500 truncate">
-                  {tour.destinations?.join(", ") || "None"}
+                <div className="md:col-span-3 text-sm text-slate-600 mb-3 md:mb-0 flex items-center gap-2">
+                  <span className="md:hidden font-semibold text-slate-400 w-24 text-[11px] uppercase tracking-wider">Destinations:</span>
+                  <span className="truncate max-w-[200px] md:max-w-none text-slate-600 font-medium">
+                    {tour.destinations?.join(", ") || "None"}
+                  </span>
                 </div>
-                <div className="md:col-span-2 flex justify-end gap-2 mt-4 md:mt-0">
+                <div className="md:col-span-2 flex justify-end gap-2 mt-2 md:mt-0 border-t border-slate-50 pt-3 md:border-t-0 md:pt-0">
                   <button
                     onClick={() => handleEdit(tour)}
-                    className="p-2 text-slate-400 hover:text-brand-blue bg-white rounded-lg border border-slate-200 shadow-sm transition-colors"
+                    className="flex-1 md:flex-none justify-center p-2 text-slate-500 hover:text-brand-blue bg-slate-50 hover:bg-brand-blue/5 md:bg-white rounded-xl border border-slate-200 shadow-sm transition-all flex items-center gap-1.5 text-xs font-bold"
                     title="Edit"
                   >
                     <Edit className="w-4 h-4" />
+                    <span className="md:hidden">Edit Tour</span>
                   </button>
                   <button
                     onClick={() => setDeleteConfirm({ isOpen: true, id: tour._id, type: "tour" })}
-                    className="p-2 text-slate-400 hover:text-red-500 bg-white rounded-lg border border-slate-200 shadow-sm transition-colors"
+                    className="flex-1 md:flex-none justify-center p-2 text-slate-500 hover:text-red-500 bg-slate-50 hover:bg-red-50 md:bg-white rounded-xl border border-slate-200 shadow-sm transition-all flex items-center gap-1.5 text-xs font-bold"
                     title="Delete"
                   >
                     <Trash2 className="w-4 h-4" />
+                    <span className="md:hidden">Delete Tour</span>
                   </button>
                 </div>
               </div>
@@ -193,8 +201,8 @@ function TourForm({ token, initialData, onClose, onSuccess }: any) {
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden animate-reveal p-8 max-w-4xl mx-auto">
-      <div className="flex items-center gap-4 mb-8">
+    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden animate-reveal p-4 sm:p-6 md:p-8 max-w-4xl mx-auto">
+      <div className="flex items-center gap-4 mb-6 md:mb-8">
         <button
           onClick={onClose}
           type="button"
@@ -202,7 +210,7 @@ function TourForm({ token, initialData, onClose, onSuccess }: any) {
         >
           <ArrowLeft className="w-5 h-5" />
         </button>
-        <h2 className="text-2xl font-bold font-display text-brand-blue-deep">
+        <h2 className="text-xl sm:text-2xl font-bold font-display text-brand-blue-deep">
           {initialData ? "Edit Tour" : "Create New Tour"}
         </h2>
       </div>

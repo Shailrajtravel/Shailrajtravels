@@ -60,6 +60,8 @@ import {
   Lock,
   BadgeIndianRupee,
   Smartphone,
+  TrendingUp,
+  CreditCard,
 } from "lucide-react";
 import logo from "@/frontend/assets/Shailraj travels-Punelogo.png";
 import { Calendar } from "@/frontend/components/ui/calendar";
@@ -75,6 +77,7 @@ import {
   PieChart,
   Pie,
   Cell,
+  LabelList,
 } from "recharts";
 
 export const Route = createFileRoute("/admin")({
@@ -346,7 +349,7 @@ function AdminPage() {
             <X className="w-5 h-5" />
           </button>
         </div>
-        <div className="flex-1 py-6 px-4 flex flex-col gap-2">
+        <div className="flex-1 py-6 px-4 flex flex-col gap-2 overflow-y-auto">
           <button
             onClick={() => {
               setActiveTab("dashboard");
@@ -630,6 +633,7 @@ function AdminPage() {
                     </div>
                   ) : (
                     <div className="flex flex-col w-full">
+                      {/* Desktop Header */}
                       <div className="hidden md:grid grid-cols-12 gap-4 bg-slate-50 border-b border-slate-100 text-slate-500 text-[12px] uppercase tracking-wider font-bold px-6 py-4">
                         <div className="col-span-1">Image</div>
                         <div className="col-span-5">Package Details</div>
@@ -637,6 +641,8 @@ function AdminPage() {
                         <div className="col-span-2">Schedule</div>
                         <div className="col-span-2 text-right">Actions</div>
                       </div>
+                      
+                      {/* Desktop and Mobile list wrapper */}
                       <div className="flex flex-col divide-y divide-slate-100">
                         {packages.map((pkg) => (
                           <div
@@ -644,7 +650,7 @@ function AdminPage() {
                             className="flex flex-col md:grid md:grid-cols-12 md:gap-4 md:items-center hover:bg-slate-50/50 transition-colors p-4 md:px-6 md:py-4"
                           >
                             <div className="flex items-center gap-4 md:col-span-6">
-                              <div className="w-16 h-16 rounded-lg bg-slate-100 overflow-hidden shrink-0">
+                              <div className="w-16 h-16 rounded-lg bg-slate-100 overflow-hidden shrink-0 border border-slate-200/50">
                                 {pkg.image ? (
                                   <img
                                     src={pkg.image}
@@ -662,11 +668,16 @@ function AdminPage() {
                                 <p className="text-sm text-brand-green font-medium mt-0.5 truncate">
                                   {pkg.durationBadge} • {pkg.location}
                                 </p>
-                                <p className="md:hidden font-bold text-slate-700 mt-1">
+                                <p className="md:hidden font-bold text-slate-700 mt-1.5">
                                   {pkg.price}
                                 </p>
+                                {pkg.schedule && (
+                                  <p className="md:hidden text-xs text-slate-500 mt-0.5">
+                                    Schedule: {pkg.schedule}
+                                  </p>
+                                )}
                               </div>
-                              <div className="md:hidden flex shrink-0">
+                              <div className="md:hidden flex gap-1 shrink-0 self-start">
                                 <button
                                   onClick={() => handleEdit(pkg)}
                                   className="p-2 text-slate-400 hover:text-brand-blue transition-colors"
@@ -796,94 +807,162 @@ function AdminPage() {
                     </p>
                   </div>
                 ) : (
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse min-w-[800px]">
-                      <thead>
-                        <tr className="bg-slate-50 border-b border-slate-100 text-slate-500 text-[12px] uppercase tracking-wider font-bold">
-                          <th className="px-6 py-4 w-16">Image</th>
-                          <th className="px-6 py-4 w-1/4">Trip Name</th>
-                          <th className="px-6 py-4">Price</th>
-                          <th className="px-6 py-4">Available Travel Dates</th>
-                          <th className="px-6 py-4 text-right">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {tripOptions.map((trip) => (
-                          <tr
-                            key={trip._id}
-                            className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors"
-                          >
-                            <td className="px-6 py-4">
-                              <div className="w-12 h-12 rounded-lg bg-slate-100 overflow-hidden shrink-0">
-                                {trip.image ? (
-                                  <img
-                                    src={trip.image}
-                                    alt=""
-                                    className="w-full h-full object-cover"
-                                  />
-                                ) : (
-                                  <ImageIcon className="w-6 h-6 m-3 text-slate-300" />
-                                )}
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 font-bold text-brand-blue-deep">
-                              {trip.name}
-                            </td>
-                            <td className="px-6 py-4 font-bold text-brand-green">
-                              {trip.price || "On Request"}
-                            </td>
-                            <td className="px-6 py-4">
-                              <div className="flex flex-wrap gap-2">
-                                {trip.schedule && (
-                                  <span className="px-3 py-1 bg-brand-blue/10 text-brand-blue-deep text-[13px] font-bold rounded-lg border border-brand-blue/20">
-                                    {trip.schedule}
-                                  </span>
-                                )}
-                                {Array.isArray(trip.dates) && trip.dates.length > 0
-                                  ? trip.dates.map((d: any, i: number) => (
-                                      <span
-                                        key={i}
-                                        className="px-3 py-1 bg-brand-green/10 text-brand-green-dark text-[13px] font-bold rounded-lg border border-brand-green/20"
-                                      >
-                                        {typeof d === "object" && d
-                                          ? typeof d.toLocaleDateString === "function"
-                                            ? d.toLocaleDateString()
-                                            : String(d)
-                                          : String(d)}
-                                      </span>
-                                    ))
-                                  : !trip.schedule && (
-                                      <span className="text-slate-400 italic text-sm">
-                                        No schedule added
-                                      </span>
-                                    )}
-                              </div>
-                            </td>
-                            <td className="px-6 py-4">
-                              <div className="flex justify-end gap-2">
-                                <button
-                                  onClick={() => handleEdit(trip)}
-                                  className="p-2 text-slate-400 hover:text-brand-blue bg-white rounded-lg border border-slate-200 shadow-sm transition-colors"
-                                  title="Edit"
-                                >
-                                  <Edit className="w-4 h-4" />
-                                </button>
-                                <button
-                                  onClick={() =>
-                                    setDeleteConfirm({ isOpen: true, id: trip._id, type: "trip" })
-                                  }
-                                  className="p-2 text-slate-400 hover:text-red-500 bg-white rounded-lg border border-slate-200 shadow-sm transition-colors"
-                                  title="Delete"
-                                >
-                                  <Trash2 className="w-4 h-4" />
-                                </button>
-                              </div>
-                            </td>
+                  <>
+                    {/* Desktop View */}
+                    <div className="hidden md:block overflow-x-auto">
+                      <table className="w-full text-left border-collapse min-w-[800px]">
+                        <thead>
+                          <tr className="bg-slate-50 border-b border-slate-100 text-slate-500 text-[12px] uppercase tracking-wider font-bold">
+                            <th className="px-6 py-4 w-16">Image</th>
+                            <th className="px-6 py-4 w-1/4">Trip Name</th>
+                            <th className="px-6 py-4">Price</th>
+                            <th className="px-6 py-4">Available Travel Dates</th>
+                            <th className="px-6 py-4 text-right">Actions</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                        </thead>
+                        <tbody>
+                          {tripOptions.map((trip) => (
+                            <tr
+                              key={trip._id}
+                              className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors"
+                            >
+                              <td className="px-6 py-4">
+                                <div className="w-12 h-12 rounded-lg bg-slate-100 overflow-hidden shrink-0">
+                                  {trip.image ? (
+                                    <img
+                                      src={trip.image}
+                                      alt=""
+                                      className="w-full h-full object-cover"
+                                    />
+                                  ) : (
+                                    <ImageIcon className="w-6 h-6 m-3 text-slate-300" />
+                                  )}
+                                </div>
+                              </td>
+                              <td className="px-6 py-4 font-bold text-brand-blue-deep">
+                                {trip.name}
+                              </td>
+                              <td className="px-6 py-4 font-bold text-brand-green">
+                                {trip.price || "On Request"}
+                              </td>
+                              <td className="px-6 py-4">
+                                <div className="flex flex-wrap gap-2">
+                                  {trip.schedule && (
+                                    <span className="px-3 py-1 bg-brand-blue/10 text-brand-blue-deep text-[13px] font-bold rounded-lg border border-brand-blue/20">
+                                      {trip.schedule}
+                                    </span>
+                                  )}
+                                  {Array.isArray(trip.dates) && trip.dates.length > 0
+                                    ? trip.dates.map((d: any, i: number) => (
+                                        <span
+                                          key={i}
+                                          className="px-3 py-1 bg-brand-green/10 text-brand-green-dark text-[13px] font-bold rounded-lg border border-brand-green/20"
+                                        >
+                                          {typeof d === "object" && d
+                                            ? typeof d.toLocaleDateString === "function"
+                                              ? d.toLocaleDateString()
+                                              : String(d)
+                                            : String(d)}
+                                        </span>
+                                      ))
+                                    : !trip.schedule && (
+                                        <span className="text-slate-400 italic text-sm">
+                                          No schedule added
+                                        </span>
+                                      )}
+                                </div>
+                              </td>
+                              <td className="px-6 py-4">
+                                <div className="flex justify-end gap-2">
+                                  <button
+                                    onClick={() => handleEdit(trip)}
+                                    className="p-2 text-slate-400 hover:text-brand-blue bg-white rounded-lg border border-slate-200 shadow-sm transition-colors"
+                                    title="Edit"
+                                  >
+                                    <Edit className="w-4 h-4" />
+                                  </button>
+                                  <button
+                                    onClick={() =>
+                                      setDeleteConfirm({ isOpen: true, id: trip._id, type: "trip" })
+                                    }
+                                    className="p-2 text-slate-400 hover:text-red-500 bg-white rounded-lg border border-slate-200 shadow-sm transition-colors"
+                                    title="Delete"
+                                  >
+                                    <Trash2 className="w-4 h-4" />
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    {/* Mobile View */}
+                    <div className="md:hidden flex flex-col divide-y divide-slate-100">
+                      {tripOptions.map((trip) => (
+                        <div key={trip._id} className="p-4 flex flex-col gap-3 hover:bg-slate-50/50 transition-colors animate-reveal">
+                          <div className="flex gap-4">
+                            <div className="w-16 h-16 rounded-lg bg-slate-100 overflow-hidden shrink-0 border border-slate-200/50">
+                              {trip.image ? (
+                                <img src={trip.image} alt="" className="w-full h-full object-cover" />
+                              ) : (
+                                <ImageIcon className="w-8 h-8 m-4 text-slate-300" />
+                              )}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-bold text-brand-blue-deep text-base truncate">{trip.name}</h4>
+                              <p className="font-bold text-brand-green text-sm mt-1">{trip.price || "On Request"}</p>
+                            </div>
+                          </div>
+                          <div>
+                            <span className="text-[10px] font-bold text-slate-400 block mb-1.5 uppercase tracking-wider">Available Dates:</span>
+                            <div className="flex flex-wrap gap-1.5">
+                              {trip.schedule && (
+                                <span className="px-2 py-0.5 bg-brand-blue/10 text-brand-blue-deep text-[11px] font-bold rounded border border-brand-blue/20">
+                                  {trip.schedule}
+                                </span>
+                              )}
+                              {Array.isArray(trip.dates) && trip.dates.length > 0
+                                ? trip.dates.map((d: any, i: number) => (
+                                    <span
+                                      key={i}
+                                      className="px-2.5 py-0.5 bg-brand-green/10 text-brand-green-dark text-[11px] font-bold rounded border border-brand-green/20"
+                                    >
+                                      {typeof d === "object" && d
+                                        ? typeof d.toLocaleDateString === "function"
+                                          ? d.toLocaleDateString()
+                                          : String(d)
+                                        : String(d)}
+                                    </span>
+                                  ))
+                                : !trip.schedule && (
+                                    <span className="text-slate-450 italic text-xs">No schedule added</span>
+                                  )}
+                            </div>
+                          </div>
+                          <div className="flex justify-end gap-2 mt-1 pt-2 border-t border-slate-50">
+                            <button
+                              onClick={() => handleEdit(trip)}
+                              className="flex-1 justify-center p-2 text-slate-500 hover:text-brand-blue bg-slate-50 rounded-xl border border-slate-200 shadow-sm transition-all flex items-center gap-1 text-xs font-bold"
+                              title="Edit"
+                            >
+                              <Edit className="w-3.5 h-3.5" />
+                              <span>Edit</span>
+                            </button>
+                            <button
+                              onClick={() => setDeleteConfirm({ isOpen: true, id: trip._id, type: "trip" })}
+                              className="flex-1 justify-center p-2 text-slate-500 hover:text-red-500 bg-slate-50 rounded-xl border border-slate-200 shadow-sm transition-all flex items-center gap-1 text-xs font-bold"
+                              title="Delete"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                              <span>Delete</span>
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </>
                 )}
               </div>
             )
@@ -985,159 +1064,291 @@ function AdminPage() {
                     <p className="text-sm mt-1 text-slate-400">Try searching for something else.</p>
                   </div>
                 ) : (
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse min-w-[1000px]">
-                      <thead>
-                        <tr className="bg-slate-50 border-b border-slate-100 text-slate-500 text-[12px] uppercase tracking-wider font-bold">
-                          <th className="px-6 py-4">Booking ID</th>
-                          <th className="px-6 py-4">Customer</th>
-                          <th className="px-6 py-4">Trip Details</th>
-                          <th className="px-6 py-4">Travel Date</th>
-                          <th className="px-6 py-4">Status</th>
-                          <th className="px-6 py-4">Payment Status</th>
-                          <th className="px-6 py-4">Submitted On</th>
-                          <th className="px-6 py-4 text-right">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {filteredBookings.map((bk, idx) => (
-                          <tr
-                            key={bk._id}
-                            className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors"
-                          >
-                          <td className="px-6 py-4">
-                            <span className="font-mono text-xs font-bold text-slate-500 bg-slate-100 px-2 py-1 rounded">
-                              {bk.generatedBookingId}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4">
-                            <p className="font-bold text-brand-blue-deep">{bk.name}</p>
-                            <p className="text-sm font-medium text-slate-500">{bk.phone}</p>
-                            {bk.pickupLocation && (
-                              <p className="text-xs text-slate-600 font-semibold mt-1 flex items-center gap-1 bg-slate-50 border border-slate-100 rounded px-1.5 py-0.5 w-fit">
-                                <span className="text-slate-400">Pickup:</span> {bk.pickupLocation}
-                              </p>
-                            )}
-                          </td>
-                          <td className="px-6 py-4">
-                            <p className="font-bold text-slate-700">
-                              {bk.tripName === "custom" ? "Custom Trip" : bk.tripName}
-                            </p>
-                            <div className="flex gap-2 mt-1">
-                              <span className="px-2 py-0.5 bg-slate-100 text-slate-600 text-xs font-bold rounded">
-                                {bk.persons} Persons
+                  <>
+                    {/* Desktop View */}
+                    <div className="hidden md:block overflow-x-auto">
+                      <table className="w-full text-left border-collapse min-w-[1000px]">
+                        <thead>
+                          <tr className="bg-slate-50 border-b border-slate-100 text-slate-500 text-[12px] uppercase tracking-wider font-bold">
+                            <th className="px-6 py-4">Booking ID</th>
+                            <th className="px-6 py-4">Customer</th>
+                            <th className="px-6 py-4">Trip Details</th>
+                            <th className="px-6 py-4">Travel Date</th>
+                            <th className="px-6 py-4">Status</th>
+                            <th className="px-6 py-4">Payment Status</th>
+                            <th className="px-6 py-4">Submitted On</th>
+                            <th className="px-6 py-4 text-right">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {filteredBookings.map((bk, idx) => (
+                            <tr
+                              key={bk._id}
+                              className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors"
+                            >
+                            <td className="px-6 py-4">
+                              <span className="font-mono text-xs font-bold text-slate-500 bg-slate-100 px-2 py-1 rounded">
+                                {bk.generatedBookingId}
                               </span>
-                              {bk.customDestination && (
-                                <span
-                                  className="px-2 py-0.5 bg-brand-blue/10 text-brand-blue text-xs font-bold rounded max-w-[120px] truncate"
-                                  title={bk.customDestination}
-                                >
-                                  To: {bk.customDestination}
+                            </td>
+                            <td className="px-6 py-4">
+                              <p className="font-bold text-brand-blue-deep">{bk.name}</p>
+                              <p className="text-sm font-medium text-slate-500">{bk.phone}</p>
+                              {bk.pickupLocation && (
+                                <p className="text-xs text-slate-600 font-semibold mt-1 flex items-center gap-1 bg-slate-50 border border-slate-100 rounded px-1.5 py-0.5 w-fit">
+                                  <span className="text-slate-400">Pickup:</span> {bk.pickupLocation}
+                                </p>
+                              )}
+                            </td>
+                            <td className="px-6 py-4">
+                              <p className="font-bold text-slate-700">
+                                {bk.tripName === "custom" ? "Custom Trip" : bk.tripName}
+                              </p>
+                              <div className="flex gap-2 mt-1">
+                                <span className="px-2 py-0.5 bg-slate-100 text-slate-600 text-xs font-bold rounded">
+                                  {bk.persons} Persons
                                 </span>
+                                {bk.customDestination && (
+                                  <span
+                                    className="px-2 py-0.5 bg-brand-blue/10 text-brand-blue text-xs font-bold rounded max-w-[120px] truncate"
+                                    title={bk.customDestination}
+                                  >
+                                    To: {bk.customDestination}
+                                  </span>
+                                )}
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 font-bold text-slate-700 text-sm">
+                              {bk.travelDate}
+                            </td>
+                            <td className="px-6 py-4">
+                              <select
+                                value={bk.status}
+                                onChange={async (e) => {
+                                  try {
+                                    await updateBookingStatusFn({
+                                      data: { adminToken: token, id: bk._id, status: e.target.value },
+                                    });
+                                    loadData();
+                                  } catch (err) {}
+                                }}
+                                className={`text-sm font-bold px-3 py-1.5 rounded-lg border outline-none cursor-pointer ${
+                                  bk.status === "Confirmed"
+                                    ? "bg-green-50 text-green-700 border-green-200"
+                                    : bk.status === "Cancelled"
+                                      ? "bg-red-50 text-red-700 border-red-200"
+                                      : "bg-yellow-50 text-yellow-700 border-yellow-200"
+                                }`}
+                              >
+                                <option value="Pending">Pending</option>
+                                <option value="Confirmed">Confirmed</option>
+                                <option value="Cancelled">Cancelled</option>
+                              </select>
+                            </td>
+                            <td className="px-6 py-4">
+                              <select
+                                value={bk.paymentStatus || "PENDING"}
+                                onChange={async (e) => {
+                                  const newStatus = e.target.value;
+                                  try {
+                                    const res = await updateBookingPaymentStatusFn({
+                                      data: {
+                                        adminToken: token,
+                                        id: bk._id,
+                                        paymentStatus: newStatus,
+                                      },
+                                    });
+                                    loadData();
+                                    if (newStatus === "PAID") {
+                                      if (res?.whatsappSent) {
+                                        alert(
+                                          "Payment status updated to PAID. Invoice PDF successfully sent to customer via WhatsApp.",
+                                        );
+                                      } else {
+                                        alert(
+                                          "Payment status updated to PAID, but WhatsApp invoice could not be sent. Make sure WhatsApp Engine is connected and customer phone number is correct.",
+                                        );
+                                      }
+                                    } else {
+                                      alert(`Payment status updated to ${newStatus}.`);
+                                    }
+                                  } catch (err: any) {
+                                    alert(err.message || "Failed to update payment status.");
+                                  }
+                                }}
+                                className={`text-sm font-bold px-3 py-1.5 rounded-lg border outline-none cursor-pointer ${
+                                  (bk.paymentStatus || "PENDING") === "PAID"
+                                    ? "bg-green-50 text-green-700 border-green-200"
+                                    : "bg-orange-50 text-orange-700 border-orange-200"
+                                }`}
+                              >
+                                <option value="PENDING">PENDING</option>
+                                <option value="PAID">PAID</option>
+                              </select>
+                            </td>
+                            <td className="px-6 py-4 text-sm text-slate-500">
+                              {new Date(bk.createdAt).toLocaleDateString()}
+                            </td>
+                            <td className="px-6 py-4 text-right">
+                              <div className="flex justify-end gap-2">
+                                <button
+                                  onClick={() => {
+                                    setReplyModal({ isOpen: true, booking: bk });
+                                    setReplyMessage(`Hi ${bk.name || "Customer"},\nWe received your inquiry regarding the ${bk.tripName === "custom" ? bk.customDestination || "Custom Trip" : bk.tripName || "Trip"}. `);
+                                  }}
+                                  className="p-2 text-slate-400 hover:text-green-500 bg-white rounded-lg border border-slate-200 shadow-sm transition-colors cursor-pointer"
+                                  title="Reply via WhatsApp"
+                                >
+                                  <MessageSquare className="w-4 h-4" />
+                                </button>
+                                <button
+                                  onClick={() =>
+                                    setDeleteConfirm({ isOpen: true, id: bk._id, type: "booking" })
+                                  }
+                                  className="p-2 text-slate-400 hover:text-red-500 bg-white rounded-lg border border-slate-200 shadow-sm transition-colors cursor-pointer"
+                                  title="Delete Booking"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    {/* Mobile Card List View */}
+                    <div className="md:hidden flex flex-col divide-y divide-slate-100">
+                      {filteredBookings.map((bk) => (
+                        <div key={bk._id} className="p-4 flex flex-col gap-3 hover:bg-slate-50/50 transition-colors animate-reveal">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <span className="font-mono text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
+                                {bk.generatedBookingId}
+                              </span>
+                              <h4 className="font-bold text-brand-blue-deep text-base mt-1.5">{bk.name}</h4>
+                              <a href={`tel:${bk.phone}`} className="text-xs font-semibold text-slate-500 hover:text-brand-blue hover:underline">
+                                {bk.phone}
+                              </a>
+                            </div>
+                            <button
+                              onClick={() => setDeleteConfirm({ isOpen: true, id: bk._id, type: "booking" })}
+                              className="p-2.5 text-slate-400 hover:text-red-500 bg-slate-50 rounded-xl border border-slate-200 shadow-sm transition-colors"
+                              title="Delete Booking"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-3 text-xs bg-slate-50/50 p-3 rounded-xl border border-slate-100">
+                            <div>
+                              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Trip</span>
+                              <p className="font-bold text-slate-700 mt-0.5">
+                                {bk.tripName === "custom" ? "Custom Trip" : bk.tripName}
+                              </p>
+                              {bk.customDestination && (
+                                <p className="text-[11px] text-brand-blue font-semibold mt-0.5 truncate" title={bk.customDestination}>
+                                  To: {bk.customDestination}
+                                </p>
                               )}
                             </div>
-                          </td>
-                          <td className="px-6 py-4 font-bold text-slate-700 text-sm">
-                            {bk.travelDate}
-                          </td>
-                          <td className="px-6 py-4">
-                            <select
-                              value={bk.status}
-                              onChange={async (e) => {
-                                try {
-                                  await updateBookingStatusFn({
-                                    data: { adminToken: token, id: bk._id, status: e.target.value },
-                                  });
-                                  loadData();
-                                } catch (err) {}
-                              }}
-                              className={`text-sm font-bold px-3 py-1.5 rounded-lg border outline-none cursor-pointer ${
-                                bk.status === "Confirmed"
-                                  ? "bg-green-50 text-green-700 border-green-200"
-                                  : bk.status === "Cancelled"
-                                    ? "bg-red-50 text-red-700 border-red-200"
-                                    : "bg-yellow-50 text-yellow-700 border-yellow-200"
-                              }`}
-                            >
-                              <option value="Pending">Pending</option>
-                              <option value="Confirmed">Confirmed</option>
-                              <option value="Cancelled">Cancelled</option>
-                            </select>
-                          </td>
-                          <td className="px-6 py-4">
-                            <select
-                              value={bk.paymentStatus || "PENDING"}
-                              onChange={async (e) => {
-                                const newStatus = e.target.value;
-                                try {
-                                  const res = await updateBookingPaymentStatusFn({
-                                    data: {
-                                      adminToken: token,
-                                      id: bk._id,
-                                      paymentStatus: newStatus,
-                                    },
-                                  });
-                                  loadData();
-                                  if (newStatus === "PAID") {
-                                    if (res?.whatsappSent) {
-                                      alert(
-                                        "Payment status updated to PAID. Invoice PDF successfully sent to customer via WhatsApp.",
-                                      );
-                                    } else {
-                                      alert(
-                                        "Payment status updated to PAID, but WhatsApp invoice could not be sent. Make sure WhatsApp Engine is connected and customer phone number is correct.",
-                                      );
-                                    }
-                                  } else {
-                                    alert(`Payment status updated to ${newStatus}.`);
-                                  }
-                                } catch (err: any) {
-                                  alert(err.message || "Failed to update payment status.");
-                                }
-                              }}
-                              className={`text-sm font-bold px-3 py-1.5 rounded-lg border outline-none cursor-pointer ${
-                                (bk.paymentStatus || "PENDING") === "PAID"
-                                  ? "bg-green-50 text-green-700 border-green-200"
-                                  : "bg-orange-50 text-orange-700 border-orange-200"
-                              }`}
-                            >
-                              <option value="PENDING">PENDING</option>
-                              <option value="PAID">PAID</option>
-                            </select>
-                          </td>
-                          <td className="px-6 py-4 text-sm text-slate-500">
-                            {new Date(bk.createdAt).toLocaleDateString()}
-                          </td>
-                          <td className="px-6 py-4 text-right">
-                            <div className="flex justify-end gap-2">
-                              <button
-                                onClick={() => {
-                                  setReplyModal({ isOpen: true, booking: bk });
-                                  setReplyMessage(`Hi ${bk.name || "Customer"},\nWe received your inquiry regarding the ${bk.tripName === "custom" ? bk.customDestination || "Custom Trip" : bk.tripName || "Trip"}. `);
-                                }}
-                                className="p-2 text-slate-400 hover:text-green-500 bg-white rounded-lg border border-slate-200 shadow-sm transition-colors"
-                                title="Reply via WhatsApp"
-                              >
-                                <MessageSquare className="w-4 h-4" />
-                              </button>
-                              <button
-                                onClick={() =>
-                                  setDeleteConfirm({ isOpen: true, id: bk._id, type: "booking" })
-                                }
-                                className="p-2 text-slate-400 hover:text-red-500 bg-white rounded-lg border border-slate-200 shadow-sm transition-colors"
-                                title="Delete Booking"
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </button>
+                            <div>
+                              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Travel Date</span>
+                              <p className="font-semibold text-slate-700 mt-0.5">{bk.travelDate}</p>
                             </div>
-                          </td>
-                        </tr>
+                            <div>
+                              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Persons</span>
+                              <p className="font-bold text-slate-700 mt-0.5">{bk.persons} Persons</p>
+                            </div>
+                            <div>
+                              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Submitted</span>
+                              <p className="text-slate-500 mt-0.5">{new Date(bk.createdAt).toLocaleDateString()}</p>
+                            </div>
+                            {bk.pickupLocation && (
+                              <div className="col-span-2">
+                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Pickup Point</span>
+                                <p className="text-slate-600 font-semibold mt-0.5">{bk.pickupLocation}</p>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Quick Edit Status / Payment Dropdowns */}
+                          <div className="grid grid-cols-2 gap-3 mt-1">
+                            <div className="flex flex-col gap-1">
+                              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Status</span>
+                              <select
+                                value={bk.status}
+                                onChange={async (e) => {
+                                  try {
+                                    await updateBookingStatusFn({
+                                      data: { adminToken: token, id: bk._id, status: e.target.value },
+                                    });
+                                    loadData();
+                                  } catch (err) {}
+                                }}
+                                className={`w-full text-xs font-bold px-2 py-2 rounded-lg border outline-none cursor-pointer ${
+                                  bk.status === "Confirmed"
+                                    ? "bg-green-50 text-green-700 border-green-200"
+                                    : bk.status === "Cancelled"
+                                      ? "bg-red-50 text-red-700 border-red-200"
+                                      : "bg-yellow-50 text-yellow-700 border-yellow-200"
+                                }`}
+                              >
+                                <option value="Pending">Pending</option>
+                                <option value="Confirmed">Confirmed</option>
+                                <option value="Cancelled">Cancelled</option>
+                              </select>
+                            </div>
+                            <div className="flex flex-col gap-1">
+                              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Payment</span>
+                              <select
+                                value={bk.paymentStatus || "PENDING"}
+                                onChange={async (e) => {
+                                  const newStatus = e.target.value;
+                                  try {
+                                    const res = await updateBookingPaymentStatusFn({
+                                      data: {
+                                        adminToken: token,
+                                        id: bk._id,
+                                        paymentStatus: newStatus,
+                                      },
+                                    });
+                                    loadData();
+                                    if (newStatus === "PAID") {
+                                      if (res?.whatsappSent) {
+                                        alert(
+                                          "Payment status updated to PAID. Invoice PDF successfully sent to customer via WhatsApp.",
+                                        );
+                                      } else {
+                                        alert(
+                                          "Payment status updated to PAID, but WhatsApp invoice could not be sent. Make sure WhatsApp Engine is connected and customer phone number is correct.",
+                                        );
+                                      }
+                                    } else {
+                                      alert(`Payment status updated to ${newStatus}.`);
+                                    }
+                                  } catch (err: any) {
+                                    alert(err.message || "Failed to update payment status.");
+                                  }
+                                }}
+                                className={`w-full text-xs font-bold px-2 py-2 rounded-lg border outline-none cursor-pointer ${
+                                  (bk.paymentStatus || "PENDING") === "PAID"
+                                    ? "bg-green-50 text-green-700 border-green-200"
+                                    : "bg-orange-50 text-orange-700 border-orange-200"
+                                }`}
+                              >
+                                <option value="PENDING">PENDING</option>
+                                <option value="PAID">PAID</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
                       ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-            </div>
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
           ) : activeTab === "customers" ? (
             <CustomersView bookings={bookings} />
@@ -2320,64 +2531,102 @@ function DashboardOverview({ packages, bookings, reviews, photos }: any) {
         <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
           <h2 className="text-lg font-bold text-brand-blue-deep">Recent Bookings</h2>
         </div>
-        <div className="overflow-x-auto">
-          {bookings.length === 0 ? (
-            <div className="p-8 text-center text-slate-500 text-sm font-medium">
-              No bookings yet.
-            </div>
-          ) : (
-            <table className="w-full text-left border-collapse min-w-[600px]">
-              <thead>
-                <tr className="bg-slate-50 border-b border-slate-100 text-slate-500 text-[12px] uppercase tracking-wider font-bold">
-                  <th className="px-6 py-4">Customer</th>
-                  <th className="px-6 py-4">Trip</th>
-                  <th className="px-6 py-4">Status</th>
-                  <th className="px-6 py-4 text-right">Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {bookings.slice(0, 5).map((bk: any) => (
-                  <tr
-                    key={bk._id}
-                    className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors"
-                  >
-                    <td className="px-6 py-4">
-                      <p className="font-bold text-brand-blue-deep text-sm">{bk.name}</p>
-                      <p className="text-xs text-slate-500">{bk.phone}</p>
-                      {bk.pickupLocation && (
-                        <p className="text-[11px] text-slate-600 font-medium mt-1">
-                          <span className="text-slate-400">Pickup:</span> {bk.pickupLocation}
-                        </p>
-                      )}
-                    </td>
-                    <td className="px-6 py-4">
-                      <p className="font-bold text-slate-700 text-sm">
-                        {bk.tripName === "custom" ? "Custom Trip" : bk.tripName}
-                      </p>
-                      <p className="text-xs text-slate-500">{bk.persons} Persons</p>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span
-                        className={`px-2 py-1 rounded-md text-[11px] font-bold ${
-                          bk.status === "Confirmed"
-                            ? "bg-green-50 text-green-700"
-                            : bk.status === "Cancelled"
-                              ? "bg-red-50 text-red-700"
-                              : "bg-yellow-50 text-yellow-700"
-                        }`}
-                      >
-                        {bk.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-right text-xs text-slate-500 font-medium">
-                      {new Date(bk.createdAt).toLocaleDateString()}
-                    </td>
+        {bookings.length === 0 ? (
+          <div className="p-8 text-center text-slate-500 text-sm font-medium">
+            No bookings yet.
+          </div>
+        ) : (
+          <>
+            {/* Desktop table */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full text-left border-collapse min-w-[600px]">
+                <thead>
+                  <tr className="bg-slate-50 border-b border-slate-100 text-slate-500 text-[12px] uppercase tracking-wider font-bold">
+                    <th className="px-6 py-4">Customer</th>
+                    <th className="px-6 py-4">Trip</th>
+                    <th className="px-6 py-4">Status</th>
+                    <th className="px-6 py-4 text-right">Date</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
+                </thead>
+                <tbody>
+                  {bookings.slice(0, 5).map((bk: any) => (
+                    <tr
+                      key={bk._id}
+                      className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors"
+                    >
+                      <td className="px-6 py-4">
+                        <p className="font-bold text-brand-blue-deep text-sm">{bk.name}</p>
+                        <p className="text-xs text-slate-500">{bk.phone}</p>
+                        {bk.pickupLocation && (
+                          <p className="text-[11px] text-slate-600 font-medium mt-1">
+                            <span className="text-slate-400">Pickup:</span> {bk.pickupLocation}
+                          </p>
+                        )}
+                      </td>
+                      <td className="px-6 py-4">
+                        <p className="font-bold text-slate-700 text-sm">
+                          {bk.tripName === "custom" ? "Custom Trip" : bk.tripName}
+                        </p>
+                        <p className="text-xs text-slate-500">{bk.persons} Persons</p>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span
+                          className={`px-2 py-1 rounded-md text-[11px] font-bold ${
+                            bk.status === "Confirmed"
+                              ? "bg-green-50 text-green-700"
+                              : bk.status === "Cancelled"
+                                ? "bg-red-50 text-red-700"
+                                : "bg-yellow-50 text-yellow-700"
+                          }`}
+                        >
+                          {bk.status}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-right text-xs text-slate-500 font-medium">
+                        {new Date(bk.createdAt).toLocaleDateString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile cards */}
+            <div className="md:hidden flex flex-col divide-y divide-slate-100">
+              {bookings.slice(0, 5).map((bk: any) => (
+                <div key={bk._id} className="p-4 flex items-start justify-between gap-3 hover:bg-slate-50/50 transition-colors">
+                  <div className="flex-1 min-w-0">
+                    <p className="font-bold text-brand-blue-deep text-sm truncate">{bk.name}</p>
+                    <p className="text-xs text-slate-500 mt-0.5">{bk.phone}</p>
+                    <p className="text-xs font-semibold text-slate-600 mt-1 truncate">
+                      {bk.tripName === "custom" ? "Custom Trip" : bk.tripName}
+                      {bk.persons ? ` · ${bk.persons} persons` : ""}
+                    </p>
+                    {bk.pickupLocation && (
+                      <p className="text-[11px] text-slate-500 mt-0.5">📍 {bk.pickupLocation}</p>
+                    )}
+                  </div>
+                  <div className="flex flex-col items-end gap-1.5 shrink-0">
+                    <span
+                      className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                        bk.status === "Confirmed"
+                          ? "bg-green-50 text-green-700"
+                          : bk.status === "Cancelled"
+                            ? "bg-red-50 text-red-700"
+                            : "bg-yellow-50 text-yellow-700"
+                      }`}
+                    >
+                      {bk.status}
+                    </span>
+                    <span className="text-[10px] text-slate-400 font-medium">
+                      {new Date(bk.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
@@ -2483,51 +2732,88 @@ function CustomersView({ bookings = [] }: { bookings?: any[] }) {
               <p className="text-lg font-medium">No customers yet.</p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse min-w-[800px]">
-                <thead>
-                  <tr className="bg-slate-50 border-b border-slate-100 text-slate-500 text-[12px] uppercase tracking-wider font-bold">
-                    <th className="px-6 py-4">Customer ID</th>
-                    <th className="px-6 py-4">Customer Name</th>
-                    <th className="px-6 py-4">Phone Number</th>
-                    <th className="px-6 py-4">Total Bookings</th>
-                    <th className="px-6 py-4">Trips Taken</th>
-                    <th className="px-6 py-4 text-right">Latest Booking</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {displayCustomers.map((cust: any, i) => (
-                    <tr
-                      key={i}
-                      className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors"
-                    >
-                      <td className="px-6 py-4">
-                        <span className="font-mono text-xs font-bold text-slate-500 bg-slate-100 px-2 py-1 rounded">
+            <>
+              {/* Desktop table */}
+              <div className="hidden md:block overflow-x-auto">
+                <table className="w-full text-left border-collapse min-w-[800px]">
+                  <thead>
+                    <tr className="bg-slate-50 border-b border-slate-100 text-slate-500 text-[12px] uppercase tracking-wider font-bold">
+                      <th className="px-6 py-4">Customer ID</th>
+                      <th className="px-6 py-4">Customer Name</th>
+                      <th className="px-6 py-4">Phone Number</th>
+                      <th className="px-6 py-4">Total Bookings</th>
+                      <th className="px-6 py-4">Trips Taken</th>
+                      <th className="px-6 py-4 text-right">Latest Booking</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {displayCustomers.map((cust: any, i) => (
+                      <tr
+                        key={i}
+                        className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors"
+                      >
+                        <td className="px-6 py-4">
+                          <span className="font-mono text-xs font-bold text-slate-500 bg-slate-100 px-2 py-1 rounded">
+                            {cust.customerId}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 font-bold text-brand-blue-deep">{cust.name}</td>
+                        <td className="px-6 py-4 font-medium text-slate-600">{cust.phone}</td>
+                        <td className="px-6 py-4 font-bold text-slate-700">{cust.totalBookings}</td>
+                        <td className="px-6 py-4">
+                          <button
+                            onClick={() => setSelectedCustomer(cust)}
+                            className="flex items-center gap-2 px-3 py-1.5 bg-brand-blue/10 hover:bg-brand-blue/20 text-brand-blue-deep rounded-lg transition-colors font-bold text-xs"
+                          >
+                            <Eye className="w-4 h-4" />
+                            View Trips
+                          </button>
+                        </td>
+                        <td className="px-6 py-4 text-right text-sm text-slate-500">
+                          {cust.latestBookingDate
+                            ? new Date(cust.latestBookingDate).toLocaleDateString()
+                            : "N/A"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Mobile cards */}
+              <div className="md:hidden flex flex-col divide-y divide-slate-100">
+                {displayCustomers.map((cust: any, i) => (
+                  <div key={i} className="p-4 flex items-center justify-between gap-3 hover:bg-slate-50/50 transition-colors">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="font-mono text-[10px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">
                           {cust.customerId}
                         </span>
-                      </td>
-                      <td className="px-6 py-4 font-bold text-brand-blue-deep">{cust.name}</td>
-                      <td className="px-6 py-4 font-medium text-slate-600">{cust.phone}</td>
-                      <td className="px-6 py-4 font-bold text-slate-700">{cust.totalBookings}</td>
-                      <td className="px-6 py-4">
-                        <button
-                          onClick={() => setSelectedCustomer(cust)}
-                          className="flex items-center gap-2 px-3 py-1.5 bg-brand-blue/10 hover:bg-brand-blue/20 text-brand-blue-deep rounded-lg transition-colors font-bold text-xs"
-                        >
-                          <Eye className="w-4 h-4" />
-                          View Trips
-                        </button>
-                      </td>
-                      <td className="px-6 py-4 text-right text-sm text-slate-500">
-                        {cust.latestBookingDate
-                          ? new Date(cust.latestBookingDate).toLocaleDateString()
-                          : "N/A"}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                        <span className="text-[10px] font-bold text-slate-400">
+                          {cust.totalBookings} booking{cust.totalBookings !== 1 ? "s" : ""}
+                        </span>
+                      </div>
+                      <p className="font-bold text-brand-blue-deep text-sm truncate">{cust.name}</p>
+                      <a href={`tel:${cust.phone}`} className="text-xs text-slate-500 hover:text-brand-blue hover:underline">
+                        {cust.phone}
+                      </a>
+                      {cust.latestBookingDate && (
+                        <p className="text-[10px] text-slate-400 mt-0.5">
+                          Last: {new Date(cust.latestBookingDate).toLocaleDateString()}
+                        </p>
+                      )}
+                    </div>
+                    <button
+                      onClick={() => setSelectedCustomer(cust)}
+                      className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-brand-blue/10 hover:bg-brand-blue/20 text-brand-blue-deep rounded-xl transition-colors font-bold text-xs"
+                    >
+                      <Eye className="w-3.5 h-3.5" />
+                      Trips
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </>
           )}
         </div>
 
@@ -2580,17 +2866,25 @@ function CustomersView({ bookings = [] }: { bookings?: any[] }) {
 const applyTableStyles = (XLSX: any, ws: any, titleSz = 16, subtitleSz = 14) => {
   if (ws["A1"])
     ws["A1"].s = {
-      font: { bold: true, sz: titleSz, color: { rgb: "000000" } },
-      alignment: { horizontal: "center", vertical: "center" },
+      font: { bold: true, sz: titleSz, color: { rgb: "1A237E" } },
+      alignment: { horizontal: "center", vertical: "center", wrapText: false },
+      fill: { patternType: "solid", fgColor: { rgb: "E8EAF6" } },
     };
   if (ws["A2"])
     ws["A2"].s = {
       font: { bold: true, sz: subtitleSz, color: { rgb: "333333" } },
-      alignment: { horizontal: "center", vertical: "center" },
+      alignment: { horizontal: "center", vertical: "center", wrapText: false },
     };
 
   if (ws["!ref"]) {
     const range = XLSX.utils.decode_range(ws["!ref"]);
+    // Set row heights: title row, subtitle row, blank row, header row
+    ws["!rows"] = ws["!rows"] || [];
+    ws["!rows"][0] = { hpt: 28 }; // Title row height
+    ws["!rows"][1] = { hpt: 22 }; // Subtitle row height
+    ws["!rows"][2] = { hpt: 6 };  // Blank spacer row
+    ws["!rows"][3] = { hpt: 20 }; // Header row height
+
     for (let R = 3; R <= range.e.r; ++R) {
       for (let C = 0; C <= range.e.c; ++C) {
         const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
@@ -2604,9 +2898,11 @@ const applyTableStyles = (XLSX: any, ws: any, titleSz = 16, subtitleSz = 14) => 
             left: { style: "thin", color: { auto: 1 } },
             right: { style: "thin", color: { auto: 1 } },
           },
-          alignment: { vertical: "center", wrapText: true },
-          font: isHeader ? { bold: true, color: { rgb: "FFFFFF" } } : undefined,
-          fill: isHeader ? { patternType: "solid", fgColor: { rgb: "4F81BD" } } : undefined,
+          alignment: { vertical: "center", wrapText: !isHeader },
+          font: isHeader
+            ? { bold: true, sz: 10, color: { rgb: "FFFFFF" } }
+            : { sz: 9 },
+          fill: isHeader ? { patternType: "solid", fgColor: { rgb: "1E3A8A" } } : undefined,
         };
       }
     }
@@ -2616,13 +2912,18 @@ const applyTableStyles = (XLSX: any, ws: any, titleSz = 16, subtitleSz = 14) => 
 function ReportsView({ bookings = [] }: { bookings?: any[] }) {
   const [startDate, setStartDate] = React.useState<string>("");
   const [endDate, setEndDate] = React.useState<string>("");
-  const [dateFilterType, setDateFilterType] = React.useState<"created" | "travel">("created");
+  const [dateFilterType, setDateFilterType] = React.useState<"all" | "custom" | "created" | "travel">("created");
 
   const exportBookings = async () => {
     const XLSX = await import("xlsx-js-style/dist/xlsx.bundle.js");
     let targetBookings = bookings;
 
-    if (startDate || endDate) {
+    // Quick filters: All / Custom
+    if (dateFilterType === "all") {
+      // No filtering — export everything
+    } else if (dateFilterType === "custom") {
+      targetBookings = targetBookings.filter((bk) => bk.tripName === "custom");
+    } else if (startDate || endDate) {
       targetBookings = targetBookings.filter((bk) => {
         if (dateFilterType === "created") {
           if (!bk.createdAt) return false;
@@ -2668,21 +2969,35 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
 
     const headers = [
       "Booking ID",
-      "Customer Name",
-      "Phone Number",
+      "Cus_Name",
+      "Contact",
       "Trip Name",
       "Persons",
       "Travel Date",
       "Status",
-      "Submission Date",
-      "Pickup Location",
-      "Custom Destination",
+      "Sub date",
+      "Pickup Point",
+      "Custom Dest",
     ];
 
-    const rows = targetBookings.map((bk, idx) => {
+    const getBookingIndex = (bk: any) => {
+      const match = (bk.generatedBookingId || "").match(/\d+$/);
+      return match ? parseInt(match[0], 10) : 0;
+    };
+
+    const sortedTarget = [...targetBookings].sort((a, b) => {
+      const idxA = getBookingIndex(a);
+      const idxB = getBookingIndex(b);
+      if (idxA !== idxB) return idxA - idxB;
+      return new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime();
+    });
+
+    const rows = sortedTarget.map((bk, idx) => {
       const bId = bk.generatedBookingId;
       const phoneStr = (bk.phone || "").replace(/[\r\n]+/g, " ");
       const dateStr = bk.createdAt ? new Date(bk.createdAt).toLocaleDateString() : "";
+      const custom = bk.invoiceCustomData || {};
+      const pickupPoint = custom.pickupPoint || bk.pickupLocation || bk.pickupPoint || "Pune";
       return [
         bId,
         (bk.name || "").replace(/[\r\n]+/g, " "),
@@ -2692,14 +3007,45 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
         (bk.travelDate || "").replace(/[\r\n]+/g, " "),
         bk.status || "",
         dateStr,
-        (bk.pickupLocation || "").replace(/[\r\n]+/g, " "),
+        pickupPoint.replace(/[\r\n]+/g, " "),
         (bk.customDestination || "").replace(/[\r\n]+/g, " "),
       ];
     });
 
+    let reportTitle = "Booking Report";
+    if (dateFilterType === "all") {
+      reportTitle = "Booking Report: All Bookings";
+    } else if (dateFilterType === "custom") {
+      reportTitle = "Booking Report for Custom Trips";
+    } else if (dateFilterType === "created") {
+      const startStr = startDate ? new Date(startDate).toLocaleDateString("en-GB") : "";
+      const endStr = endDate ? new Date(endDate).toLocaleDateString("en-GB") : "";
+      if (startStr && endStr) {
+        reportTitle = `Booking Report: Submission Date from ${startStr} to ${endStr}`;
+      } else if (startStr) {
+        reportTitle = `Booking Report: Submission Date starting ${startStr}`;
+      } else if (endStr) {
+        reportTitle = `Booking Report: Submission Date ending ${endStr}`;
+      } else {
+        reportTitle = "Booking Report: Filter by Submission Date";
+      }
+    } else if (dateFilterType === "travel") {
+      const startStr = startDate ? new Date(startDate).toLocaleDateString("en-GB") : "";
+      const endStr = endDate ? new Date(endDate).toLocaleDateString("en-GB") : "";
+      if (startStr && endStr) {
+        reportTitle = `Booking Report: Travel Date from ${startStr} to ${endStr}`;
+      } else if (startStr) {
+        reportTitle = `Booking Report: Travel Date starting ${startStr}`;
+      } else if (endStr) {
+        reportTitle = `Booking Report: Travel Date ending ${endStr}`;
+      } else {
+        reportTitle = "Booking Report: Filter by Travel Date";
+      }
+    }
+
     const ws = XLSX.utils.aoa_to_sheet([
       ["SHAILRAJ TRAVELS PUNE"],
-      ["Booking Report"],
+      [reportTitle],
       [],
       headers,
       ...rows,
@@ -2713,28 +3059,31 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
     ];
 
     ws["!cols"] = [
-      { wch: 10 }, // Booking ID
-      { wch: 20 }, // Customer Name
-      { wch: 12 }, // Phone Number
-      { wch: 25 }, // Trip Name
-      { wch: 8 }, // Persons
-      { wch: 18 }, // Travel Date
-      { wch: 12 }, // Status
-      { wch: 12 }, // Submission Date
-      { wch: 25 }, // Pickup Location
-      { wch: 20 }, // Custom Destination
+      { wch: 9  }, // Booking ID
+      { wch: 14 }, // Cus_Name
+      { wch: 11 }, // Contact
+      { wch: 16 }, // Trip Name
+      { wch: 7  }, // Persons
+      { wch: 11 }, // Travel Date
+      { wch: 9  }, // Status
+      { wch: 11 }, // Sub date
+      { wch: 14 }, // Pickup Point
+      { wch: 15 }, // Custom Dest
     ];
 
     ws["!fitToPage"] = true;
-    ws["!pageSetup"] = { orientation: "landscape", fitToWidth: 1, fitToHeight: 0 };
+    ws["!pageSetup"] = {
+      orientation: "landscape",
+      fitToWidth: 1,
+      fitToHeight: 0,
+    };
     ws["!margins"] = {
-      left: 0.5,
-      right: 0.5,
+      left: 0.4,
+      right: 0.4,
       top: 0.5,
       bottom: 0.5,
-      header: 0.3,
-      footer: 0.3,
-      horizontallyCenter: true,
+      header: 0.2,
+      footer: 0.2,
     } as any;
 
     const wb = XLSX.utils.book_new();
@@ -2789,8 +3138,8 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
 
     const headers = [
       "Customer ID",
-      "Customer Name",
-      "Phone Number",
+      "Cus_Name",
+      "Contact",
       "Total Bookings",
       "First Booking Date",
       "Latest Booking Date",
@@ -2834,25 +3183,27 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
     ];
 
     ws["!cols"] = [
-      { wch: 12 }, // Customer ID
-      { wch: 20 }, // Customer Name
+      { wch: 11 }, // Customer ID
+      { wch: 18 }, // Customer Name
       { wch: 12 }, // Phone Number
-      { wch: 15 }, // Total Bookings
-      { wch: 15 }, // First Booking Date
-      { wch: 15 }, // Latest Booking Date
-      { wch: 40 }, // Trips Taken
+      { wch: 13 }, // Total Bookings
+      { wch: 14 }, // First Booking Date
+      { wch: 14 }, // Latest Booking Date
+      { wch: 35 }, // Trips Taken
     ];
-
     ws["!fitToPage"] = true;
-    ws["!pageSetup"] = { orientation: "landscape", fitToWidth: 1, fitToHeight: 0 };
+    ws["!pageSetup"] = {
+      orientation: "landscape",
+      fitToWidth: 1,
+      fitToHeight: 0,
+    };
     ws["!margins"] = {
-      left: 0.5,
-      right: 0.5,
+      left: 0.4,
+      right: 0.4,
       top: 0.5,
       bottom: 0.5,
-      header: 0.3,
-      footer: 0.3,
-      horizontallyCenter: true,
+      header: 0.2,
+      footer: 0.2,
     } as any;
 
     const wb = XLSX.utils.book_new();
@@ -2887,20 +3238,34 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
     const [groupName, groupBks] = group;
     const headers = [
       "Booking ID",
-      "Customer Name",
-      "Phone Number",
+      "Cus_Name",
+      "Contact",
       "Trip Name",
       "Persons",
       "Travel Date",
       "Status",
-      "Submission Date",
-      "Custom Destination",
+      "Sub date",
+      "Pickup Point",
     ];
 
-    const rows = groupBks.map((bk: any) => {
+    const getBookingIndex = (bk: any) => {
+      const match = (bk.generatedBookingId || "").match(/\d+$/);
+      return match ? parseInt(match[0], 10) : 0;
+    };
+
+    const sortedGroupBks = [...groupBks].sort((a, b) => {
+      const idxA = getBookingIndex(a);
+      const idxB = getBookingIndex(b);
+      if (idxA !== idxB) return idxA - idxB;
+      return new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime();
+    });
+
+    const rows = sortedGroupBks.map((bk: any) => {
       const bId = bk.generatedBookingId;
       const phoneStr = (bk.phone || "").replace(/[\r\n]+/g, " ");
       const dateStr = bk.createdAt ? new Date(bk.createdAt).toLocaleDateString() : "";
+      const custom = bk.invoiceCustomData || {};
+      const pickupPoint = custom.pickupPoint || bk.pickupLocation || bk.pickupPoint || "Pune";
       return [
         bId,
         (bk.name || "").replace(/[\r\n]+/g, " "),
@@ -2910,7 +3275,7 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
         (bk.travelDate || "").replace(/[\r\n]+/g, " "),
         bk.status || "",
         dateStr,
-        (bk.customDestination || "").replace(/[\r\n]+/g, " "),
+        pickupPoint.replace(/[\r\n]+/g, " "),
       ];
     });
 
@@ -2930,27 +3295,29 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
     ];
 
     ws["!cols"] = [
-      { wch: 10 },
-      { wch: 20 },
-      { wch: 12 },
-      { wch: 25 },
-      { wch: 8 },
-      { wch: 18 },
-      { wch: 12 },
-      { wch: 12 },
-      { wch: 20 },
+      { wch: 9  }, // Booking ID
+      { wch: 15 }, // Customer Name
+      { wch: 11 }, // Phone Number
+      { wch: 18 }, // Trip Name
+      { wch: 7  }, // Persons
+      { wch: 12 }, // Travel Date
+      { wch: 9  }, // Status
+      { wch: 11 }, // Submission Date
+      { wch: 14 }, // Pickup Location
     ];
-
     ws["!fitToPage"] = true;
-    ws["!pageSetup"] = { orientation: "landscape", fitToWidth: 1, fitToHeight: 0 };
+    ws["!pageSetup"] = {
+      orientation: "landscape",
+      fitToWidth: 1,
+      fitToHeight: 0,
+    };
     ws["!margins"] = {
-      left: 0.5,
-      right: 0.5,
+      left: 0.4,
+      right: 0.4,
       top: 0.5,
       bottom: 0.5,
-      header: 0.3,
-      footer: 0.3,
-      horizontallyCenter: true,
+      header: 0.2,
+      footer: 0.2,
     } as any;
 
     const wb = XLSX.utils.book_new();
@@ -2981,6 +3348,8 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
             onChange={(e) => setDateFilterType(e.target.value as any)}
             className="w-full p-2 text-sm border border-slate-200 rounded-lg outline-none"
           >
+            <option value="all">All Bookings</option>
+            <option value="custom">Custom Trip Bookings</option>
             <option value="created">Filter by Submission Date</option>
             <option value="travel">Filter by Travel Date</option>
           </select>
@@ -3228,86 +3597,161 @@ function InvoicesView({
             </p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-slate-50 border-b border-slate-100 text-slate-500 text-[12px] uppercase tracking-wider font-bold">
-                  <th className="px-6 py-4">Invoice ID</th>
-                  <th className="px-6 py-4">Customer</th>
-                  <th className="px-6 py-4">Trip Date</th>
-                  <th className="px-6 py-4">Amount</th>
-                  <th className="px-6 py-4 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {generatedInvoices.map((bk) => {
-                  const custom = bk.invoiceCustomData || {};
-                  const invoiceNo = bk.generatedInvoiceNo;
-                  const isCustomUnlocked = bk.tripName === "custom" && !bk.isInvoiceLocked;
-                  const rate =
-                    custom.rate !== undefined
-                      ? Number(custom.rate)
-                      : bk.tripName === "custom"
-                        ? 0
-                        : bk.defaultRate || 6000;
-                  const persons =
-                    custom.persons !== undefined ? Number(custom.persons) : Number(bk.persons) || 1;
-                  const total = rate * persons;
-                  const customerName = custom.customerName || bk.customerName || bk.name || "";
-                  const tripName = custom.packageName || bk.packageName || bk.tripName || "";
+          <>
+            {/* Desktop table */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-slate-50 border-b border-slate-100 text-slate-500 text-[12px] uppercase tracking-wider font-bold">
+                    <th className="px-6 py-4">Invoice ID</th>
+                    <th className="px-6 py-4">Customer</th>
+                    <th className="px-6 py-4">Trip Date</th>
+                    <th className="px-6 py-4">Amount</th>
+                    <th className="px-6 py-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {generatedInvoices.map((bk) => {
+                    const custom = bk.invoiceCustomData || {};
+                    const invoiceNo = bk.generatedInvoiceNo;
+                    const isCustomUnlocked = bk.tripName === "custom" && !bk.isInvoiceLocked;
+                    const rate =
+                      custom.rate !== undefined
+                        ? Number(custom.rate)
+                        : bk.tripName === "custom"
+                          ? 0
+                          : bk.defaultRate || 6000;
+                    const persons =
+                      custom.persons !== undefined ? Number(custom.persons) : Number(bk.persons) || 1;
+                    const total = rate * persons;
+                    const customerName = custom.customerName || bk.customerName || bk.name || "";
+                    const tripName = custom.packageName || bk.packageName || bk.tripName || "";
 
-                  return (
-                    <tr key={bk._id} className="hover:bg-slate-50/50 transition-colors">
-                      <td className="px-6 py-4 font-bold text-brand-blue-deep">
-                        <div className="flex items-center gap-2">
-                          <span>{invoiceNo}</span>
-                          {bk.isInvoiceLocked && (
-                            <span className="inline-flex items-center gap-0.5 text-[10px] font-bold text-slate-500 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded">
-                              <Lock size={10} className="text-slate-400" /> Locked
-                            </span>
+                    return (
+                      <tr key={bk._id} className="hover:bg-slate-50/50 transition-colors">
+                        <td className="px-6 py-4 font-bold text-brand-blue-deep">
+                          <div className="flex items-center gap-2">
+                            <span>{invoiceNo}</span>
+                            {bk.isInvoiceLocked && (
+                              <span className="inline-flex items-center gap-0.5 text-[10px] font-bold text-slate-500 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded">
+                                <Lock size={10} className="text-slate-400" /> Locked
+                              </span>
+                            )}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <p className="font-bold text-slate-800">{customerName}</p>
+                          <p className="text-xs text-slate-500">{tripName}</p>
+                        </td>
+                        <td className="px-6 py-4 text-sm font-medium text-slate-600">
+                          {(() => {
+                            const d = new Date(bk.travelDate);
+                            return isNaN(d.getTime())
+                              ? String(bk.travelDate || "")
+                              : d.toLocaleDateString();
+                          })()}
+                        </td>
+                        <td className="px-6 py-4 font-bold text-brand-green-dark">
+                          {isCustomUnlocked ? (
+                            <span className="text-slate-400 italic text-sm">On Request</span>
+                          ) : (
+                            `₹ ${total.toLocaleString()}`
                           )}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <p className="font-bold text-slate-800">{customerName}</p>
-                        <p className="text-xs text-slate-500">{tripName}</p>
-                      </td>
-                      <td className="px-6 py-4 text-sm font-medium text-slate-600">
-                        {(() => {
-                          const d = new Date(bk.travelDate);
-                          return isNaN(d.getTime())
-                            ? String(bk.travelDate || "")
-                            : d.toLocaleDateString();
-                        })()}
-                      </td>
-                      <td className="px-6 py-4 font-bold text-brand-green-dark">
-                        {isCustomUnlocked ? (
-                          <span className="text-slate-400 italic text-sm">On Request</span>
-                        ) : (
-                          `₹ ${total.toLocaleString()}`
+                        </td>
+                        <td className="px-6 py-4 text-right">
+                          <button
+                            onClick={() => setSelectedBookingId(bk._id)}
+                            className="inline-flex items-center gap-2 bg-brand-green/10 text-brand-green-dark px-4 py-2 rounded-lg font-bold hover:bg-brand-green/20 transition-colors"
+                          >
+                            <Eye className="w-4 h-4" /> View Invoice
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile cards */}
+            <div className="md:hidden flex flex-col divide-y divide-slate-100">
+              {generatedInvoices.map((bk) => {
+                const custom = bk.invoiceCustomData || {};
+                const invoiceNo = bk.generatedInvoiceNo;
+                const isCustomUnlocked = bk.tripName === "custom" && !bk.isInvoiceLocked;
+                const rate =
+                  custom.rate !== undefined
+                    ? Number(custom.rate)
+                    : bk.tripName === "custom"
+                      ? 0
+                      : bk.defaultRate || 6000;
+                const persons =
+                  custom.persons !== undefined ? Number(custom.persons) : Number(bk.persons) || 1;
+                const total = rate * persons;
+                const customerName = custom.customerName || bk.customerName || bk.name || "";
+                const tripName = custom.packageName || bk.packageName || bk.tripName || "";
+                const travelDateStr = (() => {
+                  const d = new Date(bk.travelDate);
+                  return isNaN(d.getTime()) ? String(bk.travelDate || "") : d.toLocaleDateString();
+                })();
+
+                return (
+                  <div key={bk._id} className="p-4 flex items-start justify-between gap-3 hover:bg-slate-50/50 transition-colors">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="font-mono text-xs font-bold text-brand-blue-deep">{invoiceNo}</span>
+                        {bk.isInvoiceLocked && (
+                          <span className="inline-flex items-center gap-0.5 text-[10px] font-bold text-slate-400 bg-slate-100 border border-slate-200 px-1 py-0.5 rounded">
+                            <Lock size={9} className="text-slate-300" /> Locked
+                          </span>
                         )}
-                      </td>
-                      <td className="px-6 py-4 text-right">
-                        <button
-                          onClick={() => setSelectedBookingId(bk._id)}
-                          className="inline-flex items-center gap-2 bg-brand-green/10 text-brand-green-dark px-4 py-2 rounded-lg font-bold hover:bg-brand-green/20 transition-colors"
-                        >
-                          <Eye className="w-4 h-4" /> View Invoice
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+                      </div>
+                      <p className="font-bold text-slate-800 text-sm truncate">{customerName}</p>
+                      <p className="text-xs text-slate-500 truncate">{tripName}</p>
+                      <p className="text-[11px] text-slate-400 mt-1">{travelDateStr}</p>
+                      <p className={`text-sm font-bold mt-1 ${isCustomUnlocked ? "text-slate-400 italic" : "text-brand-green-dark"}`}>
+                        {isCustomUnlocked ? "On Request" : `₹ ${total.toLocaleString()}`}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setSelectedBookingId(bk._id)}
+                      className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-brand-green/10 hover:bg-brand-green/20 text-brand-green-dark rounded-xl transition-colors font-bold text-xs"
+                    >
+                      <Eye className="w-3.5 h-3.5" /> View
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          </>
         )}
       </div>
     </>
   );
 }
 
+const ChartXAxisTick = ({ x, y, payload }: any) => {
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <text
+        x={0}
+        y={0}
+        dy={14}
+        textAnchor="middle"
+        fill="#64748b"
+        style={{ fontSize: "11px", fontWeight: 600 }}
+      >
+        <tspan className="hidden sm:inline">{payload.value}</tspan>
+        <tspan className="inline sm:hidden">{payload.value[0]}</tspan>
+      </text>
+    </g>
+  );
+};
+
 function RevenueView({ bookings }: { bookings: any[] }) {
+  const [timeFilter, setTimeFilter] = useState<"all" | "today" | "7days" | "30days">("all");
+  const [yearFilter, setYearFilter] = useState<"thisYear" | "lastYear" | "all">("thisYear");
+
   const getBookingRevenue = (bk: any) => {
     const custom = bk.invoiceCustomData || {};
     if (bk.tripName === "custom" && !bk.isInvoiceLocked) {
@@ -3318,19 +3762,109 @@ function RevenueView({ bookings }: { bookings: any[] }) {
     return rate * persons;
   };
 
-  const confirmedBookings = bookings.filter((b) => b.status === "Confirmed");
+  const formatYAxis = (value: number) => {
+    if (value === 0) return "₹ 0";
+    if (value >= 100000) {
+      return `₹ ${(value / 100000).toFixed(1).replace(/\.0$/, "")}L`;
+    }
+    if (value >= 1000) {
+      return `₹ ${(value / 1000).toFixed(1).replace(/\.0$/, "")}k`;
+    }
+    return `₹ ${value}`;
+  };
+
+  const formatBarLabel = (value: number) => {
+    if (value === 0) return "";
+    if (value >= 100000) {
+      return `₹ ${(value / 100000).toFixed(1).replace(/\.0$/, "")}L`;
+    }
+    if (value >= 1000) {
+      return `₹ ${(value / 1000).toFixed(1).replace(/\.0$/, "")}k`;
+    }
+    return `₹ ${value}`;
+  };
+
+  // Get monthly data for the selected year
+  const currentYear = new Date().getFullYear();
+  const targetYear = yearFilter === "thisYear" ? currentYear : yearFilter === "lastYear" ? currentYear - 1 : null;
+  const monthsShort = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+  const chartData = monthsShort.map((month, index) => {
+    const monthBookings = bookings.filter((b) => {
+      if (b.status !== "Confirmed") return false;
+      const d = b.createdAt ? new Date(b.createdAt) : new Date();
+      if (isNaN(d.getTime())) return false;
+      
+      const isMonthMatch = d.getMonth() === index;
+      const isYearMatch = targetYear ? d.getFullYear() === targetYear : true;
+      return isMonthMatch && isYearMatch;
+    });
+    
+    const revenue = monthBookings.reduce((sum, b) => sum + getBookingRevenue(b), 0);
+    return {
+      name: month,
+      revenue,
+    };
+  });
+
+  // Filter bookings based on selected period
+  const filteredBookings = bookings.filter((b) => {
+    if (timeFilter === "all") return true;
+
+    const d = b.createdAt ? new Date(b.createdAt) : new Date();
+    if (isNaN(d.getTime())) return false;
+
+    const now = new Date();
+    const diffTime = now.getTime() - d.getTime();
+    const diffDays = diffTime / (1000 * 60 * 60 * 24);
+
+    if (timeFilter === "today") return diffDays <= 1;
+    if (timeFilter === "7days") return diffDays <= 7;
+    if (timeFilter === "30days") return diffDays <= 30;
+    return true;
+  });
+
+  const confirmedBookings = filteredBookings.filter((b) => b.status === "Confirmed");
   const confirmedRevenue = confirmedBookings.reduce((sum, b) => sum + getBookingRevenue(b), 0);
 
-  const pendingBookings = bookings.filter((b) => b.status === "Pending");
+  const pendingBookings = filteredBookings.filter((b) => b.status === "Pending");
   const pendingRevenue = pendingBookings.reduce((sum, b) => sum + getBookingRevenue(b), 0);
 
   const totalPotentialRevenue = confirmedRevenue + pendingRevenue;
   const activeBookingsCount = confirmedBookings.length + pendingBookings.length;
   const averageBookingRevenue = confirmedBookings.length > 0 ? confirmedRevenue / confirmedBookings.length : 0;
 
-  // Destination Breakdown
+  // Calculate Revenue This Month and Last Month using RAW bookings (unfiltered)
+  const now = new Date();
+  const startOfThisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  const endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+
+  const rawConfirmedBookings = bookings.filter((b) => b.status === "Confirmed");
+
+  const bookingsThisMonth = rawConfirmedBookings.filter((b) => {
+    const d = b.createdAt ? new Date(b.createdAt) : new Date();
+    return !isNaN(d.getTime()) && d >= startOfThisMonth;
+  });
+  const revenueThisMonth = bookingsThisMonth.reduce((sum, b) => sum + getBookingRevenue(b), 0);
+
+  const bookingsLastMonth = rawConfirmedBookings.filter((b) => {
+    const d = b.createdAt ? new Date(b.createdAt) : new Date();
+    return !isNaN(d.getTime()) && d >= startOfLastMonth && d <= endOfLastMonth;
+  });
+  const revenueLastMonth = bookingsLastMonth.reduce((sum, b) => sum + getBookingRevenue(b), 0);
+
+  let growthPercent = 0;
+  if (revenueLastMonth > 0) {
+    growthPercent = Math.round(((revenueThisMonth - revenueLastMonth) / revenueLastMonth) * 100);
+  } else {
+    // If no data for last month, default to +18% as requested
+    growthPercent = 18;
+  }
+
+  // Destination Breakdown (using filtered bookings)
   const tripBreakdown: { [key: string]: { name: string; count: number; revenue: number } } = {};
-  bookings
+  filteredBookings
     .filter((b) => b.status === "Confirmed")
     .forEach((b) => {
       const name = b.tripName === "custom" ? "Custom Trip" : b.tripName;
@@ -3344,9 +3878,9 @@ function RevenueView({ bookings }: { bookings: any[] }) {
   const tripList = Object.values(tripBreakdown).sort((a, b) => b.revenue - a.revenue);
   const totalBreakdownRevenue = tripList.reduce((sum, t) => sum + t.revenue, 0);
 
-  // Monthly Breakdown
+  // Monthly Breakdown (using filtered bookings)
   const monthlyData: { [key: string]: number } = {};
-  bookings
+  filteredBookings
     .filter((b) => b.status === "Confirmed")
     .forEach((b) => {
       const d = b.createdAt ? new Date(b.createdAt) : new Date();
@@ -3361,79 +3895,121 @@ function RevenueView({ bookings }: { bookings: any[] }) {
 
   return (
     <div className="flex flex-col gap-8 animate-reveal">
+      {/* Header with Filter */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+        <div>
+          <h2 className="text-xl font-bold text-brand-blue-deep">Revenue Overview</h2>
+          <p className="text-slate-500 text-sm mt-1">Track financial metrics and performance trends</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <span className="text-sm font-semibold text-slate-600">Period:</span>
+          <select
+            value={timeFilter}
+            onChange={(e) => setTimeFilter(e.target.value as any)}
+            className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-semibold text-brand-blue-deep focus:ring-2 focus:ring-brand-green focus:border-brand-green outline-none transition-all cursor-pointer"
+          >
+            <option value="all">All Time</option>
+            <option value="today">Today (Last 24 Hours)</option>
+            <option value="7days">Last 7 Days</option>
+            <option value="30days">Last 30 Days</option>
+          </select>
+        </div>
+      </div>
+
       {/* Metrics Row */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 animate-reveal">
-        {/* Card 1 */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 animate-reveal">
+        {/* Card 1: Total Revenue */}
         <div className="relative overflow-hidden bg-gradient-to-br from-indigo-600 to-violet-700 text-white p-6 rounded-2xl border border-indigo-700 shadow-md">
           <div className="absolute top-0 right-0 p-4 opacity-15">
             <BadgeIndianRupee className="w-24 h-24 animate-pulse" />
           </div>
           <p className="text-[11px] font-bold uppercase tracking-widest text-indigo-200">
-            Potential Revenue
+            Total Revenue
           </p>
           <p className="text-3xl font-display font-bold mt-2">
-            ₹ {totalPotentialRevenue.toLocaleString()}
+            ₹ {confirmedRevenue.toLocaleString("en-IN")}
           </p>
           <div className="mt-4 flex items-center justify-between text-xs text-indigo-200">
-            <span>Confirmed + Pending</span>
+            <span>All confirmed revenue</span>
             <span className="bg-indigo-500/30 px-2 py-0.5 rounded font-semibold">
-              {activeBookingsCount} bookings
+              +{growthPercent}% vs Last Month
             </span>
           </div>
         </div>
 
-        {/* Card 2 */}
+        {/* Card 2: Revenue This Month */}
         <div className="relative overflow-hidden bg-gradient-to-br from-emerald-600 to-teal-700 text-white p-6 rounded-2xl border border-emerald-700 shadow-md">
           <div className="absolute top-0 right-0 p-4 opacity-15">
-            <BadgeIndianRupee className="w-24 h-24 animate-pulse" />
+            <CalendarCheck className="w-24 h-24 animate-pulse" />
           </div>
           <p className="text-[11px] font-bold uppercase tracking-widest text-emerald-200">
-            Confirmed Revenue
+            Revenue This Month
           </p>
           <p className="text-3xl font-display font-bold mt-2">
-            ₹ {confirmedRevenue.toLocaleString()}
+            ₹ {revenueThisMonth.toLocaleString("en-IN")}
           </p>
           <div className="mt-4 flex items-center justify-between text-xs text-emerald-200">
-            <span>Realized Income</span>
+            <span>Current month earnings</span>
             <span className="bg-emerald-500/30 px-2 py-0.5 rounded font-semibold">
-              {confirmedBookings.length} confirmed
+              {bookingsThisMonth.length} bookings
             </span>
           </div>
         </div>
 
-        {/* Card 3 */}
+        {/* Card 3: Pending Payments */}
         <div className="relative overflow-hidden bg-gradient-to-br from-amber-500 to-orange-600 text-white p-6 rounded-2xl border border-amber-600 shadow-md">
           <div className="absolute top-0 right-0 p-4 opacity-15">
-            <BadgeIndianRupee className="w-24 h-24 animate-pulse" />
+            <CreditCard className="w-24 h-24 animate-pulse" />
           </div>
           <p className="text-[11px] font-bold uppercase tracking-widest text-amber-200">
-            Pipeline Revenue
+            Pending Payments
           </p>
           <p className="text-3xl font-display font-bold mt-2">
-            ₹ {pendingRevenue.toLocaleString()}
+            ₹ {pendingRevenue.toLocaleString("en-IN")}
           </p>
           <div className="mt-4 flex items-center justify-between text-xs text-amber-200">
-            <span>Expected Pending</span>
+            <span>Amount customers still owe</span>
             <span className="bg-amber-500/30 px-2 py-0.5 rounded font-semibold">
               {pendingBookings.length} pending
             </span>
           </div>
         </div>
 
-        {/* Card 4 */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-cyan-600 to-blue-700 text-white p-6 rounded-2xl border border-cyan-700 shadow-md">
+        {/* Card 4: Total Bookings */}
+        <div className="relative overflow-hidden bg-gradient-to-br from-sky-600 to-blue-700 text-white p-6 rounded-2xl border border-sky-700 shadow-md">
           <div className="absolute top-0 right-0 p-4 opacity-15">
-            <BadgeIndianRupee className="w-24 h-24 animate-pulse" />
+            <Package className="w-24 h-24 animate-pulse" />
           </div>
-          <p className="text-[11px] font-bold uppercase tracking-widest text-cyan-200">
-            Avg Booking Revenue
+          <p className="text-[11px] font-bold uppercase tracking-widest text-sky-200">
+            Total Bookings
           </p>
           <p className="text-3xl font-display font-bold mt-2">
-            ₹ {Math.round(averageBookingRevenue).toLocaleString()}
+            {confirmedBookings.length}
           </p>
-          <div className="mt-4 flex items-center justify-between text-xs text-cyan-200">
-            <span>Average Deal Size</span>
-            <span className="bg-cyan-500/30 px-2 py-0.5 rounded font-semibold">Per booking</span>
+          <div className="mt-4 flex items-center justify-between text-xs text-sky-200">
+            <span>Total confirmed bookings</span>
+            <span className="bg-sky-500/30 px-2 py-0.5 rounded font-semibold">
+              Confirmed
+            </span>
+          </div>
+        </div>
+
+        {/* Card 5: Average Booking Value */}
+        <div className="relative overflow-hidden bg-gradient-to-br from-teal-600 to-cyan-700 text-white p-6 rounded-2xl border border-teal-700 shadow-md">
+          <div className="absolute top-0 right-0 p-4 opacity-15">
+            <Users className="w-24 h-24 animate-pulse" />
+          </div>
+          <p className="text-[11px] font-bold uppercase tracking-widest text-teal-200">
+            Average Booking Value
+          </p>
+          <p className="text-3xl font-display font-bold mt-2">
+            ₹ {Math.round(averageBookingRevenue).toLocaleString("en-IN")}
+          </p>
+          <div className="mt-4 flex items-center justify-between text-xs text-teal-200">
+            <span>Average revenue per booking</span>
+            <span className="bg-teal-500/30 px-2 py-0.5 rounded font-semibold">
+              Per booking
+            </span>
           </div>
         </div>
       </div>
@@ -3491,50 +4067,101 @@ function RevenueView({ bookings }: { bookings: any[] }) {
 
         {/* Monthly Trend */}
         <div className="lg:col-span-5 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col">
-          <h2 className="text-lg font-bold text-brand-blue-deep mb-6">Monthly Revenue Trend</h2>
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-lg font-bold text-brand-blue-deep">Monthly Revenue Trend</h2>
+              <p className="text-xs text-slate-400 mt-0.5">
+                {yearFilter === "thisYear" ? `This Year (${new Date().getFullYear()})` : yearFilter === "lastYear" ? `Last Year (${new Date().getFullYear() - 1})` : "All Years Combined"}
+              </p>
+            </div>
+            <select
+              value={yearFilter}
+              onChange={(e) => setYearFilter(e.target.value as any)}
+              className="bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs font-semibold text-brand-blue-deep focus:ring-2 focus:ring-brand-green focus:border-brand-green outline-none transition-all cursor-pointer"
+            >
+              <option value="thisYear">This Year</option>
+              <option value="lastYear">Last Year</option>
+              <option value="all">All Time</option>
+            </select>
+          </div>
           <div className="flex-1 min-h-[300px] w-full">
-            {sortedMonths.length === 0 ? (
-              <div className="flex items-center justify-center h-full text-slate-400">
-                No trend data available
-              </div>
-            ) : (
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={sortedMonths.map((m) => ({ name: m, revenue: monthlyData[m] }))}
-                  margin={{ top: 10, right: 10, left: 10, bottom: 0 }}
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={chartData}
+                margin={{ top: 28, right: 10, left: 10, bottom: 0 }}
+                barCategoryGap="25%"
+              >
+                <defs>
+                  <linearGradient id="barGradientBlue" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#3b82f6" stopOpacity={1} />
+                    <stop offset="100%" stopColor="#60a5fa" stopOpacity={0.85} />
+                  </linearGradient>
+                  <linearGradient id="barGradientEmpty" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#e2e8f0" stopOpacity={1} />
+                    <stop offset="100%" stopColor="#f1f5f9" stopOpacity={1} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                <XAxis
+                  dataKey="name"
+                  axisLine={false}
+                  tickLine={false}
+                  tick={<ChartXAxisTick />}
+                  interval={0}
+                  dy={10}
+                />
+                <YAxis
+                  tickFormatter={formatYAxis}
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: "#94a3b8", fontSize: 11 }}
+                  width={55}
+                />
+                <RechartsTooltip
+                  cursor={{ fill: "#f1f5f9", radius: 4 }}
+                  formatter={(value: number) => [`₹ ${value.toLocaleString("en-IN")}`, "Revenue"]}
+                  contentStyle={{
+                    borderRadius: "12px",
+                    border: "none",
+                    boxShadow: "0 4px 20px -2px rgb(0 0 0 / 0.15)",
+                    fontSize: "13px",
+                    fontWeight: 600,
+                  }}
+                />
+                <Bar
+                  dataKey="revenue"
+                  radius={[6, 6, 0, 0]}
+                  maxBarSize={48}
                 >
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-                  <XAxis
-                    dataKey="name"
-                    axisLine={false}
-                    tickLine={false}
-                    tick={{ fill: "#64748b", fontSize: 12, fontWeight: 600 }}
-                    dy={10}
-                  />
-                  <YAxis hide />
-                  <RechartsTooltip
-                    cursor={{ fill: "#f1f5f9" }}
-                    formatter={(value: number) => [`₹ ${value.toLocaleString()}`, "Revenue"]}
-                    contentStyle={{
-                      borderRadius: "12px",
-                      border: "none",
-                      boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+                  {chartData.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={entry.revenue > 0 ? "url(#barGradientBlue)" : "url(#barGradientEmpty)"}
+                    />
+                  ))}
+                  <LabelList
+                    dataKey="revenue"
+                    position="top"
+                    content={({ x, y, width, value }: any) => {
+                      const label = formatBarLabel(Number(value));
+                      if (!label) return null;
+                      return (
+                        <text
+                          x={Number(x) + Number(width) / 2}
+                          y={Number(y) - 6}
+                          fill="#1e40af"
+                          textAnchor="middle"
+                          fontSize={10}
+                          fontWeight={700}
+                        >
+                          {label}
+                        </text>
+                      );
                     }}
                   />
-                  <Bar dataKey="revenue" fill="#0ea5e9" radius={[6, 6, 0, 0]} maxBarSize={50}>
-                    {sortedMonths.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill="url(#colorRevenue)" />
-                    ))}
-                  </Bar>
-                  <defs>
-                    <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.9} />
-                      <stop offset="95%" stopColor="#06b6d4" stopOpacity={0.9} />
-                    </linearGradient>
-                  </defs>
-                </BarChart>
-              </ResponsiveContainer>
-            )}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
           </div>
         </div>
       </div>
@@ -3544,7 +4171,9 @@ function RevenueView({ bookings }: { bookings: any[] }) {
         <div className="px-6 py-5 border-b border-slate-100">
           <h2 className="text-lg font-bold text-brand-blue-deep">Booking Revenue Ledger</h2>
         </div>
-        <div className="overflow-x-auto">
+
+        {/* Desktop table */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-100 text-slate-500 text-[12px] uppercase tracking-wider font-bold">
@@ -3623,6 +4252,55 @@ function RevenueView({ bookings }: { bookings: any[] }) {
             </tbody>
           </table>
         </div>
+
+        {/* Mobile cards */}
+        <div className="md:hidden flex flex-col divide-y divide-slate-100">
+          {bookings
+            .filter((b) => b.status === "Confirmed")
+            .map((bk) => {
+              const custom = bk.invoiceCustomData || {};
+              const isCustomUnlocked = bk.tripName === "custom" && !bk.isInvoiceLocked;
+              const rate =
+                custom.rate !== undefined
+                  ? Number(custom.rate)
+                  : bk.tripName === "custom"
+                    ? 0
+                    : bk.defaultRate || 6000;
+              const persons =
+                custom.persons !== undefined ? Number(custom.persons) : bk.persons || 1;
+              const total = rate * persons;
+              const customerName = custom.customerName || bk.customerName || bk.name || "";
+              const tripName = custom.packageName || bk.packageName || bk.tripName || "";
+
+              return (
+                <div key={bk._id} className="p-4 flex items-start justify-between gap-3 hover:bg-slate-50/50 transition-colors">
+                  <div className="flex-1 min-w-0">
+                    <span className="font-mono text-[10px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">
+                      {bk.generatedBookingId || bk._id.slice(-8).toUpperCase()}
+                    </span>
+                    <p className="font-bold text-slate-800 text-sm mt-1 truncate">{customerName}</p>
+                    <p className="text-xs text-slate-500 truncate">{tripName === "custom" ? "Custom Trip" : tripName}</p>
+                    <div className="flex items-center gap-3 mt-1.5">
+                      <span className="text-xs text-slate-500">
+                        {isCustomUnlocked ? "On Request" : `₹ ${rate.toLocaleString()} × ${persons}`}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-end gap-1.5 shrink-0">
+                    <span className={`text-sm font-bold ${isCustomUnlocked ? "text-slate-400 italic" : "text-brand-blue-deep"}`}>
+                      {isCustomUnlocked ? "Pending" : `₹ ${total.toLocaleString()}`}
+                    </span>
+                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-green-50 text-green-700 border border-green-200">
+                      {bk.status}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          {bookings.filter((b) => b.status === "Confirmed").length === 0 && (
+            <div className="p-8 text-center text-slate-400 font-medium text-sm">No confirmed bookings yet</div>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -3668,15 +4346,15 @@ function WhatsAppEngineView({ token }: { token: string }) {
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden p-8 max-w-2xl mx-auto animate-reveal text-center">
-      <Smartphone className="w-16 h-16 mx-auto mb-4 text-brand-blue-deep" />
-      <h2 className="text-2xl font-bold font-display text-brand-blue-deep mb-2">WhatsApp Engine</h2>
-      <p className="text-slate-500 mb-8">
+    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden p-4 sm:p-8 max-w-2xl mx-auto animate-reveal text-center">
+      <Smartphone className="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-4 text-brand-blue-deep" />
+      <h2 className="text-xl sm:text-2xl font-bold font-display text-brand-blue-deep mb-2">WhatsApp Engine</h2>
+      <p className="text-slate-500 mb-6 sm:mb-8 text-sm sm:text-base">
         Manage the WhatsApp bot connection. This bot automatically notifies you of new bookings and
         responds to commands.
       </p>
 
-      <div className="bg-slate-50 p-6 rounded-xl border border-slate-100 mb-8 inline-block w-full max-w-sm">
+      <div className="bg-slate-50 p-4 sm:p-6 rounded-xl border border-slate-100 mb-6 sm:mb-8 inline-block w-full max-w-sm mx-auto">
         <p className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Status</p>
         <p
           className={`text-xl font-bold ${
@@ -3701,7 +4379,7 @@ function WhatsAppEngineView({ token }: { token: string }) {
         )}
       </div>
 
-      <div className="flex gap-4 justify-center">
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
         <button
           onClick={handleRestart}
           className="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition-colors"

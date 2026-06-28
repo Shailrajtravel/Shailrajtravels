@@ -63,6 +63,27 @@ function ContactPage() {
     }
   };
 
+  const handleFormKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+    if (e.key === "Enter") {
+      const target = e.target as HTMLElement;
+      if (
+        (target.tagName === "INPUT" && (target as HTMLInputElement).type !== "button" && (target as HTMLInputElement).type !== "submit") ||
+        target.tagName === "SELECT"
+      ) {
+        const form = e.currentTarget;
+        const inputs = Array.from(
+          form.querySelectorAll("input:not([type='hidden']):not([disabled]), select:not([disabled]), textarea:not([disabled])")
+        ) as HTMLElement[];
+        
+        const index = inputs.indexOf(target);
+        if (index > -1 && index < inputs.length - 1) {
+          e.preventDefault();
+          inputs[index + 1].focus();
+        }
+      }
+    }
+  };
+
   return (
     <main className="w-full bg-slate-50 pb-20 pt-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -156,7 +177,11 @@ function ContactPage() {
                     {errorMessage}
                   </div>
                 )}
-                <form className="space-y-6" onSubmit={handleSubmit}>
+                <form
+                  className="space-y-6"
+                  onSubmit={handleSubmit}
+                  onKeyDown={handleFormKeyDown}
+                >
                   {/* Honeypot Field */}
                   <input
                     type="text"

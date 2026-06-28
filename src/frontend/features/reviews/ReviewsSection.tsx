@@ -121,6 +121,27 @@ export function ReviewsSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
   // Fallback to MOCK_REVIEWS if DB is empty (e.g. fresh installation)
   const displayReviews = dbReviews && dbReviews.length > 0 ? dbReviews : MOCK_REVIEWS;
 
+  const handleFormKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+    if (e.key === "Enter") {
+      const target = e.target as HTMLElement;
+      if (
+        (target.tagName === "INPUT" && (target as HTMLInputElement).type !== "button" && (target as HTMLInputElement).type !== "submit") ||
+        target.tagName === "SELECT"
+      ) {
+        const form = e.currentTarget;
+        const inputs = Array.from(
+          form.querySelectorAll("input:not([type='hidden']):not([disabled]), select:not([disabled]), textarea:not([disabled])")
+        ) as HTMLElement[];
+        
+        const index = inputs.indexOf(target);
+        if (index > -1 && index < inputs.length - 1) {
+          e.preventDefault();
+          inputs[index + 1].focus();
+        }
+      }
+    }
+  };
+
   return (
     <section
       id="reviews"
@@ -153,6 +174,7 @@ export function ReviewsSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
                 action="https://formspree.io/f/placeholder"
                 method="POST"
                 onSubmit={handleSubmit}
+                onKeyDown={handleFormKeyDown}
                 className="flex flex-col gap-5"
               >
                 <input type="hidden" name="rating" value={rating} />

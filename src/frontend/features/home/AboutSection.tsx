@@ -1,7 +1,107 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Map, Users, Star } from "lucide-react";
+import { getPublicStatsFn } from "../../../backend/lib/bookings";
+import { highlightBrandName } from "../core/BrandHighlight";
+
+const AnimatedCounter = ({
+  target,
+  duration = 1500,
+  suffix = "",
+  decimals = 0,
+}: {
+  target: number;
+  duration?: number;
+  suffix?: string;
+  decimals?: number;
+}) => {
+  const [count, setCount] = useState(0);
+  const [hasStarted, setHasStarted] = useState(false);
+  const elementRef = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setHasStarted(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+    if (elementRef.current) {
+      observer.observe(elementRef.current);
+    }
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!hasStarted) return;
+    const start = 0;
+    const end = target;
+    const startTime = performance.now();
+    let animationFrameId: number;
+
+    const updateCount = (now: number) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      
+      // Easing function: easeOutQuad
+      const easeProgress = progress * (2 - progress);
+      const currentValue = start + (end - start) * easeProgress;
+      
+      setCount(currentValue);
+
+      if (progress < 1) {
+        animationFrameId = requestAnimationFrame(updateCount);
+      } else {
+        setCount(end);
+      }
+    };
+
+    animationFrameId = requestAnimationFrame(updateCount);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [hasStarted, target, duration]);
+
+  return (
+    <span ref={elementRef}>
+      {count.toLocaleString(undefined, {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals,
+      })}
+      {suffix}
+    </span>
+  );
+};
 
 export function AboutSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
+  const [stats, setStats] = useState({
+    travelersCount: 0,
+    packagesCount: 0,
+    toursCount: 0,
+    tripOptionsCount: 0,
+    avgRating: 4.9,
+  });
+
+  useEffect(() => {
+    getPublicStatsFn()
+      .then((res) => {
+        if (res) {
+          setStats(res);
+        }
+      })
+      .catch((err) => console.error("Failed to load statistics:", err));
+  }, []);
+
+  // Start at 1.5 in June 2026, and increase dynamically month-by-month (by 1/12th of a year each month).
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth(); // June is 5
+  const elapsedMonths = (currentYear - 2026) * 12 + (currentMonth - 5);
+  const yearsOfExperience = (1.5 + elapsedMonths / 12).toFixed(1);
+  const happyYatris = 150 + Math.max(0, stats.travelersCount - 121);
+  // Current database count is 9 packages + tours. Start at 50, and increase as new ones are added.
+  const currentDestinationsCount = stats.packagesCount + stats.toursCount;
+  const sacredDestinations = 50 + Math.max(0, currentDestinationsCount - 9);
+
   return (
     <div id="about" className="scroll-mt-28 md:scroll-mt-32">
       {/* Hero Section */}
@@ -35,10 +135,10 @@ export function AboutSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
             <span className="text-brand-green-dark">{t.heroHeadingHighlight}</span>
           </h2>
           <div className="mx-auto mt-8 max-w-3xl text-[16px] leading-relaxed text-slate-600 md:text-[18px] space-y-6 text-justify sm:text-center">
-            <p>{t.heroP1}</p>
-            <p>{t.heroP2}</p>
-            <p>{t.heroP3}</p>
-            <p>{t.heroP4}</p>
+            <p>{highlightBrandName(t.heroP1)}</p>
+            <p>{highlightBrandName(t.heroP2)}</p>
+            <p>{highlightBrandName(t.heroP3)}</p>
+            <p>{highlightBrandName(t.heroP4)}</p>
           </div>
         </div>
       </section>
@@ -50,14 +150,14 @@ export function AboutSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
           style={{ animationDelay: "0.2s" }}
         >
           {[
-            { icon: <Map className="h-6 w-6" />, count: "50+", label: t.statDestinations },
-            { icon: <Users className="h-6 w-6" />, count: "100+", label: t.statYatris },
-            { icon: <Star className="h-6 w-6" />, count: "1.5+", label: t.statExperience },
-            { icon: <Star className="h-6 w-6" />, count: "4.9/5", label: t.statRating },
+            { icon: <Map className="h-6 w-6" />, count: <AnimatedCounter target={sacredDestinations} suffix="+" />, label: t.statDestinations },
+            { icon: <Users className="h-6 w-6" />, count: <AnimatedCounter target={happyYatris} suffix="+" />, label: t.statYatris },
+            { icon: <Star className="h-6 w-6" />, count: <AnimatedCounter target={parseFloat(String(yearsOfExperience))} decimals={1} suffix="+" />, label: t.statExperience },
+            { icon: <Star className="h-6 w-6" />, count: <AnimatedCounter target={stats.avgRating} decimals={1} suffix="/5" />, label: t.statRating },
           ].map((stat, i) => (
             <div
               key={i}
-              className="flex flex-col items-center justify-center rounded-3xl bg-white p-6 shadow-xl shadow-brand-blue/5 border border-slate-50 transition-transform hover:-translate-y-1"
+              className="flex flex-col items-center justify-center rounded-3xl bg-white p-6 shadow-xl shadow-brand-blue/5 border border-slate-50 transition-all duration-300 hover:-translate-y-1.5 hover:scale-[1.03] hover:shadow-2xl hover:shadow-brand-blue/10 hover:border-brand-blue/10"
             >
               <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-mist text-brand-blue">
                 {stat.icon}

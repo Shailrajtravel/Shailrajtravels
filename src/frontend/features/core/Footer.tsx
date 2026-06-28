@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { getToursFn } from "../../../backend/lib/tours";
 import { Phone, Mail, MapPin, Instagram, Facebook, Youtube, ArrowRight } from "lucide-react";
 import { translations } from "./i18n";
+import { BrandHighlight } from "./BrandHighlight";
 
 export function FooterSection({ t, lang = "en" }: { t: typeof translations.mr; lang?: string }) {
   const [popularTours, setPopularTours] = useState<{ label: string; href: string }[]>([]);
@@ -42,7 +43,7 @@ export function FooterSection({ t, lang = "en" }: { t: typeof translations.mr; l
           <div className="col-span-1 md:col-span-2 xl:col-span-1 flex flex-col items-center md:items-start text-center md:text-left gap-6 xl:pr-6">
             <div className="flex flex-col items-center md:items-start">
               <span className="leading-none">
-                <span className="block font-display text-[32px] font-extrabold text-white tracking-tight">
+                <span className="block font-display text-[32px] font-extrabold text-[#E10600] tracking-tight">
                   Shailraj
                 </span>
                 <span className="block text-[11px] font-bold uppercase tracking-[0.35em] text-brand-green mt-1.5 ml-0.5">
@@ -255,7 +256,7 @@ export function FooterSection({ t, lang = "en" }: { t: typeof translations.mr; l
         {/* Bottom Bar - Copyright */}
         <div className="border-t border-slate-800/80 pt-8 pb-4 flex flex-col md:flex-row items-center justify-between gap-4 text-[14px] text-slate-500 text-center md:text-left">
           <p className="font-medium tracking-wide">
-            © {new Date().getFullYear()} Shailraj Travels.{" "}
+            © {new Date().getFullYear()} <BrandHighlight text="Shailraj Travels" />.{" "}
             {t.footerRights || "All Rights Reserved."}
           </p>
           <p className="flex items-center gap-1.5">

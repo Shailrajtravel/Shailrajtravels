@@ -20,8 +20,9 @@ import {
 } from "lucide-react";
 import { Leaf } from "../core/icons";
 import { translations } from "../core/i18n";
-import bgMobile from "@/frontend/assets/hero-pandharpur.jpg";
-import temple from "@/frontend/assets/hero-pandharpur.jpg"; // fallback until correct image is found
+import { highlightBrandName } from "../core/BrandHighlight";
+import bgMobile from "@/frontend/assets/hero-pandharpur.webp";
+import temple from "@/frontend/assets/hero-pandharpur.webp"; // fallback until correct image is found
 import { createBookingFn } from "../../../backend/lib/bookings";
 
 export function getUpcomingDates(allowedDaysOfWeek: number[]) {
@@ -38,6 +39,17 @@ export function getUpcomingDates(allowedDaysOfWeek: number[]) {
   return dates;
 }
 
+function generateUUID() {
+  if (typeof window !== "undefined" && window.crypto && window.crypto.randomUUID) {
+    return window.crypto.randomUUID();
+  }
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+
 export function Hero({
   lang,
   t,
@@ -50,9 +62,30 @@ export function Hero({
   activeTripId?: string;
 }) {
   const [selectedTrip, setSelectedTrip] = useState<string>(tripOptions[0]?._id || "custom");
-  const [persons, setPersons] = useState(2);
+  const [persons, setPersons] = useState(1);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+
+  const handleFormKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+    if (e.key === "Enter") {
+      const target = e.target as HTMLElement;
+      if (
+        (target.tagName === "INPUT" && (target as HTMLInputElement).type !== "button" && (target as HTMLInputElement).type !== "submit") ||
+        target.tagName === "SELECT"
+      ) {
+        const form = e.currentTarget;
+        const inputs = Array.from(
+          form.querySelectorAll("input:not([type='hidden']):not([disabled]), select:not([disabled])")
+        ) as HTMLElement[];
+        
+        const index = inputs.indexOf(target);
+        if (index > -1 && index < inputs.length - 1) {
+          e.preventDefault();
+          inputs[index + 1].focus();
+        }
+      }
+    }
+  };
 
   useEffect(() => {
     if (activeTripId) {
@@ -169,7 +202,7 @@ export function Hero({
           </h1>
 
           <p className="mt-4 max-w-[550px] text-[15px] leading-relaxed text-slate-600 md:mt-4 md:text-[16px]">
-            {t.heroDesc}
+            {highlightBrandName(t.heroDesc)}
           </p>
 
           <div
@@ -177,7 +210,7 @@ export function Hero({
             style={{ animationDelay: "0.2s" }}
           >
             <p className="text-[15px] font-bold text-brand-blue-deep md:text-[17px]">
-              {t.heroHighlight}
+              {highlightBrandName(t.heroHighlight)}
             </p>
             <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 md:mt-5 md:gap-4">
               <div className="flex items-center gap-3 text-brand-blue-deep">
@@ -237,6 +270,7 @@ export function Hero({
             </div>
           ) : (
             <form
+              onKeyDown={handleFormKeyDown}
               onSubmit={async (e) => {
                 e.preventDefault();
                 const formData = new FormData(e.currentTarget);
@@ -249,7 +283,7 @@ export function Hero({
                   data.tripName = "custom";
                 }
 
-                data.idempotencyKey = typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2) + Date.now().toString(36);
+                data.idempotencyKey = generateUUID();
 
                 setLoading(true);
                 try {
