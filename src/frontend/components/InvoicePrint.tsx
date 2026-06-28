@@ -517,19 +517,21 @@ export function InvoicePrint({
                     </td>
                   </tr>
                 </tbody>
+                <tfoot>
+                  <tr className="bg-slate-50 border-t" style={{ borderColor: BORDER }}>
+                    <td colSpan={2} className="px-5 py-3"></td>
+                    <td className="px-5 py-3 text-center font-bold uppercase tracking-wider text-slate-700 text-[13px] border-l border-r" style={{ borderColor: BORDER }}>
+                      Total
+                    </td>
+                    <td
+                      className="px-5 py-3 text-center text-[20px] font-extrabold leading-normal"
+                      style={{ color: DARK }}
+                    >
+                      ₹ {totalAmount.toLocaleString()}
+                    </td>
+                  </tr>
+                </tfoot>
               </table>
-              <div className="flex bg-slate-50 border-t" style={{ borderColor: BORDER }}>
-                <div className="flex-1" />
-                <div className="w-[140px] px-5 py-1 flex items-center justify-center text-[15px] font-bold uppercase tracking-widest text-slate-700">
-                  Total
-                </div>
-                <div
-                  className="w-[160px] px-5 py-1 flex items-center justify-center text-[22px] font-black leading-none"
-                  style={{ color: DARK }}
-                >
-                  ₹ {totalAmount.toLocaleString()}
-                </div>
-              </div>
             </div>
 
             {/* PAYMENT + SIGNATURE */}
