@@ -384,7 +384,7 @@ export function InvoicePrint({
             </div>
 
             {/* INVOICE INFO CARD */}
-            <div className="mt-6 rounded-[10px] border" style={{ borderColor: BORDER }}>
+            <div className="mt-4 rounded-[10px] border shrink-0" style={{ borderColor: BORDER }}>
               <div className="grid grid-cols-2">
                 <div className="p-3 border-r" style={{ borderColor: BORDER }}>
                   <InfoLine
@@ -420,7 +420,7 @@ export function InvoicePrint({
             </div>
 
             {/* BILL TO + TRIP DETAILS */}
-            <div className="mt-6 grid grid-cols-2 gap-6">
+            <div className="mt-4 grid grid-cols-2 gap-4 shrink-0">
               <Card title="BILL TO">
                 <div className="flex flex-col h-full gap-1">
                   <DetailRow
@@ -463,7 +463,7 @@ export function InvoicePrint({
 
             {/* TABLE */}
             <div
-              className="mt-6 overflow-hidden rounded-[8px] border flex flex-col"
+              className="mt-4 overflow-hidden rounded-[8px] border flex flex-col shrink-0"
               style={{ borderColor: BORDER }}
             >
               <table className="w-full text-left text-[13px]">
@@ -535,7 +535,7 @@ export function InvoicePrint({
             </div>
 
             {/* PAYMENT + SIGNATURE */}
-            <div className="mt-6 grid grid-cols-2 gap-6">
+            <div className="mt-4 grid grid-cols-2 gap-4 shrink-0">
               <Card title="PAYMENT DETAILS">
                 <div className="flex flex-col h-full gap-1">
                   <DetailRow label="Payment Mode" value="Cash / Online" />
