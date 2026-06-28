@@ -142,19 +142,36 @@ export async function sendAdminNotification(message: string) {
   }
 }
 
+/** Helper to resolve correct WhatsApp JID (c.us or lid) for a phone number */
+async function resolveChatId(phone: string): Promise<string> {
+  if (!activeSessionId) throw new Error("No active session");
+  
+  let cleaned = phone.replace(/\D/g, "");
+  if (cleaned.startsWith("0")) cleaned = cleaned.substring(1);
+  if (cleaned.length === 10) cleaned = "91" + cleaned;
+  
+  try {
+    const result = await openwaRequest(`/api/sessions/${activeSessionId}/contacts/check/${cleaned}`);
+    if (result && result.exists && result.whatsappId) {
+      console.log(`[WhatsApp] Resolved phone ${phone} to JID: ${result.whatsappId}`);
+      return result.whatsappId;
+    }
+  } catch (err: any) {
+    console.warn(`[WhatsApp] Failed to resolve JID for ${phone}:`, err.message);
+  }
+  
+  return `${cleaned}@c.us`;
+}
+
 export async function sendWhatsAppMessage(phone: string, message: string) {
   if (!activeSessionId) return false;
   try {
-    let cleaned = phone.replace(/\D/g, "");
-    if (cleaned.startsWith("0")) cleaned = cleaned.substring(1);
-    if (cleaned.length === 10) cleaned = "91" + cleaned;
-
-    const targetId = `${cleaned}@c.us`;
+    const targetId = await resolveChatId(phone);
     await openwaRequest(`/api/sessions/${activeSessionId}/messages/send-text`, 'POST', {
       chatId: targetId,
       text: message
     });
-    console.log(`[WhatsApp] Sent notification to ${targetId}`);
+    console.log(`[WhatsApp] Sent message to ${targetId}`);
     return true;
   } catch (error) {
     console.error("[WhatsApp] Failed to send message:", error);
@@ -165,11 +182,7 @@ export async function sendWhatsAppMessage(phone: string, message: string) {
 export async function sendWhatsAppImage(phone: string, base64Image: string, filename: string, caption?: string) {
   if (!activeSessionId) return false;
   try {
-    let cleaned = phone.replace(/\D/g, "");
-    if (cleaned.startsWith("0")) cleaned = cleaned.substring(1);
-    if (cleaned.length === 10) cleaned = "91" + cleaned;
-    
-    const targetId = `${cleaned}@c.us`;
+    const targetId = await resolveChatId(phone);
     
     let rawBase64 = base64Image;
     let mimeType = 'image/jpeg';
@@ -249,10 +262,7 @@ export async function sendBookingInvoicePDF(
     }
 
     const filename = `Invoice_${invoiceNo}.pdf`;
-    let cleaned = (booking.phone || "").replace(/\D/g, "");
-    if (cleaned.startsWith("0")) cleaned = cleaned.substring(1);
-    if (cleaned.length === 10) cleaned = "91" + cleaned;
-    const targetId = `${cleaned}@c.us`;
+    const targetId = await resolveChatId(booking.phone || "");
 
     const pkgName = booking.invoiceCustomData?.packageName || booking.packageName || booking.tripName || "Custom Trip";
     const msg = `🙏 *Shailraj Travels Pune* 🙏\n\nHello *${booking.name || "Customer"}*,\n\nWe have received your payment for *${pkgName}*.\nPlease find the official invoice above. Thank you for choosing us! Have a blessed trip! 🚩`;
