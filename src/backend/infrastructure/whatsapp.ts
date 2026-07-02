@@ -1,4 +1,3 @@
-import "dotenv/config";
 import clientPromise from '@/backend/shared/db';
 import { ObjectId } from 'mongodb';
 
