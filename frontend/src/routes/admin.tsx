@@ -70,7 +70,7 @@ import {
   TrendingUp,
   CreditCard,
 } from 'lucide-react';
-import logo from '@/frontend/shared/assets/Shailraj travels-Punelogo.png';
+import logo from '@/frontend/shared/assets/shailraj-travels-punelogo.png';
 import { Calendar } from '@/frontend/shared/ui/calendar';
 import { format } from 'date-fns';
 import {

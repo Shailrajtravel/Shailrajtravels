@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Instagram, MapPin, Phone, Menu, X } from 'lucide-react';
-import logo from '@/frontend/shared/assets/Shailraj travels-Punelogo.png';
+import logo from '@/frontend/shared/assets/shailraj-travels-punelogo.png';
 import { translations } from '@/frontend/core/i18n';
 import { Link, useRouterState } from '@tanstack/react-router';
 
