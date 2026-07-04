@@ -8,6 +8,12 @@ This document serves as the master blueprint and reference guide for the **Shail
 
 Shailraj Travels is designed as a decoupled two-tier architecture consisting of an SSR-enabled web client (frontend) and an automated chat worker (backend).
 
+### 📊 System Topology Diagram
+![System Topology](docs/diagrams/system_topology.png)
+
+<details>
+<summary>View Text-Based Mermaid Source Code</summary>
+
 ```mermaid
 graph TB
     subgraph Client Tier
@@ -54,6 +60,7 @@ graph TB
     Nest -->|Manage Sessions| WaEngine
     WaEngine <-->|WebSocket/Signal| WhatsAppNetwork
 ```
+</details>
 
 ---
 
@@ -62,6 +69,12 @@ graph TB
 The frontend and backend communicate asynchronously through a webhook-driven trigger system. This decouples the user-facing booking interface from the background automation bot.
 
 ### A. The Booking Notification Cycle
+
+### 🔄 Booking Notification Flow
+![Booking Notification Flow](docs/diagrams/booking_flow.png)
+
+<details>
+<summary>View Sequence Diagram Source Code</summary>
 
 ```mermaid
 sequenceDiagram
@@ -82,6 +95,7 @@ sequenceDiagram
     Note over Bot: Queues job in Redis (resilient retry handler)
     Bot->>WA: Dispatches automated template message to Passenger & Driver
 ```
+</details>
 
 ### B. WhatsApp Inbound Chat Routing (Bot Rules Engine)
 
@@ -175,6 +189,12 @@ The booking card uses glassmorphism components to integrate the overlay card int
   </div>
 </div>
 ```
+
+### C. Database Entity Model (ERD)
+The database contains schemas for bookings, dynamic tour packages, bot rules, and system configurations.
+
+### 🗄️ Database ERD Diagram
+![Database Schema ERD](docs/diagrams/database_erd.png)
 
 ---
 
