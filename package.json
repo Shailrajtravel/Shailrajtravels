@@ -2,10 +2,6 @@
   "name": "shailraj-monorepo",
   "private": true,
   "type": "module",
-  "workspaces": [
-    "frontend",
-    "backend"
-  ],
   "scripts": {
     "dev": "npm run dev --prefix frontend",
     "dev:all": "concurrently \"npm run dev --prefix frontend\" \"npm run dev --prefix backend\" \"node frontend/scripts/webhook-server.mjs\"",
