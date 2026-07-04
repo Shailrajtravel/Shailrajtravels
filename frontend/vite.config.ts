@@ -8,6 +8,7 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 import Sitemap from "vite-plugin-sitemap";
 
 export default defineConfig({
+  nitro: true,
   tanstackStart: {
     server: { entry: "server" },
     serverFns: { disableCsrfMiddlewareWarning: true },
