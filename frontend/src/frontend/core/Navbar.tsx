@@ -157,6 +157,7 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
 
           <a
             href="tel:+919763433556"
+            aria-label={t.callNow}
             className="btn-cta flex h-10 w-10 items-center justify-center gap-2.5 rounded-xl text-sm font-semibold md:h-11 md:w-auto md:px-5"
           >
             <Phone className="h-4 w-4" />

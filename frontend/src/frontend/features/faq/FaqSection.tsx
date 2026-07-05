@@ -26,7 +26,7 @@ export function FaqSection({ lang, t }: { lang: string; t: any }) {
             <div>
               <h2 className="text-4xl md:text-5xl font-bold font-display text-brand-blue-deep leading-tight">
                 {t.faqHeaderMain}{" "}
-                <span className="text-brand-green">{t.faqHeaderSub}</span>
+                <span className="text-brand-green-dark">{t.faqHeaderSub}</span>
               </h2>
               <p className="text-slate-500 text-sm md:text-base mt-4 leading-relaxed max-w-md">
                 {t.faqSubtitle}

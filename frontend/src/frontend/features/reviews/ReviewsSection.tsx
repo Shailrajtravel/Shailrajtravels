@@ -197,7 +197,7 @@ export function ReviewsSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
               </div>
 
               {/* Based on total reviews */}
-              <span className="text-xs md:text-sm text-slate-500 font-bold mb-4">
+              <span className="text-xs md:text-sm text-slate-600 font-bold mb-4">
                 {lang === "mr" 
                   ? `एकूण ${displayReviews.length || 73} अभिप्रायांवर आधारित` 
                   : `Based on ${displayReviews.length || 73} reviews`}
@@ -386,7 +386,7 @@ export function ReviewsSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
           </div>
 
           {/* Footer Row: Showing our latest reviews */}
-          <div className="flex justify-center pt-6 border-t border-slate-100 text-xs font-bold text-slate-400 select-none">
+          <div className="flex justify-center pt-6 border-t border-slate-100 text-xs font-bold text-slate-500 select-none">
             <span>
               {lang === "mr" ? "आमचे ताजे अभिप्राय दर्शवत आहे" : "Showing our latest reviews"}
             </span>
