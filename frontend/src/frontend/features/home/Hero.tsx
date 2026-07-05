@@ -202,7 +202,7 @@ export function Hero({
 
       {/* Content */}
       <div className="relative z-20 mx-auto w-full max-w-[1600px] grid grid-cols-1 gap-10 px-4 md:px-6 lg:grid-cols-12 lg:px-8">
-        <div className="lg:col-span-7 animate-reveal">
+        <div className="lg:col-span-7">
           <p className="flex items-center gap-2 md:gap-3 text-[13px] md:text-[15px] font-bold tracking-[0.1em] sm:tracking-[0.2em] md:tracking-[0.32em] text-brand-green-dark">
             <span className="h-px w-4 sm:w-6 bg-brand-green md:w-8 shrink-0" />
             <span className="whitespace-nowrap">{t.explore}</span>
