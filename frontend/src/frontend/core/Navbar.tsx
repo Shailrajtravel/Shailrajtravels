@@ -48,7 +48,6 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
               src={logo}
               alt="Shailraj Travels Logo"
               className="h-[110px] w-auto object-contain md:h-[140px] -my-10 md:-my-14 -ml-5 md:-ml-8 -mr-7 md:-mr-11"
-              fetchPriority="high"
               loading="eager"
               width={140}
               height={140}
