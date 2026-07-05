@@ -1,11 +1,14 @@
 import React from 'react';
 import { BrandHighlight } from '@/frontend/core/BrandHighlight';
 import { ArrowRight } from 'lucide-react';
-import iconPin from '@/frontend/shared/assets/icon-pin.webp';
-import iconTag from '@/frontend/shared/assets/icon-tag.webp';
-// Provide fallback imports for the others
-import iconShield from '@/frontend/shared/assets/icon-shield.webp'; // Fallback
-import iconBus from '@/frontend/shared/assets/icon-bus.webp'; // Fallback
+// @ts-ignore
+import iconPin from '@/frontend/shared/assets/icon-pin.webp?w=160&format=webp&as=url';
+// @ts-ignore
+import iconTag from '@/frontend/shared/assets/icon-tag.webp?w=160&format=webp&as=url';
+// @ts-ignore
+import iconShield from '@/frontend/shared/assets/icon-shield.webp?w=160&format=webp&as=url'; // Fallback
+// @ts-ignore
+import iconBus from '@/frontend/shared/assets/icon-bus.webp?w=160&format=webp&as=url'; // Fallback
 
 import { FeatureCardBig, CheckItem } from '@/frontend/features/why-choose-us/components';
 
@@ -51,6 +54,9 @@ export function FeaturesSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
               <img
                 src={iconShield}
                 alt="Safe & Secure Travel"
+                width={160}
+                height={160}
+                loading="lazy"
                 className="w-[160px] h-[160px] max-w-none object-contain mix-blend-multiply drop-shadow-md scale-[1.1] hover:scale-[1.15] transition-transform"
               />
             }
@@ -62,6 +68,9 @@ export function FeaturesSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
               <img
                 src={iconBus}
                 alt="Comfortable AC Coaches"
+                width={160}
+                height={160}
+                loading="lazy"
                 className="w-[160px] h-[160px] max-w-none object-contain mix-blend-multiply drop-shadow-md scale-[1.1] hover:scale-[1.15] transition-transform"
               />
             }
@@ -73,6 +82,9 @@ export function FeaturesSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
               <img
                 src={iconTag}
                 alt="Best Price Guarantee"
+                width={160}
+                height={160}
+                loading="lazy"
                 className="w-[160px] h-[160px] max-w-none object-contain mix-blend-multiply drop-shadow-md scale-[1.1] hover:scale-[1.15] transition-transform"
               />
             }
@@ -84,6 +96,9 @@ export function FeaturesSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
               <img
                 src={iconPin}
                 alt="Curated Travel Experiences"
+                width={160}
+                height={160}
+                loading="lazy"
                 className="w-[160px] h-[160px] max-w-none object-contain mix-blend-multiply drop-shadow-md scale-[1.1] hover:scale-[1.15] transition-transform"
               />
             }

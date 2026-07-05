@@ -38,6 +38,9 @@ export function FaqSection({ lang, t }: { lang: string; t: any }) {
               <img
                 src="/images/faq_illustration.webp"
                 alt="FAQ Illustration"
+                width={450}
+                height={450}
+                loading="lazy"
                 className="w-full h-auto max-w-[450px] mx-auto object-contain transform hover:scale-102 transition-transform duration-300"
               />
             </div>

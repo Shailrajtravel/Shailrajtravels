@@ -47,12 +47,14 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
               src={logo}
               alt="Shailraj Travels Logo"
               className="h-[110px] w-auto object-contain md:h-[140px] -my-10 md:-my-14 -ml-5 md:-ml-8 -mr-7 md:-mr-11"
+              width={140}
+              height={140}
             />
             <span className="leading-tight">
               <span className="block font-display text-xl font-semibold text-red-600 md:text-2xl">
                 Shailraj
               </span>
-              <span className="block text-[8px] font-semibold uppercase tracking-[0.32em] text-brand-green md:text-[10px]">
+              <span className="block text-[8px] font-semibold uppercase tracking-[0.32em] text-brand-green-dark md:text-[10px]">
                 Travels
               </span>
             </span>
@@ -142,7 +144,7 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
             title="Instagram"
           >
             <Instagram className="h-4 w-4" />
-            <span className="hidden xl:inline">Instagram</span>
+            <span className="sr-only xl:not-sr-only">Instagram</span>
           </a>
 
           <a
@@ -156,6 +158,8 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
           {/* Mobile Menu Toggle */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isMobileMenuOpen}
             className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-50 text-slate-600 lg:hidden transition hover:bg-slate-100"
           >
             {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}

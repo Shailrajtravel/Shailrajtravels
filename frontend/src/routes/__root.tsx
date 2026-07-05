@@ -20,6 +20,11 @@ import '@fontsource-variable/plus-jakarta-sans';
 // @ts-ignore
 import '@fontsource/tiro-devanagari-marathi';
 import appCss from '@/styles.css?url';
+// @ts-ignore: vite-imagetools handles query string imports
+import bgMobileWebp from '@/frontend/shared/assets/111.webp?w=720&format=webp&as=url';
+// @ts-ignore
+import templeWebp from '@/frontend/shared/assets/111.webp?w=1920&format=webp&as=url';
+
 import { reportLovableError } from '@/backend/shared/lovable-error-reporting';
 import { generateSEO } from '@/backend/features/seo';
 import { AnalyticsScripts } from '@/frontend/shared/components/AnalyticsScripts';
@@ -118,6 +123,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       ],
       links: [
         { rel: "icon", type: "image/png", href: "/favicon.png" },
+        { rel: "preload", as: "image", href: bgMobileWebp, type: "image/webp", fetchpriority: "high", media: "(max-width: 1023px)" },
+        { rel: "preload", as: "image", href: templeWebp, type: "image/webp", fetchpriority: "high", media: "(min-width: 1024px)" },
         { rel: "stylesheet", href: appCss },
       ],
     }) as any,
