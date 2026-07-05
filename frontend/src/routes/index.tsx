@@ -13,7 +13,7 @@ const ToursSection = React.lazy(() => import('@/frontend/features/tours/ToursSec
 const FaqSection = React.lazy(() => import('@/frontend/features/faq/FaqSection').then(m => ({ default: m.FaqSection })));
 const ReviewsSection = React.lazy(() => import('@/frontend/features/reviews/ReviewsSection').then(m => ({ default: m.ReviewsSection })));
 const GallerySection = React.lazy(() => import('@/frontend/features/gallery/GallerySection').then(m => ({ default: m.GallerySection })));
-import { BookingModal } from '@/frontend/features/tours/BookingModal';
+const BookingModal = React.lazy(() => import('@/frontend/features/tours/BookingModal').then(m => ({ default: m.BookingModal })));
 
 import { getPackagesFn } from '@/backend/features/packages';
 
@@ -81,7 +81,9 @@ function HomePage() {
         </React.Suspense>
       </main>
       {bookingTour && (
-        <BookingModal tour={bookingTour} onClose={() => setBookingTour(null)} t={t} lang={lang} />
+        <React.Suspense fallback={null}>
+          <BookingModal tour={bookingTour} onClose={() => setBookingTour(null)} t={t} lang={lang} />
+        </React.Suspense>
       )}
     </div>
   );
