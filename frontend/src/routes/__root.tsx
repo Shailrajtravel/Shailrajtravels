@@ -21,7 +21,7 @@ import '@fontsource-variable/plus-jakarta-sans';
 import '@fontsource/tiro-devanagari-marathi';
 import appCss from '@/styles.css?url';
 // @ts-ignore: vite-imagetools handles query string imports
-import bgMobileAvif from '@/frontend/shared/assets/111.webp?w=450&q=50&format=avif&as=url';
+import bgMobileAvif from '@/frontend/shared/assets/111.webp?w=412&q=30&format=avif&as=url';
 // @ts-ignore
 import templeAvif from '@/frontend/shared/assets/111.webp?w=1920&q=60&format=avif&as=url';
 

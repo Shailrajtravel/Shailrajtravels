@@ -290,7 +290,7 @@ export function FooterSection({ t, lang = "en" }: { t: typeof translations.mr; l
         {/* Bottom Bar - Copyright */}
         <div className="border-t border-slate-800/80 pt-8 pb-4 flex flex-col md:flex-row items-center justify-between gap-4 text-[14px] text-slate-400 text-center md:text-left">
           <p className="font-medium tracking-wide">
-            © {new Date().getFullYear()} <BrandHighlight text="Shailraj Travels" />.{" "}
+            © {new Date().getFullYear()} <span className="font-display font-bold text-[#FF5C5C]">Shailraj</span> <span className="text-brand-green">Travels</span>.{" "}
             {t.footerRights || "All Rights Reserved."}
           </p>
           <p className="flex items-center gap-1.5">
