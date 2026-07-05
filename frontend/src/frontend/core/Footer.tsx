@@ -68,6 +68,7 @@ export function FooterSection({ t, lang = "en" }: { t: typeof translations.mr; l
                   aria-label="Facebook"
                   className="w-10 h-10 rounded-full bg-[#3B5998] flex items-center justify-center text-white hover:scale-110 hover:-translate-y-1 transition-all duration-300 shadow-md shadow-[#3B5998]/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a192f] cursor-pointer"
                 >
+                  <span className="sr-only">Facebook</span>
                   <Facebook className="w-5 h-5" />
                 </a>
                 {/* Instagram */}
@@ -78,6 +79,7 @@ export function FooterSection({ t, lang = "en" }: { t: typeof translations.mr; l
                   aria-label="Instagram"
                   className="w-10 h-10 rounded-full bg-[#E1306C] flex items-center justify-center text-white hover:scale-110 hover:-translate-y-1 transition-all duration-300 shadow-md shadow-[#E1306C]/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a192f] cursor-pointer"
                 >
+                  <span className="sr-only">Instagram</span>
                   <Instagram className="w-5 h-5" />
                 </a>
                 {/* YouTube */}
@@ -86,6 +88,7 @@ export function FooterSection({ t, lang = "en" }: { t: typeof translations.mr; l
                   aria-label="YouTube"
                   className="w-10 h-10 rounded-full bg-[#FF0000] flex items-center justify-center text-white hover:scale-110 hover:-translate-y-1 transition-all duration-300 shadow-md shadow-[#FF0000]/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a192f] cursor-pointer"
                 >
+                  <span className="sr-only">YouTube</span>
                   <Youtube className="w-5 h-5 fill-current" />
                 </a>
               </div>
