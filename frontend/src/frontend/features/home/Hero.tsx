@@ -22,9 +22,9 @@ import { Leaf } from '@/frontend/core/icons';
 import { translations } from '@/frontend/core/i18n';
 import { highlightBrandName } from '@/frontend/core/BrandHighlight';
 // @ts-ignore: vite-imagetools handles query string imports
-import bgMobileAvif from '@/frontend/shared/assets/111.webp?w=300&q=10&format=avif&as=url';
+import bgMobileAvif from '@/frontend/shared/assets/111.webp?w=250&q=5&format=avif&as=url';
 // @ts-ignore
-import bgMobileWebp from '@/frontend/shared/assets/111.webp?w=300&q=10&format=webp&as=url';
+import bgMobileWebp from '@/frontend/shared/assets/111.webp?w=250&q=5&format=webp&as=url';
 // @ts-ignore
 import templeAvif from '@/frontend/shared/assets/111.webp?w=1920&q=60&format=avif&as=url';
 // @ts-ignore
@@ -149,7 +149,7 @@ export function Hero({
             <img
               src={bgMobileWebp}
               alt="Pandharpur temple ghats at golden sunrise"
-              className="h-full w-full object-cover object-center"
+              className="h-full w-full object-cover object-center animate-hero-zoom"
               fetchPriority="high"
               loading="eager"
               width={720}
@@ -164,7 +164,7 @@ export function Hero({
             <img
               src={templeWebp}
               alt="Pandharpur temple ghats at golden sunrise"
-              className="h-full w-full object-cover object-center"
+              className="h-full w-full object-cover object-center animate-hero-zoom"
               fetchPriority="high"
               loading="eager"
               width={1920}

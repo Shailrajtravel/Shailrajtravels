@@ -13,9 +13,15 @@ import {
 import { useEffect, useState, createContext, useContext, type ReactNode } from 'react';
 import { Languages } from 'lucide-react';
 
+// @ts-ignore: fonts have no type declarations
+import '@fontsource-variable/inter';
+// @ts-ignore
+import '@fontsource-variable/plus-jakarta-sans';
+// @ts-ignore
+import '@fontsource/tiro-devanagari-marathi';
 import appCss from '@/styles.css?url';
 // @ts-ignore: vite-imagetools handles query string imports
-import bgMobileAvif from '@/frontend/shared/assets/111.webp?w=300&q=10&format=avif&as=url';
+import bgMobileAvif from '@/frontend/shared/assets/111.webp?w=250&q=5&format=avif&as=url';
 // @ts-ignore
 import templeAvif from '@/frontend/shared/assets/111.webp?w=1920&q=60&format=avif&as=url';
 
@@ -116,9 +122,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         { name: "google", content: "notranslate" },
       ],
       links: [
-        { rel: "preconnect", href: "https://fonts.googleapis.com" },
-        { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-        { href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Tiro+Devanagari+Marathi:ital@0;1&display=swap", rel: "stylesheet" },
         { rel: "icon", type: "image/png", href: "/favicon.png" },
         { rel: "preload", as: "image", href: bgMobileAvif, type: "image/avif", fetchPriority: "high", media: "(max-width: 1023px)" },
         { rel: "preload", as: "image", href: templeAvif, type: "image/avif", fetchPriority: "high", media: "(min-width: 1024px)" },
