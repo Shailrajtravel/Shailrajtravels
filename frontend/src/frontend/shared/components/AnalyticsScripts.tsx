@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ANALYTICS_CONFIG } from '@/frontend/shared/config/analytics';
 
 // Only load analytics when real IDs have been configured
@@ -10,7 +10,43 @@ const isGTMConfigured =
   !ANALYTICS_CONFIG.GTM_CONTAINER_ID.includes("XXXXXXX");
 
 export function AnalyticsScripts() {
-  if (!isGAConfigured && !isGTMConfigured) return null;
+  const [shouldLoad, setShouldLoad] = useState(false);
+
+  useEffect(() => {
+    if (!isGAConfigured && !isGTMConfigured) return;
+
+    let timeoutId: number;
+
+    const loadAnalytics = () => {
+      setShouldLoad(true);
+      cleanup();
+    };
+
+    const cleanup = () => {
+      window.removeEventListener('scroll', loadAnalytics);
+      window.removeEventListener('touchstart', loadAnalytics);
+      window.removeEventListener('pointerdown', loadAnalytics);
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+
+    // Progressive loading strategy
+    if (typeof requestIdleCallback !== 'undefined') {
+      requestIdleCallback(() => {
+        timeoutId = setTimeout(loadAnalytics, 2000) as unknown as number;
+      });
+    } else {
+      timeoutId = setTimeout(loadAnalytics, 3000) as unknown as number;
+    }
+
+    // Load on first interaction
+    window.addEventListener('scroll', loadAnalytics, { passive: true, once: true });
+    window.addEventListener('touchstart', loadAnalytics, { passive: true, once: true });
+    window.addEventListener('pointerdown', loadAnalytics, { passive: true, once: true });
+
+    return cleanup;
+  }, []);
+
+  if (!shouldLoad) return null;
 
   return (
     <>

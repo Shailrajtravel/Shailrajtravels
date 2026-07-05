@@ -7,12 +7,12 @@ import { translations } from '@/frontend/core/i18n';
 import { Navbar } from '@/frontend/core/Navbar';
 import { FooterSection as Footer } from '@/frontend/core/Footer';
 import { Hero } from '@/frontend/features/home/Hero';
-import { AboutSection } from '@/frontend/features/home/AboutSection';
-import { FeaturesSection } from '@/frontend/features/why-choose-us/FeaturesSection';
-import { ToursSection } from '@/frontend/features/tours/ToursSection';
-import { FaqSection } from '@/frontend/features/faq/FaqSection';
-import { ReviewsSection } from '@/frontend/features/reviews/ReviewsSection';
-import { GallerySection } from '@/frontend/features/gallery/GallerySection';
+const AboutSection = React.lazy(() => import('@/frontend/features/home/AboutSection').then(m => ({ default: m.AboutSection })));
+const FeaturesSection = React.lazy(() => import('@/frontend/features/why-choose-us/FeaturesSection').then(m => ({ default: m.FeaturesSection })));
+const ToursSection = React.lazy(() => import('@/frontend/features/tours/ToursSection').then(m => ({ default: m.ToursSection })));
+const FaqSection = React.lazy(() => import('@/frontend/features/faq/FaqSection').then(m => ({ default: m.FaqSection })));
+const ReviewsSection = React.lazy(() => import('@/frontend/features/reviews/ReviewsSection').then(m => ({ default: m.ReviewsSection })));
+const GallerySection = React.lazy(() => import('@/frontend/features/gallery/GallerySection').then(m => ({ default: m.GallerySection })));
 import { BookingModal } from '@/frontend/features/tours/BookingModal';
 
 import { getPackagesFn } from '@/backend/features/packages';
@@ -63,19 +63,21 @@ function HomePage() {
       <Navbar t={t} />
       <main>
         <Hero lang={lang} t={t} tripOptions={tripOptions} activeTripId="" />
-        <AboutSection lang={lang} t={t} />
-        <FeaturesSection lang={lang} t={t} />
-        <ToursSection
-          lang={lang}
-          t={t}
-          packages={dbPackages}
-          tripOptions={tripOptions}
-          onBookSeat={handleBookSeat}
-          mode="packages"
-        />
-        <FaqSection lang={lang} t={t} />
-        <ReviewsSection lang={lang} t={t} />
-        <GallerySection t={t} photos={galleryPhotos} />
+        <React.Suspense fallback={<div className="h-64 w-full flex items-center justify-center bg-brand-mist/20 animate-pulse"></div>}>
+          <AboutSection lang={lang} t={t} />
+          <FeaturesSection lang={lang} t={t} />
+          <ToursSection
+            lang={lang}
+            t={t}
+            packages={dbPackages}
+            tripOptions={tripOptions}
+            onBookSeat={handleBookSeat}
+            mode="packages"
+          />
+          <FaqSection lang={lang} t={t} />
+          <ReviewsSection lang={lang} t={t} />
+          <GallerySection t={t} photos={galleryPhotos} />
+        </React.Suspense>
       </main>
       {bookingTour && (
         <BookingModal tour={bookingTour} onClose={() => setBookingTour(null)} t={t} lang={lang} />

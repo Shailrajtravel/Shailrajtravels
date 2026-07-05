@@ -21,8 +21,14 @@ import {
 import { Leaf } from '@/frontend/core/icons';
 import { translations } from '@/frontend/core/i18n';
 import { highlightBrandName } from '@/frontend/core/BrandHighlight';
-import bgMobile from '@/frontend/shared/assets/111.webp';
-import temple from '@/frontend/shared/assets/111.webp';
+// @ts-ignore: vite-imagetools handles query string imports
+import bgMobileAvif from '@/frontend/shared/assets/111.webp?w=720&format=avif&as=url';
+// @ts-ignore
+import bgMobileWebp from '@/frontend/shared/assets/111.webp?w=720&format=webp&as=url';
+// @ts-ignore
+import templeAvif from '@/frontend/shared/assets/111.webp?w=1920&format=avif&as=url';
+// @ts-ignore
+import templeWebp from '@/frontend/shared/assets/111.webp?w=1920&format=webp&as=url';
 import { createBookingFn } from '@/backend/shared/bookings';
 
 export function getUpcomingDates(allowedDaysOfWeek: number[]) {
@@ -137,19 +143,34 @@ export function Hero({
         {/* image right */}
         <div className="absolute inset-y-0 right-0 w-full lg:w-[60%] overflow-hidden">
           {/* Mobile background */}
-          <img
-            src={bgMobile}
-            alt="Pandharpur temple ghats at golden sunrise"
-            className="block lg:hidden h-full w-full object-cover object-center animate-hero-zoom"
-            fetchPriority="high"
-          />
+          <picture className="block lg:hidden h-full w-full">
+            <source srcSet={bgMobileAvif} type="image/avif" />
+            <source srcSet={bgMobileWebp} type="image/webp" />
+            <img
+              src={bgMobileWebp}
+              alt="Pandharpur temple ghats at golden sunrise"
+              className="h-full w-full object-cover object-center animate-hero-zoom"
+              fetchPriority="high"
+              loading="eager"
+              width={720}
+              height={1080}
+            />
+          </picture>
+          
           {/* Desktop background */}
-          <img
-            src={temple}
-            alt="Pandharpur temple ghats at golden sunrise"
-            className="hidden lg:block h-full w-full object-cover object-center animate-hero-zoom"
-            fetchPriority="high"
-          />
+          <picture className="hidden lg:block h-full w-full">
+            <source srcSet={templeAvif} type="image/avif" />
+            <source srcSet={templeWebp} type="image/webp" />
+            <img
+              src={templeWebp}
+              alt="Pandharpur temple ghats at golden sunrise"
+              className="h-full w-full object-cover object-center animate-hero-zoom"
+              fetchPriority="high"
+              loading="eager"
+              width={1920}
+              height={1080}
+            />
+          </picture>
           {/* white fade for text legibility */}
           <div className="absolute inset-0 bg-gradient-to-br from-white/95 via-white/40 to-transparent lg:bg-gradient-to-r lg:from-white lg:via-white/40 lg:to-transparent" />
           {/* bottom soft fade */}
@@ -299,7 +320,7 @@ export function Hero({
               }}
               className="grid grid-cols-1 gap-3 md:grid-cols-3"
             >
-              <FieldBox icon={<User className="h-5 w-5" />} label={t.formName}>
+              <FieldBox icon={<User className="h-5 w-5" />} label={t.formName} htmlFor="hero-name">
                 <input
                   suppressHydrationWarning
                   type="text"
@@ -312,7 +333,7 @@ export function Hero({
                 />
               </FieldBox>
 
-              <FieldBox icon={<Phone className="h-5 w-5" />} label={t.formContact}>
+              <FieldBox icon={<Phone className="h-5 w-5" />} label={t.formContact} htmlFor="hero-phone">
                 <input
                   suppressHydrationWarning
                   type="tel"
@@ -325,7 +346,7 @@ export function Hero({
                 />
               </FieldBox>
 
-              <FieldBox icon={<MapPin className="h-5 w-5" />} label={t.formTrip}>
+              <FieldBox icon={<MapPin className="h-5 w-5" />} label={t.formTrip} htmlFor="hero-trip">
                 <div className="relative flex items-center w-full">
                   <select
                     suppressHydrationWarning
@@ -348,7 +369,7 @@ export function Hero({
               </FieldBox>
 
               {selectedTrip === "custom" && (
-                <FieldBox icon={<MapPin className="h-5 w-5" />} label={t.formCustom}>
+                <FieldBox icon={<MapPin className="h-5 w-5" />} label={t.formCustom} htmlFor="hero-custom-destination">
                   <input
                     suppressHydrationWarning
                     type="text"
@@ -368,26 +389,28 @@ export function Hero({
                   <button
                     suppressHydrationWarning
                     type="button"
+                    aria-label="Decrease persons"
                     onClick={() => setPersons((p) => Math.max(1, p - 1))}
-                    className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 transition"
+                    className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue"
                   >
                     <Minus className="h-4 w-4" />
                   </button>
-                  <span className="text-[15px] font-semibold text-brand-blue-deep">
+                  <span className="text-[15px] font-semibold text-brand-blue-deep" aria-live="polite">
                     {persons} {persons === 1 ? t.formPerson : t.formPersonsPlural}
                   </span>
                   <button
                     suppressHydrationWarning
                     type="button"
+                    aria-label="Increase persons"
                     onClick={() => setPersons((p) => Math.min(16, p + 1))}
-                    className="flex h-7 w-7 items-center justify-center rounded-full bg-brand-green/10 text-brand-green-dark hover:bg-brand-green/20 transition"
+                    className="flex h-7 w-7 items-center justify-center rounded-full bg-brand-green/10 text-brand-green-dark hover:bg-brand-green/20 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue"
                   >
                     <Plus className="h-4 w-4" />
                   </button>
                 </div>
               </FieldBox>
 
-              <FieldBox icon={<Calendar className="h-5 w-5" />} label={t.formDate}>
+              <FieldBox icon={<Calendar className="h-5 w-5" />} label={t.formDate} htmlFor="hero-travel-date">
                 {validDates && validDates.length > 0 ? (
                   <div className="relative flex items-center w-full">
                     <select
@@ -451,6 +474,7 @@ export function Hero({
 function FieldBox({
   icon,
   label,
+  htmlFor,
   placeholder,
   value,
   chevron,
@@ -458,6 +482,7 @@ function FieldBox({
 }: {
   icon: React.ReactNode;
   label: string;
+  htmlFor?: string;
   placeholder?: string;
   value?: string;
   chevron?: boolean;
@@ -469,9 +494,15 @@ function FieldBox({
         {icon}
       </span>
       <div className="min-w-0 flex-1">
-        <div className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
-          {label}
-        </div>
+        {htmlFor ? (
+          <label htmlFor={htmlFor} className="block text-[11px] font-semibold uppercase tracking-wider text-slate-500 cursor-pointer">
+            {label}
+          </label>
+        ) : (
+          <div className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+            {label}
+          </div>
+        )}
         {children ? (
           children
         ) : value ? (
@@ -481,6 +512,7 @@ function FieldBox({
           </div>
         ) : (
           <input
+            id={htmlFor}
             placeholder={placeholder}
             className="w-full bg-transparent text-[15px] font-medium text-brand-blue-deep placeholder:text-slate-400 focus:outline-none"
           />

@@ -6,6 +6,9 @@
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 import Sitemap from "vite-plugin-sitemap";
+import { imagetools } from "vite-imagetools";
+import { compression } from "vite-plugin-compression2";
+import { visualizer } from "rollup-plugin-visualizer";
 
 export default defineConfig({
   nitro: true,
@@ -26,6 +29,8 @@ export default defineConfig({
           "/tours/tirupati-balaji-tour",
         ],
       }),
+      imagetools(),
+      visualizer({ filename: "bundle-stats.html", template: "treemap" }),
     ],
     optimizeDeps: {
       exclude: ["@aws-sdk/client-s3", "@open-wa/wa-automate", "puppeteer-core", "puppeteer", "pdfkit"],

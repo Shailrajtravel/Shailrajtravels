@@ -13,6 +13,12 @@ import {
 import { useEffect, useState, createContext, useContext, type ReactNode } from 'react';
 import { Languages } from 'lucide-react';
 
+// @ts-ignore: fonts have no type declarations
+import '@fontsource-variable/inter';
+// @ts-ignore
+import '@fontsource-variable/plus-jakarta-sans';
+// @ts-ignore
+import '@fontsource/tiro-devanagari-marathi';
 import appCss from '@/styles.css?url';
 import { reportLovableError } from '@/backend/shared/lovable-error-reporting';
 import { generateSEO } from '@/backend/features/seo';
@@ -112,12 +118,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       ],
       links: [
         { rel: "icon", type: "image/png", href: "/favicon.png" },
-        { rel: "preconnect", href: "https://fonts.googleapis.com" },
-        { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-        {
-          rel: "stylesheet",
-          href: "https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Marathi&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap",
-        },
         { rel: "stylesheet", href: appCss },
       ],
     }) as any,

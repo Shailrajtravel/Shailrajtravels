@@ -86,6 +86,9 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",
+    "@fontsource-variable/inter": "^5.2.8",
+    "@fontsource-variable/plus-jakarta-sans": "^5.2.8",
+    "@fontsource/tiro-devanagari-marathi": "^5.2.7",
     "@lovable.dev/vite-tanstack-config": "^2.3.2",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^22.16.5",
@@ -103,16 +106,19 @@
     "globals": "^15.15.0",
     "nitro": "3.0.260603-beta",
     "prettier": "^3.7.3",
+    "rollup-plugin-visualizer": "^7.0.1",
     "tsx": "^4.22.4",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.56.1",
     "vite": "^7.3.1",
+    "vite-imagetools": "^10.0.1",
+    "vite-plugin-compression2": "^2.5.3",
     "vite-plugin-sitemap": "^0.8.2"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "^4.62.2",
-    "lightningcss-linux-x64-gnu": "^1.32.0",
     "@esbuild/linux-x64": "^0.27.7",
-    "@tailwindcss/oxide-linux-x64-gnu": "^4.3.0"
+    "@rollup/rollup-linux-x64-gnu": "^4.62.2",
+    "@tailwindcss/oxide-linux-x64-gnu": "^4.3.0",
+    "lightningcss-linux-x64-gnu": "^1.32.0"
   }
 }
