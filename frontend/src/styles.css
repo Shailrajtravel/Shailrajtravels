@@ -50,7 +50,7 @@
   --secondary-foreground: #083A8C;
   --muted: #F8FBFA;
   --muted-foreground: #475569;
-  --accent: #15803D;
+  --accent: #2FAF43;
   --accent-foreground: #ffffff;
   --border: #e6ecf2;
   --input: #e6ecf2;
@@ -58,14 +58,14 @@
 
   --brand-blue: #0B4DBA;
   --brand-blue-deep: #083A8C;
-  --brand-green: #15803D;
+  --brand-green: #2FAF43;
   --brand-green-dark: #166534;
   --brand-ink: #0a1f4a;
   --brand-mist: #F8FBFA;
-  --brand-orange: #C2410C;
+  --brand-orange: #C2410C; /* Pass WCAG with white text */
   --brand-orange-dark: #9A3412;
 
-  --gradient-cta: linear-gradient(135deg, #0B4DBA 0%, #15803D 100%);
+  --gradient-cta: linear-gradient(135deg, #0B4DBA 0%, #2FAF43 100%);
   --gradient-cta-hover: linear-gradient(135deg, #083A8C 0%, #1E8B34 100%);
   --shadow-luxury: 0 30px 80px -30px rgba(8, 58, 140, 0.28);
   --shadow-card: 0 18px 50px -18px rgba(8, 58, 140, 0.22);

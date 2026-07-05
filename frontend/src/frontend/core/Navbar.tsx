@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Instagram, MapPin, Phone, Menu, X } from 'lucide-react';
 // @ts-ignore
-import logo from '@/frontend/shared/assets/shailraj-travels-punelogo.png?w=280&format=webp&as=url';
+import logo from '@/frontend/shared/assets/shailraj-travels-punelogo.png?w=300&format=webp&as=url';
 import { translations } from '@/frontend/core/i18n';
 import { Link, useRouterState } from '@tanstack/react-router';
 
@@ -25,8 +25,15 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
   const currentHash = routerState.location.hash;
 
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setIsScrolled(window.scrollY > 20);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -48,7 +55,6 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
               src={logo}
               alt="Shailraj Travels Logo"
               className="h-[110px] w-auto object-contain md:h-[140px] -my-10 md:-my-14 -ml-5 md:-ml-8 -mr-7 md:-mr-11"
-              loading="eager"
               width={140}
               height={140}
             />
@@ -151,11 +157,10 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
 
           <a
             href="tel:+919763433556"
-            aria-label={t.callNow || "Call Now"}
             className="btn-cta flex h-10 w-10 items-center justify-center gap-2.5 rounded-xl text-sm font-semibold md:h-11 md:w-auto md:px-5"
           >
             <Phone className="h-4 w-4" />
-            <span className="sr-only md:not-sr-only">{t.callNow}</span>
+            <span className="hidden md:inline">{t.callNow}</span>
           </a>
 
           {/* Mobile Menu Toggle */}
@@ -165,7 +170,6 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
             aria-expanded={isMobileMenuOpen}
             className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-50 text-slate-600 lg:hidden transition hover:bg-slate-100"
           >
-            <span className="sr-only">{isMobileMenuOpen ? "Close menu" : "Open menu"}</span>
             {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>

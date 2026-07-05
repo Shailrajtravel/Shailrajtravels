@@ -16,7 +16,7 @@ export function FeatureCardBig({
       <h3 className="text-[22px] md:text-[24px] font-bold text-[#1A2E35] mb-5 leading-tight whitespace-pre-line font-display tracking-tight">
         {title}
       </h3>
-      <div className="w-8 h-[3px] bg-[#15803D] mb-6 rounded-full opacity-80"></div>
+      <div className="w-8 h-[3px] bg-[#10A34A] mb-6 rounded-full opacity-80"></div>
       <p className="text-[15px] text-slate-500 leading-relaxed font-medium">{desc}</p>
     </div>
   );
@@ -24,8 +24,8 @@ export function FeatureCardBig({
 
 export function CheckItem({ text }: { text: string }) {
   return (
-    <div className="flex items-center gap-3 bg-white px-5 py-3 md:px-6 md:py-3.5 rounded-full shadow-[0_4px_15px_rgb(0,0,0,0.05)] border border-[#15803D]/10 transition-all hover:-translate-y-1 hover:shadow-[0_8px_25px_rgb(16,163,74,0.15)] cursor-default">
-      <CheckCircle2 className="w-[24px] h-[24px] md:w-[28px] md:h-[28px] text-[#15803D] shrink-0" />
+    <div className="flex items-center gap-3 bg-white px-5 py-3 md:px-6 md:py-3.5 rounded-full shadow-[0_4px_15px_rgb(0,0,0,0.05)] border border-[#10A34A]/10 transition-all hover:-translate-y-1 hover:shadow-[0_8px_25px_rgb(16,163,74,0.15)] cursor-default">
+      <CheckCircle2 className="w-[24px] h-[24px] md:w-[28px] md:h-[28px] text-[#10A34A] shrink-0" />
       <span className="text-[16px] md:text-[18px] font-bold text-[#1A2E35] tracking-tight">
         {text}
       </span>

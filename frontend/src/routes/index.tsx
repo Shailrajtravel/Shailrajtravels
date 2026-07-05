@@ -5,7 +5,7 @@ import { getReviewsFn } from '@/backend/features/reviews';
 
 import { translations } from '@/frontend/core/i18n';
 import { Navbar } from '@/frontend/core/Navbar';
-import { FooterSection as Footer } from '@/frontend/core/Footer';
+const Footer = React.lazy(() => import('@/frontend/core/Footer').then(m => ({ default: m.FooterSection })));
 import { Hero } from '@/frontend/features/home/Hero';
 const AboutSection = React.lazy(() => import('@/frontend/features/home/AboutSection').then(m => ({ default: m.AboutSection })));
 const FeaturesSection = React.lazy(() => import('@/frontend/features/why-choose-us/FeaturesSection').then(m => ({ default: m.FeaturesSection })));
@@ -77,12 +77,12 @@ function HomePage() {
           <FaqSection lang={lang} t={t} />
           <ReviewsSection lang={lang} t={t} />
           <GallerySection t={t} photos={galleryPhotos} />
+          <Footer t={t} lang={lang} />
         </React.Suspense>
       </main>
       {bookingTour && (
         <BookingModal tour={bookingTour} onClose={() => setBookingTour(null)} t={t} lang={lang} />
       )}
-      <Footer t={t} lang={lang} />
     </div>
   );
 }

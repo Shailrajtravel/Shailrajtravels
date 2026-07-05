@@ -157,7 +157,7 @@ export function TourModal({ tour, onClose, onBookSeat, t }: TourModalProps) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-4">
               {(tour.includes || []).map((item, index) => (
                 <div key={index} className="flex items-center gap-2.5">
-                  <Check className="w-[18px] h-[18px] text-[#15803D]" />
+                  <Check className="w-[18px] h-[18px] text-[#10A34A]" />
                   <span className="text-slate-600 text-[15px] font-medium">{item}</span>
                 </div>
               ))}

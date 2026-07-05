@@ -21,9 +21,9 @@ import '@fontsource-variable/plus-jakarta-sans';
 import '@fontsource/tiro-devanagari-marathi';
 import appCss from '@/styles.css?url';
 // @ts-ignore: vite-imagetools handles query string imports
-import bgMobileAvif from '@/frontend/shared/assets/111.webp?w=720&q=70&format=avif&as=url';
+import bgMobileAvif from '@/frontend/shared/assets/111.webp?w=720&q=60&format=avif&as=url';
 // @ts-ignore
-import templeAvif from '@/frontend/shared/assets/111.webp?w=1920&q=70&format=avif&as=url';
+import templeAvif from '@/frontend/shared/assets/111.webp?w=1920&q=60&format=avif&as=url';
 
 import { reportLovableError } from '@/backend/shared/lovable-error-reporting';
 import { generateSEO } from '@/backend/features/seo';
@@ -192,7 +192,7 @@ function FloatingWhatsApp() {
       href="https://wa.me/919763433556?text=Hii"
       target="_blank"
       rel="noreferrer"
-      className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#128C7E] text-white shadow-[0_4px_14px_rgba(18,140,126,0.4)] transition-transform hover:scale-110 active:scale-95"
+      className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_4px_14px_rgba(37,211,102,0.4)] transition-transform hover:scale-110 active:scale-95"
       aria-label="Chat on WhatsApp"
       onClick={() => window.dataLayer?.push({ event: "whatsapp_click" })}
     >
@@ -219,12 +219,18 @@ function RootComponent() {
     navigate({ search: ((old: any) => ({ ...old, lang: newLang })) as any, replace: true });
   };
 
+  const [showDeferred, setShowDeferred] = useState(false);
+  useEffect(() => {
+    const timer = setTimeout(() => setShowDeferred(true), 2500);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <LanguageContext.Provider value={{ lang, toggleLang }}>
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
-        {!isExcludedView && location.pathname !== "/login" && (
+        {!isExcludedView && location.pathname !== "/login" && showDeferred && (
           <>
             <LanguageToggle />
             <FloatingWhatsApp />

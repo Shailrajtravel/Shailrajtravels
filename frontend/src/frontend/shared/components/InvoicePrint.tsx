@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import { MapPin, Phone, Mail, Globe, ZoomIn, ZoomOut, Maximize, Lock, Send } from 'lucide-react';
-import logo from '@/frontend/shared/assets/shailraj-travels-punelogo.png';
+// @ts-ignore
+import logo from '@/frontend/shared/assets/shailraj-travels-punelogo.png?w=300&format=webp&as=url';
 import onlyNameLogo from '@/frontend/shared/assets/only-name-logo.png';
 import stamp from '@/frontend/shared/assets/stamp1.png';
 import { saveInvoiceFn, sendInvoiceWhatsAppFn } from '@/backend/shared/bookings';

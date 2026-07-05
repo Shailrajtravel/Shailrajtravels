@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { verifyAdminFn } from '@/backend/infrastructure/auth';
 import { Lock, Mail, Loader2, ArrowRight } from 'lucide-react';
-import logo from '@/frontend/shared/assets/shailraj-travels-punelogo.png';
+// @ts-ignore
+import logo from '@/frontend/shared/assets/shailraj-travels-punelogo.png?w=300&format=webp&as=url';
 
 export const Route = createFileRoute("/login")({
   component: LoginPage,
@@ -141,7 +142,7 @@ function LoginPage() {
             <button
               type="submit"
               disabled={loading || !email || !password}
-              className="w-full h-[56px] bg-[#15803D] hover:bg-[#0D8A3E] text-white font-bold rounded-2xl flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-2 shadow-lg shadow-[#15803D]/20 hover:shadow-[#15803D]/30 hover:-translate-y-0.5 cursor-pointer"
+              className="w-full h-[56px] bg-[#10A34A] hover:bg-[#0D8A3E] text-white font-bold rounded-2xl flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-2 shadow-lg shadow-[#10A34A]/20 hover:shadow-[#10A34A]/30 hover:-translate-y-0.5 cursor-pointer"
             >
               {loading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />

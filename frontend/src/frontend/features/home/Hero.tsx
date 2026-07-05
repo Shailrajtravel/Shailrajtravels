@@ -22,13 +22,13 @@ import { Leaf } from '@/frontend/core/icons';
 import { translations } from '@/frontend/core/i18n';
 import { highlightBrandName } from '@/frontend/core/BrandHighlight';
 // @ts-ignore: vite-imagetools handles query string imports
-import bgMobileAvif from '@/frontend/shared/assets/111.webp?w=720&q=70&format=avif&as=url';
+import bgMobileAvif from '@/frontend/shared/assets/111.webp?w=720&q=60&format=avif&as=url';
 // @ts-ignore
-import bgMobileWebp from '@/frontend/shared/assets/111.webp?w=720&q=70&format=webp&as=url';
+import bgMobileWebp from '@/frontend/shared/assets/111.webp?w=720&q=60&format=webp&as=url';
 // @ts-ignore
-import templeAvif from '@/frontend/shared/assets/111.webp?w=1920&q=70&format=avif&as=url';
+import templeAvif from '@/frontend/shared/assets/111.webp?w=1920&q=60&format=avif&as=url';
 // @ts-ignore
-import templeWebp from '@/frontend/shared/assets/111.webp?w=1920&q=70&format=webp&as=url';
+import templeWebp from '@/frontend/shared/assets/111.webp?w=1920&q=60&format=webp&as=url';
 import { createBookingFn } from '@/backend/shared/bookings';
 
 export function getUpcomingDates(allowedDaysOfWeek: number[]) {

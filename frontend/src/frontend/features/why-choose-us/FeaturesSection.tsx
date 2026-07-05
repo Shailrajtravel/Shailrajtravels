@@ -29,11 +29,11 @@ export function FeaturesSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
       <section className="flex-1 w-full pt-20 px-6 max-w-[1280px] mx-auto relative z-10 flex flex-col items-center animate-reveal">
         {/* Top Header */}
         <div className="flex items-center gap-4 mb-8">
-          <div className="w-10 h-[1px] bg-[#15803D]"></div>
-          <span className="text-[13px] md:text-[15px] font-bold text-[#15803D] tracking-widest uppercase">
+          <div className="w-10 h-[1px] bg-[#10A34A]"></div>
+          <span className="text-[13px] md:text-[15px] font-bold text-[#10A34A] tracking-widest uppercase">
             {t.whyChooseUs}
           </span>
-          <div className="w-10 h-[1px] bg-[#15803D]"></div>
+          <div className="w-10 h-[1px] bg-[#10A34A]"></div>
         </div>
 
         <h2
@@ -119,13 +119,13 @@ export function FeaturesSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
         <div className="flex flex-col sm:flex-row justify-center items-center gap-4 md:gap-6 w-full max-w-md mx-auto sm:max-w-none">
           <a
             href="/tours"
-            className="flex w-full sm:w-[220px] items-center justify-center gap-2 bg-[#15803D] hover:bg-[#0D8A3E] text-white rounded-lg px-6 py-4 text-[16px] font-semibold transition-all shadow-sm hover:shadow-[0_8px_20px_rgba(16,163,74,0.25)] hover:-translate-y-0.5"
+            className="flex w-full sm:w-[220px] items-center justify-center gap-2 bg-[#10A34A] hover:bg-[#0D8A3E] text-white rounded-lg px-6 py-4 text-[16px] font-semibold transition-all shadow-sm hover:shadow-[0_8px_20px_rgba(16,163,74,0.25)] hover:-translate-y-0.5"
           >
             {t.btnExplore} <ArrowRight className="w-5 h-5" />
           </a>
           <a
             href="tel:+919763433556"
-            className="flex w-full sm:w-[220px] items-center justify-center gap-2 bg-white border-2 border-[#15803D] text-[#15803D] hover:bg-[#15803D]/5 rounded-lg px-6 py-4 text-[16px] font-semibold transition-all hover:shadow-sm hover:-translate-y-0.5"
+            className="flex w-full sm:w-[220px] items-center justify-center gap-2 bg-white border-2 border-[#10A34A] text-[#10A34A] hover:bg-[#10A34A]/5 rounded-lg px-6 py-4 text-[16px] font-semibold transition-all hover:shadow-sm hover:-translate-y-0.5"
           >
             {t.btnContact} <ArrowRight className="w-5 h-5" />
           </a>
