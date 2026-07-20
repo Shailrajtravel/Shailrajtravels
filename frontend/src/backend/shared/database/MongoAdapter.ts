@@ -227,7 +227,7 @@ export class MongoAdapter {
   }
 }
 
-let fallbackMongoUri = process.env.MONGO_URI;
+let fallbackMongoUri = (import.meta as any).env?.VITE_MONGO_URI || process.env.MONGO_URI;
 
 export const mongoAdapter = new MongoAdapter();
 
@@ -236,7 +236,7 @@ async function ensureInitialized() {
   if (mongoAdapter["initialized"] || mongoAdapter["initPromise"]) return mongoAdapter["initPromise"];
 
   if (!fallbackMongoUri && typeof window === "undefined") {
-    fallbackMongoUri = process.env.MONGO_URI;
+    fallbackMongoUri = (import.meta as any).env?.VITE_MONGO_URI || process.env.MONGO_URI;
   }
 
   const clusterConfigs = {

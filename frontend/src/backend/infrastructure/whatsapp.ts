@@ -5,9 +5,9 @@ const ADMIN_PHONE = "919359570497"; // Admin number
 
 function getOpenWaConfig() {
   return {
-    url: process.env.OPENWA_API_URL || "http://localhost:2785",
-    key: process.env.OPENWA_API_KEY || "",
-    session: process.env.OPENWA_SESSION_NAME || "shailraj-bot"
+    url: (import.meta as any).env?.VITE_OPENWA_API_URL || process.env.OPENWA_API_URL || "http://localhost:2785",
+    key: (import.meta as any).env?.VITE_OPENWA_API_KEY || process.env.OPENWA_API_KEY || "",
+    session: (import.meta as any).env?.VITE_OPENWA_SESSION_NAME || process.env.OPENWA_SESSION_NAME || "shailraj-bot"
   };
 }
 
