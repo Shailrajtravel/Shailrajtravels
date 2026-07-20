@@ -1,11 +1,17 @@
 import clientPromise from '@/backend/shared/db';
 import { ObjectId } from 'mongodb';
 
-// OpenWA standalone server configuration
-const OPENWA_API_URL = process.env.OPENWA_API_URL || "http://localhost:2785";
-const OPENWA_API_KEY = process.env.OPENWA_API_KEY || ""; 
-const SESSION_NAME = process.env.OPENWA_SESSION_NAME || "shailraj-bot";
+import { getEnv } from '@/backend/infrastructure/token';
+
 const ADMIN_PHONE = "919359570497"; // Admin number
+
+function getOpenWaConfig() {
+  return {
+    url: getEnv("OPENWA_API_URL") || "http://localhost:2785",
+    key: getEnv("OPENWA_API_KEY") || "",
+    session: getEnv("OPENWA_SESSION_NAME") || "shailraj-bot"
+  };
+}
 
 export type WhatsAppStatus = "Disconnected" | "Awaiting QR" | "Connected" | "Error";
 
@@ -14,11 +20,12 @@ let activeSessionId: string | null = null;
 
 /** Helper for OpenWA REST API requests */
 async function openwaRequest(endpoint: string, method: string = "GET", body?: any) {
+  const config = getOpenWaConfig();
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
   };
-  if (OPENWA_API_KEY) {
-    headers["X-API-Key"] = OPENWA_API_KEY;
+  if (config.key) {
+    headers["X-API-Key"] = config.key;
   }
   
   const options: RequestInit = { method, headers };
@@ -26,7 +33,7 @@ async function openwaRequest(endpoint: string, method: string = "GET", body?: an
     options.body = JSON.stringify(body);
   }
 
-  const response = await fetch(`${OPENWA_API_URL}${endpoint}`, options);
+  const response = await fetch(`${config.url}${endpoint}`, options);
   if (!response.ok) {
     const errorText = await response.text();
     throw new Error(`OpenWA API Error (${response.status}): ${errorText}`);
@@ -38,17 +45,20 @@ async function openwaRequest(endpoint: string, method: string = "GET", body?: an
 }
 
 /** Initialize session by ensuring it exists in the gateway */
-export async function initWhatsApp(sessionName = SESSION_NAME) {
+export async function initWhatsApp(sessionName?: string) {
+  const config = getOpenWaConfig();
+  const effectiveSession = sessionName || config.session;
+  
   try {
-    console.log(`[WhatsApp] Checking OpenWA session: ${sessionName}`);
+    console.log(`[WhatsApp] Checking OpenWA session: ${effectiveSession}`);
     
     // 1. Fetch all sessions to find the UUID
     const sessions = await openwaRequest('/api/sessions');
-    let session = sessions.find((s: any) => s.name === sessionName);
+    let session = sessions.find((s: any) => s.name === effectiveSession);
     
     // 2. If it doesn't exist, create it
     if (!session) {
-      session = await openwaRequest('/api/sessions', 'POST', { name: sessionName });
+      session = await openwaRequest('/api/sessions', 'POST', { name: effectiveSession });
     }
     
     activeSessionId = session.id;
@@ -112,7 +122,7 @@ export async function clearAuthCache() {
   }
 }
 
-export async function restartWhatsApp(sessionName = SESSION_NAME) {
+export async function restartWhatsApp(sessionName?: string) {
   console.log("[WhatsApp] Restarting WhatsApp client via Gateway...");
   try {
     if (activeSessionId) {

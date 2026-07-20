@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start';
 import { logAuditAction } from '@/backend/shared/audit';
-import { getAdminToken } from '@/backend/infrastructure/token';
+import { getAdminToken, getEnv } from '@/backend/infrastructure/token';
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
 
@@ -27,19 +27,20 @@ export const verifyAdminFn = createServerFn({ method: "POST" })
     }
 
     if (data.email && data.password) {
-      const expectedEmail = process.env.ADMIN_EMAIL || "khudeshivam@gmail.com";
-      const hash = process.env.ADMIN_PASSWORD_HASH;
+      const expectedEmail = getEnv("ADMIN_EMAIL") || "khudeshivam@gmail.com";
+      const hash = getEnv("ADMIN_PASSWORD_HASH");
+      const plain = getEnv("ADMIN_PASSWORD");
 
       let isMatch = false;
       if (hash) {
         isMatch = bcrypt.compareSync(data.password, hash);
-      } else if (process.env.ADMIN_PASSWORD) {
-        isMatch = data.password === process.env.ADMIN_PASSWORD;
+      } else if (plain) {
+        isMatch = data.password === plain;
       }
 
       const emailMatch = data.email === expectedEmail;
       if (isDev) {
-        console.log(`[Auth] Login attempt — emailMatch:${emailMatch} passwordMatch:${isMatch} hasPassword:${!!process.env.ADMIN_PASSWORD}`);
+        console.log(`[Auth] Login attempt — emailMatch:${emailMatch} passwordMatch:${isMatch} hasPassword:${!!plain}`);
       }
 
       if (emailMatch && isMatch) {
@@ -61,14 +62,15 @@ export const verifyAdminFn = createServerFn({ method: "POST" })
 export const verifyAdminPasswordFn = createServerFn({ method: "POST" })
   .validator((data: { password: string }) => data)
   .handler(async ({ data }) => {
-    const expectedEmail = process.env.ADMIN_EMAIL || "khudeshivam@gmail.com";
-    const hash = process.env.ADMIN_PASSWORD_HASH;
+    const expectedEmail = getEnv("ADMIN_EMAIL") || "khudeshivam@gmail.com";
+    const hash = getEnv("ADMIN_PASSWORD_HASH");
+    const plain = getEnv("ADMIN_PASSWORD");
 
     let isMatch = false;
     if (hash) {
       isMatch = bcrypt.compareSync(data.password, hash);
-    } else if (process.env.ADMIN_PASSWORD) {
-      isMatch = data.password === process.env.ADMIN_PASSWORD;
+    } else if (plain) {
+      isMatch = data.password === plain;
     }
 
     if (isMatch) {
