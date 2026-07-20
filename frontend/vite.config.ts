@@ -5,12 +5,18 @@
 //     error logger plugins, and sandbox detection (port/host/strictPort).
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
-import dotenv from 'dotenv';
 import path from 'path';
-try {
-  dotenv.config({ path: path.resolve(process.cwd(), '../.env') });
-} catch {
-  // Ignore missing .env in production / CI environments
+import fs from 'fs';
+
+// Safely load root .env in local dev if present
+const envPath = path.resolve(process.cwd(), '../.env');
+if (fs.existsSync(envPath)) {
+  try {
+    const dotenv = await import('dotenv');
+    dotenv.default?.config({ path: envPath }) || dotenv.config?.({ path: envPath });
+  } catch {
+    // Ignore if dotenv is not installed in production/CI environments
+  }
 }
 import Sitemap from "vite-plugin-sitemap";
 import { imagetools } from "vite-imagetools";
