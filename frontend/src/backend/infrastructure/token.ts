@@ -1,3 +1,4 @@
+// @ts-ignore - Vinxi is a transitive dependency from TanStack Start
 import { getEvent } from 'vinxi/http';
 
 export function getEnv(key: string): string | undefined {
