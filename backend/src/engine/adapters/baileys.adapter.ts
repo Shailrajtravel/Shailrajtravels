@@ -209,11 +209,25 @@ export class BaileysAdapter implements IWhatsAppEngine {
       }
     }
 
+    const baileysLogger = createBaileysLogger() as unknown as ILogger;
+    const cacheableKeys = b.makeCacheableSignalKeyStore
+      ? b.makeCacheableSignalKeyStore(state.keys, baileysLogger as any)
+      : state.keys;
+
     const sock = b.default({
-      auth: state,
+      auth: {
+        creds: state.creds,
+        keys: cacheableKeys,
+      },
       version,
       browser: BAILEYS_BROWSER,
       printQRInTerminal: false,
+      retryRequestDelayMs: 250,
+      getMessage: async key => {
+        if (!key.id) return undefined;
+        const msg = await this.config.messageStore?.getMessage(this.config.sessionId, key.id);
+        return msg?.message ?? undefined;
+      },
       // Enable the initial sync. Baileys defaults `shouldSyncHistoryMessage` to `() => !!syncFullHistory`,
       // so leaving both unset disables ALL history + app-state sync - no contacts, chats, recent history,
       // or lid->phone mappings ever arrive (the address-book app-state sync only runs once history sync is
@@ -222,10 +236,7 @@ export class BaileysAdapter implements IWhatsAppEngine {
       // RECENT window + the full contact/app-state snapshot, not the entire message history.
       shouldSyncHistoryMessage: () => true,
       syncFullHistory: process.env.BAILEYS_SYNC_FULL_HISTORY === 'true',
-      // BaileysLogger matches ILogger exactly; cast needed because the module resolves
-      // the type through a deep import path that TypeScript does not auto-unify here.
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-      logger: createBaileysLogger() as unknown as ILogger,
+      logger: baileysLogger,
     });
     this.sock = sock;
 
@@ -557,8 +568,13 @@ export class BaileysAdapter implements IWhatsAppEngine {
 
   async replyToMessage(chatId: string, quotedMsgId: string, text: string): Promise<MessageResult> {
     this.ensureReady();
-    const quoted = await this.requireStored(quotedMsgId);
-    return this.sendContent(chatId, { text }, { quoted });
+    try {
+      const quoted = await this.requireStored(quotedMsgId);
+      return await this.sendContent(chatId, { text }, { quoted });
+    } catch (error) {
+      this.logger.warn(`Failed to resolve quoted message ${quotedMsgId}, falling back to standard sendTextMessage`, String(error));
+      return this.sendTextMessage(chatId, text);
+    }
   }
 
   async forwardMessage(fromChatId: string, toChatId: string, messageId: string): Promise<MessageResult> {
@@ -829,14 +845,27 @@ export class BaileysAdapter implements IWhatsAppEngine {
   // ----- Helpers -----
 
   private handleMessagesUpsert(event: { messages: WAMessage[]; type: string }): void {
-    // Only live messages ('notify'); 'append' is history sync, which this storeless slice skips.
-    if (event.type !== 'notify') {
+    // Process live messages ('notify') and recent missed messages ('append').
+    // 'append' is used by Baileys for history sync and missed offline messages.
+    if (event.type !== 'notify' && event.type !== 'append') {
       return;
     }
+    
+    const now = Math.floor(Date.now() / 1000);
+
     for (const msg of event.messages) {
       if (!msg.message || !msg.key?.remoteJid) {
         continue; // protocol/empty messages carry no neutral content
       }
+
+      // For 'append', strictly filter out old history sync messages (older than 10 mins).
+      if (event.type === 'append') {
+        const msgTime = this.toUnixSeconds(msg.messageTimestamp);
+        if (now - msgTime > 600) {
+          continue; 
+        }
+      }
+
       // Throttle through the limiter so a burst of media messages can't run unbounded parallel
       // downloads (each a full decrypted buffer in heap). Ordering stays correct — the message store
       // keeps the newest by timestamp — and none are dropped (the limiter queues the overflow).

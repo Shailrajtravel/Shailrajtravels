@@ -277,12 +277,14 @@ export async function sendBookingInvoicePDF(
     const bookingIdStr = booking._id?.toString() || "";
     const invoiceNo = generatedInvoiceNo || booking.invoiceCustomData?.invoiceNo || booking.generatedInvoiceNo || `INV-${bookingIdStr.slice(-6).toUpperCase()}`;
 
-    if (adminToken && bookingIdStr) {
+    const effectiveToken = adminToken || (typeof process !== "undefined" ? process.env.ADMIN_PASSWORD || "admin" : "admin");
+
+    if (effectiveToken && bookingIdStr) {
       try {
         const { generateInvoicePDFViaPuppeteer } = await import('@/backend/shared/invoice-pdf');
-        pdfBuffer = await generateInvoicePDFViaPuppeteer(bookingIdStr, adminToken, invoiceNo);
+        pdfBuffer = await generateInvoicePDFViaPuppeteer(bookingIdStr, effectiveToken, invoiceNo);
       } catch (puppeteerErr) {
-        console.warn("[WhatsApp] Puppeteer route capture failed, falling back to PDFKit");
+        console.warn("[WhatsApp] Puppeteer route capture failed, falling back to PDFKit:", puppeteerErr);
         pdfBuffer = await generateSingleInvoicePDF(booking);
       }
     } else {

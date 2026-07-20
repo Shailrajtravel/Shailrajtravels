@@ -1284,18 +1284,43 @@ export class SessionService implements OnModuleDestroy, OnModuleInit, OnApplicat
     // This ensures personal chats that never triggered the bot are hidden from the dashboard.
     const allChats = await engine.getChats();
     let chats: ChatSummary[] = [];
-    
-    if (allChats.length > 0) {
-       const dbChats = await this.messageRepository
-         .createQueryBuilder('message')
-         .select('message.chatId', 'chatId')
-         .where('message.sessionId = :id', { id })
-         .andWhere('message.chatId IN (:...chatIds)', { chatIds: allChats.map(c => c.id) })
-         .groupBy('message.chatId')
-         .getRawMany();
 
-       const validChatIds = new Set(dbChats.map(row => row.chatId));
-       chats = allChats.filter(c => validChatIds.has(c.id));
+    if (allChats.length > 0) {
+      const dbChats = await this.messageRepository
+        .createQueryBuilder('message')
+        .select('message.chatId', 'chatId')
+        .where('message.sessionId = :id', { id })
+        .andWhere('message.chatId IN (:...chatIds)', { chatIds: allChats.map((c) => c.id) })
+        .groupBy('message.chatId')
+        .getRawMany();
+
+      const validChatIds = new Set(dbChats.map((row) => row.chatId));
+      chats = allChats.filter((c) => validChatIds.has(c.id));
+    } else {
+      // Fallback: If engine.getChats() fails or returns empty, query stored chats from DB
+      const dbChats = await this.messageRepository
+        .createQueryBuilder('message')
+        .select('message.chatId', 'chatId')
+        .addSelect('MAX(message.createdAt)', 'latestCreatedAt')
+        .where('message.sessionId = :id', { id })
+        .groupBy('message.chatId')
+        .getRawMany();
+
+      for (const row of dbChats) {
+        const lastMsg = await this.messageRepository.findOne({
+          where: { sessionId: id, chatId: row.chatId },
+          order: { createdAt: 'DESC' },
+        });
+
+        chats.push({
+          id: row.chatId,
+          name: row.chatId.replace(/@c\.us|@g\.us|@s\.whatsapp\.net|@newsletter/i, ''),
+          isGroup: row.chatId.endsWith('@g.us'),
+          unreadCount: 0,
+          timestamp: lastMsg?.timestamp || Math.floor(new Date(row.latestCreatedAt || Date.now()).getTime() / 1000),
+          lastMessage: lastMsg?.body || undefined,
+        });
+      }
     }
 
     chats.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));

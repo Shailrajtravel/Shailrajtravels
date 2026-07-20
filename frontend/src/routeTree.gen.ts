@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as YatriStoriesRouteImport } from './routes/yatri-stories'
 import { Route as WhyChooseShailrajTravelsRouteImport } from './routes/why-choose-shailraj-travels'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as SecurityPolicyRouteImport } from './routes/security-policy'
+import { Route as ReportIssueRouteImport } from './routes/report-issue'
 import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as PilgrimageGuidesRouteImport } from './routes/pilgrimage-guides'
@@ -54,6 +56,16 @@ const WhyChooseShailrajTravelsRoute =
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SecurityPolicyRoute = SecurityPolicyRouteImport.update({
+  id: '/security-policy',
+  path: '/security-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportIssueRoute = ReportIssueRouteImport.update({
+  id: '/report-issue',
+  path: '/report-issue',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RefundPolicyRoute = RefundPolicyRouteImport.update({
@@ -208,6 +220,8 @@ export interface FileRoutesByFullPath {
   '/pilgrimage-guides': typeof PilgrimageGuidesRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
+  '/report-issue': typeof ReportIssueRoute
+  '/security-policy': typeof SecurityPolicyRoute
   '/terms': typeof TermsRoute
   '/why-choose-shailraj-travels': typeof WhyChooseShailrajTravelsRoute
   '/yatri-stories': typeof YatriStoriesRoute
@@ -240,6 +254,8 @@ export interface FileRoutesByTo {
   '/pilgrimage-guides': typeof PilgrimageGuidesRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
+  '/report-issue': typeof ReportIssueRoute
+  '/security-policy': typeof SecurityPolicyRoute
   '/terms': typeof TermsRoute
   '/why-choose-shailraj-travels': typeof WhyChooseShailrajTravelsRoute
   '/yatri-stories': typeof YatriStoriesRoute
@@ -273,6 +289,8 @@ export interface FileRoutesById {
   '/pilgrimage-guides': typeof PilgrimageGuidesRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
+  '/report-issue': typeof ReportIssueRoute
+  '/security-policy': typeof SecurityPolicyRoute
   '/terms': typeof TermsRoute
   '/why-choose-shailraj-travels': typeof WhyChooseShailrajTravelsRoute
   '/yatri-stories': typeof YatriStoriesRoute
@@ -307,6 +325,8 @@ export interface FileRouteTypes {
     | '/pilgrimage-guides'
     | '/privacy-policy'
     | '/refund-policy'
+    | '/report-issue'
+    | '/security-policy'
     | '/terms'
     | '/why-choose-shailraj-travels'
     | '/yatri-stories'
@@ -339,6 +359,8 @@ export interface FileRouteTypes {
     | '/pilgrimage-guides'
     | '/privacy-policy'
     | '/refund-policy'
+    | '/report-issue'
+    | '/security-policy'
     | '/terms'
     | '/why-choose-shailraj-travels'
     | '/yatri-stories'
@@ -371,6 +393,8 @@ export interface FileRouteTypes {
     | '/pilgrimage-guides'
     | '/privacy-policy'
     | '/refund-policy'
+    | '/report-issue'
+    | '/security-policy'
     | '/terms'
     | '/why-choose-shailraj-travels'
     | '/yatri-stories'
@@ -404,6 +428,8 @@ export interface RootRouteChildren {
   PilgrimageGuidesRoute: typeof PilgrimageGuidesRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   RefundPolicyRoute: typeof RefundPolicyRoute
+  ReportIssueRoute: typeof ReportIssueRoute
+  SecurityPolicyRoute: typeof SecurityPolicyRoute
   TermsRoute: typeof TermsRoute
   WhyChooseShailrajTravelsRoute: typeof WhyChooseShailrajTravelsRoute
   YatriStoriesRoute: typeof YatriStoriesRoute
@@ -443,6 +469,20 @@ declare module '@tanstack/react-router' {
       path: '/terms'
       fullPath: '/terms'
       preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/security-policy': {
+      id: '/security-policy'
+      path: '/security-policy'
+      fullPath: '/security-policy'
+      preLoaderRoute: typeof SecurityPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/report-issue': {
+      id: '/report-issue'
+      path: '/report-issue'
+      fullPath: '/report-issue'
+      preLoaderRoute: typeof ReportIssueRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/refund-policy': {
@@ -652,6 +692,8 @@ const rootRouteChildren: RootRouteChildren = {
   PilgrimageGuidesRoute: PilgrimageGuidesRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
   RefundPolicyRoute: RefundPolicyRoute,
+  ReportIssueRoute: ReportIssueRoute,
+  SecurityPolicyRoute: SecurityPolicyRoute,
   TermsRoute: TermsRoute,
   WhyChooseShailrajTravelsRoute: WhyChooseShailrajTravelsRoute,
   YatriStoriesRoute: YatriStoriesRoute,

@@ -23,38 +23,62 @@ function RefundPolicyPage() {
       </h1>
       <div className="prose max-w-none text-gray-700 space-y-6">
         <p>
-          <strong>Last Updated: {new Date().toLocaleDateString()}</strong>
-        </p>
-        <p>
-          At Shailraj Travels, we aim to provide a transparent and fair refund process for our
-          customers.
+          <strong>Last Updated: 27 June 2026</strong>
         </p>
 
-        <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">1. Refund Eligibility</h2>
-        <p>
-          Refunds are applicable only for cancellations made within the stipulated time frame as
-          mentioned in our Cancellation Policy. No-shows or mid-tour dropouts are not eligible for
-          any refund.
-        </p>
+        <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">1. General</h2>
+        <p>Refunds shall only be processed in accordance with this Refund Policy and the Cancellation Policy.</p>
 
-        <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">2. Refund Processing Time</h2>
-        <p>
-          Approved refunds will be processed within 7 to 10 business days. The amount will be
-          credited back to the original mode of payment used during booking.
-        </p>
+        <hr className="my-8" />
 
-        <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">3. Tour Cancellation by Us</h2>
-        <p>
-          In the rare event that Shailraj Travels must cancel a tour due to unforeseen circumstances
-          (e.g., natural disasters, strikes, minimum occupancy not met), passengers will be offered
-          a full 100% refund or an option to reschedule to the next available date.
-        </p>
+        <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">2. Eligible Refunds</h2>
+        <p>Refunds are available only for:</p>
+        <ul className="list-disc pl-6 space-y-2">
+          <li>Eligible customer cancellations.</li>
+          <li>Tour cancellations initiated by Shailraj Travels.</li>
+        </ul>
 
-        <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">4. Contact for Refunds</h2>
-        <p>
-          To follow up on a refund request, please email shailrajtravels9999@gmail.com with your
-          booking ID.
-        </p>
+        <hr className="my-8" />
+
+        <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">3. Non-Refundable Items</h2>
+        <p>The following are non-refundable unless otherwise stated:</p>
+        <ul className="list-disc pl-6 space-y-2">
+          <li>Booking fees</li>
+          <li>Convenience fees</li>
+          <li>Payment gateway charges</li>
+          <li>GST already deposited where applicable</li>
+          <li>Visa fees (if any)</li>
+          <li>Insurance charges</li>
+          <li>VIP Darshan charges</li>
+          <li>Hotel upgrade charges</li>
+        </ul>
+
+        <hr className="my-8" />
+
+        <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">4. Processing Time</h2>
+        <p>Approved refunds shall be processed within 7–10 business days after approval.</p>
+        <p>Processing time may vary depending on banks or payment providers.</p>
+
+        <hr className="my-8" />
+
+        <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">5. Mode of Refund</h2>
+        <p>Refunds shall be credited only to the original payment method.</p>
+        <p>Cash refunds will not be issued for online payments.</p>
+
+        <hr className="my-8" />
+
+        <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">6. Cancellation by Shailraj Travels</h2>
+        <p>If Shailraj Travels cancels a tour due to operational reasons, passengers may choose either:</p>
+        <ul className="list-disc pl-6 space-y-2">
+          <li>Full refund of the amount paid, or</li>
+          <li>Credit toward another available tour.</li>
+        </ul>
+        <p>No compensation shall be payable for incidental expenses such as travel to pickup points, hotel bookings, or leave from work.</p>
+
+        <hr className="my-8" />
+
+        <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">7. Contact</h2>
+        <p>Email:<br />shailrajtravels9999@gmail.com</p>
       </div>
     </main>
   );

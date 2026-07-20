@@ -346,42 +346,66 @@ export function Hero({
                 />
               </FieldBox>
 
-              <FieldBox icon={<MapPin className="h-5 w-5" />} label={t.formTrip} htmlFor="hero-trip">
-                <div className="relative flex items-center w-full">
-                  <select
-                    suppressHydrationWarning
-                    name="trip"
-                    id="hero-trip"
-                    autoComplete="off"
-                    className="w-full appearance-none bg-transparent text-[15px] font-semibold text-brand-blue-deep focus:outline-none cursor-pointer"
-                    value={selectedTrip}
-                    onChange={(e) => setSelectedTrip(e.target.value)}
-                  >
-                    {tripOptions.map((trip) => (
-                      <option key={trip._id} value={trip._id}>
-                        {trip.name}
-                      </option>
-                    ))}
-                    <option value="custom">{t.tripCustom}</option>
-                  </select>
-                  <ChevronDown className="absolute right-0 h-4 w-4 text-slate-400 pointer-events-none" />
-                </div>
+              <FieldBox 
+                icon={<MapPin className="h-5 w-5" />} 
+                label={selectedTrip === "custom" ? t.formCustom : t.formTrip} 
+                htmlFor={selectedTrip === "custom" ? "hero-custom-destination" : "hero-trip"}
+              >
+                {selectedTrip === "custom" ? (
+                  <div className="relative flex items-center w-full">
+                    <input
+                      suppressHydrationWarning
+                      type="text"
+                      name="customDestination"
+                      id="hero-custom-destination"
+                      autoComplete="off"
+                      required
+                      autoFocus
+                      placeholder={t.formCustomPlace}
+                      className="w-full bg-transparent text-[15px] font-semibold text-brand-blue-deep placeholder:text-slate-400 placeholder:font-medium focus:outline-none pr-14"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setSelectedTrip(tripOptions[0]?._id || "")}
+                      className="absolute right-0 text-slate-400 hover:text-brand-blue text-[12px] font-semibold underline"
+                    >
+                      List
+                    </button>
+                  </div>
+                ) : (
+                  <div className="relative flex items-center w-full">
+                    <select
+                      suppressHydrationWarning
+                      name="trip"
+                      id="hero-trip"
+                      autoComplete="off"
+                      className="w-full appearance-none bg-transparent text-[15px] font-semibold text-brand-blue-deep focus:outline-none cursor-pointer"
+                      value={selectedTrip}
+                      onChange={(e) => setSelectedTrip(e.target.value)}
+                    >
+                      {tripOptions.map((trip) => (
+                        <option key={trip._id} value={trip._id}>
+                          {trip.name}
+                        </option>
+                      ))}
+                      <option value="custom">{t.tripCustom}</option>
+                    </select>
+                    <ChevronDown className="absolute right-0 h-4 w-4 text-slate-400 pointer-events-none" />
+                  </div>
+                )}
               </FieldBox>
 
-              {selectedTrip === "custom" && (
-                <FieldBox icon={<MapPin className="h-5 w-5" />} label={t.formCustom} htmlFor="hero-custom-destination">
-                  <input
-                    suppressHydrationWarning
-                    type="text"
-                    name="customDestination"
-                    id="hero-custom-destination"
-                    autoComplete="off"
-                    required
-                    placeholder={t.formCustomPlace}
-                    className="w-full bg-transparent text-[15px] font-semibold text-brand-blue-deep placeholder:text-slate-400 placeholder:font-medium focus:outline-none"
-                  />
-                </FieldBox>
-              )}
+              <FieldBox icon={<MapPin className="h-5 w-5" />} label={t.formPickupLocation} htmlFor="hero-pickup-location">
+                <input
+                  suppressHydrationWarning
+                  type="text"
+                  name="pickupLocation"
+                  id="hero-pickup-location"
+                  autoComplete="off"
+                  placeholder={t.formPickupLocationPlace}
+                  className="w-full bg-transparent text-[15px] font-semibold text-brand-blue-deep placeholder:text-slate-400 placeholder:font-medium focus:outline-none"
+                />
+              </FieldBox>
 
               <FieldBox icon={<Users className="h-5 w-5" />} label={t.formPersons}>
                 <div className="flex items-center justify-between w-full h-full">
@@ -433,7 +457,7 @@ export function Hero({
                 ) : (
                   <input
                     suppressHydrationWarning
-                    type="datetime-local"
+                    type="date"
                     name="travelDate"
                     id="hero-travel-date"
                     autoComplete="off"
@@ -447,7 +471,7 @@ export function Hero({
                 suppressHydrationWarning
                 type="submit"
                 disabled={loading}
-                className={`btn-cta flex h-[70px] items-center justify-center gap-2.5 rounded-2xl px-8 text-base font-semibold ${selectedTrip === "custom" ? "md:col-span-3" : ""} disabled:opacity-70`}
+                className="btn-cta flex h-[70px] items-center justify-center gap-2.5 rounded-2xl px-8 text-base font-semibold disabled:opacity-70"
               >
                 {loading ? (
                   <Loader2 className="h-5 w-5 animate-spin" />

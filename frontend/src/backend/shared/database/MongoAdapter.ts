@@ -1,7 +1,5 @@
 import { MongoClient, Db } from 'mongodb';
-import * as fs from 'node:fs';
-import * as path from 'node:path';
-
+// No node:fs or node:path required because vite.config.ts uses dotenv
 // ----------------------------------------------------
 // Offline Fallback Support (From original db.ts)
 // ----------------------------------------------------
@@ -67,6 +65,8 @@ class LocalCollection {
   async _readData(): Promise<any> {
     if (typeof window !== "undefined") return {};
     try {
+      const path = await import('node:path');
+      const fs = await import('node:fs');
       const dbFilePath = path.join(process.cwd(), "local_db.json");
       const data = await fs.promises.readFile(dbFilePath, "utf8");
       return JSON.parse(data);
@@ -77,6 +77,8 @@ class LocalCollection {
   async _writeData(data: any): Promise<void> {
     if (typeof window !== "undefined") return;
     try {
+      const path = await import('node:path');
+      const fs = await import('node:fs');
       const dbFilePath = path.join(process.cwd(), "local_db.json");
       await fs.promises.writeFile(dbFilePath, JSON.stringify(data, null, 2), "utf8");
     } catch (e) {
@@ -225,32 +227,34 @@ export class MongoAdapter {
   }
 }
 
-export const mongoAdapter = new MongoAdapter();
-
-// Initialize the adapter automatically when this module is loaded
-// We use process.env to grab the cluster URIs
 let fallbackMongoUri = process.env.MONGO_URI;
 
-if (!fallbackMongoUri) {
-  try {
-    const envPath = path.join(process.cwd(), ".env");
-    const envContent = fs.readFileSync(envPath, "utf-8");
-    const match = envContent.match(/^MONGO_URI=["']?([^"'\n]+)["']?$/m);
-    if (match) {
-      fallbackMongoUri = match[1];
-    }
-  } catch (e) {
-    // Ignore error if .env is missing
+export const mongoAdapter = new MongoAdapter();
+
+// Lazy initialization wrapper
+async function ensureInitialized() {
+  if (mongoAdapter["initialized"] || mongoAdapter["initPromise"]) return mongoAdapter["initPromise"];
+
+  if (!fallbackMongoUri && typeof window === "undefined") {
+    fallbackMongoUri = process.env.MONGO_URI;
   }
+
+  const clusterConfigs = {
+    cluster1: fallbackMongoUri,
+  };
+  
+  if (typeof window === "undefined") {
+    console.log("[MongoAdapter] Using MONGO_URI:", fallbackMongoUri ? "Yes (Masked)" : "No");
+  }
+
+  return mongoAdapter.init(clusterConfigs).catch(err => {
+    console.error("[MongoAdapter] Initialization failed:", err);
+  });
 }
 
-const clusterConfigs = {
-  cluster1: fallbackMongoUri,
-  // Add other clusters here if needed
+// Override getDbAsync to ensure initialization
+const originalGetDbAsync = mongoAdapter.getDbAsync.bind(mongoAdapter);
+mongoAdapter.getDbAsync = async function(clusterId: string) {
+  await ensureInitialized();
+  return originalGetDbAsync(clusterId);
 };
-
-console.log("[MongoAdapter] Using MONGO_URI:", fallbackMongoUri ? "Yes (Masked)" : "No");
-
-mongoAdapter.init(clusterConfigs).catch(err => {
-  console.error("[MongoAdapter] Initialization failed:", err);
-});

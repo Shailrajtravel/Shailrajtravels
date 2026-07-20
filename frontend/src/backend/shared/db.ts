@@ -2,8 +2,9 @@ import { MongoClient } from 'mongodb';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 
-// Load .env variables into process.env in Node.js environment
-if (typeof window === "undefined") {
+let isEnvLoaded = false;
+function loadEnv() {
+  if (isEnvLoaded || typeof window !== "undefined") return;
   try {
     let envPath = path.join(process.cwd(), ".env");
     if (!fs.existsSync(envPath)) {
@@ -37,10 +38,10 @@ if (typeof window === "undefined") {
   } catch (e: any) {
     console.error("[DB] Failed to load .env file:", e.message);
   }
+  isEnvLoaded = true;
 }
 
-const uri =
-  process.env.MONGO_URI || process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/shailraj";
+const getUri = () => process.env.MONGO_URI || process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/shailraj";
 // Helper to generate a 24-character hex ID (similar to MongoDB ObjectId)
 function generateHexId(): string {
   const chars = "0123456789abcdef";
@@ -234,16 +235,16 @@ class LocalMongoClient {
 let clientPromise: Promise<any>;
 
 async function initClient() {
-  const connectionUri =
-    process.env.MONGO_URI || process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/shailraj";
+  loadEnv();
+  const connectionUri = getUri();
 
   try {
     const client = new MongoClient(connectionUri, {
       serverSelectionTimeoutMS: parseInt(process.env.MONGODB_TIMEOUT || "10000", 10),
     });
     await client.connect();
-    // Ping the server to verify it is actually online
-    await client.db("admin").command({ ping: 1 });
+    // Ping the target database to verify connection
+    await client.db().command({ ping: 1 });
     console.log("Successfully connected to MongoDB server");
     return client;
   } catch (err: any) {

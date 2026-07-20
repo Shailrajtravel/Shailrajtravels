@@ -57,3 +57,30 @@ export const verifyAdminFn = createServerFn({ method: "POST" })
 
     return { success: false };
   });
+
+export const verifyAdminPasswordFn = createServerFn({ method: "POST" })
+  .validator((data: { password: string }) => data)
+  .handler(async ({ data }) => {
+    const expectedEmail = process.env.ADMIN_EMAIL || "khudeshivam@gmail.com";
+    const hash = process.env.ADMIN_PASSWORD_HASH;
+
+    let isMatch = false;
+    if (hash) {
+      isMatch = bcrypt.compareSync(data.password, hash);
+    } else if (process.env.ADMIN_PASSWORD) {
+      isMatch = data.password === process.env.ADMIN_PASSWORD;
+    }
+
+    if (isMatch) {
+      await logAuditAction({
+        data: {
+          action: "Unlock Invoice",
+          entityType: "Invoice",
+          details: `Invoice unlocked using admin password for ${expectedEmail}`,
+        },
+      });
+      return { success: true };
+    }
+
+    return { success: false, message: "Incorrect Admin Password" };
+  });

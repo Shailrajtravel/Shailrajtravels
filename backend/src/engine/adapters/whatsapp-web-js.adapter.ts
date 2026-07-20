@@ -39,6 +39,7 @@ import { EngineNotReadyError } from '../../common/errors/engine-not-ready.error'
 import { EngineNotSupportedError } from '../../common/errors/engine-not-supported.error';
 import { MessageNotFoundError } from '../../common/errors/message-not-found.error';
 import { loadRemoteMediaBuffer } from '../../common/media/load-remote-media';
+import { ServiceUnavailableException } from '@nestjs/common';
 import {
   GroupChat,
   GroupMetadataRaw,
@@ -740,6 +741,9 @@ export class WhatsAppWebJsAdapter extends EventEmitter implements IWhatsAppEngin
   async sendTextMessage(chatId: string, text: string): Promise<MessageResult> {
     this.ensureReady();
     const msg = await this.client!.sendMessage(chatId, text);
+    if (!msg) {
+      throw new ServiceUnavailableException(`Failed to send message: whatsapp-web.js returned undefined for chat ${chatId}`);
+    }
     return {
       id: msg.id._serialized,
       timestamp: msg.timestamp,
@@ -783,6 +787,9 @@ export class WhatsAppWebJsAdapter extends EventEmitter implements IWhatsAppEngin
     const msg = await this.client!.sendMessage(chatId, messageMedia, {
       caption: media.caption,
     });
+    if (!msg) {
+      throw new ServiceUnavailableException(`Failed to send media message: whatsapp-web.js returned undefined for chat ${chatId}`);
+    }
 
     return {
       id: msg.id._serialized,
@@ -939,20 +946,25 @@ export class WhatsAppWebJsAdapter extends EventEmitter implements IWhatsAppEngin
 
   async replyToMessage(chatId: string, quotedMsgId: string, text: string): Promise<MessageResult> {
     this.ensureReady();
-    // Find the message to quote
-    const chat = await this.client!.getChatById(chatId);
-    const messages = await chat.fetchMessages({ limit: 100 });
-    const quotedMsg = messages.find(m => m.id._serialized === quotedMsgId);
+    try {
+      const chat = await this.client!.getChatById(chatId);
+      const messages = await chat.fetchMessages({ limit: 50 });
+      const quotedMsg = messages.find(m => m.id._serialized === quotedMsgId);
 
-    if (!quotedMsg) {
-      throw new MessageNotFoundError(quotedMsgId);
+      if (quotedMsg) {
+        const msg = await quotedMsg.reply(text);
+        if (msg) {
+          return {
+            id: msg.id._serialized,
+            timestamp: msg.timestamp,
+          };
+        }
+      }
+    } catch (error) {
+      this.logger.warn(`Failed to reply to quoted message ${quotedMsgId}, falling back to standard sendTextMessage`, String(error));
     }
 
-    const msg = await quotedMsg.reply(text);
-    return {
-      id: msg.id._serialized,
-      timestamp: msg.timestamp,
-    };
+    return this.sendTextMessage(chatId, text);
   }
 
   async forwardMessage(fromChatId: string, toChatId: string, messageId: string): Promise<MessageResult> {
@@ -1464,7 +1476,14 @@ export class WhatsAppWebJsAdapter extends EventEmitter implements IWhatsAppEngin
 
   async getChats(): Promise<ChatSummary[]> {
     this.ensureReady();
-    const chats = await this.client!.getChats();
+    let chats: any[] = [];
+    try {
+      chats = await this.client!.getChats();
+    } catch (error) {
+      this.logger.error('Failed to get chats from whatsapp-web.js client', String(error));
+      return [];
+    }
+
     const summaries: ChatSummary[] = [];
     let skipped = 0;
 

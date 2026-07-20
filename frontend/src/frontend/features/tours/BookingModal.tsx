@@ -239,7 +239,7 @@ export function BookingModal({ tour, onClose, t, lang }: BookingModalProps) {
               {/* Pickup Location */}
               <div className="space-y-1">
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">
-                  {t.formPickupLocation || "Pickup Location"}{" "}
+                  {t.formPickupLocation || "Pickup Point"}{" "}
                   <span className="text-red-500">*</span>
                 </label>
                 <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 h-[56px] transition focus-within:border-[#F59E0B] focus-within:ring-2 focus-within:ring-[#F59E0B]/15">

@@ -302,11 +302,19 @@ export const saveInvoiceFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string; bookingId: string; invoiceCustomData: any }) => data)
   .handler(async ({ data }) => {
     if (data.adminToken !== getAdminToken()) throw new Error("Unauthorized");
-    await bookingRepository.updateOne(data.bookingId, {
+    const customData = data.invoiceCustomData || {};
+    const updatePayload: any = {
       isInvoiceLocked: true,
-      invoiceCustomData: data.invoiceCustomData,
-      paymentStatus: data.invoiceCustomData?.paymentStatus || "PENDING",
-    });
+      invoiceCustomData: customData,
+      paymentStatus: customData.paymentStatus || "PENDING",
+    };
+
+    if (customData.customerName) updatePayload.name = customData.customerName;
+    if (customData.customerPhone) updatePayload.phone = customData.customerPhone;
+    if (customData.travelDate) updatePayload.travelDate = customData.travelDate;
+    if (customData.pickupPoint) updatePayload.pickupLocation = customData.pickupPoint;
+
+    await bookingRepository.updateOne(data.bookingId, updatePayload);
     await logAuditAction({
       data: {
         action: "Lock Invoice",
@@ -316,16 +324,17 @@ export const saveInvoiceFn = createServerFn({ method: "POST" })
       },
     });
 
-    // Auto-send PDF invoice via WhatsApp if status is PAID
+    // Auto-send PDF invoice via WhatsApp if status is PAID, ADVANCE, or ADVANCE PAID
     let whatsappSent = false;
     let whatsappError = undefined;
 
-    if (data.invoiceCustomData?.paymentStatus === "PAID") {
+    const currentStatus = (data.invoiceCustomData?.paymentStatus || "").toUpperCase();
+    if (currentStatus === "PAID" || currentStatus === "ADVANCE" || currentStatus === "ADVANCE PAID") {
       try {
         const booking = await bookingRepository.findById(data.bookingId);
         if (booking) {
           const { sendBookingInvoicePDF } = await import('@/backend/infrastructure/whatsapp');
-          whatsappSent = await sendBookingInvoicePDF(booking);
+          whatsappSent = await sendBookingInvoicePDF(booking, data.adminToken);
         }
       } catch (err: any) {
         console.error("Failed to auto-send PDF invoice from saveInvoiceFn:", err);
@@ -349,7 +358,7 @@ export const sendInvoiceWhatsAppFn = createServerFn({ method: "POST" })
     }
 
     const { sendBookingInvoicePDF } = await import('@/backend/infrastructure/whatsapp');
-    const success = await sendBookingInvoicePDF(booking);
+    const success = await sendBookingInvoicePDF(booking, data.adminToken);
     if (!success) {
       throw new Error(
         "Failed to send WhatsApp invoice. Make sure WhatsApp Engine is connected and customer phone number is correct.",
@@ -583,7 +592,7 @@ export const updateBookingPaymentStatusFn = createServerFn({ method: "POST" })
     let whatsappSent = false;
     let whatsappError: string | undefined = undefined;
 
-    if (data.paymentStatus === "PAID") {
+    if (data.paymentStatus === "PAID" || data.paymentStatus === "ADVANCE" || data.paymentStatus === "ADVANCE PAID") {
       try {
         const updatedBooking = await bookingRepository.findById(data.id);
 
@@ -614,15 +623,22 @@ export const updateBookingPaymentStatusFn = createServerFn({ method: "POST" })
                 ? updatedBooking.customDestination || "Custom Trip"
                 : updatedBooking.tripName || "Your Trip");
             const travelDate = updatedBooking.travelDate || "N/A";
+            const isAdvance = data.paymentStatus === "ADVANCE" || data.paymentStatus === "ADVANCE PAID";
 
-            const confirmationMsg =
-              `✅ *Payment Confirmed — Shailraj Travels* 🙏\n\n` +
-              `Hello *${customerName}*,\n\n` +
-              `Your payment for *${tripName}* (Travel Date: ${travelDate}) has been marked as *PAID*.\n\n` +
-              `📄 Invoice No: *${invoiceNo}*\n\n` +
-              `The official invoice PDF is attached above. Please keep it for your records.\n\n` +
-              `We wish you a blessed and comfortable journey! 🚩\n\n` +
-              `— Shailraj Travels, Pune`;
+            const confirmationMsg = isAdvance
+              ? `✅ *Advance Payment Received — Shailraj Travels* 🙏\n\n` +
+                `Hello *${customerName}*,\n\n` +
+                `Your advance payment for *${tripName}* (Travel Date: ${travelDate}) has been marked as *ADVANCE PAID*.\n\n` +
+                `📄 Invoice No: *${invoiceNo}*\n\n` +
+                `The official receipt/invoice PDF is attached above. Thank you for booking with us! 🚩\n\n` +
+                `— Shailraj Travels, Pune`
+              : `✅ *Full Payment Confirmed — Shailraj Travels* 🙏\n\n` +
+                `Hello *${customerName}*,\n\n` +
+                `Your payment for *${tripName}* (Travel Date: ${travelDate}) has been marked as *PAID*.\n\n` +
+                `📄 Invoice No: *${invoiceNo}*\n\n` +
+                `The official invoice PDF is attached above. Please keep it for your records.\n\n` +
+                `We wish you a blessed and comfortable journey! 🚩\n\n` +
+                `— Shailraj Travels, Pune`;
 
             await sendWhatsAppMessage(updatedBooking.phone, confirmationMsg);
           }

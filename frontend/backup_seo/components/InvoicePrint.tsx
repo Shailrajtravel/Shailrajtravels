@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { MapPin, Phone, Mail, Globe, ZoomIn, ZoomOut, Maximize } from "lucide-react";
-import logo from "@/assets/Shailraj travels-Punelogo.png";
-import onlyNameLogo from "@/assets/only-name-logo.png";
-import stamp from "@/assets/stamp1.png";
+import logo from "@/frontend/shared/assets/shailraj-travels-punelogo.png";
+import onlyNameLogo from "@/frontend/shared/assets/only-name-logo.png";
+import stamp from "@/frontend/shared/assets/stamp1.png";
 
 const BLUE = "#0B3D91";
 const DARK = "#082F70";

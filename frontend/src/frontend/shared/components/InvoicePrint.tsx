@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { format } from 'date-fns';
-import { MapPin, Phone, Mail, Globe, ZoomIn, ZoomOut, Maximize, Lock, Send } from 'lucide-react';
+import { MapPin, Phone, Mail, Globe, ZoomIn, ZoomOut, Maximize, Lock, Unlock, Send, KeyRound } from 'lucide-react';
 // @ts-ignore
 import logo from '@/frontend/shared/assets/shailraj-travels-punelogo.png?w=300&format=webp&as=url';
 import onlyNameLogo from '@/frontend/shared/assets/only-name-logo.png';
 import stamp from '@/frontend/shared/assets/stamp1.png';
 import { saveInvoiceFn, sendInvoiceWhatsAppFn } from '@/backend/shared/bookings';
+import { verifyAdminPasswordFn } from '@/backend/infrastructure/auth';
 
 const BLUE = "#0B3D91";
 const DARK = "#082F70";
@@ -25,6 +26,12 @@ export function InvoicePrint({
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isSendingWhatsApp, setIsSendingWhatsApp] = useState(false);
+
+  // Password-protected Unlock state
+  const [showUnlockModal, setShowUnlockModal] = useState(false);
+  const [unlockPassword, setUnlockPassword] = useState("");
+  const [unlockError, setUnlockError] = useState("");
+  const [isVerifyingUnlock, setIsVerifyingUnlock] = useState(false);
 
   const safeDate = (dateStr: any) => {
     if (!dateStr) return new Date();
@@ -61,24 +68,20 @@ export function InvoicePrint({
         b._id?.slice(-8).toUpperCase() ||
         "",
       travelDate: (() => {
-        if (custom.travelDate) return custom.travelDate;
-        if (!b.travelDate) return "";
-        const parsed = new Date(b.travelDate);
-        if (isNaN(parsed.getTime())) {
-          return b.travelDate; // Return raw string (e.g. "Fri 3 Jul to Sun 5 Jul 2026")
-        }
+        const raw = b.travelDate || custom.travelDate || custom.travelDateTime || "";
+        if (!raw) return "";
+        const parsed = new Date(raw);
+        if (isNaN(parsed.getTime())) return raw;
         return format(parsed, "dd MMM yyyy");
       })(),
       customerName: custom.customerName || b.customerName || b.name || "",
       customerPhone: custom.customerPhone || b.customerPhone || b.phone || "",
       packageName: custom.packageName || b.tripName || b.packageId?.name || b.packageName || "Custom Trip",
       travelDateTime: (() => {
-        if (custom.travelDateTime) return custom.travelDateTime;
-        if (!b.travelDate) return "";
-        const parsed = new Date(b.travelDate);
-        if (isNaN(parsed.getTime())) {
-          return b.travelDate;
-        }
+        const raw = b.travelDate || custom.travelDateTime || custom.travelDate || "";
+        if (!raw) return "";
+        const parsed = new Date(raw);
+        if (isNaN(parsed.getTime())) return raw;
         return format(parsed, "dd MMM yyyy, HH:mm");
       })(),
       pickupPoint: custom.pickupPoint || b.pickupLocation || b.pickupPoint || "Pune",
@@ -91,6 +94,9 @@ export function InvoicePrint({
       description: custom.description || "Package Price (Per Person)",
       persons: custom.persons !== undefined ? Number(custom.persons) : b.persons || 1,
       paymentStatus: livePaymentStatus,
+      paymentMode: custom.paymentMode || "Cash",
+      cashAmount: custom.cashAmount !== undefined ? Number(custom.cashAmount) : 0,
+      onlineAmount: custom.onlineAmount !== undefined ? Number(custom.onlineAmount) : 0,
     };
   };
 
@@ -110,7 +116,15 @@ export function InvoicePrint({
   const totalAmount = data.rate * data.persons;
 
   const updateData = (key: string, value: any) => {
-    setData((prev) => ({ ...prev, [key]: value }));
+    setData((prev) => {
+      const next = { ...prev, [key]: value };
+      if (key === "travelDate") {
+        next.travelDateTime = value;
+      } else if (key === "travelDateTime") {
+        next.travelDate = value;
+      }
+      return next;
+    });
   };
 
   const getCreatedAtDate = (dateStr: any) => {
@@ -149,6 +163,14 @@ export function InvoicePrint({
       });
       if (res?.success) {
         setIsEditing(false);
+        if (booking) {
+          booking.invoiceCustomData = data;
+          booking.paymentStatus = data.paymentStatus;
+          if (data.customerName) booking.name = data.customerName;
+          if (data.customerPhone) booking.phone = data.customerPhone;
+          if (data.travelDate) booking.travelDate = data.travelDate;
+          if (data.pickupPoint) booking.pickupLocation = data.pickupPoint;
+        }
         if (onSuccess) onSuccess();
         if (data.paymentStatus === "PAID") {
           if (res.whatsappSent) {
@@ -213,6 +235,27 @@ export function InvoicePrint({
     }
   };
 
+  const handleUnlockSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!unlockPassword) return;
+    setIsVerifyingUnlock(true);
+    setUnlockError("");
+    try {
+      const res = await verifyAdminPasswordFn({ data: { password: unlockPassword } });
+      if (res?.success) {
+        setShowUnlockModal(false);
+        setUnlockPassword("");
+        setIsEditing(true);
+      } else {
+        setUnlockError(res?.message || "Incorrect Admin Password.");
+      }
+    } catch (err: any) {
+      setUnlockError(err.message || "Verification failed. Please try again.");
+    } finally {
+      setIsVerifyingUnlock(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#eef0f3] py-6 print:p-0 print:bg-white w-full overflow-x-auto print:overflow-visible relative flex flex-col items-center">
       <style>{`
@@ -257,35 +300,26 @@ export function InvoicePrint({
         </div>
 
         <div className="bg-white/90 backdrop-blur-md rounded-full shadow-lg border border-slate-200 px-4 py-2 flex items-center gap-3">
-          {isEditable ? (
-            isEditing ? (
-              <>
-                <button
-                  onClick={handleSaveAndLock}
-                  disabled={isSaving}
-                  className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded font-bold text-sm disabled:opacity-50"
-                >
-                  {isSaving ? "Saving..." : "Save & Lock Invoice"}
-                </button>
-                <button
-                  onClick={() => {
-                    setIsEditing(false);
-                    setData(getInitialData(booking));
-                  }}
-                  disabled={isSaving}
-                  className="px-3 py-1 bg-slate-400 hover:bg-slate-500 text-white rounded font-bold text-sm disabled:opacity-50"
-                >
-                  Cancel
-                </button>
-              </>
-            ) : (
+          {isEditing ? (
+            <>
               <button
-                onClick={() => setIsEditing(true)}
-                className="px-3 py-1 bg-[#0B3D91] hover:bg-[#082F70] text-white rounded font-bold text-sm"
+                onClick={handleSaveAndLock}
+                disabled={isSaving}
+                className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded font-bold text-sm disabled:opacity-50 cursor-pointer"
               >
-                Edit Invoice
+                {isSaving ? "Saving..." : "Save & Lock Invoice"}
               </button>
-            )
+              <button
+                onClick={() => {
+                  setIsEditing(false);
+                  setData(getInitialData(booking));
+                }}
+                disabled={isSaving}
+                className="px-3 py-1 bg-slate-400 hover:bg-slate-500 text-white rounded font-bold text-sm disabled:opacity-50 cursor-pointer"
+              >
+                Cancel
+              </button>
+            </>
           ) : (
             <>
               <div className="flex items-center gap-1.5 text-xs font-bold text-slate-500 px-3 py-1 bg-slate-100 rounded border border-slate-200 select-none">
@@ -293,9 +327,20 @@ export function InvoicePrint({
                 Invoice Locked
               </div>
               <button
+                onClick={() => {
+                  setUnlockPassword("");
+                  setUnlockError("");
+                  setShowUnlockModal(true);
+                }}
+                className="px-3 py-1 bg-[#0B3D91] hover:bg-[#082F70] text-white rounded font-bold text-sm flex items-center gap-1.5 transition-colors cursor-pointer"
+              >
+                <Unlock size={14} />
+                Unlock & Edit Invoice
+              </button>
+              <button
                 onClick={handleSendWhatsApp}
                 disabled={isSendingWhatsApp}
-                className="px-3 py-1 bg-green-600 hover:bg-green-700 disabled:opacity-50 text-white rounded font-bold text-sm flex items-center gap-1.5 transition-colors"
+                className="px-3 py-1 bg-green-600 hover:bg-green-700 disabled:opacity-50 text-white rounded font-bold text-sm flex items-center gap-1.5 transition-colors cursor-pointer"
               >
                 <Send size={14} />
                 {isSendingWhatsApp ? "Sending..." : "Send via WhatsApp"}
@@ -310,6 +355,63 @@ export function InvoicePrint({
           </button>
         </div>
       </div>
+
+      {/* UNLOCK PASSWORD MODAL */}
+      {showUnlockModal && (
+        <div className="no-print fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+          <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl border border-slate-100 p-6 space-y-4 animate-in fade-in zoom-in duration-150">
+            <div className="flex items-center gap-3">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-[#0B3D91]">
+                <KeyRound size={24} />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-slate-800">Unlock Invoice for Editing</h3>
+                <p className="text-xs text-slate-500">Enter Admin Password to verify authorization</p>
+              </div>
+            </div>
+
+            <form onSubmit={handleUnlockSubmit} className="space-y-4 pt-2">
+              <div>
+                <label className="block text-xs font-bold uppercase text-slate-500 mb-1">
+                  Admin Password
+                </label>
+                <input
+                  type="password"
+                  autoFocus
+                  required
+                  value={unlockPassword}
+                  onChange={(e) => setUnlockPassword(e.target.value)}
+                  placeholder="Enter admin password..."
+                  className="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm font-semibold outline-none focus:border-[#0B3D91] focus:ring-2 focus:ring-[#0B3D91]/15"
+                />
+                {unlockError && (
+                  <p className="mt-1.5 text-xs font-bold text-red-600 animate-pulse">
+                    {unlockError}
+                  </p>
+                )}
+              </div>
+
+              <div className="flex items-center justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowUnlockModal(false)}
+                  disabled={isVerifyingUnlock}
+                  className="px-4 py-2 rounded-xl border border-slate-200 text-slate-600 font-semibold text-xs hover:bg-slate-50 transition-colors cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isVerifyingUnlock || !unlockPassword}
+                  className="px-5 py-2 rounded-xl bg-[#0B3D91] hover:bg-[#082F70] disabled:opacity-50 text-white font-bold text-xs shadow-md transition-colors cursor-pointer"
+                >
+                  {isVerifyingUnlock ? "Verifying..." : "Unlock Invoice"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* SCALED WRAPPER */}
       <div
@@ -329,7 +431,7 @@ export function InvoicePrint({
         >
           <div
             className="bg-white text-[#222] shadow-xl print:shadow-none relative shrink-0 flex flex-col"
-            style={{ width: "210mm", height: "297mm", padding: "10mm 10mm 50px" }}
+            style={{ width: "210mm", height: "297mm", padding: "10mm 10mm 70px" }}
             id={`invoice-${booking._id}`}
           >
             {/* HEADER */}
@@ -376,7 +478,7 @@ export function InvoicePrint({
             </div>
 
             {/* INVOICE BADGE */}
-            <div className="mt-4 flex justify-center">
+            <div className="mt-2 flex justify-center">
               <div
                 className="rounded-[8px] px-10 py-1.5 text-[22px] font-black tracking-widest text-white shadow-sm"
                 style={{ background: DARK }}
@@ -386,16 +488,16 @@ export function InvoicePrint({
             </div>
 
             {/* INVOICE INFO CARD */}
-            <div className="mt-4 rounded-[10px] border shrink-0" style={{ borderColor: BORDER }}>
+            <div className="mt-2 rounded-[10px] border shrink-0" style={{ borderColor: BORDER }}>
               <div className="grid grid-cols-2">
-                <div className="p-3 border-r" style={{ borderColor: BORDER }}>
+                <div className="p-2 border-r" style={{ borderColor: BORDER }}>
                   <InfoLine
                     label="Invoice No."
                     value={data.invoiceNo}
                     isEditing={isEditing}
                     onChange={(v: string) => updateData("invoiceNo", v)}
                   />
-                  <div className="mt-2" />
+                  <div className="mt-1" />
                   <InfoLine
                     label="Invoice Date"
                     value={data.invoiceDate}
@@ -403,14 +505,14 @@ export function InvoicePrint({
                     onChange={(v: string) => updateData("invoiceDate", v)}
                   />
                 </div>
-                <div className="p-3">
+                <div className="p-2">
                   <InfoLine
                     label="Booking ID"
                     value={data.bookingId}
                     isEditing={isEditing}
                     onChange={(v: string) => updateData("bookingId", v)}
                   />
-                  <div className="mt-2" />
+                  <div className="mt-1" />
                   <InfoLine
                     label="Travel Date"
                     value={data.travelDate}
@@ -422,7 +524,7 @@ export function InvoicePrint({
             </div>
 
             {/* BILL TO + TRIP DETAILS */}
-            <div className="mt-4 grid grid-cols-2 gap-4 shrink-0">
+            <div className="mt-2 grid grid-cols-2 gap-4 shrink-0">
               <Card title="BILL TO">
                 <div className="flex flex-col h-full gap-1">
                   <DetailRow
@@ -458,6 +560,7 @@ export function InvoicePrint({
                   label="Pickup Point"
                   value={data.pickupPoint}
                   isEditing={isEditing}
+                  multiline={true}
                   onChange={(v: string) => updateData("pickupPoint", v)}
                 />
               </Card>
@@ -465,47 +568,47 @@ export function InvoicePrint({
 
             {/* TABLE */}
             <div
-              className="mt-4 overflow-hidden rounded-[8px] border flex flex-col shrink-0"
+              className="mt-2 overflow-hidden rounded-[8px] border flex flex-col shrink-0"
               style={{ borderColor: BORDER }}
             >
               <table className="w-full text-left text-[13px]">
                 <thead className="text-white" style={{ background: DARK }}>
                   <tr>
-                    <th className="px-5 py-3 text-left font-bold uppercase tracking-wide text-[12px]">
+                    <th className="px-3 py-2 text-left font-bold uppercase tracking-wide text-[12px]">
                       Description
                     </th>
-                    <th className="px-5 py-3 text-center font-bold uppercase tracking-wide text-[12px] w-[100px]">
+                    <th className="px-3 py-2 text-center font-bold uppercase tracking-wide text-[12px] w-[100px]">
                       Qty
                     </th>
-                    <th className="px-5 py-3 text-center font-bold uppercase tracking-wide text-[12px] w-[140px]">
+                    <th className="px-3 py-2 text-center font-bold uppercase tracking-wide text-[12px] w-[140px]">
                       Rate (₹)
                     </th>
-                    <th className="px-5 py-3 text-center font-bold uppercase tracking-wide text-[12px] w-[160px]">
+                    <th className="px-3 py-2 text-center font-bold uppercase tracking-wide text-[12px] w-[160px]">
                       Amount (₹)
                     </th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td className="px-5 py-4 font-medium text-[#222]">
+                    <td className="px-3 py-2 font-medium text-[#222] align-top">
                       {isEditing ? (
-                        <input
-                          type="text"
-                          className="w-full border border-slate-300 rounded px-2 py-1 outline-none focus:ring-1 focus:ring-brand-blue"
+                        <textarea
+                          className="w-full border border-slate-300 rounded px-2 py-1 outline-none focus:ring-1 focus:ring-brand-blue resize-y"
+                          rows={6}
                           value={data.description}
                           onChange={(e) => updateData("description", e.target.value)}
                         />
                       ) : (
-                        data.description
+                        <div className="whitespace-pre-wrap break-words min-h-[100px]">{data.description}</div>
                       )}
                     </td>
-                    <td className="px-5 py-4 text-center font-medium text-[#222]">
+                    <td className="px-3 py-2 text-center font-medium text-[#222] align-top">
                       {isEditing ? (
                         <input
                           id="invoice-persons"
                           name="persons"
                           type="number"
-                          className="w-16 text-center border border-slate-300 rounded px-1 py-0.5 outline-none focus:ring-1 focus:ring-brand-blue"
+                          className="w-16 text-center border border-slate-300 rounded px-1 py-0.5 outline-none focus:ring-1 focus:ring-brand-blue mt-1"
                           value={data.persons}
                           onChange={(e) => updateData("persons", parseInt(e.target.value) || 0)}
                         />
@@ -513,13 +616,13 @@ export function InvoicePrint({
                         data.persons
                       )}
                     </td>
-                    <td className="px-5 py-4 text-center font-medium text-[#222]">
+                    <td className="px-3 py-2 text-center font-medium text-[#222] align-top">
                       {isEditing ? (
                         <input
                           id="invoice-rate"
                           name="rate"
                           type="number"
-                          className="w-20 text-center border border-slate-300 rounded px-1 py-0.5 outline-none focus:ring-1 focus:ring-brand-blue"
+                          className="w-20 text-center border border-slate-300 rounded px-1 py-0.5 outline-none focus:ring-1 focus:ring-brand-blue mt-1"
                           value={data.rate || ""}
                           onChange={(e) => updateData("rate", parseInt(e.target.value) || 0)}
                         />
@@ -527,21 +630,17 @@ export function InvoicePrint({
                         data.rate > 0 ? data.rate.toLocaleString() : ""
                       )}
                     </td>
-                    <td className="px-5 py-4 text-center font-medium text-[#222]">
+                    <td className="px-3 py-2 text-center font-medium text-[#222] align-top">
                       {totalAmount > 0 ? totalAmount.toLocaleString() : ""}
                     </td>
                   </tr>
                 </tbody>
                 <tfoot>
                   <tr className="bg-slate-50 border-t" style={{ borderColor: BORDER }}>
-                    <td colSpan={2} className="px-5 py-3"></td>
-                    <td className="px-5 py-3 text-center font-bold uppercase tracking-wider text-slate-700 text-[13px] border-l border-r" style={{ borderColor: BORDER }}>
-                      Total
+                    <td colSpan={3} className="px-3 py-1.5 text-right font-bold uppercase tracking-wider text-slate-700 text-[13px]">
+                      TOTAL AMOUNT:
                     </td>
-                    <td
-                      className="px-5 py-3 text-center text-[20px] font-extrabold leading-normal"
-                      style={{ color: DARK }}
-                    >
+                    <td className="px-3 py-1.5 text-center text-[18px] font-extrabold leading-tight" style={{ color: DARK }}>
                       {totalAmount > 0 ? `₹ ${totalAmount.toLocaleString()}` : ""}
                     </td>
                   </tr>
@@ -550,10 +649,68 @@ export function InvoicePrint({
             </div>
 
             {/* PAYMENT + SIGNATURE */}
-            <div className="mt-4 grid grid-cols-2 gap-4 shrink-0">
+            <div className="mt-2 grid grid-cols-2 gap-4 shrink-0">
               <Card title="PAYMENT DETAILS">
                 <div className="flex flex-col h-full gap-1">
-                  <DetailRow label="Payment Mode" value="Cash / Online" />
+                  {/* Payment Mode Selector / Display */}
+                  <div className="flex items-center text-[13px]">
+                    <div className="w-[130px] font-medium">Payment Mode</div>
+                    <div className="w-3">:</div>
+                    {isEditing ? (
+                      <select
+                        className="ml-2 flex-1 border border-slate-300 rounded px-1 py-0.5 outline-none focus:ring-1 focus:ring-brand-blue cursor-pointer font-semibold text-xs"
+                        value={data.paymentMode || "Cash"}
+                        onChange={(e) => updateData("paymentMode", e.target.value)}
+                      >
+                        <option value="Cash">Cash</option>
+                        <option value="Online">Online / UPI</option>
+                        <option value="Cash + Online">Cash + Online</option>
+                      </select>
+                    ) : (
+                      <span className="ml-2 font-bold text-slate-800 text-xs">
+                        {data.paymentMode || "Cash"}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Split Breakdown when Cash + Online is selected */}
+                  {(data.paymentMode === "Cash + Online" || data.paymentMode === "Split") && (
+                    <div className="my-1 p-2 bg-slate-50 border border-slate-200 rounded text-xs space-y-1">
+                      <div className="flex items-center justify-between">
+                        <span className="font-semibold text-slate-600">Cash Amount:</span>
+                        {isEditing ? (
+                          <div className="flex items-center gap-1">
+                            <span>₹</span>
+                            <input
+                              type="number"
+                              className="w-20 border border-slate-300 rounded px-1.5 py-0.5 font-bold text-slate-800 outline-none text-right"
+                              value={data.cashAmount || 0}
+                              onChange={(e) => updateData("cashAmount", parseFloat(e.target.value) || 0)}
+                            />
+                          </div>
+                        ) : (
+                          <span className="font-bold text-slate-900">₹ {(data.cashAmount || 0).toLocaleString()}</span>
+                        )}
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="font-semibold text-slate-600">Online Amount:</span>
+                        {isEditing ? (
+                          <div className="flex items-center gap-1">
+                            <span>₹</span>
+                            <input
+                              type="number"
+                              className="w-20 border border-slate-300 rounded px-1.5 py-0.5 font-bold text-slate-800 outline-none text-right"
+                              value={data.onlineAmount || 0}
+                              onChange={(e) => updateData("onlineAmount", parseFloat(e.target.value) || 0)}
+                            />
+                          </div>
+                        ) : (
+                          <span className="font-bold text-slate-900">₹ {(data.onlineAmount || 0).toLocaleString()}</span>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
                   <DetailRow label="Paid Amount" value={totalAmount > 0 ? `₹ ${totalAmount.toLocaleString()}` : ""} />
                   <div className="mt-1 flex items-center text-[13px]">
                     <div className="w-[130px] font-medium">Payment Status</div>
@@ -565,32 +722,40 @@ export function InvoicePrint({
                         onChange={(e) => updateData("paymentStatus", e.target.value)}
                       >
                         <option value="PENDING">PENDING</option>
+                        <option value="ADVANCE">ADVANCE PAID</option>
                         <option value="PAID">PAID</option>
                       </select>
                     ) : (
                       <span
-                        className={`ml-2 rounded-sm px-2 py-0.5 text-[11px] font-bold text-white ${data.paymentStatus?.toLowerCase() === "completed" || data.paymentStatus?.toLowerCase() === "paid" ? "bg-green-500" : "bg-orange-500"}`}
+                        className={`ml-2 rounded-sm px-2 py-0.5 text-[11px] font-bold text-white ${data.paymentStatus?.toUpperCase() === "PAID"
+                          ? "bg-green-500"
+                          : data.paymentStatus?.toUpperCase() === "ADVANCE" || data.paymentStatus?.toUpperCase() === "ADVANCE PAID"
+                            ? "bg-blue-600"
+                            : "bg-orange-500"
+                          }`}
                       >
-                        {data.paymentStatus?.toUpperCase() || "PENDING"}
+                        {data.paymentStatus?.toUpperCase() === "ADVANCE"
+                          ? "ADVANCE PAID"
+                          : data.paymentStatus?.toUpperCase() || "PENDING"}
                       </span>
                     )}
                   </div>
                 </div>
               </Card>
               <Card title="AUTHORIZED SIGNATURE">
-                <div className="flex flex-col h-full justify-between relative">
+                <div className="relative flex flex-col items-center justify-end h-full min-h-[115px] pb-1">
                   {/* STAMP */}
-                  <div className="absolute bottom-3 right-22 w-[44%] opacity-85 pointer-events-none select-none mix-blend-multiply z-10">
+                  <div className="absolute bottom-3 inset-x-0 flex justify-center opacity-85 pointer-events-none select-none mix-blend-multiply z-10">
                     <img
                       src={stamp}
                       alt="Official Seal"
-                      className="w-full h-auto object-contain drop-shadow-sm"
+                      className="h-[127px] w-auto object-contain drop-shadow-sm"
                     />
                   </div>
 
-                  <div className="mt-auto pt-22 relative z-0">
+                  <div className="w-full relative z-0 text-center">
                     <div className="mx-auto h-px w-3/4 bg-slate-800" />
-                    <p className="mt-2 text-center text-[12px] text-slate-600">
+                    <p className="mt-1.5 text-center text-[12px] font-medium text-slate-600">
                       Authorized Signatory
                     </p>
                   </div>
@@ -599,13 +764,13 @@ export function InvoicePrint({
             </div>
 
             {/* THANK YOU */}
-            <div className="mt-auto flex w-full flex-col items-center pb-2 pt-6">
+            <div className="mt-auto flex w-full flex-col items-center pb-2 pt-1">
               <div className="flex w-[80%] items-center gap-6 opacity-60">
                 <div
                   className="h-[1px] flex-1"
                   style={{ background: `linear-gradient(to right, transparent, ${BORDER})` }}
                 />
-                <div className="script text-[42px] leading-none" style={{ color: DARK }}>
+                <div className="script text-[32px] leading-none" style={{ color: DARK }}>
                   Thank You!
                 </div>
                 <div
@@ -613,14 +778,14 @@ export function InvoicePrint({
                   style={{ background: `linear-gradient(to left, transparent, ${BORDER})` }}
                 />
               </div>
-              <div className="mt-3 flex flex-col items-center text-center">
-                <div className="text-[13px] font-bold tracking-widest" style={{ color: DARK }}>
+              <div className="mt-1 flex flex-col items-center text-center">
+                <div className="text-[12px] font-bold tracking-widest" style={{ color: DARK }}>
                   Wings_of_mayur_9999
                 </div>
-                <div className="mt-1 text-[9px] font-medium tracking-[0.2em] text-slate-400 uppercase">
+                <div className="mt-0.5 text-[9px] font-medium tracking-[0.2em] text-slate-400 uppercase">
                   Powered by
                 </div>
-                <div className="text-[14px] font-semibold tracking-wider text-slate-600">
+                <div className="text-[13px] font-semibold tracking-wider text-slate-600">
                   Shailraj Travels,Pune
                 </div>
               </div>
@@ -677,32 +842,43 @@ function Card({ title, children }: { title: string; children: React.ReactNode })
   return (
     <div className="overflow-hidden rounded-[6px] border h-full" style={{ borderColor: BORDER }}>
       <div
-        className="px-5 py-2.5 text-[14px] font-bold uppercase text-white"
+        className="px-4 py-1.5 text-[14px] font-bold uppercase text-white"
         style={{ background: DARK }}
       >
         {title}
       </div>
-      <div className="px-5 py-4">{children}</div>
+      <div className="px-4 py-2">{children}</div>
     </div>
   );
 }
 
-function DetailRow({ label, value, isEditing, onChange }: any) {
+function DetailRow({ label, value, isEditing, onChange, multiline }: any) {
   return (
-    <div className="flex py-1 text-[13px] items-center">
-      <div className="w-[130px] font-medium">{label}</div>
-      <div className="w-3">:</div>
-      <div className="ml-2 flex-1">
+    <div className="flex py-1 text-[13px] items-start">
+      <div className="w-[130px] font-medium pt-[2px]">{label}</div>
+      <div className="w-3 pt-[2px]">:</div>
+      <div className="ml-2 flex-1 break-words">
         {isEditing ? (
-          <input
-            id={`detail-${label.replace(/\s+/g, '-').toLowerCase()}`}
-            name={`detail-${label.replace(/\s+/g, '-').toLowerCase()}`}
-            className="w-full border border-slate-300 rounded px-1 py-0.5 outline-none focus:ring-1 focus:ring-brand-blue"
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-          />
+          multiline ? (
+            <textarea
+              id={`detail-${label.replace(/\s+/g, '-').toLowerCase()}`}
+              name={`detail-${label.replace(/\s+/g, '-').toLowerCase()}`}
+              className="w-full border border-slate-300 rounded px-1 py-0.5 outline-none focus:ring-1 focus:ring-brand-blue resize-y"
+              rows={2}
+              value={value}
+              onChange={(e) => onChange(e.target.value)}
+            />
+          ) : (
+            <input
+              id={`detail-${label.replace(/\s+/g, '-').toLowerCase()}`}
+              name={`detail-${label.replace(/\s+/g, '-').toLowerCase()}`}
+              className="w-full border border-slate-300 rounded px-1 py-0.5 outline-none focus:ring-1 focus:ring-brand-blue"
+              value={value}
+              onChange={(e) => onChange(e.target.value)}
+            />
+          )
         ) : (
-          value
+          <div className="whitespace-pre-wrap">{value}</div>
         )}
       </div>
     </div>

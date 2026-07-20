@@ -67,9 +67,11 @@ export class StorageManager {
     
     // Quick check in base collection
     const baseCol = (db as unknown as Db).collection<T>(baseCollectionName);
-    const inBase = await baseCol.findOne({ _id: new ObjectId(entityId) } as any);
-    if (inBase) {
-      return baseCol;
+    if (ObjectId.isValid(entityId)) {
+      const inBase = await baseCol.findOne({ _id: new ObjectId(entityId) } as any);
+      if (inBase) {
+        return baseCol;
+      }
     }
     
     const collectionName = `${baseCollectionName}_${this.getCurrentYearSuffix()}`;

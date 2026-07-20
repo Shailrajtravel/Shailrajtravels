@@ -23,10 +23,32 @@ if (fs.existsSync(envPath)) {
     }
     if (!process.env[key]) process.env[key] = val;
   }
+
+// Custom logger to write to a file to bypass terminal buffering
+const logFile = fs.createWriteStream(path.join(__dirname, "webhook.log"), { flags: "a" });
+function writeLog(level, ...args) {
+  const msg = args.map(a => typeof a === 'object' ? JSON.stringify(a) : a).join(' ');
+  const line = `[${new Date().toISOString()}] ${level}: ${msg}\n`;
+  logFile.write(line);
+  process.stdout.write(line);
+}
+const origConsoleLog = console.log;
+const origConsoleError = console.error;
+const origConsoleWarn = console.warn;
+console.log = (...args) => { origConsoleLog(...args); writeLog('INFO', ...args); };
+console.error = (...args) => { origConsoleError(...args); writeLog('ERROR', ...args); };
+console.warn = (...args) => { origConsoleWarn(...args); writeLog('WARN', ...args); };
 }
 
-const OPENWA_API_URL = process.env.OPENWA_API_URL || "http://localhost:2785";
-const OPENWA_API_KEY = process.env.OPENWA_API_KEY || "";
+let OPENWA_API_KEY = process.env.OPENWA_API_KEY || "";
+if (!OPENWA_API_KEY) {
+  const apiKeyPath = path.join(__dirname, "../../backend/data/.api-key");
+  if (fs.existsSync(apiKeyPath)) {
+    OPENWA_API_KEY = fs.readFileSync(apiKeyPath, "utf-8").trim();
+  }
+}
+
+const OPENWA_API_URL = process.env.OPENWA_API_URL || "http://127.0.0.1:2785";
 const SESSION_NAME = "shailraj-bot";
 const PORT = 3001;
 
@@ -39,7 +61,15 @@ async function resolveSessionId() {
     const res = await fetch(`${OPENWA_API_URL}/api/sessions`, {
       headers: OPENWA_API_KEY ? { "X-API-Key": OPENWA_API_KEY } : {},
     });
+    if (res.status === 401) {
+      console.warn("[Webhook] OpenWA API returned 401 Unauthorized. Check your API key.");
+      return;
+    }
     const sessions = await res.json();
+    if (!Array.isArray(sessions)) {
+      console.warn("[Webhook] Expected array of sessions but got:", sessions);
+      return;
+    }
     const session = sessions.find((s) => s.name === SESSION_NAME);
     if (session) {
       activeSessionId = session.id;
@@ -53,30 +83,56 @@ async function resolveSessionId() {
 }
 
 /** Send a text message via OpenWA REST API */
-async function sendReply(chatId, text) {
-  if (!activeSessionId) await resolveSessionId();
+async function sendReply(chatId, text, msgId) {
+  if (!activeSessionId) {
+    console.log("[Webhook] activeSessionId is null, resolving...");
+    await resolveSessionId();
+  }
   if (!activeSessionId) {
     console.error("[Webhook] No active session — cannot send reply");
     return;
   }
 
   console.log(`[Webhook] Sending reply to chatId: ${chatId}`);
-  const res = await fetch(
-    `${OPENWA_API_URL}/api/sessions/${activeSessionId}/messages/send-text`,
-    {
+  try {
+    const url = msgId 
+      ? `${OPENWA_API_URL}/api/sessions/${activeSessionId}/messages/reply`
+      : `${OPENWA_API_URL}/api/sessions/${activeSessionId}/messages/send-text`;
+    
+    const bodyPayload = msgId 
+      ? { chatId, quotedMessageId: msgId, text }
+      : { chatId, text };
+
+    let res = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        ...(OPENWA_API_KEY ? { "X-API-Key": OPENWA_API_KEY } : {}),
+        ...(OPENWA_API_KEY && { "X-API-Key": OPENWA_API_KEY }),
       },
-      body: JSON.stringify({ chatId, text }),
+      body: JSON.stringify(bodyPayload),
+    });
+
+    if (!res.ok && msgId) {
+      console.warn(`[Webhook] Reply endpoint failed (${res.status}), retrying with standard send-text...`);
+      const fallbackUrl = `${OPENWA_API_URL}/api/sessions/${activeSessionId}/messages/send-text`;
+      res = await fetch(fallbackUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(OPENWA_API_KEY && { "X-API-Key": OPENWA_API_KEY }),
+        },
+        body: JSON.stringify({ chatId, text }),
+      });
     }
-  );
-  if (!res.ok) {
-    const errText = await res.text();
-    console.error(`[Webhook] Send failed (${res.status}): ${errText}`);
-  } else {
-    console.log(`[Webhook] ✅ Replied to ${chatId}`);
+
+    if (!res.ok) {
+      const errText = await res.text();
+      console.error(`[Webhook] Send failed (${res.status}): ${errText}`);
+    } else {
+      console.log(`[Webhook] ✅ Replied to ${chatId}`);
+    }
+  } catch (err) {
+    console.error(`[Webhook] Request error: ${err.message}`);
   }
 }
 
@@ -87,10 +143,10 @@ function handleMessage(msg) {
     return;
   }
 
-  const senderId = msg.from; // e.g. 919876543210@c.us or @lid
+  const senderId = msg.from || msg.remoteJid || (msg.key && msg.key.remoteJid); // e.g. 919876543210@c.us or @lid
 
-  // 2. Only respond to standard individual chats (ends with @c.us or @lid)
-  const isIndividual = senderId && (senderId.endsWith("@c.us") || senderId.endsWith("@lid"));
+  // 2. Only respond to standard individual chats by excluding groups and broadcasts
+  const isIndividual = senderId && !senderId.endsWith("@g.us") && !senderId.includes("@newsletter") && senderId !== "status@broadcast";
   if (!isIndividual) {
     console.log(`[Webhook] ℹ️ Skipping non-individual chat or newsletter: ${senderId}`);
     return;
@@ -110,7 +166,11 @@ function handleMessage(msg) {
     }
   }
 
-  const text = (msg.body || "").toLowerCase().trim();
+  let rawText = msg.body || msg.text || msg.content || "";
+  if (!rawText && msg.message) {
+    rawText = msg.message.conversation || (msg.message.extendedTextMessage && msg.message.extendedTextMessage.text) || "";
+  }
+  const text = rawText.toLowerCase().trim();
   if (!text) return;
 
   console.log(`[Webhook] 📩 From ${senderId}: "${text}"`);
@@ -148,7 +208,7 @@ function handleMessage(msg) {
   }
 
   if (reply) {
-    sendReply(senderId, reply).catch((err) =>
+    sendReply(senderId, reply, msgId).catch((err) =>
       console.error("[Webhook] Reply error:", err)
     );
   }

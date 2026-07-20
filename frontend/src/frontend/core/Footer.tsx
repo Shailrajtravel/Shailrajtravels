@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { getToursFn } from '@/backend/features/tours';
-import { Phone, Mail, MapPin, Instagram, Facebook, Youtube, ArrowRight } from 'lucide-react';
+import { Phone, Mail, MapPin, Instagram, Facebook, Youtube, ArrowRight, X } from 'lucide-react';
 import { translations } from '@/frontend/core/i18n';
 import { BrandHighlight } from '@/frontend/core/BrandHighlight';
 import { Link } from '@tanstack/react-router';
 
 export function FooterSection({ t, lang = "en" }: { t: typeof translations.mr; lang?: string }) {
   const [popularTours, setPopularTours] = useState<{ label: string; href: string }[]>([]);
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
 
   useEffect(() => {
     getToursFn({ data: { lang } })
@@ -254,34 +255,28 @@ export function FooterSection({ t, lang = "en" }: { t: typeof translations.mr; l
                 <span className="absolute bottom-0 left-0 w-8 h-[2px] bg-brand-green rounded-full"></span>
               </h3>
               <ul className="flex flex-col gap-3.5">
-                {[
-                  { label: t.footerSecurityPolicy || "Security Policy", href: "#" },
-                  { label: t.footerReportIssue || "Report Issue", href: "#" },
-                ].map((link) => (
-                  <li key={link.label}>
-                    {link.href === "#" ? (
-                      <a
-                        href={link.href}
-                        className="group inline-flex items-center text-[15px] text-slate-400 hover:text-white transition-colors py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green rounded-sm whitespace-nowrap"
-                      >
-                        <ArrowRight className="w-3.5 h-3.5 mr-2 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 text-brand-green transition-all duration-300 shrink-0" />
-                        <span className="group-hover:translate-x-1 transition-transform duration-300">
-                          {link.label}
-                        </span>
-                      </a>
-                    ) : (
-                      <Link
-                        to={link.href as any}
-                        className="group inline-flex items-center text-[15px] text-slate-400 hover:text-white transition-colors py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green rounded-sm whitespace-nowrap"
-                      >
-                        <ArrowRight className="w-3.5 h-3.5 mr-2 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 text-brand-green transition-all duration-300 shrink-0" />
-                        <span className="group-hover:translate-x-1 transition-transform duration-300">
-                          {link.label}
-                        </span>
-                      </Link>
-                    )}
-                  </li>
-                ))}
+                <li>
+                  <Link
+                    to="/security-policy"
+                    className="group inline-flex items-center text-[15px] text-slate-400 hover:text-white transition-colors py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green rounded-sm whitespace-nowrap"
+                  >
+                    <ArrowRight className="w-3.5 h-3.5 mr-2 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 text-brand-green transition-all duration-300 shrink-0" />
+                    <span className="group-hover:translate-x-1 transition-transform duration-300">
+                      {t.footerSecurityPolicy || "Security Policy"}
+                    </span>
+                  </Link>
+                </li>
+                <li>
+                  <button
+                    onClick={() => setIsReportModalOpen(true)}
+                    className="group inline-flex items-center text-[15px] text-slate-400 hover:text-white transition-colors py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green rounded-sm whitespace-nowrap text-left"
+                  >
+                    <ArrowRight className="w-3.5 h-3.5 mr-2 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 text-brand-green transition-all duration-300 shrink-0" />
+                    <span className="group-hover:translate-x-1 transition-transform duration-300">
+                      {t.footerReportIssue || "Report Issue"}
+                    </span>
+                  </button>
+                </li>
               </ul>
             </div>
           </div>
@@ -299,6 +294,59 @@ export function FooterSection({ t, lang = "en" }: { t: typeof translations.mr; l
           </p>
         </div>
       </div>
+
+      {/* Report Issue Modal */}
+      {isReportModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#0a192f]/80 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+            <div className="bg-[#0a192f] p-5 flex items-center justify-between">
+              <h3 className="text-xl font-bold text-white font-display tracking-wide m-0">Report an Issue</h3>
+              <button onClick={() => setIsReportModalOpen(false)} className="text-slate-400 hover:text-white transition-colors p-1 rounded-full hover:bg-white/10">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <form 
+              className="p-6 flex flex-col gap-5 text-slate-800"
+              onSubmit={(e) => {
+                e.preventDefault();
+                alert("Thank you for your report. Our team will look into it shortly.");
+                setIsReportModalOpen(false);
+              }}
+            >
+              <div className="flex flex-col gap-1.5 text-left">
+                <label htmlFor="report-name" className="text-[13px] font-bold text-slate-600 uppercase tracking-wide">Full Name</label>
+                <input required type="text" id="report-name" className="px-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-green/50 focus:border-brand-green w-full bg-slate-50 hover:bg-white transition-colors" placeholder="John Doe" />
+              </div>
+              <div className="flex flex-col gap-1.5 text-left">
+                <label htmlFor="report-email" className="text-[13px] font-bold text-slate-600 uppercase tracking-wide">Email Address</label>
+                <input required type="email" id="report-email" className="px-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-green/50 focus:border-brand-green w-full bg-slate-50 hover:bg-white transition-colors" placeholder="john@example.com" />
+              </div>
+              <div className="flex flex-col gap-1.5 text-left">
+                <label htmlFor="report-type" className="text-[13px] font-bold text-slate-600 uppercase tracking-wide">Issue Type</label>
+                <select required id="report-type" defaultValue="" className="px-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-green/50 focus:border-brand-green w-full bg-slate-50 hover:bg-white transition-colors text-slate-700">
+                  <option value="" disabled>Select an issue type...</option>
+                  <option value="website">Website / App Bug</option>
+                  <option value="booking">Booking Issue</option>
+                  <option value="tour">Tour Experience Issue</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div className="flex flex-col gap-1.5 text-left">
+                <label htmlFor="report-desc" className="text-[13px] font-bold text-slate-600 uppercase tracking-wide">Description</label>
+                <textarea required id="report-desc" rows={4} className="px-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-green/50 focus:border-brand-green w-full resize-none bg-slate-50 hover:bg-white transition-colors" placeholder="Please describe the issue in detail..."></textarea>
+              </div>
+              <div className="flex flex-col gap-1.5 text-left">
+                <label htmlFor="report-screenshot" className="text-[13px] font-bold text-slate-600 uppercase tracking-wide">Screenshot (Optional)</label>
+                <input type="file" id="report-screenshot" accept="image/*" className="px-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-green/50 focus:border-brand-green w-full bg-slate-50 hover:bg-white transition-colors text-sm text-slate-600 file:mr-4 file:py-1.5 file:px-4 file:rounded-md file:border-0 file:text-xs file:font-bold file:bg-[#0a192f] file:text-white hover:file:bg-[#0a192f]/90 file:cursor-pointer cursor-pointer" />
+              </div>
+              <button type="submit" className="mt-2 w-full py-3.5 bg-[#FF5C5C] hover:bg-[#ff4747] text-white font-bold rounded-lg transition-colors shadow-lg shadow-[#FF5C5C]/20 flex items-center justify-center gap-2 group">
+                Submit Report
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </footer>
   );
 }

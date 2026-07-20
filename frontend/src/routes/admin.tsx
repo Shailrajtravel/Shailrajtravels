@@ -1220,12 +1220,15 @@ function AdminPage() {
                                   }
                                 }}
                                 className={`text-sm font-bold px-3 py-1.5 rounded-lg border outline-none cursor-pointer ${
-                                  (bk.paymentStatus || "PENDING") === "PAID"
+                                  (bk.paymentStatus || "PENDING").toUpperCase() === "PAID"
                                     ? "bg-green-50 text-green-700 border-green-200"
+                                    : (bk.paymentStatus || "PENDING").toUpperCase() === "ADVANCE" || (bk.paymentStatus || "PENDING").toUpperCase() === "ADVANCE PAID"
+                                    ? "bg-blue-50 text-blue-700 border-blue-200"
                                     : "bg-orange-50 text-orange-700 border-orange-200"
                                 }`}
                               >
                                 <option value="PENDING">PENDING</option>
+                                <option value="ADVANCE">ADVANCE PAID</option>
                                 <option value="PAID">PAID</option>
                               </select>
                             </td>
@@ -1376,12 +1379,15 @@ function AdminPage() {
                                   }
                                 }}
                                 className={`w-full text-xs font-bold px-2 py-2 rounded-lg border outline-none cursor-pointer ${
-                                  (bk.paymentStatus || "PENDING") === "PAID"
+                                  (bk.paymentStatus || "PENDING").toUpperCase() === "PAID"
                                     ? "bg-green-50 text-green-700 border-green-200"
+                                    : (bk.paymentStatus || "PENDING").toUpperCase() === "ADVANCE" || (bk.paymentStatus || "PENDING").toUpperCase() === "ADVANCE PAID"
+                                    ? "bg-blue-50 text-blue-700 border-blue-200"
                                     : "bg-orange-50 text-orange-700 border-orange-200"
                                 }`}
                               >
                                 <option value="PENDING">PENDING</option>
+                                <option value="ADVANCE">ADVANCE PAID</option>
                                 <option value="PAID">PAID</option>
                               </select>
                             </div>
