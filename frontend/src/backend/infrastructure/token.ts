@@ -1,9 +1,9 @@
 export function getAdminToken() {
-  const pwd = process.env.ADMIN_PASSWORD;
+  const pwdOrHash = process.env.ADMIN_PASSWORD_HASH || process.env.ADMIN_PASSWORD;
   const email = process.env.ADMIN_EMAIL || "khudeshivam@gmail.com";
-  if (!pwd) {
-    console.warn("ADMIN_PASSWORD is not set in environment variables");
+  if (!pwdOrHash) {
+    console.warn("Neither ADMIN_PASSWORD_HASH nor ADMIN_PASSWORD is set in environment variables");
     return null;
   }
-  return Buffer.from(email + ":" + pwd + "_ADMIN_SALT").toString("base64");
+  return Buffer.from(email + ":" + pwdOrHash + "_ADMIN_SALT").toString("base64");
 }
