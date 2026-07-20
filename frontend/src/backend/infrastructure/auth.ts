@@ -75,7 +75,7 @@ export const verifyAdminPasswordFn = createServerFn({ method: "POST" })
       await logAuditAction({
         data: {
           action: "Unlock Invoice",
-          entityType: "Invoice",
+          entityType: "Invoice", // AuditLogEntry entityType includes "Invoice"
           details: `Invoice unlocked using admin password for ${expectedEmail}`,
         },
       });
