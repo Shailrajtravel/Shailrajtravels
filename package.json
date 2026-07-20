@@ -15,6 +15,7 @@
     "test:openwa": "npm run test:openwa --prefix frontend"
   },
   "devDependencies": {
-    "concurrently": "^10.0.3"
+    "concurrently": "^10.0.3",
+    "dotenv": "^16.4.7"
   }
 }
