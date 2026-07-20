@@ -7,7 +7,11 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 import dotenv from 'dotenv';
 import path from 'path';
-dotenv.config({ path: path.resolve(process.cwd(), '../.env') });
+try {
+  dotenv.config({ path: path.resolve(process.cwd(), '../.env') });
+} catch {
+  // Ignore missing .env in production / CI environments
+}
 import Sitemap from "vite-plugin-sitemap";
 import { imagetools } from "vite-imagetools";
 import { compression } from "vite-plugin-compression2";
