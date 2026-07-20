@@ -4,7 +4,7 @@ import { ObjectId } from 'mongodb';
 // OpenWA standalone server configuration
 const OPENWA_API_URL = process.env.OPENWA_API_URL || "http://localhost:2785";
 const OPENWA_API_KEY = process.env.OPENWA_API_KEY || ""; 
-const SESSION_NAME = "shailraj-bot";
+const SESSION_NAME = process.env.OPENWA_SESSION_NAME || "shailraj-bot";
 const ADMIN_PHONE = "919359570497"; // Admin number
 
 export type WhatsAppStatus = "Disconnected" | "Awaiting QR" | "Connected" | "Error";
