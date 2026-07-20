@@ -12,7 +12,8 @@ export interface AuditLogEntry {
     | "Review"
     | "TripOption"
     | "Room"
-    | "Tour";
+    | "Tour"
+    | "Invoice";
   entityId?: string;
   details: string;
   createdAt: Date;
