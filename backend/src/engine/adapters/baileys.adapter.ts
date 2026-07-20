@@ -234,6 +234,9 @@ export class BaileysAdapter implements IWhatsAppEngine {
       // enabled; see WhiskeySockets/Baileys Socket/index.js + Socket/chats.js). Returning true enables it
       // while keeping the full-archive download opt-in: with syncFullHistory false WhatsApp sends the
       // RECENT window + the full contact/app-state snapshot, not the entire message history.
+      markOnlineOnConnect: false,
+      connectTimeoutMs: 120000,
+      qrTimeout: 120000,
       shouldSyncHistoryMessage: () => process.env.BAILEYS_DISABLE_HISTORY_SYNC !== 'true',
       syncFullHistory: process.env.BAILEYS_SYNC_FULL_HISTORY === 'true',
       logger: baileysLogger,
