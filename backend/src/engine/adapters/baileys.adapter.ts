@@ -220,7 +220,7 @@ export class BaileysAdapter implements IWhatsAppEngine {
         keys: cacheableKeys,
       },
       version,
-      browser: BAILEYS_BROWSER,
+      browser: b.Browsers.macOS('Desktop'),
       printQRInTerminal: false,
       retryRequestDelayMs: 250,
       getMessage: async key => {
