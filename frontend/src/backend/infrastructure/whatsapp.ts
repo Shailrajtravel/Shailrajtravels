@@ -1,15 +1,13 @@
 import clientPromise from '@/backend/shared/db';
 import { ObjectId } from 'mongodb';
 
-import { getEnv } from '@/backend/infrastructure/token';
-
 const ADMIN_PHONE = "919359570497"; // Admin number
 
 function getOpenWaConfig() {
   return {
-    url: getEnv("OPENWA_API_URL") || "http://localhost:2785",
-    key: getEnv("OPENWA_API_KEY") || "",
-    session: getEnv("OPENWA_SESSION_NAME") || "shailraj-bot"
+    url: process.env.OPENWA_API_URL || "http://localhost:2785",
+    key: process.env.OPENWA_API_KEY || "",
+    session: process.env.OPENWA_SESSION_NAME || "shailraj-bot"
   };
 }
 
