@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { getAdminToken } from "./bookings";
+import { getAdminToken, isValidAdminToken } from '@/backend/infrastructure/token';
 import { recommendedVehicleRepository } from "./repositories/RecommendedVehicleRepository";
 
 const DEFAULT_RECOMMENDED_VEHICLES = [
@@ -89,7 +89,7 @@ export const getRecommendedVehiclesFn = createServerFn({ method: "GET" })
 export const saveRecommendedVehiclesFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string; vehicles: any[] }) => data)
   .handler(async ({ data }: { data: { adminToken: string; vehicles: any[] } }) => {
-    if (data.adminToken !== getAdminToken()) {
+    if (!isValidAdminToken(data?.adminToken)) {
       throw new Error("Unauthorized");
     }
     

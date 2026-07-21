@@ -4,6 +4,7 @@ import { tripOptionRepository } from '@/backend/shared/repositories/TripOptionRe
 import { bookingRepository } from '@/backend/shared/repositories/BookingRepository';
 import { packageRepository } from '@/backend/shared/repositories/PackageRepository';
 import { getAdminToken, isValidAdminToken } from '@/backend/infrastructure/token';
+export { getAdminToken, isValidAdminToken };
 import { logAuditAction } from '@/backend/shared/audit';
 import { uploadImageToCloudinary } from '@/backend/shared/cloudinary';
 import { getCachedData, setCachedData, invalidateCache, rateLimiters, redis } from '@/backend/infrastructure/redis';
