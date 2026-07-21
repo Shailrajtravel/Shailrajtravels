@@ -17,43 +17,46 @@ const adminAuthSchema = z.object({
 export const verifyAdminFn = createServerFn({ method: "POST" })
   .validator((data: unknown) => adminAuthSchema.parse(data))
   .handler(async ({ data }) => {
-    const isDev = process.env.NODE_ENV === "development";
+    try {
+      const isDev = process.env.NODE_ENV === "development";
 
-    const validToken = getAdminToken();
-    if (!validToken) {
-      console.error("[Auth] getAdminToken() returned null — ADMIN_PASSWORD is not set in .env");
-      throw new Error("Admin credentials not configured on server.");
-    }
-
-    if (data.token) {
-      return { success: true, token: validToken };
-    }
-
-    if (data.email && data.password) {
-      const expectedEmail = DEFAULT_EMAIL;
-      const hash = DEFAULT_HASH;
-
-      const isMatch = bcrypt.compareSync(data.password, hash);
-      const emailMatch = data.email.toLowerCase().trim() === expectedEmail.toLowerCase().trim();
-
-      if (isDev) {
-        console.log(`[Auth] Login attempt — emailMatch:${emailMatch} passwordMatch:${isMatch}`);
+      const validToken = getAdminToken();
+      if (!validToken) {
+        return { success: false, message: "Admin credentials not configured on server." };
       }
 
-      if (emailMatch && isMatch) {
-        await logAuditAction({
-          data: {
-            action: "Admin Login",
-            entityType: "System",
-            details: `Successful login for ${data.email}`,
-          },
-        });
+      if (data.token) {
         return { success: true, token: validToken };
       }
-      return { success: false, message: "Invalid email or password." };
-    }
 
-    return { success: false };
+      if (data.email && data.password) {
+        const expectedEmail = DEFAULT_EMAIL;
+        const hash = DEFAULT_HASH;
+
+        const isMatch = bcrypt.compareSync(data.password, hash);
+        const emailMatch = data.email.toLowerCase().trim() === expectedEmail.toLowerCase().trim();
+
+        if (emailMatch && isMatch) {
+          try {
+            await logAuditAction({
+              data: {
+                action: "Admin Login",
+                entityType: "System",
+                details: `Successful login for ${data.email}`,
+              },
+            });
+          } catch (auditErr: any) {
+            console.error("Audit log failed in login:", auditErr);
+          }
+          return { success: true, token: validToken };
+        }
+        return { success: false, message: "Invalid email or password." };
+      }
+
+      return { success: false };
+    } catch (err: any) {
+      return { success: false, message: `Runtime error in verifyAdminFn: ${err.message}` };
+    }
   });
 
 export const verifyAdminPasswordFn = createServerFn({ method: "POST" })
