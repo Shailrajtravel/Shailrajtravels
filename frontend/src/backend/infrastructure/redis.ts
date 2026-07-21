@@ -6,8 +6,8 @@ import { memoryCache } from '@/backend/shared/memory-cache';
 async function loadEnv() {
   if (typeof window === "undefined") {
     try {
-      const path = await import('node:path');
-      const fs = await import('node:fs');
+      const path = await import(/* @vite-ignore */ 'node:' + 'path');
+      const fs = await import(/* @vite-ignore */ 'node:' + 'fs');
       const envPath = path.join(process.cwd(), ".env");
       if (fs.existsSync(envPath)) {
         const envContent = fs.readFileSync(envPath, "utf8");

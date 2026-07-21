@@ -36,8 +36,8 @@ export const getChatbotRulesFn = createServerFn({ method: "POST" })
     if (data.adminToken !== getAdminToken()) throw new Error("Unauthorized");
     try {
       if (typeof window !== "undefined") return { rules: [] };
-      const path = await import('node:path');
-      const fs = await import('node:fs');
+      const path = await import(/* @vite-ignore */ 'node:' + 'path');
+      const fs = await import(/* @vite-ignore */ 'node:' + 'fs');
       const rulesPath = path.join(process.cwd(), "chatbot-rules.json");
       if (fs.existsSync(rulesPath)) {
         const rulesData = fs.readFileSync(rulesPath, "utf-8");
@@ -56,8 +56,8 @@ export const saveChatbotRulesFn = createServerFn({ method: "POST" })
     if (data.adminToken !== getAdminToken()) throw new Error("Unauthorized");
     try {
       if (typeof window !== "undefined") return { success: false };
-      const path = await import('node:path');
-      const fs = await import('node:fs');
+      const path = await import(/* @vite-ignore */ 'node:' + 'path');
+      const fs = await import(/* @vite-ignore */ 'node:' + 'fs');
       const rulesPath = path.join(process.cwd(), "chatbot-rules.json");
       fs.writeFileSync(rulesPath, JSON.stringify({ rules: data.rules }, null, 2), "utf-8");
       

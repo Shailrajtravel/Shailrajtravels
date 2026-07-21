@@ -65,8 +65,8 @@ class LocalCollection {
   async _readData(): Promise<any> {
     if (typeof window !== "undefined") return {};
     try {
-      const path = await import('node:path');
-      const fs = await import('node:fs');
+      const path = await import(/* @vite-ignore */ 'node:' + 'path');
+      const fs = await import(/* @vite-ignore */ 'node:' + 'fs');
       const dbFilePath = path.join(process.cwd(), "local_db.json");
       const data = await fs.promises.readFile(dbFilePath, "utf8");
       return JSON.parse(data);
@@ -77,8 +77,8 @@ class LocalCollection {
   async _writeData(data: any): Promise<void> {
     if (typeof window !== "undefined") return;
     try {
-      const path = await import('node:path');
-      const fs = await import('node:fs');
+      const path = await import(/* @vite-ignore */ 'node:' + 'path');
+      const fs = await import(/* @vite-ignore */ 'node:' + 'fs');
       const dbFilePath = path.join(process.cwd(), "local_db.json");
       await fs.promises.writeFile(dbFilePath, JSON.stringify(data, null, 2), "utf8");
     } catch (e) {

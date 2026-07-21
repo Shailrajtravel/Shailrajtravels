@@ -3,8 +3,8 @@ let isEnvLoaded = false;
 async function loadEnv() {
   if (isEnvLoaded || typeof window !== "undefined") return;
   try {
-    const path = await import('node:path');
-    const fs = await import('node:fs');
+    const path = await import(/* @vite-ignore */ 'node:' + 'path');
+    const fs = await import(/* @vite-ignore */ 'node:' + 'fs');
     let envPath = path.join(process.cwd(), ".env");
     if (!fs.existsSync(envPath)) {
       envPath = path.join(process.cwd(), "..", ".env");
@@ -130,8 +130,8 @@ class LocalCollection {
   async _readData(): Promise<any> {
     if (typeof window !== "undefined") return {};
     try {
-      const fs = await import('fs');
-      const path = await import('path');
+      const fs = await import(/* @vite-ignore */ 'f' + 's');
+      const path = await import(/* @vite-ignore */ 'p' + 'ath');
       const dbFilePath = path.join(process.cwd(), "local_db.json");
       const data = await fs.promises.readFile(dbFilePath, "utf8");
       return JSON.parse(data);
@@ -143,8 +143,8 @@ class LocalCollection {
   async _writeData(data: any): Promise<void> {
     if (typeof window !== "undefined") return;
     try {
-      const fs = await import('fs');
-      const path = await import('path');
+      const fs = await import(/* @vite-ignore */ 'f' + 's');
+      const path = await import(/* @vite-ignore */ 'p' + 'ath');
       const dbFilePath = path.join(process.cwd(), "local_db.json");
       await fs.promises.writeFile(dbFilePath, JSON.stringify(data, null, 2), "utf8");
     } catch (error) {
