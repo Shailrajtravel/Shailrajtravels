@@ -169,6 +169,7 @@ export class MongoAdapter {
   private primaryClusterId: string = "cluster1";
   private initialized = false;
   private initPromise: Promise<void> | null = null;
+  public lastError: string | null = null;
 
   async init(configs: Record<string, string | undefined>) {
     if (this.initialized) return;
@@ -186,6 +187,7 @@ export class MongoAdapter {
             this.dbs.set(clusterId, client.db("shailraj"));
             console.log(`[MongoAdapter] Successfully connected to ${clusterId}`);
           } catch (error: any) {
+            this.lastError = error.message || String(error);
             console.warn(`[MongoAdapter] Failed to connect to ${clusterId}:`, error.message);
           }
         }
