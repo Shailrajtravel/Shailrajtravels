@@ -285,7 +285,8 @@ export async function sendBookingInvoicePDF(
     const bookingIdStr = booking._id?.toString() || "";
     const invoiceNo = generatedInvoiceNo || booking.invoiceCustomData?.invoiceNo || booking.generatedInvoiceNo || `INV-${bookingIdStr.slice(-6).toUpperCase()}`;
 
-    const effectiveToken = adminToken || (typeof process !== "undefined" ? process.env.ADMIN_PASSWORD || "admin" : "admin");
+    const envPwd = (import.meta as any).env?.VITE_ADMIN_PASSWORD_HASH || (import.meta as any).env?.VITE_ADMIN_PASSWORD || (typeof process !== "undefined" ? process.env.ADMIN_PASSWORD_HASH || process.env.ADMIN_PASSWORD : null);
+    const effectiveToken = adminToken || envPwd || "admin";
 
     if (effectiveToken && bookingIdStr) {
       try {

@@ -1,9 +1,11 @@
-import "dotenv/config";
+import * as dotenv from "dotenv";
+import * as path from "path";
+dotenv.config({ path: path.resolve(process.cwd(), "../.env") });
 import {
   initWhatsApp,
   getStatus,
   sendWhatsAppMessage,
-} from "../src/backend/lib/whatsapp";
+} from "../src/backend/infrastructure/whatsapp";
 
 async function runTests() {
   console.log("==================================");

@@ -52,8 +52,8 @@ export const logAuditAction = createServerFn({ method: "POST" })
 export const getAuditLogsFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string }) => data)
   .handler(async ({ data }) => {
-    const pwd = process.env.ADMIN_PASSWORD;
-    const email = process.env.ADMIN_EMAIL || "khudeshivam@gmail.com";
+    const pwd = (import.meta as any).env?.VITE_ADMIN_PASSWORD_HASH || (import.meta as any).env?.VITE_ADMIN_PASSWORD || process.env.ADMIN_PASSWORD;
+    const email = (import.meta as any).env?.VITE_ADMIN_EMAIL || process.env.ADMIN_EMAIL || "khudeshivam@gmail.com";
     const validToken = pwd
       ? Buffer.from(email + ":" + pwd + "_ADMIN_SALT").toString("base64")
       : null;
