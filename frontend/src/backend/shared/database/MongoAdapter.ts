@@ -141,6 +141,21 @@ class LocalDb {
   constructor(public databaseName: string) {}
   collection<T = any>(name: string): any { return new LocalCollection(this.databaseName, name); }
   command(cmd: any) { return { ok: 1, dataSize: 1024 * 1024 }; } // Fake 1MB stats
+  listCollections() {
+    return {
+      toArray: async () => [
+        { name: "bookings" },
+        { name: "bookings_2026" },
+        { name: "packages" },
+        { name: "tours" },
+        { name: "reviews" },
+        { name: "trip_options" },
+        { name: "gallery_photos" },
+        { name: "audit_logs" },
+        { name: "custom_blogs" }
+      ]
+    };
+  }
 }
 
 
@@ -167,7 +182,6 @@ export class MongoAdapter {
               serverSelectionTimeoutMS: 5000,
             });
             await client.connect();
-            await client.db("admin").command({ ping: 1 });
             this.clients.set(clusterId, client);
             this.dbs.set(clusterId, client.db("shailraj"));
             console.log(`[MongoAdapter] Successfully connected to ${clusterId}`);

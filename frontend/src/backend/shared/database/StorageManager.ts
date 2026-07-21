@@ -110,17 +110,25 @@ export class StorageManager {
     const clusterId = mongoAdapter.getPrimaryClusterId();
     const db = await mongoAdapter.getDbAsync(clusterId);
     
-    // Find all collections that match baseCollectionName or baseCollectionName_YYYY
-    const cols = await (db as unknown as Db).listCollections().toArray();
-    const matchingCols = cols.filter((c: any) => c.name === baseCollectionName || c.name.startsWith(`${baseCollectionName}_`));
-    
-    // If none exist yet, just return the current year one so we can write to it if needed (though writes usually don't use this method)
-    if (matchingCols.length === 0) {
+    if (!db || typeof db.listCollections !== "function") {
       const currentYearName = `${baseCollectionName}_${this.getCurrentYearSuffix()}`;
-      return [(db as unknown as Db).collection<T>(currentYearName)];
+      return [(db as unknown as Db).collection<T>(baseCollectionName), (db as unknown as Db).collection<T>(currentYearName)];
     }
-    
-    return matchingCols.map((c: any) => (db as unknown as Db).collection<T>(c.name));
+
+    try {
+      const cols = await (db as unknown as Db).listCollections().toArray();
+      const matchingCols = cols.filter((c: any) => c.name === baseCollectionName || c.name.startsWith(`${baseCollectionName}_`));
+      
+      if (matchingCols.length === 0) {
+        const currentYearName = `${baseCollectionName}_${this.getCurrentYearSuffix()}`;
+        return [(db as unknown as Db).collection<T>(baseCollectionName), (db as unknown as Db).collection<T>(currentYearName)];
+      }
+      
+      return matchingCols.map((c: any) => (db as unknown as Db).collection<T>(c.name));
+    } catch {
+      const currentYearName = `${baseCollectionName}_${this.getCurrentYearSuffix()}`;
+      return [(db as unknown as Db).collection<T>(baseCollectionName), (db as unknown as Db).collection<T>(currentYearName)];
+    }
   }
 }
 
