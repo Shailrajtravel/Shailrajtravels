@@ -41,8 +41,10 @@ function loadEnv() {
   isEnvLoaded = true;
 }
 
-const DEFAULT_MONGO_URI = "mongodb+srv://shailrajtravels:shailrajtravels9999@cluster0.5jmdhjm.mongodb.net/shailraj?appName=Cluster0";
-const getUri = () => process.env.MONGO_URI || process.env.MONGODB_URI || process.env.VITE_MONGO_URI || DEFAULT_MONGO_URI;
+const DIRECT_MONGO_URI = "mongodb://shailrajtravels:shailrajtravels9999@ac-csvcnp6-shard-00-00.5jmdhjm.mongodb.net:27017,ac-csvcnp6-shard-00-01.5jmdhjm.mongodb.net:27017,ac-csvcnp6-shard-00-02.5jmdhjm.mongodb.net:27017/shailraj?ssl=true&replicaSet=atlas-9w1vmv-shard-0&authSource=admin&retryWrites=true&w=majority";
+const DEFAULT_MONGO_URI = process.env.MONGO_URI || process.env.MONGODB_URI || process.env.VITE_MONGO_URI || DIRECT_MONGO_URI;
+const getUri = () => process.env.MONGO_URI || process.env.MONGODB_URI || process.env.VITE_MONGO_URI || DIRECT_MONGO_URI;
+
 // Helper to generate a 24-character hex ID (similar to MongoDB ObjectId)
 function generateHexId(): string {
   const chars = "0123456789abcdef";
@@ -249,10 +251,19 @@ async function initClient() {
     console.log("Successfully connected to MongoDB server");
     return client;
   } catch (err: any) {
-    console.warn(
-      "MongoDB connection failed, falling back to local JSON database. Error:",
-      err.message,
-    );
+    console.error("[DB ERROR] Connection failed with primary URI:", err?.message || err);
+    try {
+      console.log("[DB] Retrying with direct seed MONGO_URI...");
+      const directClient = new MongoClient(DIRECT_MONGO_URI, {
+        serverSelectionTimeoutMS: 10000,
+      });
+      await directClient.connect();
+      await directClient.db().command({ ping: 1 });
+      console.log("Successfully connected to MongoDB server via direct seed URI!");
+      return directClient;
+    } catch (retryErr: any) {
+      console.error("[DB ERROR] Direct seed URI fallback also failed:", retryErr?.message || retryErr);
+    }
     return new LocalMongoClient();
   }
 }

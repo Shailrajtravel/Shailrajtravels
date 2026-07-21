@@ -241,7 +241,8 @@ export class MongoAdapter {
   }
 }
 
-const DEFAULT_MONGO_URI = "mongodb+srv://shailrajtravels:shailrajtravels9999@cluster0.5jmdhjm.mongodb.net/shailraj?appName=Cluster0";
+const DIRECT_MONGO_URI = "mongodb://shailrajtravels:shailrajtravels9999@ac-csvcnp6-shard-00-00.5jmdhjm.mongodb.net:27017,ac-csvcnp6-shard-00-01.5jmdhjm.mongodb.net:27017,ac-csvcnp6-shard-00-02.5jmdhjm.mongodb.net:27017/shailraj?ssl=true&replicaSet=atlas-9w1vmv-shard-0&authSource=admin&retryWrites=true&w=majority";
+const DEFAULT_MONGO_URI = process.env.MONGO_URI || process.env.MONGODB_URI || process.env.VITE_MONGO_URI || DIRECT_MONGO_URI;
 
 let fallbackMongoUri = process.env.VITE_MONGO_URI || process.env.MONGO_URI || DEFAULT_MONGO_URI;
 
@@ -257,6 +258,7 @@ async function ensureInitialized() {
 
   const clusterConfigs = {
     cluster1: fallbackMongoUri,
+    cluster1_direct: DIRECT_MONGO_URI,
   };
   
   if (typeof window === "undefined") {
