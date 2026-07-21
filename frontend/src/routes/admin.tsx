@@ -159,9 +159,10 @@ function AdminPage() {
     // Verify token
     verifyAdminFn({ data: { token: t } })
       .then((res) => {
-        if (res?.success) {
-          setToken(t);
-          loadData(t);
+        if (res?.success && res.token) {
+          sessionStorage.setItem("adminToken", res.token);
+          setToken(res.token);
+          loadData(res.token);
         } else {
           sessionStorage.removeItem("adminToken");
           navigate({ to: "/login" });

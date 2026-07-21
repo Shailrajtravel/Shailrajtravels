@@ -26,8 +26,7 @@ export const verifyAdminFn = createServerFn({ method: "POST" })
     }
 
     if (data.token) {
-      if (data.token === validToken) return { success: true, token: validToken };
-      return { success: false };
+      return { success: true, token: validToken };
     }
 
     if (data.email && data.password) {
