@@ -3,9 +3,7 @@ import { getRequest } from '@tanstack/react-start/server';
 import { tripOptionRepository } from '@/backend/shared/repositories/TripOptionRepository';
 import { bookingRepository } from '@/backend/shared/repositories/BookingRepository';
 import { packageRepository } from '@/backend/shared/repositories/PackageRepository';
-import { getAdminToken } from '@/backend/infrastructure/token';
-export { getAdminToken };
-import { ObjectId } from 'mongodb';
+import { getAdminToken, isValidAdminToken } from '@/backend/infrastructure/token';
 import { logAuditAction } from '@/backend/shared/audit';
 import { uploadImageToCloudinary } from '@/backend/shared/cloudinary';
 import { getCachedData, setCachedData, invalidateCache, rateLimiters, redis } from '@/backend/infrastructure/redis';
@@ -176,7 +174,7 @@ const processTripImages = async (tripData: any) => {
 export const createTripOptionFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string; data: any }) => data)
   .handler(async ({ data }) => {
-    if (data.adminToken !== getAdminToken()) throw new Error("Unauthorized");
+    if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
     const processedData = await processTripImages(data.data);
     const insertedId = await tripOptionRepository.insertOne(processedData);
     await logAuditAction({
@@ -194,7 +192,7 @@ export const createTripOptionFn = createServerFn({ method: "POST" })
 export const updateTripOptionFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string; id: string; data: any }) => data)
   .handler(async ({ data }) => {
-    if (data.adminToken !== getAdminToken()) throw new Error("Unauthorized");
+    if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
     const processedData = await processTripImages(data.data);
     delete processedData._id; // Prevent MongoDB immutable field error
     await tripOptionRepository.updateOne(data.id, processedData);
@@ -213,7 +211,7 @@ export const updateTripOptionFn = createServerFn({ method: "POST" })
 export const deleteTripOptionFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string; id: string }) => data)
   .handler(async ({ data }) => {
-    if (data.adminToken !== getAdminToken()) throw new Error("Unauthorized");
+    if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
     const trip = await tripOptionRepository.findById(data.id);
     await tripOptionRepository.deleteOne(data.id);
     if (trip) {
@@ -235,7 +233,7 @@ export const deleteTripOptionFn = createServerFn({ method: "POST" })
 export const getBookingsFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string }) => data)
   .handler(async ({ data }) => {
-    if (data.adminToken !== getAdminToken()) throw new Error("Unauthorized");
+    if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
 
     // Background lazy-start WhatsApp engine if disconnected
     try {
@@ -301,7 +299,7 @@ export const getBookingsFn = createServerFn({ method: "POST" })
 export const saveInvoiceFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string; bookingId: string; invoiceCustomData: any }) => data)
   .handler(async ({ data }) => {
-    if (data.adminToken !== getAdminToken()) throw new Error("Unauthorized");
+    if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
     const customData = data.invoiceCustomData || {};
     const updatePayload: any = {
       isInvoiceLocked: true,
@@ -349,7 +347,7 @@ export const saveInvoiceFn = createServerFn({ method: "POST" })
 export const sendInvoiceWhatsAppFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string; bookingId: string; phone?: string }) => data)
   .handler(async ({ data }) => {
-    if (data.adminToken !== getAdminToken()) throw new Error("Unauthorized");
+    if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
     const booking = await bookingRepository.findById(data.bookingId);
     if (!booking) throw new Error("Booking not found");
 
@@ -488,7 +486,7 @@ export const createBookingFn = createServerFn({ method: "POST" })
 export const updateBookingStatusFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string; id: string; status: string }) => data)
   .handler(async ({ data }) => {
-    if (data.adminToken !== getAdminToken()) throw new Error("Unauthorized");
+    if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
 
     // Fetch booking details first to send WhatsApp to target phone
     const booking = await bookingRepository.findById(data.id);
@@ -537,7 +535,7 @@ export const updateBookingStatusFn = createServerFn({ method: "POST" })
 export const sendBookingReplyFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string; id: string; message: string }) => data)
   .handler(async ({ data }) => {
-    if (data.adminToken !== getAdminToken()) throw new Error("Unauthorized");
+    if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
     const booking = await bookingRepository.findById(data.id);
     if (!booking) throw new Error("Booking not found");
     if (!booking.phone) throw new Error("Customer phone number is missing");
@@ -564,7 +562,7 @@ export const sendBookingReplyFn = createServerFn({ method: "POST" })
 export const updateBookingPaymentStatusFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string; id: string; paymentStatus: string }) => data)
   .handler(async ({ data }) => {
-    if (data.adminToken !== getAdminToken()) throw new Error("Unauthorized");
+    if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
     const booking = await bookingRepository.findById(data.id);
     if (!booking) throw new Error("Booking not found");
 
@@ -657,7 +655,7 @@ export const updateBookingPaymentStatusFn = createServerFn({ method: "POST" })
 export const deleteBookingFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string; id: string }) => data)
   .handler(async ({ data }) => {
-    if (data.adminToken !== getAdminToken()) throw new Error("Unauthorized");
+    if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
     const booking = await bookingRepository.findById(data.id);
     await bookingRepository.deleteOne(data.id);
     if (booking) {
@@ -679,7 +677,7 @@ export const deleteBookingFn = createServerFn({ method: "POST" })
 export const getBookingForPrintFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string; bookingId: string }) => data)
   .handler(async ({ data }) => {
-    if (data.adminToken !== getAdminToken()) throw new Error("Unauthorized");
+    if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
     const booking = await bookingRepository.findById(data.bookingId);
     if (!booking) throw new Error("Booking not found");
     // Return as plain JSON (no MongoDB ObjectId)

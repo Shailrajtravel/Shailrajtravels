@@ -48,17 +48,13 @@ export const logAuditAction = createServerFn({ method: "POST" })
     }
   });
 
+import { getAdminToken, isValidAdminToken } from '@/backend/infrastructure/token';
+
 // API endpoint for the Admin panel to fetch logs
 export const getAuditLogsFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string }) => data)
   .handler(async ({ data }) => {
-    const pwd = (import.meta as any).env?.VITE_ADMIN_PASSWORD_HASH || (import.meta as any).env?.VITE_ADMIN_PASSWORD || process.env.ADMIN_PASSWORD;
-    const email = (import.meta as any).env?.VITE_ADMIN_EMAIL || process.env.ADMIN_EMAIL || "khudeshivam@gmail.com";
-    const validToken = pwd
-      ? Buffer.from(email + ":" + pwd + "_ADMIN_SALT").toString("base64")
-      : null;
-
-    if (!validToken || data.adminToken !== validToken) throw new Error("Unauthorized");
+    if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
 
     try {
       const client = await clientPromise;

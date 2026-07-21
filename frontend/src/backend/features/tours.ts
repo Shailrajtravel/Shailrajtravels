@@ -1,5 +1,5 @@
 import { createServerFn } from '@tanstack/react-start';
-import { getAdminToken } from '@/backend/infrastructure/token';
+import { getAdminToken, isValidAdminToken } from '@/backend/infrastructure/token';
 import { tourRepository } from '@/backend/shared/repositories/TourRepository';
 import { uploadImageToCloudinary } from '@/backend/shared/cloudinary';
 import { logAuditAction } from '@/backend/shared/audit';
@@ -116,7 +116,7 @@ const processTourImages = async (tourData: any) => {
 export const createTourFn = createServerFn({ method: "POST" })
   .validator((data: TourInput) => data)
   .handler(async ({ data }) => {
-    if (data.adminToken !== getAdminToken()) throw new Error("Unauthorized");
+    if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
 
     const processedData = await processTourImages(data.data);
     processedData.createdAt = new Date();
@@ -140,7 +140,7 @@ export const createTourFn = createServerFn({ method: "POST" })
 export const updateTourFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string; id: string; data: any }) => data)
   .handler(async ({ data }) => {
-    if (data.adminToken !== getAdminToken()) throw new Error("Unauthorized");
+    if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
 
     const processedData = await processTourImages(data.data);
     const updateData = { ...processedData };
@@ -165,7 +165,7 @@ export const updateTourFn = createServerFn({ method: "POST" })
 export const deleteTourFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string; id: string }) => data)
   .handler(async ({ data }) => {
-    if (data.adminToken !== getAdminToken()) throw new Error("Unauthorized");
+    if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
 
     const tour = await tourRepository.findById(data.id);
 

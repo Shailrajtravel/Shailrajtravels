@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start';
 import { packageRepository } from '@/backend/shared/repositories/PackageRepository';
-import { getAdminToken } from '@/backend/infrastructure/token';
+import { getAdminToken, isValidAdminToken } from '@/backend/infrastructure/token';
 import { uploadImageToCloudinary } from '@/backend/shared/cloudinary';
 import { logAuditAction } from '@/backend/shared/audit';
 import { getCachedData, setCachedData, invalidateCache } from '@/backend/infrastructure/redis';
@@ -74,7 +74,7 @@ const processPackageImages = async (packageData: any) => {
 export const createPackageFn = createServerFn({ method: "POST" })
   .validator((data: PackageInput) => data)
   .handler(async ({ data }) => {
-    if (data.adminToken !== getAdminToken()) throw new Error("Unauthorized");
+    if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
 
     const processedData = await processPackageImages(data.data);
     const newDoc = { ...processedData, createdAt: new Date() };
@@ -94,7 +94,7 @@ export const createPackageFn = createServerFn({ method: "POST" })
 export const updatePackageFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string; id: string; data: any }) => data)
   .handler(async ({ data }) => {
-    if (data.adminToken !== getAdminToken()) throw new Error("Unauthorized");
+    if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
 
     const processedData = await processPackageImages(data.data);
     const updateData = { ...processedData };
@@ -117,7 +117,7 @@ export const updatePackageFn = createServerFn({ method: "POST" })
 export const deletePackageFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string; id: string }) => data)
   .handler(async ({ data }) => {
-    if (data.adminToken !== getAdminToken()) throw new Error("Unauthorized");
+    if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
 
     const pkg = await packageRepository.findById(data.id);
     await packageRepository.deleteOne(data.id);
