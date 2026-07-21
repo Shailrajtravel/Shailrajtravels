@@ -1,38 +1,42 @@
 import { Redis } from '@upstash/redis';
 import { Ratelimit } from '@upstash/ratelimit';
-import path from 'path';
-import fs from 'fs';
 import { memoryCache } from '@/backend/shared/memory-cache';
 
 // Load .env variables manually in Node environment if not loaded
-if (typeof window === "undefined") {
-  try {
-    const envPath = path.join(process.cwd(), ".env");
-    if (fs.existsSync(envPath)) {
-      const envContent = fs.readFileSync(envPath, "utf8");
-      envContent.split(/\r?\n/).forEach((line) => {
-        const trimmed = line.trim();
-        if (trimmed && !trimmed.startsWith("#")) {
-          const firstEq = trimmed.indexOf("=");
-          if (firstEq !== -1) {
-            const key = trimmed.substring(0, firstEq).trim();
-            let val = trimmed.substring(firstEq + 1).trim();
-            if (val.startsWith('"') && val.endsWith('"')) {
-              val = val.slice(1, -1);
-            } else if (val.startsWith("'") && val.endsWith("'")) {
-              val = val.slice(1, -1);
-            }
-            if (!process.env[key]) {
-              process.env[key] = val;
+async function loadEnv() {
+  if (typeof window === "undefined") {
+    try {
+      const path = await import('node:path');
+      const fs = await import('node:fs');
+      const envPath = path.join(process.cwd(), ".env");
+      if (fs.existsSync(envPath)) {
+        const envContent = fs.readFileSync(envPath, "utf8");
+        envContent.split(/\r?\n/).forEach((line) => {
+          const trimmed = line.trim();
+          if (trimmed && !trimmed.startsWith("#")) {
+            const firstEq = trimmed.indexOf("=");
+            if (firstEq !== -1) {
+              const key = trimmed.substring(0, firstEq).trim();
+              let val = trimmed.substring(firstEq + 1).trim();
+              if (val.startsWith('"') && val.endsWith('"')) {
+                val = val.slice(1, -1);
+              } else if (val.startsWith("'") && val.endsWith("'")) {
+                val = val.slice(1, -1);
+              }
+              if (!process.env[key]) {
+                process.env[key] = val;
+              }
             }
           }
-        }
-      });
+        });
+      }
+    } catch (e) {
+      console.error("Error loading .env for Redis", e);
     }
-  } catch (e) {
-    console.error("Error loading .env for Redis", e);
   }
 }
+// Execute it but do not block, as this is top level.
+loadEnv().catch(console.error);
 
 let redisClient: Redis | null = null;
 

@@ -1,11 +1,10 @@
 import { MongoClient } from 'mongodb';
-import * as fs from 'node:fs';
-import * as path from 'node:path';
-
 let isEnvLoaded = false;
-function loadEnv() {
+async function loadEnv() {
   if (isEnvLoaded || typeof window !== "undefined") return;
   try {
+    const path = await import('node:path');
+    const fs = await import('node:fs');
     let envPath = path.join(process.cwd(), ".env");
     if (!fs.existsSync(envPath)) {
       envPath = path.join(process.cwd(), "..", ".env");
@@ -238,7 +237,7 @@ class LocalMongoClient {
 let clientPromise: Promise<any>;
 
 async function initClient() {
-  loadEnv();
+  await loadEnv();
   const connectionUri = getUri();
 
   try {
