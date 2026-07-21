@@ -26,7 +26,7 @@ import { visualizer } from "rollup-plugin-visualizer";
 export default defineConfig({
   nitro: {
     cloudflare: {
-      nodeCompat: true
+      nodeCompat: false
     }
   },
   tanstackStart: {
@@ -53,7 +53,7 @@ export default defineConfig({
       exclude: ["@aws-sdk/client-s3", "@open-wa/wa-automate", "puppeteer-core", "puppeteer", "pdfkit"],
     },
     ssr: {
-      external: ["mongodb", "bson", "@open-wa/wa-automate", "puppeteer-core", "puppeteer", "pdfkit", "@aws-sdk/client-s3", "qrcode", "http-auth", "buffer-crc32"],
+      external: ["mongodb", "bson", "@puppeteer/browsers", "@open-wa/wa-automate", "puppeteer-core", "puppeteer", "pdfkit", "@aws-sdk/client-s3", "qrcode", "http-auth", "buffer-crc32"],
     },
     server: {
       host: true,
