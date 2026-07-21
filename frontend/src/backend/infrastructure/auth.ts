@@ -4,6 +4,10 @@ import { getAdminToken } from '@/backend/infrastructure/token';
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
 
+// Hardcoded defaults — bcrypt hash of "Shailraj@123"
+const DEFAULT_HASH = "$2b$10$fkJe41AG.J0AHaG/UNKojOO8hnFX5j2TCIwSCRGC07CgD7gI1hzgi";
+const DEFAULT_EMAIL = "khudeshivam@gmail.com";
+
 const adminAuthSchema = z.object({
   email: z.string().email().optional(),
   password: z.string().optional(),
@@ -27,8 +31,8 @@ export const verifyAdminFn = createServerFn({ method: "POST" })
     }
 
     if (data.email && data.password) {
-      const expectedEmail = process.env.VITE_ADMIN_EMAIL || process.env.ADMIN_EMAIL || import.meta.env.VITE_ADMIN_EMAIL || "khudeshivam@gmail.com";
-      const hash = process.env.VITE_ADMIN_PASSWORD_HASH || process.env.ADMIN_PASSWORD_HASH || import.meta.env.VITE_ADMIN_PASSWORD_HASH || import.meta.env.VITE_ADMIN_PASSWORD;
+      const expectedEmail = process.env.VITE_ADMIN_EMAIL || process.env.ADMIN_EMAIL || DEFAULT_EMAIL;
+      const hash = process.env.VITE_ADMIN_PASSWORD_HASH || process.env.ADMIN_PASSWORD_HASH || DEFAULT_HASH;
 
       let isMatch = false;
       if (hash) {
@@ -39,7 +43,7 @@ export const verifyAdminFn = createServerFn({ method: "POST" })
 
       const emailMatch = data.email === expectedEmail;
       if (isDev) {
-        console.log(`[Auth] Login attempt — emailMatch:${emailMatch} passwordMatch:${isMatch} hasPassword:${!!process.env.ADMIN_PASSWORD}`);
+        console.log(`[Auth] Login attempt — emailMatch:${emailMatch} passwordMatch:${isMatch} hash:${hash?.substring(0,10)}...`);
       }
 
       if (emailMatch && isMatch) {
@@ -61,8 +65,8 @@ export const verifyAdminFn = createServerFn({ method: "POST" })
 export const verifyAdminPasswordFn = createServerFn({ method: "POST" })
   .validator((data: { password: string }) => data)
   .handler(async ({ data }) => {
-    const expectedEmail = process.env.VITE_ADMIN_EMAIL || process.env.ADMIN_EMAIL || import.meta.env.VITE_ADMIN_EMAIL || "khudeshivam@gmail.com";
-    const hash = process.env.VITE_ADMIN_PASSWORD_HASH || process.env.ADMIN_PASSWORD_HASH || import.meta.env.VITE_ADMIN_PASSWORD_HASH || import.meta.env.VITE_ADMIN_PASSWORD;
+    const expectedEmail = process.env.VITE_ADMIN_EMAIL || process.env.ADMIN_EMAIL || DEFAULT_EMAIL;
+    const hash = process.env.VITE_ADMIN_PASSWORD_HASH || process.env.ADMIN_PASSWORD_HASH || DEFAULT_HASH;
 
     let isMatch = false;
     if (hash) {
@@ -75,7 +79,7 @@ export const verifyAdminPasswordFn = createServerFn({ method: "POST" })
       await logAuditAction({
         data: {
           action: "Unlock Invoice",
-          entityType: "Invoice", // AuditLogEntry entityType includes "Invoice"
+          entityType: "Invoice",
           details: `Invoice unlocked using admin password for ${expectedEmail}`,
         },
       });
@@ -84,3 +88,4 @@ export const verifyAdminPasswordFn = createServerFn({ method: "POST" })
 
     return { success: false, message: "Incorrect Admin Password" };
   });
+
