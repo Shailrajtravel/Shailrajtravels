@@ -41,7 +41,8 @@ function loadEnv() {
   isEnvLoaded = true;
 }
 
-const getUri = () => process.env.MONGO_URI || process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/shailraj";
+const DEFAULT_MONGO_URI = "mongodb+srv://shailrajtravels:shailrajtravels9999@cluster0.5jmdhjm.mongodb.net/shailraj?appName=Cluster0";
+const getUri = () => process.env.MONGO_URI || process.env.MONGODB_URI || process.env.VITE_MONGO_URI || DEFAULT_MONGO_URI;
 // Helper to generate a 24-character hex ID (similar to MongoDB ObjectId)
 function generateHexId(): string {
   const chars = "0123456789abcdef";

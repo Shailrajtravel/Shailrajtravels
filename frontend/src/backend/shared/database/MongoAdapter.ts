@@ -227,7 +227,9 @@ export class MongoAdapter {
   }
 }
 
-let fallbackMongoUri = process.env.VITE_MONGO_URI || process.env.MONGO_URI || import.meta.env.VITE_MONGO_URI;
+const DEFAULT_MONGO_URI = "mongodb+srv://shailrajtravels:shailrajtravels9999@cluster0.5jmdhjm.mongodb.net/shailraj?appName=Cluster0";
+
+let fallbackMongoUri = process.env.VITE_MONGO_URI || process.env.MONGO_URI || DEFAULT_MONGO_URI;
 
 export const mongoAdapter = new MongoAdapter();
 
@@ -236,7 +238,7 @@ async function ensureInitialized() {
   if (mongoAdapter["initialized"] || mongoAdapter["initPromise"]) return mongoAdapter["initPromise"];
 
   if (!fallbackMongoUri && typeof window === "undefined") {
-    fallbackMongoUri = process.env.VITE_MONGO_URI || process.env.MONGO_URI || import.meta.env.VITE_MONGO_URI;
+    fallbackMongoUri = process.env.VITE_MONGO_URI || process.env.MONGO_URI || DEFAULT_MONGO_URI;
   }
 
   const clusterConfigs = {
