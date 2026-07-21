@@ -1,5 +1,6 @@
 import { createServerFn } from '@tanstack/react-start';
 import clientPromise from '@/backend/shared/db';
+import { getAdminToken, isValidAdminToken } from '@/backend/infrastructure/token';
 
 export interface AuditLogEntry {
   _id?: string;
@@ -47,8 +48,6 @@ export const logAuditAction = createServerFn({ method: "POST" })
       console.error("Failed to log audit action:", error);
     }
   });
-
-import { getAdminToken, isValidAdminToken } from '@/backend/infrastructure/token';
 
 // API endpoint for the Admin panel to fetch logs
 export const getAuditLogsFn = createServerFn({ method: "POST" })
