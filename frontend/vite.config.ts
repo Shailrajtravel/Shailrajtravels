@@ -24,7 +24,11 @@ import { compression } from "vite-plugin-compression2";
 import { visualizer } from "rollup-plugin-visualizer";
 
 export default defineConfig({
-  nitro: true,
+  nitro: {
+    cloudflare: {
+      nodeCompat: true
+    }
+  },
   tanstackStart: {
     server: { entry: "server" },
     serverFns: { disableCsrfMiddlewareWarning: true },
@@ -49,7 +53,7 @@ export default defineConfig({
       exclude: ["@aws-sdk/client-s3", "@open-wa/wa-automate", "puppeteer-core", "puppeteer", "pdfkit"],
     },
     ssr: {
-      external: ["@open-wa/wa-automate", "puppeteer-core", "puppeteer", "pdfkit", "@aws-sdk/client-s3", "qrcode", "http-auth", "buffer-crc32"],
+      external: ["mongodb", "bson", "@open-wa/wa-automate", "puppeteer-core", "puppeteer", "pdfkit", "@aws-sdk/client-s3", "qrcode", "http-auth", "buffer-crc32"],
     },
     server: {
       host: true,
