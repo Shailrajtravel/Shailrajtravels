@@ -13,6 +13,21 @@ import {
 import { useEffect, useState, createContext, useContext, type ReactNode } from 'react';
 import { Languages } from 'lucide-react';
 
+// Browser polyfill for Buffer to guarantee zero ReferenceError crashes in production client bundles
+if (typeof window !== 'undefined' && typeof (window as any).Buffer === 'undefined') {
+  (window as any).Buffer = {
+    from: (data: any) => {
+      const str = typeof data === 'string' ? data : String(data);
+      return {
+        toString: (enc?: string) => (enc === 'base64' ? btoa(str) : str),
+        byteLength: str.length,
+      };
+    },
+    concat: (arr: any[]) => arr.join(''),
+    isBuffer: () => false,
+  };
+}
+
 // @ts-ignore: fonts have no type declarations
 import '@fontsource-variable/inter';
 // @ts-ignore
