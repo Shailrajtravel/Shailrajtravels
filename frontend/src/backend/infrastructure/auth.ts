@@ -28,7 +28,7 @@ export const verifyAdminFn = createServerFn({ method: "POST" })
 
     if (data.email && data.password) {
       const expectedEmail = process.env.VITE_ADMIN_EMAIL || process.env.ADMIN_EMAIL || import.meta.env.VITE_ADMIN_EMAIL || "khudeshivam@gmail.com";
-      const hash = process.env.VITE_ADMIN_PASSWORD_HASH || process.env.ADMIN_PASSWORD_HASH || import.meta.env.VITE_ADMIN_PASSWORD_HASH;
+      const hash = process.env.VITE_ADMIN_PASSWORD_HASH || process.env.ADMIN_PASSWORD_HASH || import.meta.env.VITE_ADMIN_PASSWORD_HASH || import.meta.env.VITE_ADMIN_PASSWORD;
 
       let isMatch = false;
       if (hash) {
@@ -62,7 +62,7 @@ export const verifyAdminPasswordFn = createServerFn({ method: "POST" })
   .validator((data: { password: string }) => data)
   .handler(async ({ data }) => {
     const expectedEmail = process.env.VITE_ADMIN_EMAIL || process.env.ADMIN_EMAIL || import.meta.env.VITE_ADMIN_EMAIL || "khudeshivam@gmail.com";
-    const hash = process.env.VITE_ADMIN_PASSWORD_HASH || process.env.ADMIN_PASSWORD_HASH || import.meta.env.VITE_ADMIN_PASSWORD_HASH;
+    const hash = process.env.VITE_ADMIN_PASSWORD_HASH || process.env.ADMIN_PASSWORD_HASH || import.meta.env.VITE_ADMIN_PASSWORD_HASH || import.meta.env.VITE_ADMIN_PASSWORD;
 
     let isMatch = false;
     if (hash) {
