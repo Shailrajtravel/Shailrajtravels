@@ -31,19 +31,14 @@ export const verifyAdminFn = createServerFn({ method: "POST" })
     }
 
     if (data.email && data.password) {
-      const expectedEmail = process.env.VITE_ADMIN_EMAIL || process.env.ADMIN_EMAIL || DEFAULT_EMAIL;
-      const hash = process.env.VITE_ADMIN_PASSWORD_HASH || process.env.ADMIN_PASSWORD_HASH || DEFAULT_HASH;
+      const expectedEmail = DEFAULT_EMAIL;
+      const hash = DEFAULT_HASH;
 
-      let isMatch = false;
-      if (hash) {
-        isMatch = bcrypt.compareSync(data.password, hash);
-      } else if (process.env.ADMIN_PASSWORD) {
-        isMatch = data.password === process.env.ADMIN_PASSWORD;
-      }
+      const isMatch = bcrypt.compareSync(data.password, hash);
+      const emailMatch = data.email.toLowerCase().trim() === expectedEmail.toLowerCase().trim();
 
-      const emailMatch = data.email === expectedEmail;
       if (isDev) {
-        console.log(`[Auth] Login attempt — emailMatch:${emailMatch} passwordMatch:${isMatch} hash:${hash?.substring(0,10)}...`);
+        console.log(`[Auth] Login attempt — emailMatch:${emailMatch} passwordMatch:${isMatch}`);
       }
 
       if (emailMatch && isMatch) {
@@ -65,15 +60,10 @@ export const verifyAdminFn = createServerFn({ method: "POST" })
 export const verifyAdminPasswordFn = createServerFn({ method: "POST" })
   .validator((data: { password: string }) => data)
   .handler(async ({ data }) => {
-    const expectedEmail = process.env.VITE_ADMIN_EMAIL || process.env.ADMIN_EMAIL || DEFAULT_EMAIL;
-    const hash = process.env.VITE_ADMIN_PASSWORD_HASH || process.env.ADMIN_PASSWORD_HASH || DEFAULT_HASH;
+    const expectedEmail = DEFAULT_EMAIL;
+    const hash = DEFAULT_HASH;
 
-    let isMatch = false;
-    if (hash) {
-      isMatch = bcrypt.compareSync(data.password, hash);
-    } else if (process.env.ADMIN_PASSWORD) {
-      isMatch = data.password === process.env.ADMIN_PASSWORD;
-    }
+    const isMatch = bcrypt.compareSync(data.password, hash);
 
     if (isMatch) {
       await logAuditAction({
