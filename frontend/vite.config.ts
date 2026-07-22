@@ -27,6 +27,15 @@ export default defineConfig({
   nitro: {
     cloudflare: {
       nodeCompat: true
+    },
+    alias: {
+      "node:fs": "unenv/runtime/mock/proxy",
+      "node:fs/promises": "unenv/runtime/mock/proxy",
+      "node:http": "unenv/runtime/mock/proxy",
+      "node:zlib": "unenv/runtime/mock/proxy",
+      "node:child_process": "unenv/runtime/mock/proxy",
+      "node:timers": "unenv/runtime/mock/proxy",
+      "node:timers/promises": "unenv/runtime/mock/proxy"
     }
   },
 
