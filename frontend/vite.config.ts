@@ -29,13 +29,13 @@ export default defineConfig({
       nodeCompat: true
     },
     alias: {
-      "node:fs": "unenv/runtime/mock/proxy",
-      "node:fs/promises": "unenv/runtime/mock/proxy",
-      "node:http": "unenv/runtime/mock/proxy",
-      "node:zlib": "unenv/runtime/mock/proxy",
-      "node:child_process": "unenv/runtime/mock/proxy",
-      "node:timers": "unenv/runtime/mock/proxy",
-      "node:timers/promises": "unenv/runtime/mock/proxy"
+      "node:fs": "./src/backend/shared/mock-proxy.ts",
+      "node:fs/promises": "./src/backend/shared/mock-proxy.ts",
+      "node:http": "./src/backend/shared/mock-proxy.ts",
+      "node:zlib": "./src/backend/shared/mock-proxy.ts",
+      "node:child_process": "./src/backend/shared/mock-proxy.ts",
+      "node:timers": "./src/backend/shared/mock-proxy.ts",
+      "node:timers/promises": "./src/backend/shared/mock-proxy.ts"
     }
   },
 
