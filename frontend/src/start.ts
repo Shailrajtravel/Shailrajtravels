@@ -12,10 +12,18 @@ const errorMiddleware = createMiddleware().server(async ({ next, request }) => {
         const url = new URL(request.url);
         const lowerPath = url.pathname.toLowerCase();
         if (lowerPath.includes("_serverfn") || lowerPath.includes("_server-fn")) {
-          throw error;
+          return new Response(
+            JSON.stringify({
+              error: String(error),
+              stack: error instanceof Error ? error.stack : undefined
+            }),
+            { status: 500, headers: { "content-type": "application/json" } }
+          );
         }
       } catch (e) {
-        if (e === error) throw error;
+        if (e === error) {
+          return new Response(JSON.stringify({ error: String(error) }), { status: 500 });
+        }
       }
     }
 
