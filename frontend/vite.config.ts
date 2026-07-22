@@ -39,7 +39,8 @@ export default defineConfig({
     plugins: [
       nodePolyfills({
         include: ["fs", "http", "zlib", "child_process", "timers"],
-        globals: { Buffer: true, global: true, process: true }
+        globals: { Buffer: true, global: true, process: true },
+        protocolImports: true
       }),
       Sitemap({
         hostname: "https://www.shailrajtravels.com",
