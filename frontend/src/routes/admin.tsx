@@ -228,11 +228,11 @@ function AdminPage() {
         blogsPromise,
       ]);
 
-      setPackages(pkgs);
-      setReviews(revs);
-      setTripOptions(trips);
+      setPackages(Array.isArray(pkgs) ? pkgs : []);
+      setReviews(Array.isArray(revs) ? revs : []);
+      setTripOptions(Array.isArray(trips) ? trips : []);
 
-      let sortedBks = [...(bks || [])].sort(
+      let sortedBks = [...(Array.isArray(bks) ? bks : [])].sort(
         (a, b) => new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime(),
       );
       sortedBks = sortedBks.map((bk, idx) => {
@@ -245,10 +245,10 @@ function AdminPage() {
       sortedBks.reverse();
       setBookings(sortedBks);
 
-      setGalleryPhotos(photos);
-      setAuditLogs(logs);
-      setTours(trs);
-      setCustomBlogs(dbBlogs || []);
+      setGalleryPhotos(Array.isArray(photos) ? photos : []);
+      setAuditLogs(Array.isArray(logs) ? logs : []);
+      setTours(Array.isArray(trs) ? trs : []);
+      setCustomBlogs(Array.isArray(dbBlogs) ? dbBlogs : []);
     } catch (e: any) {
       console.error("loadData fatal error:", e);
       setErrorMsg(e.message || String(e));
@@ -2532,7 +2532,12 @@ function GalleryForm({ token, onClose, onSuccess }: any) {
 }
 
 function DashboardOverview({ packages, bookings, reviews, photos }: any) {
-  const pendingBookings = bookings.filter((b: any) => b.status === "Pending").length;
+  const safeBookings = Array.isArray(bookings) ? bookings : [];
+  const safePackages = Array.isArray(packages) ? packages : [];
+  const safeReviews = Array.isArray(reviews) ? reviews : [];
+  const safePhotos = Array.isArray(photos) ? photos : [];
+
+  const pendingBookings = safeBookings.filter((b: any) => b?.status === "Pending").length;
 
   return (
     <div className="flex flex-col gap-8 animate-reveal">
@@ -2546,7 +2551,7 @@ function DashboardOverview({ packages, bookings, reviews, photos }: any) {
               Total Bookings
             </p>
             <p className="text-3xl font-display font-bold text-brand-blue-deep">
-              {bookings.length}
+              {safeBookings.length}
             </p>
           </div>
         </div>
@@ -2568,7 +2573,7 @@ function DashboardOverview({ packages, bookings, reviews, photos }: any) {
           <div>
             <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">Packages</p>
             <p className="text-3xl font-display font-bold text-brand-blue-deep">
-              {packages.length}
+              {safePackages.length}
             </p>
           </div>
         </div>
@@ -2578,7 +2583,7 @@ function DashboardOverview({ packages, bookings, reviews, photos }: any) {
           </div>
           <div>
             <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">Reviews</p>
-            <p className="text-3xl font-display font-bold text-brand-blue-deep">{reviews.length}</p>
+            <p className="text-3xl font-display font-bold text-brand-blue-deep">{safeReviews.length}</p>
           </div>
         </div>
       </div>
@@ -2587,7 +2592,7 @@ function DashboardOverview({ packages, bookings, reviews, photos }: any) {
         <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
           <h2 className="text-lg font-bold text-brand-blue-deep">Recent Bookings</h2>
         </div>
-        {bookings.length === 0 ? (
+        {safeBookings.length === 0 ? (
           <div className="p-8 text-center text-slate-500 text-sm font-medium">
             No bookings yet.
           </div>
