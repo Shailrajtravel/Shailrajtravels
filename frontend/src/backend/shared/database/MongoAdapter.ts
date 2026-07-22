@@ -244,9 +244,10 @@ export class MongoAdapter {
 }
 
 const DIRECT_MONGO_URI = "mongodb://shailrajtravels:shailrajtravels9999@ac-csvcnp6-shard-00-00.5jmdhjm.mongodb.net:27017,ac-csvcnp6-shard-00-01.5jmdhjm.mongodb.net:27017,ac-csvcnp6-shard-00-02.5jmdhjm.mongodb.net:27017/shailraj?ssl=true&replicaSet=atlas-9w1vmv-shard-0&authSource=admin&retryWrites=true&w=majority";
-const DEFAULT_MONGO_URI = process.env.MONGO_URI || process.env.MONGODB_URI || process.env.VITE_MONGO_URI || DIRECT_MONGO_URI;
 
-let fallbackMongoUri = process.env.VITE_MONGO_URI || process.env.MONGO_URI || DEFAULT_MONGO_URI;
+// In Cloudflare Workers, mongodb+srv (DNS SRV) always fails.
+// We force the direct URI to bypass this limitation.
+let fallbackMongoUri = process.env.MONGO_DIRECT_URI || DIRECT_MONGO_URI;
 
 export const mongoAdapter = new MongoAdapter();
 
