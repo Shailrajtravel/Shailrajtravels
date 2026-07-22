@@ -22,20 +22,12 @@ import Sitemap from "vite-plugin-sitemap";
 import { imagetools } from "vite-imagetools";
 import { compression } from "vite-plugin-compression2";
 import { visualizer } from "rollup-plugin-visualizer";
+import { nodePolyfills } from "vite-plugin-node-polyfills";
 
 export default defineConfig({
   nitro: {
     cloudflare: {
       nodeCompat: true
-    },
-    alias: {
-      "node:fs": "./src/backend/shared/mock-proxy.ts",
-      "node:fs/promises": "./src/backend/shared/mock-proxy.ts",
-      "node:http": "./src/backend/shared/mock-proxy.ts",
-      "node:zlib": "./src/backend/shared/mock-proxy.ts",
-      "node:child_process": "./src/backend/shared/mock-proxy.ts",
-      "node:timers": "./src/backend/shared/mock-proxy.ts",
-      "node:timers/promises": "./src/backend/shared/mock-proxy.ts"
     }
   },
 
@@ -45,6 +37,10 @@ export default defineConfig({
   },
   vite: {
     plugins: [
+      nodePolyfills({
+        include: ["fs", "http", "zlib", "child_process", "timers", "os", "path", "stream", "crypto"],
+        globals: { Buffer: true, global: true, process: true }
+      }),
       Sitemap({
         hostname: "https://www.shailrajtravels.com",
         dynamicRoutes: [
