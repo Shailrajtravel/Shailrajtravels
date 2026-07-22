@@ -1,24 +1,43 @@
-import { v2 as cloudinary } from 'cloudinary';
+const CLOUD_NAME = "dquecn5qj";
+const API_KEY = "912918221149553";
+const API_SECRET = "2nz-n7M7UnXDw42pAjwS4tDg0H0";
 
-// Configuration gets automatically picked up from process.env.CLOUDINARY_URL if standard,
-// but we pass it explicitly just in case it wasn't picked up correctly.
-cloudinary.config({
-  cloud_name: "dquecn5qj",
-  api_key: "912918221149553",
-  api_secret: "2nz-n7M7UnXDw42pAjwS4tDg0H0",
-  secure: true,
-});
+async function sha1(str: string): Promise<string> {
+  const enc = new TextEncoder();
+  const hash = await crypto.subtle.digest("SHA-1", enc.encode(str));
+  return Array.from(new Uint8Array(hash))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
 
 export const uploadImageToCloudinary = async (
   base64Str: string,
   folder: string,
 ): Promise<string> => {
   try {
-    const result = await cloudinary.uploader.upload(base64Str, {
-      folder,
-      resource_type: "auto", // use auto to preserve exactly what was uploaded (png, webp, jpg, etc)
+    const timestamp = Math.floor(Date.now() / 1000).toString();
+    const strToSign = `folder=${folder}&timestamp=${timestamp}${API_SECRET}`;
+    const signature = await sha1(strToSign);
+
+    const formData = new FormData();
+    formData.append("file", base64Str);
+    formData.append("folder", folder);
+    formData.append("timestamp", timestamp);
+    formData.append("api_key", API_KEY);
+    formData.append("signature", signature);
+
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+      method: "POST",
+      body: formData,
     });
-    return result.secure_url;
+
+    if (!res.ok) {
+      const errText = await res.text();
+      throw new Error(`Cloudinary HTTP ${res.status}: ${errText}`);
+    }
+
+    const json = await res.json();
+    return json.secure_url;
   } catch (error) {
     console.error("Cloudinary Upload Error:", error);
     throw new Error("Failed to upload image to Cloudinary");
