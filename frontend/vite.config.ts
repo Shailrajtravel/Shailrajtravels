@@ -28,6 +28,14 @@ export default defineConfig({
   nitro: {
     cloudflare: {
       nodeCompat: true
+    },
+    alias: {
+      'node:fs': 'unenv/runtime/mock/empty',
+      'fs': 'unenv/runtime/mock/empty',
+      'node:child_process': 'unenv/runtime/mock/empty',
+      'child_process': 'unenv/runtime/mock/empty',
+      'node:http': 'unenv/runtime/mock/empty',
+      'http': 'unenv/runtime/mock/empty'
     }
   },
 
