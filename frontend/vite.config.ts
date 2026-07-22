@@ -22,6 +22,7 @@ import Sitemap from "vite-plugin-sitemap";
 import { imagetools } from "vite-imagetools";
 import { compression } from "vite-plugin-compression2";
 import { visualizer } from "rollup-plugin-visualizer";
+import { nodePolyfills } from "vite-plugin-node-polyfills";
 
 export default defineConfig({
   nitro: {
@@ -36,6 +37,10 @@ export default defineConfig({
   },
   vite: {
     plugins: [
+      nodePolyfills({
+        include: ["fs", "http", "zlib", "child_process", "timers"],
+        globals: { Buffer: true, global: true, process: true }
+      }),
       Sitemap({
         hostname: "https://www.shailrajtravels.com",
         dynamicRoutes: [
