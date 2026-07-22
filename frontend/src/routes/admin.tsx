@@ -18,6 +18,7 @@ import {
   getBookingsFn,
   deleteBookingFn,
   updateBookingStatusFn,
+  updateBookingDateFn,
   updateBookingPaymentStatusFn,
   sendBookingReplyFn,
 } from '@/backend/shared/bookings';
@@ -115,6 +116,7 @@ function AdminPage() {
   const [reviews, setReviews] = useState<any[]>([]);
   const [tripOptions, setTripOptions] = useState<any[]>([]);
   const [bookings, setBookings] = useState<any[]>([]);
+  const [editingDate, setEditingDate] = useState<{ id: string; date: string } | null>(null);
   const [galleryPhotos, setGalleryPhotos] = useState<any[]>([]);
   const [auditLogs, setAuditLogs] = useState<any[]>([]);
   const [tours, setTours] = useState<any[]>([]);
@@ -1163,7 +1165,36 @@ function AdminPage() {
                               </div>
                             </td>
                             <td className="px-6 py-4 font-bold text-slate-700 text-sm">
-                              {bk.travelDate}
+                              {editingDate?.id === bk._id ? (
+                                <div className="flex items-center gap-1">
+                                  <input 
+                                    type="date"
+                                    value={editingDate.date}
+                                    onChange={(e) => setEditingDate({ ...editingDate, date: e.target.value })}
+                                    className="p-1 text-xs border border-slate-300 rounded outline-none w-28 font-normal"
+                                  />
+                                  <button
+                                    onClick={async () => {
+                                      try {
+                                        await updateBookingDateFn({ data: { adminToken: token, id: bk._id, travelDate: editingDate.date }});
+                                        setEditingDate(null);
+                                        loadData();
+                                      } catch (err) { alert("Failed to update date"); }
+                                    }}
+                                    className="p-1.5 text-white bg-green-500 rounded hover:bg-green-600"
+                                  >
+                                    <Check className="w-3 h-3" />
+                                  </button>
+                                  <button onClick={() => setEditingDate(null)} className="p-1.5 text-white bg-red-500 rounded hover:bg-red-600">
+                                    <X className="w-3 h-3" />
+                                  </button>
+                                </div>
+                              ) : (
+                                <div className="flex items-center gap-2 group cursor-pointer" onClick={() => setEditingDate({ id: bk._id, date: bk.travelDate || "" })}>
+                                  {bk.travelDate}
+                                  <Edit2 className="w-3 h-3 text-slate-300 group-hover:text-brand-blue transition-colors" />
+                                </div>
+                              )}
                             </td>
                             <td className="px-6 py-4">
                               <select
@@ -1302,7 +1333,36 @@ function AdminPage() {
                             </div>
                             <div>
                               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Travel Date</span>
-                              <p className="font-semibold text-slate-700 mt-0.5">{bk.travelDate}</p>
+                              {editingDate?.id === bk._id ? (
+                                <div className="flex items-center gap-1 mt-0.5">
+                                  <input 
+                                    type="date"
+                                    value={editingDate.date}
+                                    onChange={(e) => setEditingDate({ ...editingDate, date: e.target.value })}
+                                    className="p-1 text-xs border rounded outline-none w-full"
+                                  />
+                                  <button
+                                    onClick={async () => {
+                                      try {
+                                        await updateBookingDateFn({ data: { adminToken: token, id: bk._id, travelDate: editingDate.date }});
+                                        setEditingDate(null);
+                                        loadData();
+                                      } catch (err) { alert("Failed to update date"); }
+                                    }}
+                                    className="p-1 text-white bg-green-500 rounded hover:bg-green-600"
+                                  >
+                                    <Check className="w-3 h-3" />
+                                  </button>
+                                  <button onClick={() => setEditingDate(null)} className="p-1 text-white bg-red-500 rounded hover:bg-red-600">
+                                    <X className="w-3 h-3" />
+                                  </button>
+                                </div>
+                              ) : (
+                                <div className="flex items-center gap-2 group cursor-pointer mt-0.5" onClick={() => setEditingDate({ id: bk._id, date: bk.travelDate || "" })}>
+                                  <p className="font-semibold text-slate-700">{bk.travelDate}</p>
+                                  <Edit2 className="w-3 h-3 text-slate-300 group-hover:text-brand-blue" />
+                                </div>
+                              )}
                             </div>
                             <div>
                               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Persons</span>

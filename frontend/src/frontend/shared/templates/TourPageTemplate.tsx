@@ -577,7 +577,7 @@ export function TourPageTemplate({ data, recommendedVehicles = [] }: TourPageTem
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">
                       {"Travel Date"}
                     </label>
-                    {validDates && validDates.length > 0 ? (
+                    {validDates && validDates.length > 0 && travelDate !== "CUSTOM" ? (
                       <select
                         name="travelDate"
                         id="tour-travel-date"
@@ -593,18 +593,30 @@ export function TourPageTemplate({ data, recommendedVehicles = [] }: TourPageTem
                             {date}
                           </option>
                         ))}
+                        <option value="CUSTOM">Custom Date</option>
                       </select>
                     ) : (
-                      <input
-                        type="date"
-                        name="travelDate"
-                        id="tour-travel-date"
-                        autoComplete="off"
-                        required
-                        value={travelDate}
-                        onChange={(e) => setTravelDate(e.target.value)}
-                        className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-brand-orange outline-none transition-shadow text-slate-800"
-                      />
+                      <div className="flex flex-col w-full">
+                        <input
+                          type="date"
+                          name="travelDate"
+                          id="tour-travel-date"
+                          autoComplete="off"
+                          required
+                          value={travelDate === "CUSTOM" ? "" : travelDate}
+                          onChange={(e) => setTravelDate(e.target.value)}
+                          className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-brand-orange outline-none transition-shadow text-slate-800"
+                        />
+                        {validDates && validDates.length > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => setTravelDate("")}
+                            className="text-[12px] font-bold text-brand-orange mt-2 text-left hover:underline"
+                          >
+                            ← Pick a scheduled date
+                          </button>
+                        )}
+                      </div>
                     )}
                   </div>
                   <button

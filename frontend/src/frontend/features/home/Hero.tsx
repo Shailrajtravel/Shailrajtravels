@@ -68,6 +68,7 @@ export function Hero({
   activeTripId?: string;
 }) {
   const [selectedTrip, setSelectedTrip] = useState<string>(tripOptions[0]?._id || "custom");
+  const [isCustomDate, setIsCustomDate] = useState(false);
   const [persons, setPersons] = useState(1);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -435,7 +436,7 @@ export function Hero({
               </FieldBox>
 
               <FieldBox icon={<Calendar className="h-5 w-5" />} label={t.formDate} htmlFor="hero-travel-date">
-                {validDates && validDates.length > 0 ? (
+                {validDates && validDates.length > 0 && !isCustomDate ? (
                   <div className="relative flex items-center w-full">
                     <select
                       suppressHydrationWarning
@@ -444,6 +445,12 @@ export function Hero({
                       autoComplete="off"
                       required
                       className="w-full appearance-none bg-transparent text-[14px] md:text-[15px] font-semibold text-brand-blue-deep focus:outline-none cursor-pointer"
+                      onChange={(e) => {
+                        if (e.target.value === "CUSTOM") {
+                          setIsCustomDate(true);
+                          e.target.value = "";
+                        }
+                      }}
                     >
                       <option value="">Select a date</option>
                       {validDates.map((date: string) => (
@@ -451,19 +458,31 @@ export function Hero({
                           {date}
                         </option>
                       ))}
+                      <option value="CUSTOM">Custom Date</option>
                     </select>
                     <ChevronDown className="absolute right-0 h-4 w-4 text-slate-400 pointer-events-none" />
                   </div>
                 ) : (
-                  <input
-                    suppressHydrationWarning
-                    type="date"
-                    name="travelDate"
-                    id="hero-travel-date"
-                    autoComplete="off"
-                    required
-                    className="w-full bg-transparent text-[14px] md:text-[15px] font-semibold text-brand-blue-deep focus:outline-none cursor-pointer"
-                  />
+                  <div className="flex flex-col w-full">
+                    <input
+                      suppressHydrationWarning
+                      type="date"
+                      name="travelDate"
+                      id="hero-travel-date"
+                      autoComplete="off"
+                      required
+                      className="w-full bg-transparent text-[14px] md:text-[15px] font-semibold text-brand-blue-deep focus:outline-none cursor-pointer"
+                    />
+                    {validDates && validDates.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => setIsCustomDate(false)}
+                        className="text-[11px] font-bold text-brand-orange mt-2 text-left hover:underline"
+                      >
+                        ← Pick a scheduled date
+                      </button>
+                    )}
+                  </div>
                 )}
               </FieldBox>
 

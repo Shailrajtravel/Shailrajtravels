@@ -484,6 +484,28 @@ export const createBookingFn = createServerFn({ method: "POST" })
     }
   });
 
+export const updateBookingDateFn = createServerFn({ method: "POST" })
+  .validator((data: { adminToken: string; id: string; travelDate: string }) => data)
+  .handler(async ({ data }) => {
+    if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
+    const booking = await bookingRepository.findById(data.id);
+    if (!booking) throw new Error("Booking not found");
+
+    await bookingRepository.updateOne(data.id, { travelDate: data.travelDate });
+
+    await logAuditAction({
+      data: {
+        action: "Update Booking Date",
+        entityType: "Booking",
+        details: `Changed booking travel date to ${data.travelDate}`,
+        entityId: data.id,
+      },
+    });
+
+    await invalidateCache("admin:bookings");
+    return { success: true };
+  });
+
 export const updateBookingStatusFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string; id: string; status: string }) => data)
   .handler(async ({ data }) => {

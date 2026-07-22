@@ -296,7 +296,7 @@ export function BookingModal({ tour, onClose, t, lang }: BookingModalProps) {
                 <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 h-[56px] transition focus-within:border-[#F59E0B] focus-within:ring-2 focus-within:ring-[#F59E0B]/15">
                   <Calendar className="h-5 w-5 text-slate-400 shrink-0" />
                   <div className="relative flex items-center w-full">
-                    {validDates.length > 0 ? (
+                    {validDates.length > 0 && travelDate !== "CUSTOM" ? (
                       <select
                         name="travelDate"
                         id="booking-travel-date"
@@ -312,18 +312,30 @@ export function BookingModal({ tour, onClose, t, lang }: BookingModalProps) {
                             {date}
                           </option>
                         ))}
+                        <option value="CUSTOM">Custom Date</option>
                       </select>
                     ) : (
-                      <input
-                        type="date"
-                        name="travelDate"
-                        id="booking-travel-date"
-                        autoComplete="off"
-                        required
-                        value={travelDate}
-                        onChange={(e) => setTravelDate(e.target.value)}
-                        className="w-full bg-transparent text-[15px] font-semibold text-[#112233] focus:outline-none cursor-pointer"
-                      />
+                      <div className="flex flex-col w-full">
+                        <input
+                          type="date"
+                          name="travelDate"
+                          id="booking-travel-date"
+                          autoComplete="off"
+                          required
+                          value={travelDate === "CUSTOM" ? "" : travelDate}
+                          onChange={(e) => setTravelDate(e.target.value)}
+                          className="w-full bg-transparent text-[15px] font-semibold text-[#112233] focus:outline-none cursor-pointer"
+                        />
+                        {validDates.length > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => setTravelDate("")}
+                            className="text-[11px] font-bold text-[#F59E0B] mt-2 text-left hover:underline"
+                          >
+                            ← Pick a scheduled date
+                          </button>
+                        )}
+                      </div>
                     )}
                   </div>
                 </div>
