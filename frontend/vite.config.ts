@@ -22,34 +22,14 @@ import Sitemap from "vite-plugin-sitemap";
 import { imagetools } from "vite-imagetools";
 import { compression } from "vite-plugin-compression2";
 import { visualizer } from "rollup-plugin-visualizer";
-import { nodePolyfills } from "vite-plugin-node-polyfills";
 
 export default defineConfig({
-  nitro: {
-    cloudflare: {
-      nodeCompat: true
-    },
-    alias: {
-      'node:fs': 'unenv/runtime/mock/empty',
-      'fs': 'unenv/runtime/mock/empty',
-      'node:child_process': 'unenv/runtime/mock/empty',
-      'child_process': 'unenv/runtime/mock/empty',
-      'node:http': 'unenv/runtime/mock/empty',
-      'http': 'unenv/runtime/mock/empty'
-    }
-  },
-
   tanstackStart: {
     server: { entry: "server" },
     serverFns: { disableCsrfMiddlewareWarning: true },
   },
   vite: {
     plugins: [
-      nodePolyfills({
-        include: ["fs", "http", "zlib", "child_process", "timers"],
-        globals: { Buffer: true, global: true, process: true },
-        protocolImports: true
-      }),
       Sitemap({
         hostname: "https://www.shailrajtravels.com",
         dynamicRoutes: [
