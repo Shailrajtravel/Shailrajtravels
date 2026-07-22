@@ -6,14 +6,17 @@ const errorMiddleware = createMiddleware().server(async ({ next, request }) => {
   try {
     return await next();
   } catch (error) {
-    // If it's a server function (RPC) request, let TanStack Start handle the error serialization
+    // If it's a server function (RPC) request, let TanStack Start handle the error serialization natively
     if (request) {
       try {
         const url = new URL(request.url);
-        if (url.pathname.startsWith("/_server-fn")) {
+        const lowerPath = url.pathname.toLowerCase();
+        if (lowerPath.includes("_serverfn") || lowerPath.includes("_server-fn")) {
           throw error;
         }
-      } catch (e) {}
+      } catch (e) {
+        if (e === error) throw error;
+      }
     }
 
     if (error != null && typeof error === "object" && "statusCode" in error) {
@@ -27,10 +30,6 @@ const errorMiddleware = createMiddleware().server(async ({ next, request }) => {
   }
 });
 
-const csrfMiddleware = createCsrfMiddleware({
-  filter: (ctx) => ctx.handlerType === "serverFn",
-});
-
 export const startInstance = createStart(() => ({
-  requestMiddleware: [csrfMiddleware, errorMiddleware],
+  requestMiddleware: [errorMiddleware],
 }));
