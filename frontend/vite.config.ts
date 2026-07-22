@@ -54,7 +54,7 @@ export default defineConfig({
       exclude: ["@aws-sdk/client-s3", "@open-wa/wa-automate", "puppeteer-core", "puppeteer", "pdfkit"],
     },
     ssr: {
-      external: ["mongodb", "bson", "@puppeteer/browsers", "@open-wa/wa-automate", "puppeteer-core", "puppeteer", "pdfkit", "@aws-sdk/client-s3", "qrcode", "http-auth", "buffer-crc32"],
+      external: ["@puppeteer/browsers", "@open-wa/wa-automate", "puppeteer-core", "puppeteer", "pdfkit", "@aws-sdk/client-s3", "http-auth", "buffer-crc32"],
     },
     server: {
       host: true,
