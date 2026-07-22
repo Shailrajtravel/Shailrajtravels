@@ -27,14 +27,9 @@ export default defineConfig({
   nitro: {
     cloudflare: {
       nodeCompat: true
-    },
-    alias: {
-      'node:fs': 'unenv/mock/empty',
-      'fs': 'unenv/mock/empty',
-      'node:fs/promises': 'unenv/mock/empty',
-      'fs/promises': 'unenv/mock/empty'
     }
   },
+
   tanstackStart: {
     server: { entry: "server" },
     serverFns: { disableCsrfMiddlewareWarning: true },
