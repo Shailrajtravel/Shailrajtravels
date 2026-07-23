@@ -41,11 +41,28 @@ const DEFAULT_RULES: ChatbotRule[] = [
 @Controller('bot-rules')
 export class BotRulesController {
   private getRulesPath(): string {
-    let rulesPath = path.resolve(process.cwd(), 'chatbot-rules.json');
-    if (!fs.existsSync(rulesPath)) {
-      rulesPath = path.resolve(process.cwd(), '../chatbot-rules.json');
+    const dataDir = path.resolve(process.cwd(), 'data');
+    if (!fs.existsSync(dataDir)) {
+      try {
+        fs.mkdirSync(dataDir, { recursive: true });
+      } catch (e) {}
     }
-    return rulesPath;
+    const dataRulesPath = path.resolve(dataDir, 'chatbot-rules.json');
+    if (fs.existsSync(dataRulesPath)) {
+      return dataRulesPath;
+    }
+
+    let rulesPath = path.resolve(process.cwd(), 'chatbot-rules.json');
+    if (fs.existsSync(rulesPath)) {
+      return rulesPath;
+    }
+
+    const rootRulesPath = path.resolve(process.cwd(), '../chatbot-rules.json');
+    if (fs.existsSync(rootRulesPath)) {
+      return rootRulesPath;
+    }
+
+    return dataRulesPath;
   }
 
   @Get()
@@ -76,15 +93,7 @@ export class BotRulesController {
   @ApiResponse({ status: 200, description: 'Rules updated successfully' })
   updateRules(@Body() dto: ChatbotRulesDto): { success: boolean } {
     try {
-      let rulesPath = path.resolve(process.cwd(), 'chatbot-rules.json');
-      if (!fs.existsSync(rulesPath)) {
-        const fallback = path.resolve(process.cwd(), '../chatbot-rules.json');
-        if (fs.existsSync(fallback)) {
-          rulesPath = fallback;
-        } else {
-          rulesPath = path.resolve(process.cwd(), '../chatbot-rules.json');
-        }
-      }
+      const rulesPath = this.getRulesPath();
       fs.writeFileSync(rulesPath, JSON.stringify(dto, null, 2), 'utf8');
       return { success: true };
     } catch (err) {

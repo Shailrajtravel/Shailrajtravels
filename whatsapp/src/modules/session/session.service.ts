@@ -691,9 +691,12 @@ export class SessionService implements OnModuleDestroy, OnModuleInit, OnApplicat
                 
                 if (text) {
                   try {
-                    let rulesPath = require('path').resolve(process.cwd(), 'chatbot-rules.json');
+                    let rulesPath = require('path').resolve(process.cwd(), 'data', 'chatbot-rules.json');
                     if (!require('fs').existsSync(rulesPath)) {
-                       rulesPath = require('path').resolve(process.cwd(), '../chatbot-rules.json');
+                      rulesPath = require('path').resolve(process.cwd(), 'chatbot-rules.json');
+                      if (!require('fs').existsSync(rulesPath)) {
+                        rulesPath = require('path').resolve(process.cwd(), '../chatbot-rules.json');
+                      }
                     }
                     if (require('fs').existsSync(rulesPath)) {
                       const rulesData = JSON.parse(require('fs').readFileSync(rulesPath, 'utf8'));
