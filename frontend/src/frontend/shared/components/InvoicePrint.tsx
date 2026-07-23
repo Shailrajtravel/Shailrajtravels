@@ -63,10 +63,9 @@ export function InvoicePrint({
         }),
       bookingId:
         custom.bookingId ||
-        b.generatedBookingId ||
         b.bookingId ||
-        b._id?.slice(-8).toUpperCase() ||
-        "",
+        b.generatedBookingId ||
+        (b._id ? `SB-${b._id.slice(-6).toUpperCase()}` : "SB-000001"),
       travelDate: (() => {
         const raw = b.travelDate || custom.travelDate || custom.travelDateTime || "";
         if (!raw) return "";
