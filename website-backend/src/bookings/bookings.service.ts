@@ -29,10 +29,64 @@ export class BookingsService {
     return await bookingRepository.findAllSorted();
   }
 
+  private async sendWhatsAppNotification(to: string, text: string) {
+    try {
+      const openwaUrl = process.env.OPENWA_API_URL || 'https://shailrajtravels-backend.onrender.com';
+      const apiKey = process.env.OPENWA_API_KEY || 'shailraj-secret-key';
+      
+      const sessRes = await fetch(`${openwaUrl}/api/sessions`, {
+        headers: { 'X-API-Key': apiKey }
+      });
+      if (!sessRes.ok) return;
+      const sessions = await sessRes.json();
+      const activeSess = Array.isArray(sessions) ? (sessions.find((s: any) => s.status === 'ready' || s.status === 'connected') || sessions[0]) : null;
+      if (!activeSess || !activeSess.id) return;
+
+      const formattedTo = to.includes('@') ? to : `${to.replace(/\D/g, '')}@c.us`;
+      await fetch(`${openwaUrl}/api/sessions/${activeSess.id}/messages/send-text`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Key': apiKey
+        },
+        body: JSON.stringify({
+          chatId: formattedTo,
+          text: text
+        })
+      });
+    } catch (err) {
+      this.logger.error(`Failed to send WhatsApp notification to ${to}`, String(err));
+    }
+  }
+
   async createBooking(data: any) {
-    const res: any = await bookingRepository.insertOne(data);
+    const now = new Date().toISOString();
+    const bookingData = {
+      bookingId: `SB-${Date.now().toString().slice(-6)}`,
+      status: 'Pending',
+      paymentStatus: 'Unpaid',
+      createdAt: now,
+      updatedAt: now,
+      ...data
+    };
+
+    const res: any = await bookingRepository.insertOne(bookingData);
     const id = typeof res === 'object' && res ? (res.insertedId || res._id || res.id || res).toString() : String(res);
-    return { id, success: true };
+
+    // Trigger WhatsApp notifications in the background
+    setImmediate(() => {
+      // 1. Notify Admin / Owner
+      const adminMsg = `🚨 *New Booking Alert! (ID: ${bookingData.bookingId})*\n\n👤 *Customer:* ${data.name || 'Valued Customer'}\n📞 *Phone:* ${data.phone || 'N/A'}\n🗺️ *Trip:* ${data.tripName || 'Tour'}\n📍 *Pickup:* ${data.pickupLocation || 'pune'}\n👥 *Persons:* ${data.persons || 1}\n📅 *Travel Date:* ${data.travelDate || 'Flexible'}\n\nPlease check Admin Dashboard to confirm.`;
+      this.sendWhatsAppNotification('919359570497', adminMsg);
+
+      // 2. Notify Customer (if phone provided)
+      if (data.phone) {
+        const custMsg = `Namaste ${data.name || ''}! 🙏\n\nThank you for booking with *Shailraj Travels*!\n\n📋 *Booking Details (ID: ${bookingData.bookingId}):*\n• *Trip:* ${data.tripName || 'Tour'}\n• *Travel Date:* ${data.travelDate || 'Flexible'}\n• *Persons:* ${data.persons || 1}\n• *Pickup Location:* ${data.pickupLocation || 'pune'}\n• *Status:* Pending Confirmation\n\nOur team will contact you shortly to confirm your booking. Call us anytime: +91 9359570497.`;
+        this.sendWhatsAppNotification(data.phone, custMsg);
+      }
+    });
+
+    return { id, bookingId: bookingData.bookingId, success: true };
   }
 
   async updateBookingDate(id: string, date: string) {
