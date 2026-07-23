@@ -1,6 +1,23 @@
 import { createServerFn } from '@tanstack/react-start';
-import clientPromise from '@/backend/shared/db';
 import { getAdminToken, isValidAdminToken } from '@/backend/infrastructure/token';
+
+const BACKEND_URL = process.env.VITE_WEBSITE_BACKEND_URL || "http://localhost:3000/api";
+
+const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
+  const res = await fetch(`${BACKEND_URL}${endpoint}`, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  });
+  if (!res.ok) {
+    const errorText = await res.text();
+    throw new Error(errorText || `API Error: ${res.status}`);
+  }
+  const text = await res.text();
+  return text ? JSON.parse(text) : null;
+};
 
 export interface AuditLogEntry {
   _id?: string;
@@ -32,18 +49,10 @@ export const logAuditAction = createServerFn({ method: "POST" })
   )
   .handler(async ({ data }) => {
     try {
-      const client = await clientPromise;
-      const db = client.db("shailraj");
-
-      const entry: Omit<AuditLogEntry, "_id"> = {
-        action: data.action,
-        entityType: data.entityType,
-        details: data.details,
-        createdAt: new Date(),
-      };
-      if (data.entityId) entry.entityId = data.entityId;
-
-      await db.collection("audit_logs").insertOne(entry);
+      await apiFetch('/audit', {
+        method: "POST",
+        body: JSON.stringify(data),
+      });
     } catch (error) {
       console.error("Failed to log audit action:", error);
     }
@@ -56,22 +65,9 @@ export const getAuditLogsFn = createServerFn({ method: "POST" })
     if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
 
     try {
-      const client = await clientPromise;
-      const db = client.db("shailraj");
-
-      const logs = await db
-        .collection("audit_logs")
-        .find({})
-        .sort({ createdAt: -1 })
-        .limit(100) // Keep it fast, return last 100 actions
-        .toArray();
-
-      return logs.map((l: any) => ({
-        ...l,
-        _id: l._id.toString(),
-      }));
+      return await apiFetch('/audit');
     } catch (error) {
-      console.error("Failed to fetch audit logs", error);
+      console.error("Failed to fetch audit logs:", error);
       return [];
     }
   });

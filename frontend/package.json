@@ -63,7 +63,6 @@
     "embla-carousel-react": "^8.6.0",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.575.0",
-    "mongodb": "^7.3.0",
     "pdfkit": "^0.19.1",
     "puppeteer": "^25.1.0",
     "qrcode": "^1.5.4",

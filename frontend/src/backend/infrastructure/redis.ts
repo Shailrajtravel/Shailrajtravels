@@ -11,7 +11,7 @@ async function loadEnv() {
       const envPath = path.join(process.cwd(), ".env");
       if (fs.existsSync(envPath)) {
         const envContent = fs.readFileSync(envPath, "utf8");
-        envContent.split(/\r?\n/).forEach((line) => {
+        envContent.split(/\r?\n/).forEach((line: string) => {
           const trimmed = line.trim();
           if (trimmed && !trimmed.startsWith("#")) {
             const firstEq = trimmed.indexOf("=");

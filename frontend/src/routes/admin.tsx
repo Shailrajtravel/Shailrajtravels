@@ -70,6 +70,7 @@ import {
   Smartphone,
   TrendingUp,
   CreditCard,
+  Check,
 } from 'lucide-react';
 // @ts-ignore
 import logo from '@/frontend/shared/assets/shailraj-travels-punelogo.png?w=300&format=webp&as=url';
@@ -1169,14 +1170,14 @@ function AdminPage() {
                                 <div className="flex items-center gap-1">
                                   <input 
                                     type="date"
-                                    value={editingDate.date}
-                                    onChange={(e) => setEditingDate({ ...editingDate, date: e.target.value })}
+                                    value={editingDate!.date}
+                                    onChange={(e) => setEditingDate(prev => prev ? { ...prev, date: e.target.value } : null)}
                                     className="p-1 text-xs border border-slate-300 rounded outline-none w-28 font-normal"
                                   />
                                   <button
                                     onClick={async () => {
                                       try {
-                                        await updateBookingDateFn({ data: { adminToken: token, id: bk._id, travelDate: editingDate.date }});
+                                        await updateBookingDateFn({ data: { adminToken: token, id: bk._id, travelDate: editingDate!.date }});
                                         setEditingDate(null);
                                         loadData();
                                       } catch (err) { alert("Failed to update date"); }
@@ -1192,7 +1193,7 @@ function AdminPage() {
                               ) : (
                                 <div className="flex items-center gap-2 group cursor-pointer" onClick={() => setEditingDate({ id: bk._id, date: bk.travelDate || "" })}>
                                   {bk.travelDate}
-                                  <Edit2 className="w-3 h-3 text-slate-300 group-hover:text-brand-blue transition-colors" />
+                                  <Edit className="w-3 h-3 text-slate-300 group-hover:text-brand-blue transition-colors" />
                                 </div>
                               )}
                             </td>
@@ -1337,14 +1338,14 @@ function AdminPage() {
                                 <div className="flex items-center gap-1 mt-0.5">
                                   <input 
                                     type="date"
-                                    value={editingDate.date}
-                                    onChange={(e) => setEditingDate({ ...editingDate, date: e.target.value })}
+                                    value={editingDate!.date}
+                                    onChange={(e) => setEditingDate(prev => prev ? { ...prev, date: e.target.value } : null)}
                                     className="p-1 text-xs border rounded outline-none w-full"
                                   />
                                   <button
                                     onClick={async () => {
                                       try {
-                                        await updateBookingDateFn({ data: { adminToken: token, id: bk._id, travelDate: editingDate.date }});
+                                        await updateBookingDateFn({ data: { adminToken: token, id: bk._id, travelDate: editingDate!.date }});
                                         setEditingDate(null);
                                         loadData();
                                       } catch (err) { alert("Failed to update date"); }
@@ -1360,7 +1361,7 @@ function AdminPage() {
                               ) : (
                                 <div className="flex items-center gap-2 group cursor-pointer mt-0.5" onClick={() => setEditingDate({ id: bk._id, date: bk.travelDate || "" })}>
                                   <p className="font-semibold text-slate-700">{bk.travelDate}</p>
-                                  <Edit2 className="w-3 h-3 text-slate-300 group-hover:text-brand-blue" />
+                                  <Edit className="w-3 h-3 text-slate-300 group-hover:text-brand-blue" />
                                 </div>
                               )}
                             </div>

@@ -70,8 +70,6 @@ function withSecurityHeaders(response: Response): Response {
 }
 
 import { z } from 'zod';
-import { MongoClient } from 'mongodb';
-
 const contactSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Invalid email address"),
@@ -85,11 +83,7 @@ const rateLimit = new Map<string, { count: number; timestamp: number }>();
 const RATE_LIMIT_WINDOW = 15 * 60 * 1000;
 const MAX_REQUESTS = 3;
 
-import clientPromise from '@/backend/shared/db';
 
-async function connectToDatabase() {
-  return clientPromise;
-}
 
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
@@ -148,15 +142,19 @@ export default {
         }
 
         try {
-          const client = await connectToDatabase();
-          const db = client.db("shailraj_travels");
-          await db.collection("contacts").insertOne({
-            ...data,
-            createdAt: new Date(),
+          const backendUrl = process.env.VITE_WEBSITE_BACKEND_URL || "http://localhost:3000/api";
+          const res = await fetch(`${backendUrl}/contacts`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
           });
-          console.log(`[DB] Saved contact submission from ${data.email}`);
-        } catch (dbError) {
-          console.error("[DB] Failed to save contact:", dbError);
+          if (!res.ok) {
+            console.error("[API] Failed to save contact, status:", res.status);
+          } else {
+            console.log(`[API] Saved contact submission from ${data.email}`);
+          }
+        } catch (apiError) {
+          console.error("[API] Failed to save contact:", apiError);
         }
 
         return withSecurityHeaders(

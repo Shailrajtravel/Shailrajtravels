@@ -1,5 +1,3 @@
-import clientPromise from '@/backend/shared/db';
-import { ObjectId } from 'mongodb';
 
 const ADMIN_PHONE = "919359570497"; // Admin number
 
