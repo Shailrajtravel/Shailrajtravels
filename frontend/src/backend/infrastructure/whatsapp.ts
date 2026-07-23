@@ -5,7 +5,7 @@ function getOpenWaConfig() {
   return {
     url: process.env.VITE_OPENWA_API_URL || process.env.OPENWA_API_URL || import.meta.env.VITE_OPENWA_API_URL || "https://shailrajtravels-backend.onrender.com",
     key: process.env.VITE_OPENWA_API_KEY || process.env.OPENWA_API_KEY || import.meta.env.VITE_OPENWA_API_KEY || "shailraj-secret-key",
-    session: process.env.VITE_OPENWA_SESSION_NAME || process.env.OPENWA_SESSION_NAME || import.meta.env.VITE_OPENWA_SESSION_NAME || "shailraj-bot"
+    session: process.env.VITE_OPENWA_SESSION_NAME || process.env.OPENWA_SESSION_NAME || import.meta.env.VITE_OPENWA_SESSION_NAME || "shailrajtravels-bot"
   };
 }
 
