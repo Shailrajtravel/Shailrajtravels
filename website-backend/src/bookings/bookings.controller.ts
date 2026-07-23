@@ -52,6 +52,16 @@ export class BookingsController {
     return this.bookingsService.updateBookingPaymentStatus(id, paymentStatus);
   }
 
+  @Post(':id/invoice')
+  async saveInvoice(@Param('id') id: string, @Body('invoiceCustomData') invoiceCustomData: any) {
+    return this.bookingsService.saveInvoice(id, invoiceCustomData);
+  }
+
+  @Post(':id/invoice/whatsapp')
+  async sendInvoiceWhatsApp(@Param('id') id: string, @Body('phone') phone?: string) {
+    return this.bookingsService.sendInvoiceWhatsApp(id, phone);
+  }
+
   @Delete(':id')
   async deleteBooking(@Param('id') id: string) {
     return this.bookingsService.deleteBooking(id);

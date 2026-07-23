@@ -90,15 +90,129 @@ export class BookingsService {
   }
 
   async updateBookingDate(id: string, date: string) {
-    return await bookingRepository.updateOne(id, { travelDate: date });
+    return await bookingRepository.updateOne(id, { travelDate: date, updatedAt: new Date().toISOString() });
   }
 
   async updateBookingStatus(id: string, status: string) {
-    return await bookingRepository.updateOne(id, { status });
+    await bookingRepository.updateOne(id, { status, updatedAt: new Date().toISOString() });
+
+    // Send automatic WhatsApp notification to customer on status change
+    setImmediate(async () => {
+      try {
+        const bookings = await bookingRepository.findByQuery({ _id: id });
+        const booking = bookings.length > 0 ? bookings[0] : null;
+        if (booking && booking.phone) {
+          const custName = booking.name || booking.customerName || 'Valued Customer';
+          const trip = booking.tripName || 'Tour';
+          const bkId = booking.bookingId || `SB-${id.slice(-6)}`;
+          
+          if (status === 'Confirmed') {
+            const msg = `Namaste ${custName}! 🎉\n\nGreat news! Your booking (*${bkId}*) for *${trip}* has been *CONFIRMED* by Shailraj Travels!\n\n📅 *Travel Date:* ${booking.travelDate || 'As scheduled'}\n📍 *Pickup:* ${booking.pickupLocation || 'pune'}\n👥 *Persons:* ${booking.persons || 1}\n\nWe look forward to giving you a wonderful journey! Call us anytime: +91 9359570497.`;
+            await this.sendWhatsAppNotification(booking.phone, msg);
+          } else if (status === 'Cancelled') {
+            const msg = `Namaste ${custName}.\n\nYour booking (*${bkId}*) for *${trip}* has been *CANCELLED* by Shailraj Travels.\n\nIf you have any questions or wish to re-book, please contact us at +91 9359570497.`;
+            await this.sendWhatsAppNotification(booking.phone, msg);
+          }
+        }
+      } catch (err) {
+        this.logger.error(`Error sending status update WhatsApp for booking ${id}`, String(err));
+      }
+    });
+
+    return { success: true };
   }
 
   async updateBookingPaymentStatus(id: string, paymentStatus: string) {
-    return await bookingRepository.updateOne(id, { paymentStatus });
+    await bookingRepository.updateOne(id, { paymentStatus, updatedAt: new Date().toISOString() });
+
+    // Send automatic WhatsApp notification to customer on payment status change
+    setImmediate(async () => {
+      try {
+        const bookings = await bookingRepository.findByQuery({ _id: id });
+        const booking = bookings.length > 0 ? bookings[0] : null;
+        if (booking && booking.phone) {
+          const custName = booking.name || booking.customerName || 'Valued Customer';
+          const trip = booking.tripName || 'Tour';
+          const bkId = booking.bookingId || `SB-${id.slice(-6)}`;
+          const statusUpper = (paymentStatus || '').toUpperCase();
+
+          let msg = '';
+          if (statusUpper === 'PAID') {
+            msg = `Namaste ${custName}! 🧾\n\nPayment Status Update for booking *${bkId}* (${trip}):\n\n💳 *Payment Status:* *PAID IN FULL* ✅\n\nThank you for completing your payment with Shailraj Travels! View invoice: https://shailrajtravels.com/invoice-print?id=${id}\nCall us anytime: +91 9359570497.`;
+          } else if (statusUpper === 'ADVANCE' || statusUpper === 'ADVANCE PAID') {
+            msg = `Namaste ${custName}! 💳\n\nAdvance Payment Status Update for booking *${bkId}* (${trip}):\n\n💰 *Payment Status:* *ADVANCE RECEIVED* ✅\n\nThank you for your advance payment to Shailraj Travels! View bill: https://shailrajtravels.com/invoice-print?id=${id}\nCall us anytime: +91 9359570497.`;
+          }
+          if (msg) {
+            await this.sendWhatsAppNotification(booking.phone, msg);
+          }
+        }
+      } catch (err) {
+        this.logger.error(`Error sending payment status WhatsApp for booking ${id}`, String(err));
+      }
+    });
+
+    return { success: true, whatsappSent: true };
+  }
+
+  async saveInvoice(id: string, invoiceCustomData: any) {
+    const paymentStatus = invoiceCustomData?.paymentStatus || 'ADVANCE';
+    await bookingRepository.updateOne(id, {
+      invoiceCustomData,
+      isInvoiceLocked: true,
+      paymentStatus: paymentStatus,
+      updatedAt: new Date().toISOString()
+    });
+
+    let whatsappSent = false;
+    try {
+      const bookings = await bookingRepository.findByQuery({ _id: id });
+      const booking = bookings.length > 0 ? bookings[0] : null;
+      const phone = invoiceCustomData?.customerPhone || booking?.phone;
+
+      if (phone) {
+        const custName = invoiceCustomData?.customerName || booking?.name || 'Valued Customer';
+        const trip = invoiceCustomData?.tripName || booking?.tripName || 'Tour Package';
+        const invNo = invoiceCustomData?.invoiceNo || booking?.bookingId || `INV-${id.slice(-6)}`;
+        const total = invoiceCustomData?.grandTotal || invoiceCustomData?.totalAmount || 'N/A';
+        const advance = invoiceCustomData?.advancePaid || invoiceCustomData?.advanceAmount || '0';
+        const balance = invoiceCustomData?.balanceDue || '0';
+        const date = invoiceCustomData?.travelDate || booking?.travelDate || 'As scheduled';
+
+        let msg = '';
+        if (paymentStatus.toUpperCase() === 'PAID') {
+          msg = `Namaste ${custName}! 🧾\n\nHere is your Official Tax Invoice from *Shailraj Travels*!\n\n📋 *Invoice No:* ${invNo}\n🚘 *Trip:* ${trip}\n📅 *Travel Date:* ${date}\n💵 *Total Amount:* ₹${total}\n💳 *Payment Status:* *PAID IN FULL* ✅\n\nView & Print your Invoice: https://shailrajtravels.com/invoice-print?id=${id}\n\nThank you for choosing Shailraj Travels! Call us anytime: +91 9359570497.`;
+        } else {
+          msg = `Namaste ${custName}! 🧾\n\nHere is your Advance Receipt & Bill from *Shailraj Travels*!\n\n📋 *Invoice No:* ${invNo}\n🚘 *Trip:* ${trip}\n📅 *Travel Date:* ${date}\n💵 *Total Amount:* ₹${total}\n💰 *Advance Paid:* ₹${advance}\n⚖️ *Balance Due:* ₹${balance}\n💳 *Payment Status:* *${paymentStatus.toUpperCase()}* ✅\n\nView & Print your Bill: https://shailrajtravels.com/invoice-print?id=${id}\n\nThank you for booking with Shailraj Travels! Call us anytime: +91 9359570497.`;
+        }
+
+        await this.sendWhatsAppNotification(phone, msg);
+        whatsappSent = true;
+      }
+    } catch (err) {
+      this.logger.error(`Failed to send WhatsApp invoice for booking ${id}`, String(err));
+    }
+
+    return { success: true, whatsappSent };
+  }
+
+  async sendInvoiceWhatsApp(id: string, phone?: string) {
+    const bookings = await bookingRepository.findByQuery({ _id: id });
+    const booking = bookings.length > 0 ? bookings[0] : null;
+    if (!booking) return { success: false, message: 'Booking not found' };
+
+    const targetPhone = phone || booking.invoiceCustomData?.customerPhone || booking.phone;
+    if (!targetPhone) return { success: false, message: 'No phone number' };
+
+    const custom = booking.invoiceCustomData || {};
+    const custName = custom.customerName || booking.name || 'Valued Customer';
+    const trip = custom.tripName || booking.tripName || 'Tour';
+    const invNo = custom.invoiceNo || booking.bookingId || `INV-${id.slice(-6)}`;
+    const paymentStatus = booking.paymentStatus || custom.paymentStatus || 'PENDING';
+
+    const msg = `Namaste ${custName}! 🧾\n\nHere is your Invoice & Booking Summary from *Shailraj Travels*!\n\n📋 *Invoice No:* ${invNo}\n🚘 *Trip:* ${trip}\n💳 *Payment Status:* *${paymentStatus.toUpperCase()}*\n\nView & Print your Bill: https://shailrajtravels.com/invoice-print?id=${id}\n\nContact us: +91 9359570497.`;
+
+    await this.sendWhatsAppNotification(targetPhone, msg);
+    return { success: true, whatsappSent: true };
   }
 
   async deleteBooking(id: string) {

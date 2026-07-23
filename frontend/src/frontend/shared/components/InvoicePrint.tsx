@@ -172,16 +172,10 @@ export function InvoicePrint({
           if (data.pickupPoint) booking.pickupLocation = data.pickupPoint;
         }
         if (onSuccess) onSuccess();
-        if (data.paymentStatus === "PAID") {
-          if (res.whatsappSent) {
-            alert("Invoice saved, locked, and sent successfully via WhatsApp.");
-          } else {
-            alert(
-              "Invoice saved and locked, but WhatsApp invoice could not be sent. Make sure WhatsApp Engine is connected and customer phone number is correct.",
-            );
-          }
+        if (res?.whatsappSent) {
+          alert("Invoice / Bill saved, locked, and sent successfully via WhatsApp to the customer.");
         } else {
-          alert("Invoice saved and locked successfully.");
+          alert("Invoice / Bill saved and locked successfully.");
         }
       } else {
         alert("Failed to save and lock invoice.");
