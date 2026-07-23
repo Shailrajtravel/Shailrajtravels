@@ -24,6 +24,9 @@ import { compression } from "vite-plugin-compression2";
 import { visualizer } from "rollup-plugin-visualizer";
 
 export default defineConfig({
+  nitro: {
+    preset: "cloudflare-pages"
+  },
   tanstackStart: {
     server: { entry: "server" },
     serverFns: { disableCsrfMiddlewareWarning: true },
