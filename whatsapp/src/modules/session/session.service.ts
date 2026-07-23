@@ -171,10 +171,10 @@ export class SessionService implements OnModuleDestroy, OnModuleInit, OnApplicat
   }
 
   async onApplicationBootstrap(): Promise<void> {
-    if (process.env.AUTO_START_SESSIONS !== 'true') return;
+    if (process.env.AUTO_START_SESSIONS === 'false') return;
 
     const sessions = await this.sessionRepository.find({
-      where: { phone: Not(IsNull()), status: SessionStatus.DISCONNECTED },
+      where: { phone: Not(IsNull()) },
     });
 
     if (sessions.length === 0) return;
@@ -187,6 +187,8 @@ export class SessionService implements OnModuleDestroy, OnModuleInit, OnApplicat
     for (let i = 0; i < sessions.length; i++) {
       const session = sessions[i];
       try {
+        session.status = SessionStatus.DISCONNECTED;
+        await this.sessionRepository.save(session);
         await this.start(session.id);
         this.logger.log(`Auto-started session: ${session.name}`, {
           sessionId: session.id,
