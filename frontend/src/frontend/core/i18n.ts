@@ -138,7 +138,7 @@ export const translations = {
     footerAbout: "आमच्याबद्दल",
     footerQuickLinks: "महत्त्वाच्या लिंक्स",
     footerContact: "संपर्क साधण्याचे मार्ग",
-    footerAddress: "शैलराज ट्रॅव्हल्स, गोपाळ पट्टी मांजरी बुद्रुक, हडपसर, पुणे, महाराष्ट्र ४१२३०७",
+    footerAddress: "वैभव सुपर मार्केट, अक्षदा मेडिकल जवळ, गोपाळ पट्टी मांजरी बुद्रुक, हडपसर, पुणे, महाराष्ट्र ४१२३०७, भारत",
     footerRights: "सर्वाधिकार सुरक्षित.",
     toursSubtitle: "पॅकेजेस",
     toursTitlePrefix: "लोकप्रिय",
@@ -314,7 +314,7 @@ export const translations = {
     footerQuickLinks: "Quick Links",
     footerContact: "Contact Us",
     footerAddress:
-      "Shailraj Travels, Gopal Patti Manjri budruk, Hadapsar, Pune, Maharashtra 412307",
+      "Vaibhav super market near akshada medical Gopal Patti Manjri budruk, Hadapsar, Pune, Maharashtra 412307, India",
     footerRights: "All rights reserved.",
     toursSubtitle: "PACKAGES",
     toursTitlePrefix: "Popular",

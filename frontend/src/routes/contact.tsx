@@ -107,7 +107,7 @@ function ContactPage() {
                 <div>
                   <h3 className="font-semibold text-gray-900">Our Office</h3>
                   <p>
-                    Shailraj Travels, Gopal Patti Manjri budruk,
+                    Vaibhav super market near akshada medical Gopal Patti Manjri budruk,
                     <br />
                     Hadapsar, Pune, Maharashtra 412307, India
                   </p>
