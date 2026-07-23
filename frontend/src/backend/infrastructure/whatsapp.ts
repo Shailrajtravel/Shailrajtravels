@@ -154,7 +154,7 @@ export async function getStatus() {
           let qrData = null;
           try {
             const qrRes = await openwaRequest(`/api/sessions/${session.id}/qr`);
-            qrData = qrRes.qr || qrRes.code || qrRes.url || null;
+            qrData = qrRes.qrCode || qrRes.qr || qrRes.code || qrRes.url || null;
           } catch (e) {}
           return { status: "Awaiting QR", qr: qrData };
         } else if (statusStr === "disconnected" || statusStr === "failed") {
