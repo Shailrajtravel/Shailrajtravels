@@ -677,47 +677,44 @@ export class SessionService implements OnModuleDestroy, OnModuleInit, OnApplicat
             const isIncoming = !incoming.fromMe;
             const isIndividual = incoming.chatId && (incoming.chatId.endsWith('@c.us') || incoming.chatId.endsWith('@lid'));
             
-            if (isIncoming && isIndividual) {
-              // Check if we already have a conversation with this person in the database
-              const existingMessage = await this.messageRepository.findOne({
-                where: { sessionId: id, chatId: incoming.chatId },
-                select: ['id']
-              });
-
-              if (!existingMessage) {
-                // This is a NEW personal chat. Check if it matches a keyword.
-                let matchesKeyword = false;
-                const text = (incoming.body || '').toLowerCase().trim();
-                
-                if (text) {
-                  try {
-                    let rulesPath = require('path').resolve(process.cwd(), 'data', 'chatbot-rules.json');
-                    if (!require('fs').existsSync(rulesPath)) {
-                      rulesPath = require('path').resolve(process.cwd(), 'chatbot-rules.json');
-                      if (!require('fs').existsSync(rulesPath)) {
-                        rulesPath = require('path').resolve(process.cwd(), '../chatbot-rules.json');
-                      }
-                    }
-                    if (require('fs').existsSync(rulesPath)) {
-                      const rulesData = JSON.parse(require('fs').readFileSync(rulesPath, 'utf8'));
-                      if (Array.isArray(rulesData.rules)) {
-                        matchesKeyword = rulesData.rules.some((rule: any) =>
-                          rule.keywords.some((k: string) => text === k.trim().toLowerCase())
-                        );
-                      }
-                    }
-                  } catch (err) {
-                    this.logger.error('Error reading chatbot rules for privacy filter', String(err));
+            // --- CHATBOT AUTO-REPLY ---
+            if (isIncoming && isIndividual && incoming.body) {
+              const text = incoming.body.toLowerCase().trim();
+              let matchedRule: any = null;
+              try {
+                let rulesPath = require('path').resolve(process.cwd(), 'data', 'chatbot-rules.json');
+                if (!require('fs').existsSync(rulesPath)) {
+                  rulesPath = require('path').resolve(process.cwd(), 'chatbot-rules.json');
+                  if (!require('fs').existsSync(rulesPath)) {
+                    rulesPath = require('path').resolve(process.cwd(), '../chatbot-rules.json');
                   }
                 }
-                
-                if (!matchesKeyword) {
-                   this.logger.debug(`Privacy filter: Dropped message from ${incoming.chatId} (no keyword match)`, { sessionId: id });
-                   return; // STOP processing. Do not save, do not webhook.
+                if (require('fs').existsSync(rulesPath)) {
+                  const rulesData = JSON.parse(require('fs').readFileSync(rulesPath, 'utf8'));
+                  if (Array.isArray(rulesData.rules)) {
+                    matchedRule = rulesData.rules.find((rule: any) =>
+                      Array.isArray(rule.keywords) && rule.keywords.some((k: string) => {
+                        const kw = k.trim().toLowerCase();
+                        if (!kw) return false;
+                        if (text === kw || text.includes(kw) || kw.includes(text)) return true;
+                        if (kw === 'hi' && (text === 'hii' || text === 'hiii' || text.startsWith('hi'))) return true;
+                        return false;
+                      })
+                    );
+                  }
                 }
+              } catch (err) {
+                this.logger.error('Error reading chatbot rules for auto-reply', String(err));
+              }
+
+              if (matchedRule && matchedRule.reply) {
+                this.logger.log(`[Chatbot] Sending auto-reply to ${incoming.chatId} for keyword match on "${text}"`);
+                void engine.sendTextMessage(incoming.chatId, matchedRule.reply).catch(err => {
+                  this.logger.error(`Failed to send auto-reply to ${incoming.chatId}`, String(err));
+                });
               }
             }
-            // --- END PRIVACY FILTER ---
+            // --- END CHATBOT AUTO-REPLY ---
 
             // Inline @lid -> phone resolution (#263), opt-in via RESOLVE_LID_TO_PHONE. Best-effort:
             // attaches senderPhone (digits or null) before persist/dispatch so webhook/ws consumers
