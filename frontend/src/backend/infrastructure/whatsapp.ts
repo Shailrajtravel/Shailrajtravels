@@ -141,15 +141,15 @@ export async function getStatus() {
   try {
     const config = getOpenWaConfig();
     const sessions = await openwaRequest('/api/sessions');
-    if (Array.isArray(sessions)) {
-      const session = sessions.find((s: any) => s.name === config.session);
+    if (Array.isArray(sessions) && sessions.length > 0) {
+      const session = sessions.find((s: any) => s.name === config.session) || sessions[0];
       if (session) {
         activeSessionId = session.id;
         const statusStr = (session.status || "").toLowerCase();
-        if (statusStr === "ready" || statusStr === "authenticated" || session.phone) {
+        if (statusStr === "ready" || statusStr === "authenticated" || statusStr === "connected" || session.phone) {
           currentStatus = "Connected";
           return { status: "Connected", qr: null, phone: session.phone };
-        } else if (statusStr === "qr_ready" || statusStr === "authenticating" || statusStr === "created") {
+        } else if (statusStr === "qr_ready" || statusStr === "authenticating" || statusStr === "created" || statusStr === "initializing") {
           currentStatus = "Awaiting QR";
           let qrData = null;
           try {
@@ -163,7 +163,7 @@ export async function getStatus() {
       }
     }
   } catch (error) {
-    // Fail silently to local status if OpenWA is warming up or temporarily unreachable
+    console.warn("[WhatsApp] getStatus error:", (error as Error).message);
   }
   return { status: currentStatus, qr: null };
 }
