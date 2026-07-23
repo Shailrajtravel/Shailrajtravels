@@ -30,7 +30,9 @@ export class BookingsService {
   }
 
   async createBooking(data: any) {
-    return await bookingRepository.insertOne(data);
+    const res: any = await bookingRepository.insertOne(data);
+    const id = typeof res === 'object' && res ? (res.insertedId || res._id || res.id || res).toString() : String(res);
+    return { id, success: true };
   }
 
   async updateBookingDate(id: string, date: string) {

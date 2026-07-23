@@ -4,7 +4,7 @@ export { getAdminToken, isValidAdminToken };
 import { z } from 'zod';
 
 const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
-  const BACKEND_URL = import.meta.env.VITE_WEBSITE_BACKEND_URL || process.env.VITE_WEBSITE_BACKEND_URL || "http://localhost:3000/api";
+  const BACKEND_URL = import.meta.env.VITE_WEBSITE_BACKEND_URL || process.env.VITE_WEBSITE_BACKEND_URL || "https://shailrajtravels.onrender.com/api";
   const res = await fetch(`${BACKEND_URL}${endpoint}`, {
     ...options,
     headers: {
@@ -17,7 +17,12 @@ const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
     throw new Error(errorText || `API Error: ${res.status}`);
   }
   const text = await res.text();
-  return text ? JSON.parse(text) : null;
+  if (!text) return null;
+  try {
+    return JSON.parse(text);
+  } catch (e) {
+    return { id: text, message: text, success: true };
+  }
 };
 
 // ---- TRIP OPTIONS ----
