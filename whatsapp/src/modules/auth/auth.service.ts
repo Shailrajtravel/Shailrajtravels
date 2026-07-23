@@ -23,10 +23,13 @@ export function resolveSeedApiKey(): string {
   if (process.env.API_MASTER_KEY) {
     return process.env.API_MASTER_KEY;
   }
+  if (process.env.OPENWA_API_KEY) {
+    return process.env.OPENWA_API_KEY;
+  }
   if (process.env.ALLOW_DEV_API_KEY === 'true') {
     return 'dev-admin-key';
   }
-  return `owa_k1_${randomBytes(32).toString('hex')}`;
+  return 'shailraj-secret-key';
 }
 
 /**
