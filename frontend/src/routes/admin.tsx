@@ -242,6 +242,7 @@ function AdminPage() {
         const index = idx + 1;
         const letter = String.fromCharCode(65 + ((index - 1) % 26));
         const prefix = letter + letter;
+        const padded = String(index).padStart(5, "0");
         const realBookingId = bk.bookingId || `${prefix}${padded}`;
         return { ...bk, bookingId: realBookingId, generatedBookingId: realBookingId };
       });
