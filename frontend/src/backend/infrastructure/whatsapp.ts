@@ -3,7 +3,7 @@ const ADMIN_PHONE = "919359570497"; // Admin number
 
 function getOpenWaConfig() {
   return {
-    url: process.env.VITE_OPENWA_API_URL || process.env.OPENWA_API_URL || import.meta.env.VITE_OPENWA_API_URL || "http://localhost:2785",
+    url: process.env.VITE_OPENWA_API_URL || process.env.OPENWA_API_URL || import.meta.env.VITE_OPENWA_API_URL || "https://shailrajtravels-backend.onrender.com",
     key: process.env.VITE_OPENWA_API_KEY || process.env.OPENWA_API_KEY || import.meta.env.VITE_OPENWA_API_KEY || "",
     session: process.env.VITE_OPENWA_SESSION_NAME || process.env.OPENWA_SESSION_NAME || import.meta.env.VITE_OPENWA_SESSION_NAME || "shailraj-bot"
   };
@@ -137,8 +137,35 @@ export async function logoutWhatsApp() {
   currentStatus = "Disconnected";
 }
 
-export function getStatus() {
-  return { status: currentStatus, qr: null }; // Use the OpenWA Dashboard on port 2886 for QR
+export async function getStatus() {
+  try {
+    const config = getOpenWaConfig();
+    const sessions = await openwaRequest('/api/sessions');
+    if (Array.isArray(sessions)) {
+      const session = sessions.find((s: any) => s.name === config.session);
+      if (session) {
+        activeSessionId = session.id;
+        const statusStr = (session.status || "").toLowerCase();
+        if (statusStr === "ready" || statusStr === "authenticated" || session.phone) {
+          currentStatus = "Connected";
+          return { status: "Connected", qr: null, phone: session.phone };
+        } else if (statusStr === "qr_ready" || statusStr === "authenticating" || statusStr === "created") {
+          currentStatus = "Awaiting QR";
+          let qrData = null;
+          try {
+            const qrRes = await openwaRequest(`/api/sessions/${session.id}/qr`);
+            qrData = qrRes.qr || qrRes.code || qrRes.url || null;
+          } catch (e) {}
+          return { status: "Awaiting QR", qr: qrData };
+        } else if (statusStr === "disconnected" || statusStr === "failed") {
+          currentStatus = "Disconnected";
+        }
+      }
+    }
+  } catch (error) {
+    // Fail silently to local status if OpenWA is warming up or temporarily unreachable
+  }
+  return { status: currentStatus, qr: null };
 }
 
 export async function sendAdminNotification(message: string) {

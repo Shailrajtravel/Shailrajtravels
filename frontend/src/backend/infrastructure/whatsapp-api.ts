@@ -6,7 +6,7 @@ export const getWhatsAppStatusFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string }) => data)
   .handler(async ({ data }) => {
     if (data.adminToken !== getAdminToken()) throw new Error("Unauthorized");
-    return getStatus();
+    return await getStatus();
   });
 
 export const restartWhatsAppFn = createServerFn({ method: "POST" })

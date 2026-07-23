@@ -5,3 +5,4 @@ compatibility_flags = ["nodejs_compat"]
 
 [vars]
 VITE_WEBSITE_BACKEND_URL = "https://shailrajtravels.onrender.com/api"
+VITE_OPENWA_API_URL = "https://shailrajtravels-backend.onrender.com"
