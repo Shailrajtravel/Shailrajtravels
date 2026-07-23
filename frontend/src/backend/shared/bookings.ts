@@ -3,9 +3,8 @@ import { getAdminToken, isValidAdminToken } from '@/backend/infrastructure/token
 export { getAdminToken, isValidAdminToken };
 import { z } from 'zod';
 
-const BACKEND_URL = process.env.VITE_WEBSITE_BACKEND_URL || "http://localhost:3000/api";
-
 const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
+  const BACKEND_URL = process.env.VITE_WEBSITE_BACKEND_URL || "http://localhost:3000/api";
   const res = await fetch(`${BACKEND_URL}${endpoint}`, {
     ...options,
     headers: {
