@@ -138,6 +138,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       ],
       links: [
         { rel: "icon", type: "image/png", href: "/favicon.png" },
+        { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
         { rel: "preload", as: "image", href: bgMobileAvif, type: "image/avif", fetchPriority: "high", media: "(max-width: 1023px)" },
         { rel: "preload", as: "image", href: templeAvif, type: "image/avif", fetchPriority: "high", media: "(min-width: 1024px)" },
         { rel: "stylesheet", href: appCss },
