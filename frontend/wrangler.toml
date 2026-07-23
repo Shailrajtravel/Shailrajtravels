@@ -2,3 +2,6 @@ name = "shailrajtravels"
 pages_build_output_dir = "dist"
 compatibility_date = "2025-04-01"
 compatibility_flags = ["nodejs_compat"]
+
+[vars]
+VITE_WEBSITE_BACKEND_URL = "https://shailrajtravels.onrender.com/api"
