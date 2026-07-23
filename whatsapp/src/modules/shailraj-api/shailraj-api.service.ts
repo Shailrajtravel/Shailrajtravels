@@ -32,16 +32,13 @@ export class ShailrajApiService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  getDb(): Db {
-    if (!this.db) {
-      throw new Error('Database connection not established');
-    }
+  getDb(): Db | null {
     return this.db;
   }
 
   async createBooking(bookingData: any) {
-    const db = this.getDb();
-    const result = await db.collection('bookings').insertOne({
+    if (!this.db) return null;
+    const result = await this.db.collection('bookings').insertOne({
       ...bookingData,
       createdAt: new Date(),
     });
@@ -49,27 +46,84 @@ export class ShailrajApiService implements OnModuleInit, OnModuleDestroy {
   }
 
   async getBookings() {
-    const db = this.getDb();
-    return db.collection('bookings').find({}).sort({ createdAt: -1 }).toArray();
+    if (!this.db) return [];
+    return this.db.collection('bookings').find({}).sort({ createdAt: -1 }).toArray();
   }
 
   async getPackages() {
-    const db = this.getDb();
-    return db.collection('packages').find({}).toArray();
+    if (!this.db) return [];
+    return this.db.collection('packages').find({}).toArray();
   }
   
   async getTours() {
-    const db = this.getDb();
-    return db.collection('tours').find({}).toArray();
+    if (!this.db) return [];
+    return this.db.collection('tours').find({}).toArray();
   }
   
   async getTripOptions() {
-    const db = this.getDb();
-    return db.collection('trip_options').find({}).toArray();
+    if (!this.db) return [];
+    return this.db.collection('trip_options').find({}).toArray();
   }
 
   async getReviews() {
-    const db = this.getDb();
-    return db.collection('reviews').find({}).toArray();
+    if (!this.db) return [];
+    return this.db.collection('reviews').find({}).toArray();
+  }
+
+  // --- OpenWA MongoDB Session & Webhook Persistence ---
+
+  async saveOpenWaSession(session: any) {
+    if (!this.db || !session) return;
+    try {
+      await this.db.collection('openwa_sessions').updateOne(
+        { id: session.id },
+        { $set: { ...session, updatedAt: new Date() } },
+        { upsert: true }
+      );
+    } catch (e: any) {
+      this.logger.warn(`Failed to persist OpenWA session ${session.id} to MongoDB: ${e.message}`);
+    }
+  }
+
+  async getOpenWaSessions() {
+    if (!this.db) return [];
+    try {
+      return await this.db.collection('openwa_sessions').find({}).toArray();
+    } catch (e: any) {
+      this.logger.warn(`Failed to fetch OpenWA sessions from MongoDB: ${e.message}`);
+      return [];
+    }
+  }
+
+  async saveOpenWaWebhook(webhook: any) {
+    if (!this.db || !webhook) return;
+    try {
+      await this.db.collection('openwa_webhooks').updateOne(
+        { id: webhook.id },
+        { $set: { ...webhook, updatedAt: new Date() } },
+        { upsert: true }
+      );
+    } catch (e: any) {
+      this.logger.warn(`Failed to persist OpenWA webhook ${webhook.id} to MongoDB: ${e.message}`);
+    }
+  }
+
+  async getOpenWaWebhooks() {
+    if (!this.db) return [];
+    try {
+      return await this.db.collection('openwa_webhooks').find({}).toArray();
+    } catch (e: any) {
+      this.logger.warn(`Failed to fetch OpenWA webhooks from MongoDB: ${e.message}`);
+      return [];
+    }
+  }
+
+  async deleteOpenWaWebhook(id: string) {
+    if (!this.db) return;
+    try {
+      await this.db.collection('openwa_webhooks').deleteOne({ id });
+    } catch (e: any) {
+      this.logger.warn(`Failed to delete OpenWA webhook ${id} from MongoDB: ${e.message}`);
+    }
   }
 }

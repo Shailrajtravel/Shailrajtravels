@@ -28,6 +28,7 @@ import {
   ReactionEvent,
 } from '../../engine/interfaces/whatsapp-engine.interface';
 import { createLogger } from '../../common/services/logger.service';
+import { ShailrajApiService } from '../shailraj-api/shailraj-api.service';
 import { EventsGateway } from '../events/events.gateway';
 import { WebhookService } from '../webhook/webhook.service';
 import { HookManager } from '../../core/hooks';
@@ -143,13 +144,37 @@ export class SessionService implements OnModuleDestroy, OnModuleInit, OnApplicat
     private readonly hookManager: HookManager,
     @Optional()
     private readonly configService?: ConfigService,
+    @Optional()
+    private readonly shailrajApiService?: ShailrajApiService,
   ) {}
 
   /**
    * On backend startup, reset all active session statuses to disconnected
-   * because the engines are not running yet after restart
+   * and restore sessions from MongoDB backup
    */
   async onModuleInit(): Promise<void> {
+    if (this.shailrajApiService) {
+      try {
+        const mongoSessions = await this.shailrajApiService.getOpenWaSessions();
+        for (const mongoSession of mongoSessions) {
+          const exists = await this.sessionRepository.findOne({ where: { id: mongoSession.id } });
+          if (!exists) {
+            const newSession = this.sessionRepository.create({
+              id: mongoSession.id,
+              name: mongoSession.name,
+              phone: mongoSession.phone || null,
+              config: mongoSession.config || {},
+              status: SessionStatus.DISCONNECTED,
+            });
+            await this.sessionRepository.save(newSession);
+            this.logger.log(`Restored session ${mongoSession.name} from MongoDB backup`, { sessionId: mongoSession.id });
+          }
+        }
+      } catch (e: any) {
+        this.logger.warn(`Failed to restore sessions from MongoDB: ${e.message}`);
+      }
+    }
+
     const activeStatuses = [
       SessionStatus.READY,
       SessionStatus.INITIALIZING,
