@@ -14,6 +14,29 @@ export interface ChatbotRulesDto {
   rules: ChatbotRule[];
 }
 
+const DEFAULT_RULES: ChatbotRule[] = [
+  {
+    keywords: ["hi", "hello", "namaste", "start", "menu", "help", "options", "shailraj"],
+    reply: "Namaste! 🙏 Welcome to *Shailraj Travels* - Your Trusted Travel Partner in Pune! 🚗✨\n\nHere is how we can assist you:\n1️⃣ *Book a Cab/Bus* - Reply 'book' or visit https://shailrajtravels.com\n2️⃣ *Tour Packages* - Reply 'packages' or 'tours'\n3️⃣ *Office Address* - Reply 'address'\n4️⃣ *Contact Us* - Reply 'contact'\n\nHow can we help you today?"
+  },
+  {
+    keywords: ["book", "booking", "cab", "car", "bus", "rental", "hire"],
+    reply: "🚗 *Book Your Ride with Shailraj Travels!*\n\nWe offer Sedan, SUV, Urbania, & Tempo Traveller rentals for outstation & local tours.\n\n👉 Book online directly: https://shailrajtravels.com/bookings\n📞 Or call us directly at +91 9359570497 for instant confirmation!"
+  },
+  {
+    keywords: ["tours", "packages", "tour", "ashtavinayak", "mahableshwar", "goa", "shirdi", "konkan"],
+    reply: "🏞️ *Popular Tour Packages by Shailraj Travels:*\n\n• Ashtavinayak Darshan (2 Days / 3 Days)\n• Shirdi - Shanishingnapur Tour\n• Mahabaleshwar & Panchgani Weekend Getaway\n• Konkan Coastal & Beach Tour\n• Goa Special Package\n\n👉 Explore full itinerary & rates: https://shailrajtravels.com/tours"
+  },
+  {
+    keywords: ["address", "location", "office", "where"],
+    reply: "📍 *Shailraj Travels Office Address:*\n\nVaibhav super market near akshada medical Gopal Patti Manjri budruk, Hadapsar, Pune, Maharashtra 412307, India\n\n🗺️ Google Maps: https://maps.google.com/?q=Manjri+Budruk+Hadapsar+Pune"
+  },
+  {
+    keywords: ["contact", "phone", "number", "call", "owner", "support"],
+    reply: "📞 *Contact Shailraj Travels:*\n\n• Phone / WhatsApp: +91 9359570497\n• Email: shailrajtravels@gmail.com\n• Website: https://shailrajtravels.com\n\nFeel free to call us anytime for urgent bookings!"
+  }
+];
+
 @ApiTags('bot-rules')
 @Controller('bot-rules')
 export class BotRulesController {
@@ -31,14 +54,19 @@ export class BotRulesController {
   getRules(): ChatbotRulesDto {
     try {
       const rulesPath = this.getRulesPath();
-      if (!fs.existsSync(rulesPath)) {
-        return { rules: [] };
+      if (fs.existsSync(rulesPath)) {
+        const content = fs.readFileSync(rulesPath, 'utf8');
+        const data = JSON.parse(content);
+        if (Array.isArray(data.rules) && data.rules.length > 0) {
+          return data as ChatbotRulesDto;
+        }
       }
-      const content = fs.readFileSync(rulesPath, 'utf8');
-      const data = JSON.parse(content);
-      return data as ChatbotRulesDto;
+      try {
+        fs.writeFileSync(rulesPath, JSON.stringify({ rules: DEFAULT_RULES }, null, 2), 'utf8');
+      } catch (e) {}
+      return { rules: DEFAULT_RULES };
     } catch (err) {
-      throw new InternalServerErrorException('Failed to read chatbot rules');
+      return { rules: DEFAULT_RULES };
     }
   }
 
@@ -54,7 +82,6 @@ export class BotRulesController {
         if (fs.existsSync(fallback)) {
           rulesPath = fallback;
         } else {
-          // If neither exists, default to ../chatbot-rules.json to match user's root
           rulesPath = path.resolve(process.cwd(), '../chatbot-rules.json');
         }
       }

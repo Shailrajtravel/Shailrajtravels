@@ -30,24 +30,25 @@ export const logoutWhatsAppFn = createServerFn({ method: "POST" })
     return { success: true };
   });
 
+const OPENWA_URL = process.env.VITE_OPENWA_API_URL || process.env.OPENWA_API_URL || "https://shailrajtravels-backend.onrender.com";
+const OPENWA_KEY = process.env.VITE_OPENWA_API_KEY || process.env.OPENWA_API_KEY || "shailraj-secret-key";
+
 export const getChatbotRulesFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string }) => data)
   .handler(async ({ data }) => {
     if (data.adminToken !== getAdminToken()) throw new Error("Unauthorized");
     try {
-      if (typeof window !== "undefined") return { rules: [] };
-      const path = await import(/* @vite-ignore */ 'node:' + 'path');
-      const fs = await import(/* @vite-ignore */ 'node:' + 'fs');
-      const rulesPath = path.join(process.cwd(), "chatbot-rules.json");
-      if (fs.existsSync(rulesPath)) {
-        const rulesData = fs.readFileSync(rulesPath, "utf-8");
-        return JSON.parse(rulesData);
+      const response = await fetch(`${OPENWA_URL}/api/bot-rules`, {
+        headers: { "X-API-Key": OPENWA_KEY }
+      });
+      if (response.ok) {
+        const rulesData = await response.json();
+        return rulesData;
       }
-      return { rules: [] };
     } catch (e) {
-      console.error("Error reading chatbot rules", e);
-      return { rules: [] };
+      console.error("Error reading chatbot rules from OpenWA API", e);
     }
+    return { rules: [] };
   });
 
 export const saveChatbotRulesFn = createServerFn({ method: "POST" })
@@ -55,17 +56,19 @@ export const saveChatbotRulesFn = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     if (data.adminToken !== getAdminToken()) throw new Error("Unauthorized");
     try {
-      if (typeof window !== "undefined") return { success: false };
-      const path = await import(/* @vite-ignore */ 'node:' + 'path');
-      const fs = await import(/* @vite-ignore */ 'node:' + 'fs');
-      const rulesPath = path.join(process.cwd(), "chatbot-rules.json");
-      fs.writeFileSync(rulesPath, JSON.stringify({ rules: data.rules }, null, 2), "utf-8");
-      
-      // Attempt to restart WhatsApp so it picks up new rules, or hot-reload if possible
-      // Actually whatsapp.ts reads the file on every incoming message! So no restart needed.
-      return { success: true };
+      const response = await fetch(`${OPENWA_URL}/api/bot-rules`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "X-API-Key": OPENWA_KEY
+        },
+        body: JSON.stringify({ rules: data.rules })
+      });
+      if (response.ok) {
+        return { success: true };
+      }
     } catch (e) {
-      console.error("Error saving chatbot rules", e);
-      return { success: false };
+      console.error("Error saving chatbot rules via OpenWA API", e);
     }
+    return { success: false };
   });
