@@ -31,6 +31,31 @@ export class BookingRepository extends BaseRepository<any> {
     }
     return results;
   }
+
+  async findBookingById(id: string): Promise<any | null> {
+    if (!id) return null;
+    const collections = await storageManager.getAllPartitionedCollections(this.baseCollectionName);
+    let objId: any = null;
+    try {
+      if (typeof id === 'string' && id.length === 24) {
+        const { ObjectId } = require('mongodb');
+        objId = new ObjectId(id);
+      }
+    } catch (e) {}
+
+    for (const col of collections) {
+      const doc = await col.findOne({
+        $or: [
+          ...(objId ? [{ _id: objId }] : []),
+          { _id: id as any },
+          { id: id },
+          { bookingId: id }
+        ]
+      });
+      if (doc) return doc;
+    }
+    return null;
+  }
 }
 
 export const bookingRepository = new BookingRepository();

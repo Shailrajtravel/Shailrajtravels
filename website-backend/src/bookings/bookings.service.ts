@@ -99,8 +99,7 @@ export class BookingsService {
     // Send automatic WhatsApp notification to customer on status change
     setImmediate(async () => {
       try {
-        const bookings = await bookingRepository.findByQuery({ _id: id });
-        const booking = bookings.length > 0 ? bookings[0] : null;
+        const booking = await bookingRepository.findBookingById(id);
         if (booking && booking.phone) {
           const custName = booking.name || booking.customerName || 'Valued Customer';
           const trip = booking.tripName || 'Tour';
@@ -128,8 +127,7 @@ export class BookingsService {
     // Send automatic WhatsApp notification to customer on payment status change
     setImmediate(async () => {
       try {
-        const bookings = await bookingRepository.findByQuery({ _id: id });
-        const booking = bookings.length > 0 ? bookings[0] : null;
+        const booking = await bookingRepository.findBookingById(id);
         if (booking && booking.phone) {
           const custName = booking.name || booking.customerName || 'Valued Customer';
           const trip = booking.tripName || 'Tour';
@@ -165,8 +163,7 @@ export class BookingsService {
 
     let whatsappSent = false;
     try {
-      const bookings = await bookingRepository.findByQuery({ _id: id });
-      const booking = bookings.length > 0 ? bookings[0] : null;
+      const booking = await bookingRepository.findBookingById(id);
       const phone = invoiceCustomData?.customerPhone || booking?.phone;
 
       if (phone) {
@@ -196,8 +193,7 @@ export class BookingsService {
   }
 
   async sendInvoiceWhatsApp(id: string, phone?: string) {
-    const bookings = await bookingRepository.findByQuery({ _id: id });
-    const booking = bookings.length > 0 ? bookings[0] : null;
+    const booking = await bookingRepository.findBookingById(id);
     if (!booking) return { success: false, message: 'Booking not found' };
 
     const targetPhone = phone || booking.invoiceCustomData?.customerPhone || booking.phone;
@@ -220,8 +216,7 @@ export class BookingsService {
   }
 
   async getBookingForPrint(id: string) {
-    const bookings = await bookingRepository.findByQuery({ _id: id });
-    return bookings.length > 0 ? bookings[0] : null;
+    return await bookingRepository.findBookingById(id);
   }
 
   async getPublicStats() {
