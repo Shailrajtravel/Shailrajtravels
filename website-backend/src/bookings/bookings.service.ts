@@ -92,13 +92,30 @@ export class BookingsService {
       const sessRes = await fetch(`${openwaUrl}/api/sessions`, {
         headers: { 'X-API-Key': apiKey }
       });
-      if (!sessRes.ok) return;
+      if (!sessRes.ok) {
+        this.logger.error(`OpenWA API sessions error: HTTP ${sessRes.status}`);
+        return;
+      }
       const sessions = await sessRes.json();
       const activeSess = Array.isArray(sessions) ? (sessions.find((s: any) => s.status === 'ready' || s.status === 'connected') || sessions[0]) : null;
-      if (!activeSess || !activeSess.id) return;
+      if (!activeSess || !activeSess.id) {
+        this.logger.error('No active WhatsApp session found in OpenWA engine');
+        return;
+      }
 
-      const formattedTo = to.includes('@') ? to : `${to.replace(/\D/g, '')}@c.us`;
-      await fetch(`${openwaUrl}/api/sessions/${activeSess.id}/messages/send-text`, {
+      let cleanTo = (to || '').trim();
+      let digits = cleanTo.replace(/\D/g, '');
+
+      // Standardize Indian 10-digit mobile numbers by adding 91 country code prefix if missing
+      if (digits.length === 10) {
+        digits = '91' + digits;
+      }
+
+      const formattedTo = cleanTo.includes('@') ? cleanTo : `${digits}@c.us`;
+
+      this.logger.log(`Dispatching WhatsApp message via session ${activeSess.id} to ${formattedTo}`);
+
+      const sendRes = await fetch(`${openwaUrl}/api/sessions/${activeSess.id}/messages/send-text`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -109,6 +126,13 @@ export class BookingsService {
           text: text
         })
       });
+
+      if (!sendRes.ok) {
+        const errBody = await sendRes.text();
+        this.logger.error(`Failed to dispatch WhatsApp message to ${formattedTo}: ${errBody}`);
+      } else {
+        this.logger.log(`Successfully delivered WhatsApp message to ${formattedTo}`);
+      }
     } catch (err) {
       this.logger.error(`Failed to send WhatsApp notification to ${to}`, String(err));
     }
@@ -155,24 +179,26 @@ export class BookingsService {
     setImmediate(async () => {
       try {
         const booking = await bookingRepository.findBookingById(id);
-        if (booking && booking.phone) {
+        const targetPhone = booking?.phone || booking?.customerPhone;
+        if (booking && targetPhone) {
           const templates = await this.getWhatsAppTemplates();
           const vars = {
             customerName: booking.name || booking.customerName || 'Valued Customer',
             bookingId: booking.bookingId || `SB-${id.slice(-6)}`,
-            tripName: booking.tripName || 'Tour Package',
+            tripName: booking.tripName === 'custom' ? booking.customDestination || 'Custom Trip' : booking.tripName || 'Tour Package',
             travelDate: booking.travelDate || 'As scheduled',
             persons: booking.persons || 1,
             pickupLocation: booking.pickupLocation || 'Pune',
             invoiceUrl: `https://shailrajtravels.com/invoice-print?id=${id}`,
           };
 
-          if (status === 'Confirmed') {
+          const sLower = (status || '').trim().toLowerCase();
+          if (sLower === 'confirmed') {
             const msg = this.renderTemplate(templates.confirmed, vars);
-            await this.sendWhatsAppNotification(booking.phone, msg);
-          } else if (status === 'Cancelled') {
+            await this.sendWhatsAppNotification(targetPhone, msg);
+          } else if (sLower === 'cancelled') {
             const msg = this.renderTemplate(templates.cancelled, vars);
-            await this.sendWhatsAppNotification(booking.phone, msg);
+            await this.sendWhatsAppNotification(targetPhone, msg);
           }
         }
       } catch (err) {
