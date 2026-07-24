@@ -74,9 +74,9 @@ export class WebhookService implements OnModuleInit, OnApplicationBootstrap {
         if (mongoWebhooks.length > 0) {
           const sessions = await this.sessionRepository.find({ take: 1 });
           const defaultSession = sessions[0];
+          if (!defaultSession) return;
           for (const mongoWh of mongoWebhooks) {
-            const targetSessionId = (mongoWh.sessionId && mongoWh.sessionId !== '*') ? mongoWh.sessionId : (defaultSession?.id || null);
-            if (!targetSessionId) continue;
+            const targetSessionId = (mongoWh.sessionId && mongoWh.sessionId !== '*') ? mongoWh.sessionId : defaultSession.id;
             const exists = await this.webhookRepository.findOne({ where: { id: mongoWh.id } });
             if (!exists) {
               const newWh = this.webhookRepository.create({
