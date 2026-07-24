@@ -72,7 +72,8 @@ export class WebhookService implements OnModuleInit, OnApplicationBootstrap {
       try {
         const mongoWebhooks = await this.shailrajApiService.getOpenWaWebhooks();
         if (mongoWebhooks.length > 0) {
-          const defaultSession = await this.sessionRepository.findOne({});
+          const sessions = await this.sessionRepository.find({ take: 1 });
+          const defaultSession = sessions[0];
           for (const mongoWh of mongoWebhooks) {
             const targetSessionId = (mongoWh.sessionId && mongoWh.sessionId !== '*') ? mongoWh.sessionId : (defaultSession?.id || null);
             if (!targetSessionId) continue;
@@ -107,10 +108,12 @@ export class WebhookService implements OnModuleInit, OnApplicationBootstrap {
     const urlExists = existing.some(w => w.url === defaultUrl || w.url.includes('shailrajtravels.onrender.com'));
     if (!urlExists) {
       try {
-        let session = await this.sessionRepository.findOne({});
+        let sessions = await this.sessionRepository.find({ take: 1 });
+        let session = sessions[0];
         if (!session) {
           await new Promise(r => setTimeout(r, 1000));
-          session = await this.sessionRepository.findOne({});
+          sessions = await this.sessionRepository.find({ take: 1 });
+          session = sessions[0];
         }
         if (!session) {
           this.logger.warn('No active session found in database yet, skipping default webhook auto-registration');
