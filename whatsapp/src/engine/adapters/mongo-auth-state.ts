@@ -4,7 +4,7 @@ import type { AuthenticationCreds, SignalKeyStore } from '@whiskeysockets/bailey
 
 export interface BaileysCredsDocument {
   _id: string; // sessionId
-  creds: AuthenticationCreds;
+  creds: any;
   updatedAt: Date;
 }
 
@@ -36,9 +36,22 @@ export async function useMongoDBAuthState(
 ): Promise<MongoAuthStateResult> {
   const b = await loadLib();
 
+  // Helper to transform any object (creds or key value) into a safe, revivable JSON structure using Baileys BufferJSON
+  const writeTransform = (data: any) => {
+    if (!data) return data;
+    return JSON.parse(JSON.stringify(data, b.BufferJSON.replacer));
+  };
+
+  const readTransform = (data: any) => {
+    if (!data) return data;
+    return JSON.parse(JSON.stringify(data), b.BufferJSON.reviver);
+  };
+
   // 1. Fetch or initialize creds
   const credsDoc = await credsColl.findOne({ _id: sessionId });
-  const creds: AuthenticationCreds = credsDoc?.creds ?? b.initAuthCreds();
+  const creds: AuthenticationCreds = credsDoc?.creds
+    ? readTransform(credsDoc.creds)
+    : b.initAuthCreds();
 
   let debounceTimer: NodeJS.Timeout | null = null;
   let latestCredsToSave: AuthenticationCreds | null = null;
@@ -49,7 +62,7 @@ export async function useMongoDBAuthState(
       debounceTimer = null;
     }
     if (latestCredsToSave) {
-      const payloadToSave = latestCredsToSave;
+      const payloadToSave = writeTransform(latestCredsToSave);
       latestCredsToSave = null;
       try {
         await credsColl.updateOne(
@@ -62,7 +75,7 @@ export async function useMongoDBAuthState(
           },
           { upsert: true },
         );
-        logger.debug(`[MongoAuth] Flushed credentials for session ${sessionId}`);
+        logger.debug(`[MongoAuth] Saved credentials for session ${sessionId}`);
       } catch (err) {
         logger.error('Failed to flush credentials to MongoDB', err instanceof Error ? err.stack : String(err));
       }
@@ -76,7 +89,7 @@ export async function useMongoDBAuthState(
     }
     debounceTimer = setTimeout(() => {
       void flushPendingCreds();
-    }, 2000);
+    }, 100);
   };
 
   // 2. Key Store implementation
@@ -88,7 +101,7 @@ export async function useMongoDBAuthState(
       try {
         const docs = await keysColl.find({ _id: { $in: prefixedIds } }).toArray();
         for (const doc of docs) {
-          let value = doc.value;
+          let value = readTransform(doc.value);
           if (type === 'app-state-sync-key' && value) {
             value = b.proto.Message.AppStateSyncKeyData.fromObject(value);
           }
@@ -114,6 +127,7 @@ export async function useMongoDBAuthState(
           const value = dict[category][id];
           const _id = `${sessionId}_${category}_${id}`;
           if (value) {
+            const cleanValue = writeTransform(value);
             writeOps.push({
               updateOne: {
                 filter: { _id },
@@ -122,7 +136,7 @@ export async function useMongoDBAuthState(
                     sessionId,
                     category,
                     keyId: id,
-                    value,
+                    value: cleanValue,
                     updatedAt: new Date(),
                   },
                 },
