@@ -1,11 +1,11 @@
 import { Controller, Post, Body, Get, Logger } from '@nestjs/common';
 import { storageManager } from '../database/StorageManager';
 
-@Controller('webhooks')
+@Controller()
 export class WebhooksController {
   private readonly logger = new Logger(WebhooksController.name);
 
-  @Post()
+  @Post(['webhooks', 'api/webhooks'])
   async handleWebhook(@Body() payload: any) {
     this.logger.log(`Received Webhook Event: ${payload?.event || 'unknown'}`, JSON.stringify(payload));
     
@@ -27,7 +27,7 @@ export class WebhooksController {
     return { status: 'success', received: true };
   }
 
-  @Get()
+  @Get(['webhooks', 'api/webhooks'])
   async getRecentWebhooks() {
     try {
       const col = await storageManager.getGlobalCollection('openwa_received_webhooks');
