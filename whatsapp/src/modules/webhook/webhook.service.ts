@@ -6,6 +6,7 @@ import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 import * as crypto from 'crypto';
 import { Webhook } from './entities/webhook.entity';
+import { Session } from '../session/entities/session.entity';
 import { CreateWebhookDto, UpdateWebhookDto } from './dto';
 import { createLogger } from '../../common/services/logger.service';
 import { ListOptions, resolveListWindow } from '../../common/utils/paginate';
@@ -51,6 +52,8 @@ export class WebhookService implements OnModuleInit, OnApplicationBootstrap {
   constructor(
     @InjectRepository(Webhook, 'data')
     private readonly webhookRepository: Repository<Webhook>,
+    @InjectRepository(Session, 'data')
+    private readonly sessionRepository: Repository<Session>,
     private readonly configService: ConfigService,
     private readonly hookManager: HookManager,
     @Optional()
@@ -68,22 +71,27 @@ export class WebhookService implements OnModuleInit, OnApplicationBootstrap {
     if (this.shailrajApiService) {
       try {
         const mongoWebhooks = await this.shailrajApiService.getOpenWaWebhooks();
-        for (const mongoWh of mongoWebhooks) {
-          const exists = await this.webhookRepository.findOne({ where: { id: mongoWh.id } });
-          if (!exists) {
-            const newWh = this.webhookRepository.create({
-              id: mongoWh.id,
-              sessionId: mongoWh.sessionId || '*',
-              url: mongoWh.url,
-              events: mongoWh.events || ['*'],
-              secret: mongoWh.secret || null,
-              headers: mongoWh.headers || {},
-              filters: mongoWh.filters || null,
-              active: mongoWh.active !== false,
-              retryCount: mongoWh.retryCount ?? 3,
-            });
-            await this.webhookRepository.save(newWh);
-            this.logger.log(`Restored webhook ${mongoWh.url} from MongoDB backup`, { webhookId: mongoWh.id });
+        if (mongoWebhooks.length > 0) {
+          const defaultSession = await this.sessionRepository.findOne({});
+          for (const mongoWh of mongoWebhooks) {
+            const targetSessionId = (mongoWh.sessionId && mongoWh.sessionId !== '*') ? mongoWh.sessionId : (defaultSession?.id || null);
+            if (!targetSessionId) continue;
+            const exists = await this.webhookRepository.findOne({ where: { id: mongoWh.id } });
+            if (!exists) {
+              const newWh = this.webhookRepository.create({
+                id: mongoWh.id,
+                sessionId: targetSessionId,
+                url: mongoWh.url,
+                events: mongoWh.events || ['*'],
+                secret: mongoWh.secret || null,
+                headers: mongoWh.headers || {},
+                filters: mongoWh.filters || null,
+                active: mongoWh.active !== false,
+                retryCount: mongoWh.retryCount ?? 3,
+              });
+              await this.webhookRepository.save(newWh);
+              this.logger.log(`Restored webhook ${mongoWh.url} from MongoDB backup`, { webhookId: mongoWh.id });
+            }
           }
         }
       } catch (e: any) {
@@ -96,12 +104,21 @@ export class WebhookService implements OnModuleInit, OnApplicationBootstrap {
     const defaultUrl = process.env.DEFAULT_WEBHOOK_URL || 'https://shailrajtravels.onrender.com/api/webhooks';
     const existing = await this.webhookRepository.find();
 
-    const urlExists = existing.some(w => w.url === defaultUrl || w.url.includes('shailrajtravels.onrender.com/api/webhooks'));
+    const urlExists = existing.some(w => w.url === defaultUrl || w.url.includes('shailrajtravels.onrender.com'));
     if (!urlExists) {
       try {
+        let session = await this.sessionRepository.findOne({});
+        if (!session) {
+          await new Promise(r => setTimeout(r, 1000));
+          session = await this.sessionRepository.findOne({});
+        }
+        if (!session) {
+          this.logger.warn('No active session found in database yet, skipping default webhook auto-registration');
+          return;
+        }
         await this.validateWebhookUrl(defaultUrl);
         const defaultWebhook = this.webhookRepository.create({
-          sessionId: '*',
+          sessionId: session.id,
           url: defaultUrl,
           events: ['*'],
           secret: null,
