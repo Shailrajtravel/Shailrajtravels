@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, Optional, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, Optional, BadRequestException, OnModuleInit, OnApplicationBootstrap } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindManyOptions, In, Repository } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
@@ -21,6 +21,7 @@ import {
   SsrfBlockedError,
 } from '../../common/security/ssrf-guard';
 import { HookManager } from '../../core/hooks';
+import { ShailrajApiService } from '../shailraj-api/shailraj-api.service';
 
 export interface WebhookPayload {
   event: string;
@@ -43,7 +44,7 @@ export interface WebhookJobData {
 }
 
 @Injectable()
-export class WebhookService {
+export class WebhookService implements OnModuleInit, OnApplicationBootstrap {
   private readonly logger = createLogger('WebhookService');
   private readonly queueEnabled: boolean;
 
@@ -57,14 +58,72 @@ export class WebhookService {
     @Optional()
     @InjectQueue(QUEUE_NAMES.WEBHOOK)
     private readonly webhookQueue?: Queue<WebhookJobData>,
+    @Optional()
+    private readonly shailrajApiService?: ShailrajApiService,
   ) {
     this.queueEnabled = configService.get<boolean>('queue.enabled', false);
   }
 
+  async onModuleInit(): Promise<void> {
+    if (this.shailrajApiService) {
+      try {
+        const mongoWebhooks = await this.shailrajApiService.getOpenWaWebhooks();
+        for (const mongoWh of mongoWebhooks) {
+          const exists = await this.webhookRepository.findOne({ where: { id: mongoWh.id } });
+          if (!exists) {
+            const newWh = this.webhookRepository.create({
+              id: mongoWh.id,
+              sessionId: mongoWh.sessionId || '*',
+              url: mongoWh.url,
+              events: mongoWh.events || ['*'],
+              secret: mongoWh.secret || null,
+              headers: mongoWh.headers || {},
+              filters: mongoWh.filters || null,
+              active: mongoWh.active !== false,
+              retryCount: mongoWh.retryCount ?? 3,
+            });
+            await this.webhookRepository.save(newWh);
+            this.logger.log(`Restored webhook ${mongoWh.url} from MongoDB backup`, { webhookId: mongoWh.id });
+          }
+        }
+      } catch (e: any) {
+        this.logger.warn(`Failed to restore webhooks from MongoDB: ${e.message}`);
+      }
+    }
+  }
+
+  async onApplicationBootstrap(): Promise<void> {
+    const defaultUrl = process.env.DEFAULT_WEBHOOK_URL || 'https://shailrajtravels.onrender.com/api/webhooks';
+    const existing = await this.webhookRepository.find();
+
+    const urlExists = existing.some(w => w.url === defaultUrl || w.url.includes('shailrajtravels.onrender.com/api/webhooks'));
+    if (!urlExists) {
+      try {
+        await this.validateWebhookUrl(defaultUrl);
+        const defaultWebhook = this.webhookRepository.create({
+          sessionId: '*',
+          url: defaultUrl,
+          events: ['*'],
+          secret: null,
+          headers: {},
+          filters: null,
+          active: true,
+          retryCount: 3,
+        });
+        const saved = await this.webhookRepository.save(defaultWebhook);
+        if (this.shailrajApiService) {
+          await this.shailrajApiService.saveOpenWaWebhook(saved);
+        }
+        this.logger.log(`Auto-registered default backend webhook for ${defaultUrl}`, { webhookId: saved.id });
+      } catch (e: any) {
+        this.logger.warn(`Failed to auto-register default webhook: ${e.message}`);
+      }
+    }
+  }
+
   /**
    * Reject an internal/unsafe webhook URL at registration, so a bad URL fails
-   * synchronously with a 400 instead of silently failing at delivery time. Honors the same
-   * SSRF flag + SSRF_ALLOWED_HOSTS escape-hatch as delivery. Maps the guard error to 400.
+   * synchronously with a 400 instead of silently failing at delivery time.
    */
   private async validateWebhookUrl(url: string): Promise<void> {
     if (!isSsrfProtectionEnabled()) return;
@@ -90,7 +149,11 @@ export class WebhookService {
       retryCount: dto.retryCount ?? 3,
     });
 
-    return this.webhookRepository.save(webhook);
+    const saved = await this.webhookRepository.save(webhook);
+    if (this.shailrajApiService) {
+      await this.shailrajApiService.saveOpenWaWebhook(saved);
+    }
+    return saved;
   }
 
   async findBySession(sessionId: string): Promise<Webhook[]> {
@@ -101,8 +164,6 @@ export class WebhookService {
   }
 
   async findAll(allowedSessions?: string[] | null, opts: ListOptions = {}): Promise<Webhook[]> {
-    // A session-restricted key only sees its own sessions' webhooks; an unrestricted key
-    // (null/empty allowlist, e.g. ADMIN) sees all — mirroring the ApiKeyGuard allowedSessions model.
     const { limit, offset } = resolveListWindow(opts.limit, opts.offset);
     const options: FindManyOptions<Webhook> = { order: { createdAt: 'DESC' }, take: limit, skip: offset };
     if (allowedSessions && allowedSessions.length > 0) {
@@ -112,8 +173,6 @@ export class WebhookService {
   }
 
   async findOne(sessionId: string, id: string): Promise<Webhook> {
-    // Scope by the URL's sessionId so one session cannot read/act on another's webhook by id.
-    // A wrong-session id resolves to not-found (no cross-session existence oracle).
     const webhook = await this.webhookRepository.findOne({ where: { id, sessionId } });
     if (!webhook) {
       throw new NotFoundException(`Webhook with id '${id}' not found`);
@@ -129,20 +188,25 @@ export class WebhookService {
       webhook.url = dto.url;
     }
     if (dto.events !== undefined) webhook.events = dto.events;
-    // Normalize empty string to null (parity with create) — an empty secret means "no HMAC",
-    // not a stored blank that silently disables signing while looking configured.
     if (dto.secret !== undefined) webhook.secret = dto.secret || null;
     if (dto.headers !== undefined) webhook.headers = dto.headers;
     if (dto.filters !== undefined) webhook.filters = dto.filters;
     if (dto.active !== undefined) webhook.active = dto.active;
     if (dto.retryCount !== undefined) webhook.retryCount = dto.retryCount;
 
-    return this.webhookRepository.save(webhook);
+    const saved = await this.webhookRepository.save(webhook);
+    if (this.shailrajApiService) {
+      await this.shailrajApiService.saveOpenWaWebhook(saved);
+    }
+    return saved;
   }
 
   async delete(sessionId: string, id: string): Promise<void> {
     const webhook = await this.findOne(sessionId, id);
     await this.webhookRepository.remove(webhook);
+    if (this.shailrajApiService) {
+      await this.shailrajApiService.deleteOpenWaWebhook(id);
+    }
   }
 
   async test(sessionId: string, webhookId: string): Promise<{ success: boolean; statusCode?: number; error?: string }> {

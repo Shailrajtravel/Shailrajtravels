@@ -150,15 +150,17 @@ export class SessionService implements OnModuleDestroy, OnModuleInit, OnApplicat
   ) {}
 
   /**
-   * On backend startup, reset all active session statuses to disconnected
-   * and restore sessions from MongoDB backup
+   * On backend startup, reset all active session statuses to disconnected,
+   * restore sessions from MongoDB backup, and auto-create default session if 0 exist.
    */
   async onModuleInit(): Promise<void> {
     if (this.shailrajApiService) {
       try {
         const mongoSessions = await this.shailrajApiService.getOpenWaSessions();
         for (const mongoSession of mongoSessions) {
-          const exists = await this.sessionRepository.findOne({ where: { id: mongoSession.id } });
+          const exists = await this.sessionRepository.findOne({
+            where: [{ id: mongoSession.id }, { name: mongoSession.name }],
+          });
           if (!exists) {
             const newSession = this.sessionRepository.create({
               id: mongoSession.id,
@@ -169,11 +171,31 @@ export class SessionService implements OnModuleDestroy, OnModuleInit, OnApplicat
             });
             await this.sessionRepository.save(newSession);
             this.logger.log(`Restored session ${mongoSession.name} from MongoDB backup`, { sessionId: mongoSession.id });
+          } else if (mongoSession.phone && !exists.phone) {
+            exists.phone = mongoSession.phone;
+            await this.sessionRepository.save(exists);
           }
         }
       } catch (e: any) {
         this.logger.warn(`Failed to restore sessions from MongoDB: ${e.message}`);
       }
+    }
+
+    // Auto-create a default session if no sessions exist in database at all
+    const count = await this.sessionRepository.count();
+    if (count === 0) {
+      const defaultName = process.env.DEFAULT_SESSION_NAME || 'default';
+      const defaultSession = this.sessionRepository.create({
+        name: defaultName,
+        phone: null,
+        config: {},
+        status: SessionStatus.DISCONNECTED,
+      });
+      const saved = await this.sessionRepository.save(defaultSession);
+      if (this.shailrajApiService) {
+        await this.shailrajApiService.saveOpenWaSession(saved);
+      }
+      this.logger.log(`Auto-created default session '${defaultName}' on startup`, { sessionId: saved.id });
     }
 
     const activeStatuses = [
@@ -199,13 +221,12 @@ export class SessionService implements OnModuleDestroy, OnModuleInit, OnApplicat
   async onApplicationBootstrap(): Promise<void> {
     if (process.env.AUTO_START_SESSIONS === 'false') return;
 
-    const sessions = await this.sessionRepository.find({
-      where: { phone: Not(IsNull()) },
-    });
+    // Fetch all sessions (including restored or auto-created default session)
+    const sessions = await this.sessionRepository.find();
 
     if (sessions.length === 0) return;
 
-    this.logger.log(`Auto-starting ${sessions.length} previously authenticated session(s)`, {
+    this.logger.log(`Auto-starting ${sessions.length} session(s) on application startup`, {
       action: 'auto_start',
       count: sessions.length,
     });
@@ -227,7 +248,7 @@ export class SessionService implements OnModuleDestroy, OnModuleInit, OnApplicat
           action: 'auto_start_failed',
         });
       }
-      // Throttle between sequential Chromium launches; no need to wait after the last one.
+      // Throttle between sequential launches
       if (i < sessions.length - 1) {
         await this.delay(2000);
       }
@@ -308,6 +329,11 @@ export class SessionService implements OnModuleDestroy, OnModuleInit, OnApplicat
     const saved = await this.dataSource.transaction(async manager => {
       return await manager.save(session);
     });
+
+    if (this.shailrajApiService) {
+      await this.shailrajApiService.saveOpenWaSession(saved);
+    }
+
     this.logger.log(`Session created: ${saved.name}`, {
       sessionId: saved.id,
       action: 'create',
