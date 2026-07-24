@@ -86,7 +86,8 @@ export class BookingsService {
 
   private async sendWhatsAppNotification(to: string, text: string) {
     try {
-      const openwaUrl = process.env.OPENWA_API_URL || 'https://shailrajtravels-backend.onrender.com';
+      const baseUrl = process.env.OPENWA_API_URL || 'https://shailrajtravels-backend.onrender.com';
+      const openwaUrl = baseUrl.replace(/\/+$/, '');
       const apiKey = process.env.OPENWA_API_KEY || 'shailraj-secret-key';
       
       const sessRes = await fetch(`${openwaUrl}/api/sessions`, {
@@ -97,7 +98,7 @@ export class BookingsService {
         return;
       }
       const sessions = await sessRes.json();
-      const activeSess = Array.isArray(sessions) ? (sessions.find((s: any) => s.status === 'ready' || s.status === 'connected') || sessions[0]) : null;
+      const activeSess = Array.isArray(sessions) ? (sessions.find((s: any) => s.status === 'ready' || s.status === 'connected' || s.status === 'working') || sessions[0]) : null;
       if (!activeSess || !activeSess.id) {
         this.logger.error('No active WhatsApp session found in OpenWA engine');
         return;
@@ -105,6 +106,11 @@ export class BookingsService {
 
       let cleanTo = (to || '').trim();
       let digits = cleanTo.replace(/\D/g, '');
+
+      // Handle leading zero e.g. 08446982438 -> 8446982438
+      if (digits.length === 11 && digits.startsWith('0')) {
+        digits = digits.slice(1);
+      }
 
       // Standardize Indian 10-digit mobile numbers by adding 91 country code prefix if missing
       if (digits.length === 10) {
