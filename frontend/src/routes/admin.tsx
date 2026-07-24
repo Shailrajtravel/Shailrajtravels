@@ -1439,12 +1439,65 @@ function AdminPage() {
                             </div>
                             <div>
                               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Submitted</span>
-                              <p className="text-slate-500 mt-0.5">{new Date(bk.createdAt).toLocaleDateString()}</p>
+                              <div className="flex items-center gap-2">
+                                <span className="font-mono text-xs font-bold px-2 py-0.5 bg-slate-100 text-slate-600 rounded">
+                                  {bk.generatedBookingId}
+                                </span>
+                                <span className="font-bold text-slate-900">{bk.name || "N/A"}</span>
+                              </div>
+                              <p className="text-xs text-slate-500 mt-1 font-mono">{bk.phone}</p>
                             </div>
+                            <div className="flex items-center gap-1">
+                              <button
+                                onClick={() => {
+                                  setPaymentModal({
+                                    isOpen: true,
+                                    booking: bk,
+                                    paymentStatus: bk.paymentStatus || "ADVANCE",
+                                    paidAmount: bk.paidAmount || (bk.invoiceCustomData?.advancePaid) || "",
+                                    paymentNote: bk.paymentNote || "",
+                                    sendWhatsApp: true,
+                                    isSubmitting: false,
+                                  });
+                                }}
+                                className="p-2 text-brand-blue hover:bg-blue-50 rounded-lg"
+                                title="Record Payment"
+                              >
+                                <CreditCard className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setReplyModal({ isOpen: true, booking: bk });
+                                  setReplyMessage(`Hi ${bk.name || "Customer"},\nWe received your inquiry regarding the ${bk.tripName === "custom" ? bk.customDestination || "Custom Trip" : bk.tripName || "Trip"}. `);
+                                }}
+                                className="p-2 text-green-600 hover:bg-green-50 rounded-lg"
+                                title="Reply via WhatsApp"
+                              >
+                                <MessageSquare className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={() =>
+                                  setDeleteConfirm({ isOpen: true, id: bk._id, type: "booking" })
+                                }
+                                className="p-2 text-red-500 hover:bg-red-50 rounded-lg"
+                                title="Delete Booking"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </div>
+
+                          <div className="text-xs text-slate-600 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+                            <span className="font-bold">Trip:</span>{" "}
+                            {bk.tripName === "custom" ? bk.customDestination || "Custom Trip" : bk.tripName} ({bk.persons || 1} P)
+                            {bk.travelDate && (
+                              <div>
+                                <span className="font-bold">Date:</span> {bk.travelDate}
+                              </div>
+                            )}
                             {bk.pickupLocation && (
-                              <div className="col-span-2">
-                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Pickup Point</span>
-                                <p className="text-slate-600 font-semibold mt-0.5">{bk.pickupLocation}</p>
+                              <div>
+                                <span className="font-bold">Pickup:</span> {bk.pickupLocation}
                               </div>
                             )}
                           </div>
@@ -1456,12 +1509,18 @@ function AdminPage() {
                               <select
                                 value={bk.status}
                                 onChange={async (e) => {
+                                  const newStatus = e.target.value;
                                   try {
                                     await updateBookingStatusFn({
-                                      data: { adminToken: token, id: bk._id, status: e.target.value },
+                                      data: { adminToken: token, id: bk._id, status: newStatus },
                                     });
                                     loadData();
-                                  } catch (err) {}
+                                    if (newStatus === "Confirmed" || newStatus === "Cancelled") {
+                                      alert(`Booking status updated to ${newStatus}. WhatsApp notification sent to customer.`);
+                                    }
+                                  } catch (err) {
+                                    alert("Failed to update status.");
+                                  }
                                 }}
                                 className={`w-full text-xs font-bold px-2 py-2 rounded-lg border outline-none cursor-pointer ${
                                   bk.status === "Confirmed"
@@ -1480,32 +1539,22 @@ function AdminPage() {
                               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Payment</span>
                               <select
                                 value={bk.paymentStatus || "PENDING"}
-                                onChange={async (e) => {
+                                onChange={(e) => {
                                   const newStatus = e.target.value;
-                                  try {
-                                    const res = await updateBookingPaymentStatusFn({
-                                      data: {
-                                        adminToken: token,
-                                        id: bk._id,
-                                        paymentStatus: newStatus,
-                                      },
+                                  if (newStatus === "ADVANCE" || newStatus === "PAID") {
+                                    setPaymentModal({
+                                      isOpen: true,
+                                      booking: bk,
+                                      paymentStatus: newStatus,
+                                      paidAmount: bk.paidAmount || (bk.invoiceCustomData?.advancePaid) || (newStatus === "PAID" ? (bk.invoiceCustomData?.grandTotal || "") : ""),
+                                      paymentNote: bk.paymentNote || "",
+                                      sendWhatsApp: true,
+                                      isSubmitting: false,
                                     });
-                                    loadData();
-                                    if (newStatus === "PAID") {
-                                      if (res?.whatsappSent) {
-                                        alert(
-                                          "Payment status updated to PAID. Invoice PDF successfully sent to customer via WhatsApp.",
-                                        );
-                                      } else {
-                                        alert(
-                                          "Payment status updated to PAID, but WhatsApp invoice could not be sent. Make sure WhatsApp Engine is connected and customer phone number is correct.",
-                                        );
-                                      }
-                                    } else {
-                                      alert(`Payment status updated to ${newStatus}.`);
-                                    }
-                                  } catch (err: any) {
-                                    alert(err.message || "Failed to update payment status.");
+                                  } else {
+                                    updateBookingPaymentStatusFn({
+                                      data: { adminToken: token, id: bk._id, paymentStatus: newStatus, sendWhatsApp: false },
+                                    }).then(() => loadData());
                                   }
                                 }}
                                 className={`w-full text-xs font-bold px-2 py-2 rounded-lg border outline-none cursor-pointer ${
@@ -1518,7 +1567,7 @@ function AdminPage() {
                               >
                                 <option value="PENDING">PENDING</option>
                                 <option value="ADVANCE">ADVANCE PAID</option>
-                                <option value="PAID">PAID</option>
+                                <option value="PAID">PAID IN FULL</option>
                               </select>
                             </div>
                           </div>
