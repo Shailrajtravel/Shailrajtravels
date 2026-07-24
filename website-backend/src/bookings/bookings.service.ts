@@ -3,9 +3,64 @@ import { bookingRepository } from '../repositories/BookingRepository';
 import { tripOptionRepository } from '../repositories/TripOptionRepository';
 import { storageManager } from '../database/StorageManager';
 
+const DEFAULT_TEMPLATES = {
+  confirmed: `Namaste {customerName}! 🎉\n\nGreat news! Your booking (*{bookingId}*) for *{tripName}* has been *CONFIRMED* by Shailraj Travels!\n\n📅 *Travel Date:* {travelDate}\n📍 *Pickup:* {pickupLocation}\n👥 *Persons:* {persons}\n\nWe look forward to giving you a wonderful journey! Call us anytime: +91 9359570497.`,
+  cancelled: `Namaste {customerName}.\n\nYour booking (*{bookingId}*) for *{tripName}* has been *CANCELLED* by Shailraj Travels.\n\nIf you have any questions or wish to re-book, please contact us at +91 9359570497.`,
+  payment: `Namaste {customerName}! 🧾\n\nHere is your Official Payment Receipt & Invoice from *Shailraj Travels*!\n\n📋 *Booking ID:* {bookingId}\n🚘 *Trip:* {tripName}\n📅 *Travel Date:* {travelDate}\n💵 *Paid Amount:* ₹{paidAmount}\n📝 *Note:* {paymentNote}\n💳 *Payment Status:* *{paymentStatus}* ✅\n\n📄 *View & Print Invoice:* {invoiceUrl}\n\nThank you for choosing Shailraj Travels! Call us anytime: +91 9359570497.`,
+};
+
 @Injectable()
 export class BookingsService {
   private readonly logger = new Logger(BookingsService.name);
+
+  // --- TEMPLATES ---
+  async getWhatsAppTemplates() {
+    try {
+      const col = await storageManager.getGlobalCollection('whatsapp_templates');
+      const doc = await col.findOne({ _id: 'booking_templates' as any });
+      if (doc) {
+        return {
+          confirmed: doc.confirmed || DEFAULT_TEMPLATES.confirmed,
+          cancelled: doc.cancelled || DEFAULT_TEMPLATES.cancelled,
+          payment: doc.payment || DEFAULT_TEMPLATES.payment,
+        };
+      }
+    } catch (e) {
+      this.logger.warn('Failed to fetch whatsapp templates from database, returning defaults');
+    }
+    return DEFAULT_TEMPLATES;
+  }
+
+  async saveWhatsAppTemplates(templates: { confirmed?: string; cancelled?: string; payment?: string }) {
+    try {
+      const col = await storageManager.getGlobalCollection('whatsapp_templates');
+      await col.updateOne(
+        { _id: 'booking_templates' as any },
+        {
+          $set: {
+            confirmed: templates.confirmed || DEFAULT_TEMPLATES.confirmed,
+            cancelled: templates.cancelled || DEFAULT_TEMPLATES.cancelled,
+            payment: templates.payment || DEFAULT_TEMPLATES.payment,
+            updatedAt: new Date().toISOString(),
+          },
+        },
+        { upsert: true }
+      );
+      return { success: true };
+    } catch (e: any) {
+      this.logger.error('Failed to save whatsapp templates', e);
+      throw e;
+    }
+  }
+
+  private renderTemplate(template: string, vars: Record<string, string | number>) {
+    let result = template;
+    for (const key in vars) {
+      const val = vars[key] != null ? String(vars[key]) : '';
+      result = result.replace(new RegExp(`\\{${key}\\}`, 'g'), val);
+    }
+    return result;
+  }
 
   // --- TRIP OPTIONS ---
   async getTripOptions() {
@@ -73,10 +128,10 @@ export class BookingsService {
     const res: any = await bookingRepository.insertOne(bookingData);
     const id = typeof res === 'object' && res ? (res.insertedId || res._id || res.id || res).toString() : String(res);
 
-    // Trigger WhatsApp notifications in the background
-    setImmediate(() => {
-      // 1. Notify Admin / Owner
-      const adminMsg = `🚨 *New Booking Alert! (ID: ${bookingData.bookingId})*\n\n👤 *Customer:* ${data.name || 'Valued Customer'}\n📞 *Phone:* ${data.phone || 'N/A'}\n🗺️ *Trip:* ${data.tripName || 'Tour'}\n📍 *Pickup:* ${data.pickupLocation || 'pune'}\n👥 *Persons:* ${data.persons || 1}\n📅 *Travel Date:* ${data.travelDate || 'Flexible'}\n\nPlease check Admin Dashboard to confirm.`;
+    // Immediate background notifications
+    setImmediate(async () => {
+      // 1. Notify Admin (Default Number: 919359570497)
+      const adminMsg = `🚨 *NEW BOOKING ALERT!* (ID: ${bookingData.bookingId})\n\n👤 *Customer:* ${data.name || 'N/A'}\n📞 *Phone:* ${data.phone || 'N/A'}\n🚘 *Trip:* ${data.tripName || 'Custom'}\n📍 *Destination:* ${data.customDestination || 'N/A'}\n📅 *Travel Date:* ${data.travelDate || 'N/A'}\n👥 *Persons:* ${data.persons || 1}\n\nPlease check admin panel to confirm!`;
       this.sendWhatsAppNotification('919359570497', adminMsg);
 
       // 2. Notify Customer (if phone provided)
@@ -96,20 +151,27 @@ export class BookingsService {
   async updateBookingStatus(id: string, status: string) {
     await bookingRepository.updateOne(id, { status, updatedAt: new Date().toISOString() });
 
-    // Send automatic WhatsApp notification to customer on status change
+    // Send automatic WhatsApp notification to customer on status change using custom templates
     setImmediate(async () => {
       try {
         const booking = await bookingRepository.findBookingById(id);
         if (booking && booking.phone) {
-          const custName = booking.name || booking.customerName || 'Valued Customer';
-          const trip = booking.tripName || 'Tour';
-          const bkId = booking.bookingId || `SB-${id.slice(-6)}`;
-          
+          const templates = await this.getWhatsAppTemplates();
+          const vars = {
+            customerName: booking.name || booking.customerName || 'Valued Customer',
+            bookingId: booking.bookingId || `SB-${id.slice(-6)}`,
+            tripName: booking.tripName || 'Tour Package',
+            travelDate: booking.travelDate || 'As scheduled',
+            persons: booking.persons || 1,
+            pickupLocation: booking.pickupLocation || 'Pune',
+            invoiceUrl: `https://shailrajtravels.com/invoice-print?id=${id}`,
+          };
+
           if (status === 'Confirmed') {
-            const msg = `Namaste ${custName}! 🎉\n\nGreat news! Your booking (*${bkId}*) for *${trip}* has been *CONFIRMED* by Shailraj Travels!\n\n📅 *Travel Date:* ${booking.travelDate || 'As scheduled'}\n📍 *Pickup:* ${booking.pickupLocation || 'pune'}\n👥 *Persons:* ${booking.persons || 1}\n\nWe look forward to giving you a wonderful journey! Call us anytime: +91 9359570497.`;
+            const msg = this.renderTemplate(templates.confirmed, vars);
             await this.sendWhatsAppNotification(booking.phone, msg);
           } else if (status === 'Cancelled') {
-            const msg = `Namaste ${custName}.\n\nYour booking (*${bkId}*) for *${trip}* has been *CANCELLED* by Shailraj Travels.\n\nIf you have any questions or wish to re-book, please contact us at +91 9359570497.`;
+            const msg = this.renderTemplate(templates.cancelled, vars);
             await this.sendWhatsAppNotification(booking.phone, msg);
           }
         }
@@ -121,35 +183,70 @@ export class BookingsService {
     return { success: true };
   }
 
-  async updateBookingPaymentStatus(id: string, paymentStatus: string) {
-    await bookingRepository.updateOne(id, { paymentStatus, updatedAt: new Date().toISOString() });
+  async updateBookingPaymentStatus(
+    id: string,
+    paymentStatus: string,
+    paidAmount?: number | string,
+    paymentNote?: string,
+    sendWhatsApp: boolean = true,
+  ) {
+    const booking = await bookingRepository.findBookingById(id);
+    const existingCustom = booking?.invoiceCustomData || {};
 
-    // Send automatic WhatsApp notification to customer on payment status change
-    setImmediate(async () => {
-      try {
-        const booking = await bookingRepository.findBookingById(id);
-        if (booking && booking.phone) {
-          const custName = booking.name || booking.customerName || 'Valued Customer';
-          const trip = booking.tripName || 'Tour';
-          const bkId = booking.bookingId || `SB-${id.slice(-6)}`;
-          const statusUpper = (paymentStatus || '').toUpperCase();
+    const updateFields: any = {
+      paymentStatus,
+      updatedAt: new Date().toISOString(),
+    };
 
-          let msg = '';
-          if (statusUpper === 'PAID') {
-            msg = `Namaste ${custName}! 🧾\n\nPayment Status Update for booking *${bkId}* (${trip}):\n\n💳 *Payment Status:* *PAID IN FULL* ✅\n\nThank you for completing your payment with Shailraj Travels! View invoice: https://shailrajtravels.com/invoice-print?id=${id}\nCall us anytime: +91 9359570497.`;
-          } else if (statusUpper === 'ADVANCE' || statusUpper === 'ADVANCE PAID') {
-            msg = `Namaste ${custName}! 💳\n\nAdvance Payment Status Update for booking *${bkId}* (${trip}):\n\n💰 *Payment Status:* *ADVANCE RECEIVED* ✅\n\nThank you for your advance payment to Shailraj Travels! View bill: https://shailrajtravels.com/invoice-print?id=${id}\nCall us anytime: +91 9359570497.`;
+    if (paidAmount !== undefined && paidAmount !== null && paidAmount !== '') {
+      updateFields.paidAmount = String(paidAmount);
+      existingCustom.advancePaid = String(paidAmount);
+      existingCustom.advanceAmount = String(paidAmount);
+    }
+    if (paymentNote !== undefined && paymentNote !== null) {
+      updateFields.paymentNote = paymentNote;
+      existingCustom.paymentNote = paymentNote;
+    }
+    existingCustom.paymentStatus = paymentStatus;
+    updateFields.invoiceCustomData = existingCustom;
+
+    await bookingRepository.updateOne(id, updateFields);
+
+    let whatsappSent = false;
+
+    if (sendWhatsApp) {
+      setImmediate(async () => {
+        try {
+          const refreshed = await bookingRepository.findBookingById(id);
+          if (refreshed && refreshed.phone) {
+            const templates = await this.getWhatsAppTemplates();
+            const statusUpper = (paymentStatus || '').toUpperCase();
+            const formattedStatus = statusUpper.includes('PAID') && !statusUpper.includes('ADVANCE') ? 'PAID IN FULL' : 'ADVANCE RECEIVED';
+
+            const vars = {
+              customerName: refreshed.name || refreshed.customerName || 'Valued Customer',
+              bookingId: refreshed.bookingId || `SB-${id.slice(-6)}`,
+              tripName: refreshed.tripName || 'Tour Package',
+              travelDate: refreshed.travelDate || 'As scheduled',
+              persons: refreshed.persons || 1,
+              pickupLocation: refreshed.pickupLocation || 'Pune',
+              paidAmount: refreshed.paidAmount || paidAmount || '0',
+              paymentNote: refreshed.paymentNote || paymentNote || (statusUpper.includes('PAID') ? 'Full payment received' : 'Advance received'),
+              paymentStatus: formattedStatus,
+              invoiceUrl: `https://shailrajtravels.com/invoice-print?id=${id}`,
+            };
+
+            const msg = this.renderTemplate(templates.payment, vars);
+            await this.sendWhatsAppNotification(refreshed.phone, msg);
+            whatsappSent = true;
           }
-          if (msg) {
-            await this.sendWhatsAppNotification(booking.phone, msg);
-          }
+        } catch (err) {
+          this.logger.error(`Error sending payment status WhatsApp for booking ${id}`, String(err));
         }
-      } catch (err) {
-        this.logger.error(`Error sending payment status WhatsApp for booking ${id}`, String(err));
-      }
-    });
+      });
+    }
 
-    return { success: true, whatsappSent: true };
+    return { success: true, whatsappSent };
   }
 
   async saveInvoice(id: string, invoiceCustomData: any) {
@@ -167,21 +264,21 @@ export class BookingsService {
       const phone = invoiceCustomData?.customerPhone || booking?.phone;
 
       if (phone) {
-        const custName = invoiceCustomData?.customerName || booking?.name || 'Valued Customer';
-        const trip = invoiceCustomData?.tripName || booking?.tripName || 'Tour Package';
-        const invNo = invoiceCustomData?.invoiceNo || booking?.bookingId || `INV-${id.slice(-6)}`;
-        const total = invoiceCustomData?.grandTotal || invoiceCustomData?.totalAmount || 'N/A';
-        const advance = invoiceCustomData?.advancePaid || invoiceCustomData?.advanceAmount || '0';
-        const balance = invoiceCustomData?.balanceDue || '0';
-        const date = invoiceCustomData?.travelDate || booking?.travelDate || 'As scheduled';
+        const templates = await this.getWhatsAppTemplates();
+        const vars = {
+          customerName: invoiceCustomData?.customerName || booking?.name || 'Valued Customer',
+          bookingId: invoiceCustomData?.invoiceNo || booking?.bookingId || `INV-${id.slice(-6)}`,
+          tripName: invoiceCustomData?.tripName || booking?.tripName || 'Tour Package',
+          travelDate: invoiceCustomData?.travelDate || booking?.travelDate || 'As scheduled',
+          persons: booking?.persons || 1,
+          pickupLocation: booking?.pickupLocation || 'Pune',
+          paidAmount: invoiceCustomData?.advancePaid || invoiceCustomData?.grandTotal || '0',
+          paymentNote: invoiceCustomData?.paymentNote || 'Invoice issued',
+          paymentStatus: (paymentStatus || '').toUpperCase(),
+          invoiceUrl: `https://shailrajtravels.com/invoice-print?id=${id}`,
+        };
 
-        let msg = '';
-        if (paymentStatus.toUpperCase() === 'PAID') {
-          msg = `Namaste ${custName}! 🧾\n\nHere is your Official Tax Invoice from *Shailraj Travels*!\n\n📋 *Invoice No:* ${invNo}\n🚘 *Trip:* ${trip}\n📅 *Travel Date:* ${date}\n💵 *Total Amount:* ₹${total}\n💳 *Payment Status:* *PAID IN FULL* ✅\n\nView & Print your Invoice: https://shailrajtravels.com/invoice-print?id=${id}\n\nThank you for choosing Shailraj Travels! Call us anytime: +91 9359570497.`;
-        } else {
-          msg = `Namaste ${custName}! 🧾\n\nHere is your Advance Receipt & Bill from *Shailraj Travels*!\n\n📋 *Invoice No:* ${invNo}\n🚘 *Trip:* ${trip}\n📅 *Travel Date:* ${date}\n💵 *Total Amount:* ₹${total}\n💰 *Advance Paid:* ₹${advance}\n⚖️ *Balance Due:* ₹${balance}\n💳 *Payment Status:* *${paymentStatus.toUpperCase()}* ✅\n\nView & Print your Bill: https://shailrajtravels.com/invoice-print?id=${id}\n\nThank you for booking with Shailraj Travels! Call us anytime: +91 9359570497.`;
-        }
-
+        const msg = this.renderTemplate(templates.payment, vars);
         await this.sendWhatsAppNotification(phone, msg);
         whatsappSent = true;
       }
@@ -199,14 +296,22 @@ export class BookingsService {
     const targetPhone = phone || booking.invoiceCustomData?.customerPhone || booking.phone;
     if (!targetPhone) return { success: false, message: 'No phone number' };
 
+    const templates = await this.getWhatsAppTemplates();
     const custom = booking.invoiceCustomData || {};
-    const custName = custom.customerName || booking.name || 'Valued Customer';
-    const trip = custom.tripName || booking.tripName || 'Tour';
-    const invNo = custom.invoiceNo || booking.bookingId || `INV-${id.slice(-6)}`;
-    const paymentStatus = booking.paymentStatus || custom.paymentStatus || 'PENDING';
+    const vars = {
+      customerName: custom.customerName || booking.name || 'Valued Customer',
+      bookingId: custom.invoiceNo || booking.bookingId || `INV-${id.slice(-6)}`,
+      tripName: custom.tripName || booking.tripName || 'Tour Package',
+      travelDate: custom.travelDate || booking.travelDate || 'As scheduled',
+      persons: booking.persons || 1,
+      pickupLocation: booking.pickupLocation || 'Pune',
+      paidAmount: booking.paidAmount || custom.advancePaid || '0',
+      paymentNote: booking.paymentNote || 'Invoice issued',
+      paymentStatus: (booking.paymentStatus || custom.paymentStatus || 'PENDING').toUpperCase(),
+      invoiceUrl: `https://shailrajtravels.com/invoice-print?id=${id}`,
+    };
 
-    const msg = `Namaste ${custName}! 🧾\n\nHere is your Invoice & Booking Summary from *Shailraj Travels*!\n\n📋 *Invoice No:* ${invNo}\n🚘 *Trip:* ${trip}\n💳 *Payment Status:* *${paymentStatus.toUpperCase()}*\n\nView & Print your Bill: https://shailrajtravels.com/invoice-print?id=${id}\n\nContact us: +91 9359570497.`;
-
+    const msg = this.renderTemplate(templates.payment, vars);
     await this.sendWhatsAppNotification(targetPhone, msg);
     return { success: true, whatsappSent: true };
   }

@@ -5,6 +5,17 @@ import { BookingsService } from './bookings.service';
 export class BookingsController {
   constructor(private readonly bookingsService: BookingsService) {}
 
+  // --- WHATSAPP TEMPLATES ---
+  @Get('templates')
+  async getWhatsAppTemplates() {
+    return this.bookingsService.getWhatsAppTemplates();
+  }
+
+  @Post('templates')
+  async saveWhatsAppTemplates(@Body() templates: { confirmed?: string; cancelled?: string; payment?: string }) {
+    return this.bookingsService.saveWhatsAppTemplates(templates);
+  }
+
   // --- TRIP OPTIONS ---
   @Get('trip-options')
   async getTripOptions() {
@@ -48,8 +59,17 @@ export class BookingsController {
   }
 
   @Put(':id/payment')
-  async updateBookingPaymentStatus(@Param('id') id: string, @Body('paymentStatus') paymentStatus: string) {
-    return this.bookingsService.updateBookingPaymentStatus(id, paymentStatus);
+  async updateBookingPaymentStatus(
+    @Param('id') id: string,
+    @Body() body: { paymentStatus: string; paidAmount?: number | string; paymentNote?: string; sendWhatsApp?: boolean },
+  ) {
+    return this.bookingsService.updateBookingPaymentStatus(
+      id,
+      body.paymentStatus,
+      body.paidAmount,
+      body.paymentNote,
+      body.sendWhatsApp !== false,
+    );
   }
 
   @Post(':id/invoice')
