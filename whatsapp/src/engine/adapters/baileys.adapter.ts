@@ -154,6 +154,7 @@ export class BaileysAdapter implements IWhatsAppEngine {
   async initialize(callbacks: EngineEventCallbacks): Promise<void> {
     this.callbacks = callbacks;
     this.intentionalClose = false;
+    this.reconnectAttempts = 0;
 
     if (this.config.queueWorkerService) {
       this.config.queueWorkerService.registerMessageHandler(async (incoming: IncomingMessage) => {
@@ -382,6 +383,9 @@ export class BaileysAdapter implements IWhatsAppEngine {
       // I4: capped exponential backoff with in-flight timer guard.
       if (this.reconnectAttempts >= BaileysAdapter.MAX_RECONNECT_ATTEMPTS) {
         this.setStatus(EngineStatus.FAILED);
+        if (!this.phoneNumber) {
+          void this.clearAuthState();
+        }
         this.callbacks.onError?.(`reconnect attempts exhausted (${this.reconnectAttempts})`);
         return;
       }
