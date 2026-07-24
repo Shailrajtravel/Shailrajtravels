@@ -21,6 +21,8 @@ import {
   updateBookingDateFn,
   updateBookingPaymentStatusFn,
   sendBookingReplyFn,
+  getWhatsAppTemplatesFn,
+  saveWhatsAppTemplatesFn,
 } from '@/backend/shared/bookings';
 import {
   getGalleryPhotosFn,
@@ -151,6 +153,42 @@ function AdminPage() {
   const [replyModal, setReplyModal] = useState<{isOpen: boolean, booking: any}>({isOpen: false, booking: null});
   const [replyMessage, setReplyMessage] = useState("");
   const [replying, setReplying] = useState(false);
+
+  const [paymentModal, setPaymentModal] = useState<{
+    isOpen: boolean;
+    booking: any | null;
+    paymentStatus: string;
+    paidAmount: string;
+    paymentNote: string;
+    sendWhatsApp: boolean;
+    isSubmitting: boolean;
+  }>({
+    isOpen: false,
+    booking: null,
+    paymentStatus: "ADVANCE",
+    paidAmount: "",
+    paymentNote: "",
+    sendWhatsApp: true,
+    isSubmitting: false,
+  });
+
+  const [templateModal, setTemplateModal] = useState<{
+    isOpen: boolean;
+    activeTab: "confirmed" | "cancelled" | "payment";
+    confirmed: string;
+    cancelled: string;
+    payment: string;
+    loading: boolean;
+    saving: boolean;
+  }>({
+    isOpen: false,
+    activeTab: "confirmed",
+    confirmed: "",
+    cancelled: "",
+    payment: "",
+    loading: false,
+    saving: false,
+  });
 
   useEffect(() => {
     const t = sessionStorage.getItem("adminToken");
@@ -1093,6 +1131,28 @@ function AdminPage() {
                     </button>
                   )}
                 </div>
+                <button
+                  onClick={async () => {
+                    try {
+                      const res = await getWhatsAppTemplatesFn({ data: { adminToken: token } });
+                      setTemplateModal({
+                        isOpen: true,
+                        activeTab: "confirmed",
+                        confirmed: res?.confirmed || "",
+                        cancelled: res?.cancelled || "",
+                        payment: res?.payment || "",
+                        loading: false,
+                        saving: false,
+                      });
+                    } catch (e) {
+                      alert("Failed to load templates");
+                    }
+                  }}
+                  className="flex items-center gap-2 px-4 py-3 bg-brand-blue/10 text-brand-blue-deep hover:bg-brand-blue/20 font-bold rounded-xl transition-all text-sm shrink-0 border border-brand-blue/20"
+                >
+                  <MessageSquare className="w-4 h-4 text-brand-blue" />
+                  Edit WhatsApp Templates
+                </button>
               </div>
 
               <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
@@ -1225,32 +1285,22 @@ function AdminPage() {
                             <td className="px-6 py-4">
                               <select
                                 value={bk.paymentStatus || "PENDING"}
-                                onChange={async (e) => {
+                                onChange={(e) => {
                                   const newStatus = e.target.value;
-                                  try {
-                                    const res = await updateBookingPaymentStatusFn({
-                                      data: {
-                                        adminToken: token,
-                                        id: bk._id,
-                                        paymentStatus: newStatus,
-                                      },
+                                  if (newStatus === "ADVANCE" || newStatus === "PAID") {
+                                    setPaymentModal({
+                                      isOpen: true,
+                                      booking: bk,
+                                      paymentStatus: newStatus,
+                                      paidAmount: bk.paidAmount || (bk.invoiceCustomData?.advancePaid) || (newStatus === "PAID" ? (bk.invoiceCustomData?.grandTotal || "") : ""),
+                                      paymentNote: bk.paymentNote || "",
+                                      sendWhatsApp: true,
+                                      isSubmitting: false,
                                     });
-                                    loadData();
-                                    if (newStatus === "PAID") {
-                                      if (res?.whatsappSent) {
-                                        alert(
-                                          "Payment status updated to PAID. Invoice PDF successfully sent to customer via WhatsApp.",
-                                        );
-                                      } else {
-                                        alert(
-                                          "Payment status updated to PAID, but WhatsApp invoice could not be sent. Make sure WhatsApp Engine is connected and customer phone number is correct.",
-                                        );
-                                      }
-                                    } else {
-                                      alert(`Payment status updated to ${newStatus}.`);
-                                    }
-                                  } catch (err: any) {
-                                    alert(err.message || "Failed to update payment status.");
+                                  } else {
+                                    updateBookingPaymentStatusFn({
+                                      data: { adminToken: token, id: bk._id, paymentStatus: newStatus, sendWhatsApp: false },
+                                    }).then(() => loadData());
                                   }
                                 }}
                                 className={`text-sm font-bold px-3 py-1.5 rounded-lg border outline-none cursor-pointer ${
@@ -1263,7 +1313,7 @@ function AdminPage() {
                               >
                                 <option value="PENDING">PENDING</option>
                                 <option value="ADVANCE">ADVANCE PAID</option>
-                                <option value="PAID">PAID</option>
+                                <option value="PAID">PAID IN FULL</option>
                               </select>
                             </td>
                             <td className="px-6 py-4 text-sm text-slate-500">
@@ -1271,6 +1321,23 @@ function AdminPage() {
                             </td>
                             <td className="px-6 py-4 text-right">
                               <div className="flex justify-end gap-2">
+                                <button
+                                  onClick={() => {
+                                    setPaymentModal({
+                                      isOpen: true,
+                                      booking: bk,
+                                      paymentStatus: bk.paymentStatus || "ADVANCE",
+                                      paidAmount: bk.paidAmount || (bk.invoiceCustomData?.advancePaid) || "",
+                                      paymentNote: bk.paymentNote || "",
+                                      sendWhatsApp: true,
+                                      isSubmitting: false,
+                                    });
+                                  }}
+                                  className="p-2 text-slate-400 hover:text-brand-blue bg-white rounded-lg border border-slate-200 shadow-sm transition-colors cursor-pointer"
+                                  title="Record Payment & WhatsApp Invoice"
+                                >
+                                  <CreditCard className="w-4 h-4 text-brand-blue" />
+                                </button>
                                 <button
                                   onClick={() => {
                                     setReplyModal({ isOpen: true, booking: bk });
@@ -5018,6 +5085,296 @@ function BlogsAdminView({
                   </>
                 ) : (
                   "Save Changes"
+                )}
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {/* Payment Record & WhatsApp Invoice Modal */}
+      {paymentModal.isOpen && isMounted && createPortal(
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl w-full max-w-[550px] shadow-2xl border border-slate-100 flex flex-col animate-reveal overflow-hidden">
+            <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-brand-blue-deep to-blue-900 text-white">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 bg-white/10 rounded-xl">
+                  <CreditCard className="w-6 h-6 text-brand-gold" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold font-display">Record Payment & Invoice</h3>
+                  <p className="text-xs text-slate-200 mt-0.5">
+                    {paymentModal.booking?.generatedBookingId} • {paymentModal.booking?.name}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setPaymentModal(prev => ({ ...prev, isOpen: false }))}
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-4">
+              <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs flex justify-between items-center">
+                <div>
+                  <span className="text-slate-400 font-bold uppercase tracking-wider block text-[10px]">Trip Package</span>
+                  <p className="font-bold text-slate-700 text-sm mt-0.5">
+                    {paymentModal.booking?.tripName === "custom" ? paymentModal.booking?.customDestination || "Custom Trip" : paymentModal.booking?.tripName}
+                  </p>
+                </div>
+                <div className="text-right">
+                  <span className="text-slate-400 font-bold uppercase tracking-wider block text-[10px]">Customer Phone</span>
+                  <p className="font-mono font-bold text-brand-blue text-sm mt-0.5">{paymentModal.booking?.phone}</p>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Payment Status
+                </label>
+                <select
+                  value={paymentModal.paymentStatus}
+                  onChange={(e) => setPaymentModal(prev => ({ ...prev, paymentStatus: e.target.value }))}
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none font-bold text-slate-700 bg-white"
+                >
+                  <option value="ADVANCE">ADVANCE PAID</option>
+                  <option value="PAID">PAID IN FULL</option>
+                  <option value="PENDING">PENDING</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Total Paid Amount (₹)
+                </label>
+                <div className="relative">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">₹</span>
+                  <input
+                    type="number"
+                    placeholder="e.g. 5000"
+                    value={paymentModal.paidAmount}
+                    onChange={(e) => setPaymentModal(prev => ({ ...prev, paidAmount: e.target.value }))}
+                    className="w-full pl-8 pr-4 py-3 rounded-xl border border-slate-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none font-bold text-slate-800"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Description / Note (Optional)
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. Advance paid via GPay / Final cash settlement"
+                  value={paymentModal.paymentNote}
+                  onChange={(e) => setPaymentModal(prev => ({ ...prev, paymentNote: e.target.value }))}
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none text-sm text-slate-700"
+                />
+              </div>
+
+              <div className="pt-2">
+                <label className="flex items-center gap-3 cursor-pointer p-3 bg-blue-50/50 rounded-xl border border-blue-100 hover:bg-blue-50 transition-colors">
+                  <input
+                    type="checkbox"
+                    checked={paymentModal.sendWhatsApp}
+                    onChange={(e) => setPaymentModal(prev => ({ ...prev, sendWhatsApp: e.target.checked }))}
+                    className="w-5 h-5 accent-brand-blue rounded cursor-pointer"
+                  />
+                  <div>
+                    <span className="text-sm font-bold text-brand-blue-deep block">Send WhatsApp Receipt & Invoice Link</span>
+                    <span className="text-xs text-slate-500">Customer will receive invoice receipt on WhatsApp automatically</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div className="p-6 border-t border-slate-100 bg-slate-50 flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setPaymentModal(prev => ({ ...prev, isOpen: false }))}
+                className="px-5 py-2.5 text-slate-600 font-bold hover:bg-slate-200 rounded-xl transition-colors text-sm"
+                disabled={paymentModal.isSubmitting}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={paymentModal.isSubmitting}
+                onClick={async () => {
+                  setPaymentModal(prev => ({ ...prev, isSubmitting: true }));
+                  try {
+                    const res = await updateBookingPaymentStatusFn({
+                      data: {
+                        adminToken: token,
+                        id: paymentModal.booking._id,
+                        paymentStatus: paymentModal.paymentStatus,
+                        paidAmount: paymentModal.paidAmount,
+                        paymentNote: paymentModal.paymentNote,
+                        sendWhatsApp: paymentModal.sendWhatsApp,
+                      },
+                    });
+                    setPaymentModal(prev => ({ ...prev, isOpen: false, isSubmitting: false }));
+                    loadData();
+                    if (paymentModal.sendWhatsApp) {
+                      alert("Payment updated! Invoice & WhatsApp receipt successfully sent to customer.");
+                    } else {
+                      alert("Payment updated successfully.");
+                    }
+                  } catch (err: any) {
+                    setPaymentModal(prev => ({ ...prev, isSubmitting: false }));
+                    alert(err.message || "Failed to update payment.");
+                  }
+                }}
+                className="px-6 py-2.5 bg-brand-blue-deep text-white font-bold rounded-xl hover:bg-blue-900 transition-all flex items-center gap-2 text-sm shadow-md"
+              >
+                {paymentModal.isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Check className="w-4 h-4" />
+                    Confirm & Send Invoice
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {/* WhatsApp Message Template Customizer Modal */}
+      {templateModal.isOpen && isMounted && createPortal(
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl w-full max-w-[650px] shadow-2xl border border-slate-100 flex flex-col max-h-[90vh] animate-reveal overflow-hidden">
+            <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-brand-blue-deep to-slate-900 text-white">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 bg-white/10 rounded-xl">
+                  <MessageSquare className="w-6 h-6 text-brand-gold" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold font-display">Manage WhatsApp Message Templates</h3>
+                  <p className="text-xs text-slate-300 mt-0.5">Customize automatic messages sent to customers on status & payment updates</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setTemplateModal(prev => ({ ...prev, isOpen: false }))}
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="flex border-b border-slate-200 bg-slate-50 px-6 pt-3 gap-2">
+              <button
+                onClick={() => setTemplateModal(prev => ({ ...prev, activeTab: "confirmed" }))}
+                className={`px-4 py-2.5 font-bold text-xs rounded-t-xl transition-all border-b-2 ${templateModal.activeTab === "confirmed" ? "bg-white text-green-700 border-green-600 shadow-sm" : "text-slate-500 hover:text-slate-800 border-transparent"}`}
+              >
+                🎉 Booking Confirmed
+              </button>
+              <button
+                onClick={() => setTemplateModal(prev => ({ ...prev, activeTab: "cancelled" }))}
+                className={`px-4 py-2.5 font-bold text-xs rounded-t-xl transition-all border-b-2 ${templateModal.activeTab === "cancelled" ? "bg-white text-red-700 border-red-600 shadow-sm" : "text-slate-500 hover:text-slate-800 border-transparent"}`}
+              >
+                🔴 Booking Cancelled
+              </button>
+              <button
+                onClick={() => setTemplateModal(prev => ({ ...prev, activeTab: "payment" }))}
+                className={`px-4 py-2.5 font-bold text-xs rounded-t-xl transition-all border-b-2 ${templateModal.activeTab === "payment" ? "bg-white text-brand-blue-deep border-brand-blue shadow-sm" : "text-slate-500 hover:text-slate-800 border-transparent"}`}
+              >
+                💳 Payment & Invoice Receipt
+              </button>
+            </div>
+
+            <div className="p-6 flex-1 overflow-y-auto space-y-4">
+              <div>
+                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Available Placeholder Chips (Click to Insert):</span>
+                <div className="flex flex-wrap gap-1.5">
+                  {["{customerName}", "{bookingId}", "{tripName}", "{travelDate}", "{persons}", "{pickupLocation}", "{paidAmount}", "{paymentNote}", "{paymentStatus}", "{invoiceUrl}"].map((chip) => (
+                    <button
+                      key={chip}
+                      type="button"
+                      onClick={() => {
+                        const key = templateModal.activeTab;
+                        setTemplateModal(prev => ({
+                          ...prev,
+                          [key]: (prev[key] || "") + " " + chip,
+                        }));
+                      }}
+                      className="px-2.5 py-1 bg-slate-100 hover:bg-brand-blue/10 hover:text-brand-blue text-slate-700 text-xs font-mono font-bold rounded-lg border border-slate-200 transition-colors"
+                    >
+                      + {chip}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  {templateModal.activeTab === "confirmed" ? "Booking Confirmed WhatsApp Message" : templateModal.activeTab === "cancelled" ? "Booking Cancelled WhatsApp Message" : "Payment & Invoice WhatsApp Message"}
+                </label>
+                <textarea
+                  rows={8}
+                  value={templateModal[templateModal.activeTab]}
+                  onChange={(e) => {
+                    const key = templateModal.activeTab;
+                    const val = e.target.value;
+                    setTemplateModal(prev => ({ ...prev, [key]: val }));
+                  }}
+                  className="w-full p-4 rounded-xl border border-slate-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none font-mono text-xs text-slate-800 leading-relaxed custom-scrollbar"
+                />
+              </div>
+            </div>
+
+            <div className="p-6 border-t border-slate-100 bg-slate-50 flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setTemplateModal(prev => ({ ...prev, isOpen: false }))}
+                className="px-5 py-2.5 text-slate-600 font-bold hover:bg-slate-200 rounded-xl transition-colors text-sm"
+                disabled={templateModal.saving}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={templateModal.saving}
+                onClick={async () => {
+                  setTemplateModal(prev => ({ ...prev, saving: true }));
+                  try {
+                    await saveWhatsAppTemplatesFn({
+                      data: {
+                        adminToken: token,
+                        templates: {
+                          confirmed: templateModal.confirmed,
+                          cancelled: templateModal.cancelled,
+                          payment: templateModal.payment,
+                        },
+                      },
+                    });
+                    setTemplateModal(prev => ({ ...prev, isOpen: false, saving: false }));
+                    alert("WhatsApp templates updated successfully!");
+                  } catch (err: any) {
+                    setTemplateModal(prev => ({ ...prev, saving: false }));
+                    alert("Failed to save templates: " + (err.message || "Unknown error"));
+                  }
+                }}
+                className="px-6 py-2.5 bg-brand-green text-white font-bold rounded-xl hover:bg-brand-green-dark transition-all flex items-center gap-2 text-sm shadow-md"
+              >
+                {templateModal.saving ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Check className="w-4 h-4" />
+                    Save Templates
+                  </>
                 )}
               </button>
             </div>

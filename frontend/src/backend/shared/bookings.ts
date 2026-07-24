@@ -153,13 +153,36 @@ export const sendBookingReplyFn = createServerFn({ method: "POST" })
     });
   });
 
+export const getWhatsAppTemplatesFn = createServerFn({ method: "POST" })
+  .validator((data: { adminToken: string }) => data)
+  .handler(async ({ data }) => {
+    if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
+    return await apiFetch('/bookings/templates');
+  });
+
+export const saveWhatsAppTemplatesFn = createServerFn({ method: "POST" })
+  .validator((data: { adminToken: string; templates: { confirmed?: string; cancelled?: string; payment?: string } }) => data)
+  .handler(async ({ data }) => {
+    if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
+    return await apiFetch('/bookings/templates', {
+      method: "POST",
+      body: JSON.stringify(data.templates),
+    });
+  });
+
 export const updateBookingPaymentStatusFn = createServerFn({ method: "POST" })
-  .validator((data: { adminToken: string; id: string; paymentStatus: string }) => data)
+  .validator((data: { adminToken: string; id: string; paymentStatus: string; paidAmount?: string | number; paymentNote?: string; sendWhatsApp?: boolean }) => data)
   .handler(async ({ data }) => {
     if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
     return await apiFetch(`/bookings/${data.id}/payment`, {
       method: "PUT",
-      body: JSON.stringify({ paymentStatus: data.paymentStatus, adminToken: data.adminToken }),
+      body: JSON.stringify({
+        paymentStatus: data.paymentStatus,
+        paidAmount: data.paidAmount,
+        paymentNote: data.paymentNote,
+        sendWhatsApp: data.sendWhatsApp !== false,
+        adminToken: data.adminToken,
+      }),
     });
   });
 
