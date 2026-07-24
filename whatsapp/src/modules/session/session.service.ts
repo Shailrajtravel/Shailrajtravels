@@ -665,6 +665,13 @@ export class SessionService implements OnModuleDestroy, OnModuleInit, OnApplicat
           pushName,
           connectedAt: new Date(),
           lastActiveAt: new Date(),
+        }).then(async () => {
+          if (this.shailrajApiService) {
+            const updated = await this.sessionRepository.findOne({ where: { id } });
+            if (updated) {
+              await this.shailrajApiService.saveOpenWaSession(updated);
+            }
+          }
         });
       },
       onMessage: (message): void => {
@@ -1430,6 +1437,11 @@ export class SessionService implements OnModuleDestroy, OnModuleInit, OnApplicat
 
   private async updateStatus(id: string, status: SessionStatus): Promise<void> {
     await this.sessionRepository.update(id, { status });
+    if (this.shailrajApiService) {
+      this.sessionRepository.findOne({ where: { id } }).then(updated => {
+        if (updated) void this.shailrajApiService?.saveOpenWaSession(updated);
+      }).catch(() => undefined);
+    }
     this.logger.debug(`Session status updated to ${status}`, {
       sessionId: id,
       status,

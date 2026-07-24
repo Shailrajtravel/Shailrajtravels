@@ -5,7 +5,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   
   app.enableCors();
-  app.setGlobalPrefix('api', { exclude: ['health', 'healthz'] });
+  app.setGlobalPrefix('api', { exclude: ['health', 'healthz', 'webhooks', 'api/webhooks'] });
   
   await app.listen(process.env.PORT ?? 3000);
 }
