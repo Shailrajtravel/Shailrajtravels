@@ -28,6 +28,12 @@ export interface BaileysAdapterConfig {
   messageStore?: BaileysMessageStore;
   /** Persisted, cross-session lid->phone resolution table. Backs lid resolution beyond the in-memory map. */
   lidMappingStore?: LidMappingStore;
+  /** MongoDB session service provider */
+  mongoSessionService?: any;
+  /** Engine state and timestamp tracking provider */
+  engineStateService?: any;
+  /** Persistent QueueWorker service provider */
+  queueWorkerService?: any;
 }
 
 /**

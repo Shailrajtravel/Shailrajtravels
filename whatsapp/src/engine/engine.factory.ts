@@ -9,6 +9,10 @@ import { createLogger } from '../common/services/logger.service';
 import { BaileysMessageStoreService } from './adapters/baileys-message-store.service';
 import { LidMappingStoreService } from './identity/lid-mapping-store.service';
 
+import { MongoSessionService } from './services/mongo-session.service';
+import { EngineStateService } from './services/engine-state.service';
+import { QueueWorkerService } from './services/queue-worker.service';
+
 export interface EngineCreateOptions {
   sessionId: string;
   proxyUrl?: string;
@@ -25,6 +29,9 @@ export class EngineFactory implements OnModuleInit {
     private readonly pluginLoader: PluginLoaderService,
     private readonly baileysMessageStore: BaileysMessageStoreService,
     private readonly lidMappingStore: LidMappingStoreService,
+    private readonly mongoSessionService: MongoSessionService,
+    private readonly engineStateService: EngineStateService,
+    private readonly queueWorkerService: QueueWorkerService,
   ) {
     this.engineType = this.configService.get<string>('engine.type') ?? 'whatsapp-web.js';
   }
@@ -68,7 +75,14 @@ export class EngineFactory implements OnModuleInit {
     };
     this.pluginLoader.registerBuiltInPlugin(
       baileysManifest,
-      new BaileysPlugin(this.baileysMessageStore, engineConfig, this.lidMappingStore),
+      new BaileysPlugin(
+        this.baileysMessageStore,
+        engineConfig,
+        this.lidMappingStore,
+        this.mongoSessionService,
+        this.engineStateService,
+        this.queueWorkerService,
+      ),
       engineConfig,
     );
 

@@ -78,6 +78,14 @@ export default () => ({
       executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
     },
     sessionDataPath: process.env.SESSION_DATA_PATH || './data/sessions',
+    mongodbUri: process.env.MONGODB_URI || process.env.MONGO_URI || undefined,
+    queueProcessDelayMs: parseInt(process.env.QUEUE_PROCESS_DELAY || '500', 10),
+    queueBatchSize: parseInt(process.env.QUEUE_BATCH_SIZE || '100', 10),
+    queueRetries: [
+      parseInt(process.env.QUEUE_RETRY_1 || '2000', 10),
+      parseInt(process.env.QUEUE_RETRY_2 || '5000', 10),
+      parseInt(process.env.QUEUE_RETRY_3 || '10000', 10),
+    ],
     // Baileys engine (used when ENGINE_TYPE=baileys). Multi-file auth state base dir; each session
     // gets its own subdirectory. Read by the Baileys plugin from the opaque engine config blob.
     baileys: {

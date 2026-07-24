@@ -28,6 +28,7 @@ import {
   ReactionEvent,
 } from '../../engine/interfaces/whatsapp-engine.interface';
 import { createLogger } from '../../common/services/logger.service';
+import { simulateHumanisticTyping } from '../../common/utils/anti-ban';
 import { ShailrajApiService } from '../shailraj-api/shailraj-api.service';
 import { EventsGateway } from '../events/events.gateway';
 import { WebhookService } from '../webhook/webhook.service';
@@ -708,8 +709,11 @@ export class SessionService implements OnModuleDestroy, OnModuleInit, OnApplicat
               }
 
               if (matchedRule && matchedRule.reply) {
-                this.logger.log(`[Chatbot] Sending auto-reply to ${incoming.chatId} for keyword match on "${text}"`);
-                void engine.sendTextMessage(incoming.chatId, matchedRule.reply).catch(err => {
+                this.logger.log(`[Chatbot] Sending anti-ban humanistic auto-reply to ${incoming.chatId} for keyword match on "${text}"`);
+                void (async () => {
+                  await simulateHumanisticTyping(engine, incoming.chatId, matchedRule.reply);
+                  await engine.sendTextMessage(incoming.chatId, matchedRule.reply);
+                })().catch(err => {
                   this.logger.error(`Failed to send auto-reply to ${incoming.chatId}`, String(err));
                 });
               }

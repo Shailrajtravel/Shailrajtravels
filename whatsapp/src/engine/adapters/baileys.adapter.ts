@@ -41,6 +41,7 @@ import { MessageNotFoundError } from '../../common/errors/message-not-found.erro
 import { createLogger } from '../../common/services/logger.service';
 import { BaileysAdapterConfig, BaileysLogger } from '../types/baileys.types';
 import { BaileysSessionStore } from './baileys-session-store';
+import { useMongoDBAuthState } from './mongo-auth-state';
 import {
   capInboundMedia,
   coerceDeclaredSize,
@@ -146,11 +147,20 @@ export class BaileysAdapter implements IWhatsAppEngine {
     }
   }
 
+  private mongoAuthFlush?: () => Promise<void>;
+
   // ----- Lifecycle -----
 
   async initialize(callbacks: EngineEventCallbacks): Promise<void> {
     this.callbacks = callbacks;
     this.intentionalClose = false;
+
+    if (this.config.queueWorkerService) {
+      this.config.queueWorkerService.registerMessageHandler(async (incoming: IncomingMessage) => {
+        this.callbacks.onMessage?.(incoming);
+      });
+    }
+
     try {
       await this.connect();
     } catch (err) {
@@ -176,7 +186,28 @@ export class BaileysAdapter implements IWhatsAppEngine {
   private async connectInner(): Promise<void> {
     this.setStatus(EngineStatus.INITIALIZING);
     const b = await this.loadLib();
-    const { state, saveCreds } = await b.useMultiFileAuthState(this.authPath);
+
+    let state: any;
+    let saveCreds: () => Promise<void>;
+
+    const mongoService = this.config.mongoSessionService;
+    if (mongoService?.isConnected()) {
+      const credsColl = mongoService.getCollection('baileys_creds');
+      const keysColl = mongoService.getCollection('baileys_keys');
+      const mongoAuth = await useMongoDBAuthState(credsColl, keysColl, this.config.sessionId, () => this.loadLib());
+      state = mongoAuth.state;
+      saveCreds = mongoAuth.saveCreds;
+      this.mongoAuthFlush = mongoAuth.flushPendingCreds;
+    } else {
+      const fileAuth = await b.useMultiFileAuthState(this.authPath);
+      state = fileAuth.state;
+      saveCreds = fileAuth.saveCreds;
+    }
+
+    if (this.config.queueWorkerService) {
+      await this.config.queueWorkerService.recoverStuckJobs(this.config.sessionId);
+    }
+
     const { version } = await b.fetchLatestBaileysVersion();
 
     // C2: resurrect-after-stop guard — if disconnect/logout/destroy ran during the awaits above,
@@ -220,7 +251,7 @@ export class BaileysAdapter implements IWhatsAppEngine {
         keys: cacheableKeys,
       },
       version,
-      browser: b.Browsers.macOS('Desktop'),
+      browser: b.Browsers?.macOS ? b.Browsers.macOS('Desktop') : BAILEYS_BROWSER,
       printQRInTerminal: false,
       retryRequestDelayMs: 250,
       getMessage: async key => {
@@ -426,6 +457,13 @@ export class BaileysAdapter implements IWhatsAppEngine {
   private async clearAuthState(): Promise<void> {
     try {
       await fs.promises.rm(this.authPath, { recursive: true, force: true });
+      const mongoService = this.config.mongoSessionService;
+      if (mongoService?.isConnected()) {
+        const credsColl = mongoService.getCollection('baileys_creds');
+        const keysColl = mongoService.getCollection('baileys_keys');
+        await credsColl?.deleteOne({ _id: this.config.sessionId });
+        await keysColl?.deleteMany({ sessionId: this.config.sessionId });
+      }
       this.logger.log('Cleared Baileys auth state', { authPath: this.authPath });
     } catch (err) {
       this.logger.warn('Failed to clear Baileys auth state', {
@@ -571,13 +609,8 @@ export class BaileysAdapter implements IWhatsAppEngine {
 
   async replyToMessage(chatId: string, quotedMsgId: string, text: string): Promise<MessageResult> {
     this.ensureReady();
-    try {
-      const quoted = await this.requireStored(quotedMsgId);
-      return await this.sendContent(chatId, { text }, { quoted });
-    } catch (error) {
-      this.logger.warn(`Failed to resolve quoted message ${quotedMsgId}, falling back to standard sendTextMessage`, String(error));
-      return this.sendTextMessage(chatId, text);
-    }
+    const quoted = await this.requireStored(quotedMsgId);
+    return this.sendContent(chatId, { text }, { quoted });
   }
 
   async forwardMessage(fromChatId: string, toChatId: string, messageId: string): Promise<MessageResult> {
@@ -949,7 +982,11 @@ export class BaileysAdapter implements IWhatsAppEngine {
       if (msg.key.fromMe === true) {
         this.callbacks.onMessageCreate?.(incoming);
       } else {
-        this.callbacks.onMessage?.(incoming);
+        if (this.config.queueWorkerService) {
+          void this.config.queueWorkerService.enqueue(incoming, 'REALTIME');
+        } else {
+          this.callbacks.onMessage?.(incoming);
+        }
       }
       void this.config.messageStore?.put(this.config.sessionId, msg).catch(err =>
         this.logger.warn('Failed to persist message to store', {
@@ -1360,6 +1397,14 @@ export class BaileysAdapter implements IWhatsAppEngine {
     }
     this.status = status;
     this.callbacks.onStateChanged?.(status);
+    if (this.config.engineStateService) {
+      void this.config.engineStateService.setState(
+        this.config.sessionId,
+        status,
+        this.phoneNumber,
+        this.pushName,
+      );
+    }
   }
 
   /** `628999:12@s.whatsapp.net` / `628999@s.whatsapp.net` -> `628999`. */

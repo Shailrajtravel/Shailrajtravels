@@ -20,6 +20,9 @@ export class BaileysPlugin implements IEnginePlugin {
     private readonly messageStore?: BaileysMessageStore,
     private readonly registeredConfig?: Record<string, unknown>,
     private readonly lidMappingStore?: LidMappingStore,
+    private readonly mongoSessionService?: any,
+    private readonly engineStateService?: any,
+    private readonly queueWorkerService?: any,
   ) {}
 
   onLoad(context: PluginContext): Promise<void> {
@@ -56,6 +59,9 @@ export class BaileysPlugin implements IEnginePlugin {
       proxyType,
       messageStore: this.messageStore,
       lidMappingStore: this.lidMappingStore,
+      mongoSessionService: this.mongoSessionService,
+      engineStateService: this.engineStateService,
+      queueWorkerService: this.queueWorkerService,
     });
   }
 
