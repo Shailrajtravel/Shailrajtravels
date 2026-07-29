@@ -730,8 +730,8 @@ export class SessionService implements OnModuleDestroy, OnModuleInit, OnApplicat
                       Array.isArray(rule.keywords) && rule.keywords.some((k: string) => {
                         const kw = k.trim().toLowerCase();
                         if (!kw) return false;
-                        if (text === kw || text.includes(kw) || kw.includes(text)) return true;
-                        if (kw === 'hi' && (text === 'hii' || text === 'hiii' || text.startsWith('hi'))) return true;
+                        if (text === kw) return true;
+                        if (kw === 'hi' && (text === 'hii' || text === 'hiii')) return true;
                         return false;
                       })
                     );
