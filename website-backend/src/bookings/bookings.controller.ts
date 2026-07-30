@@ -12,7 +12,7 @@ export class BookingsController {
   }
 
   @Post('templates')
-  async saveWhatsAppTemplates(@Body() templates: { confirmed?: string; cancelled?: string; payment?: string }) {
+  async saveWhatsAppTemplates(@Body() templates: { confirmed?: string; cancelled?: string; payment?: string; invoicePdf?: string }) {
     return this.bookingsService.saveWhatsAppTemplates(templates);
   }
 
@@ -54,8 +54,8 @@ export class BookingsController {
   }
 
   @Put(':id/status')
-  async updateBookingStatus(@Param('id') id: string, @Body('status') status: string) {
-    return this.bookingsService.updateBookingStatus(id, status);
+  async updateBookingStatus(@Param('id') id: string, @Body('status') status: 'Pending' | 'Confirmed' | 'Cancelled', @Body('sendWhatsApp') sendWhatsApp?: boolean) {
+    return this.bookingsService.updateBookingStatus(id, status, sendWhatsApp !== false);
   }
 
   @Put(':id/payment')

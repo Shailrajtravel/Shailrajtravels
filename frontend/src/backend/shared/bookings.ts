@@ -134,12 +134,12 @@ export const updateBookingDateFn = createServerFn({ method: "POST" })
   });
 
 export const updateBookingStatusFn = createServerFn({ method: "POST" })
-  .validator((data: { adminToken: string; id: string; status: string }) => data)
+  .validator((data: { adminToken: string; id: string; status: 'Pending' | 'Confirmed' | 'Cancelled'; sendWhatsApp?: boolean }) => data)
   .handler(async ({ data }) => {
     if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
     return await apiFetch(`/bookings/${data.id}/status`, {
       method: "PUT",
-      body: JSON.stringify({ status: data.status }),
+      body: JSON.stringify({ status: data.status, sendWhatsApp: data.sendWhatsApp !== false }),
     });
   });
 
@@ -161,7 +161,7 @@ export const getWhatsAppTemplatesFn = createServerFn({ method: "POST" })
   });
 
 export const saveWhatsAppTemplatesFn = createServerFn({ method: "POST" })
-  .validator((data: { adminToken: string; templates: { confirmed?: string; cancelled?: string; payment?: string } }) => data)
+  .validator((data: { adminToken: string; templates: { confirmed?: string; cancelled?: string; payment?: string; invoicePdf?: string } }) => data)
   .handler(async ({ data }) => {
     if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
     return await apiFetch('/bookings/templates', {

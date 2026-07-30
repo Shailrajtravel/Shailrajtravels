@@ -7,6 +7,7 @@ const DEFAULT_TEMPLATES = {
   confirmed: `Namaste {customerName}! 🎉\n\nGreat news! Your booking (*{bookingId}*) for *{tripName}* has been *CONFIRMED* by Shailraj Travels!\n\n📅 *Travel Date:* {travelDate}\n📍 *Pickup:* {pickupLocation}\n👥 *Persons:* {persons}\n\nWe look forward to giving you a wonderful journey! Call us anytime: +91 9359570497.`,
   cancelled: `Namaste {customerName}.\n\nYour booking (*{bookingId}*) for *{tripName}* has been *CANCELLED* by Shailraj Travels.\n\nIf you have any questions or wish to re-book, please contact us at +91 9359570497.`,
   payment: `Namaste {customerName}! 🧾\n\nHere is your Official Payment Receipt & Invoice from *Shailraj Travels*!\n\n📋 *Booking ID:* {bookingId}\n🚘 *Trip:* {tripName}\n📅 *Travel Date:* {travelDate}\n💵 *Paid Amount:* ₹{paidAmount}\n📝 *Note:* {paymentNote}\n💳 *Payment Status:* *{paymentStatus}* ✅\n\n📄 *View & Print Invoice:* {invoiceUrl}\n\nThank you for choosing Shailraj Travels! Call us anytime: +91 9359570497.`,
+  invoicePdf: `🙏 *Shailraj Travels Pune* 🙏\n\nHello *{customerName}*,\n\nWe have received your payment for *{tripName}*.\nPlease find the official invoice above. Thank you for choosing us! Have a blessed trip! 🚩`,
 };
 
 @Injectable()
@@ -23,6 +24,7 @@ export class BookingsService {
           confirmed: doc.confirmed || DEFAULT_TEMPLATES.confirmed,
           cancelled: doc.cancelled || DEFAULT_TEMPLATES.cancelled,
           payment: doc.payment || DEFAULT_TEMPLATES.payment,
+          invoicePdf: doc.invoicePdf || DEFAULT_TEMPLATES.invoicePdf,
         };
       }
     } catch (e) {
@@ -31,7 +33,7 @@ export class BookingsService {
     return DEFAULT_TEMPLATES;
   }
 
-  async saveWhatsAppTemplates(templates: { confirmed?: string; cancelled?: string; payment?: string }) {
+  async saveWhatsAppTemplates(templates: { confirmed?: string; cancelled?: string; payment?: string; invoicePdf?: string }) {
     try {
       const col = await storageManager.getGlobalCollection('whatsapp_templates');
       await col.updateOne(
@@ -41,6 +43,7 @@ export class BookingsService {
             confirmed: templates.confirmed || DEFAULT_TEMPLATES.confirmed,
             cancelled: templates.cancelled || DEFAULT_TEMPLATES.cancelled,
             payment: templates.payment || DEFAULT_TEMPLATES.payment,
+            invoicePdf: templates.invoicePdf || DEFAULT_TEMPLATES.invoicePdf,
             updatedAt: new Date().toISOString(),
           },
         },
@@ -178,39 +181,44 @@ export class BookingsService {
     return await bookingRepository.updateOne(id, { travelDate: date, updatedAt: new Date().toISOString() });
   }
 
-  async updateBookingStatus(id: string, status: string) {
+  async updateBookingStatus(id: string, status: 'Pending' | 'Confirmed' | 'Cancelled', sendWhatsApp: boolean = true) {
+    const booking = await bookingRepository.findBookingById(id);
+    if (!booking) throw new Error('Booking not found');
+
     await bookingRepository.updateOne(id, { status, updatedAt: new Date().toISOString() });
 
     // Send automatic WhatsApp notification to customer on status change using custom templates
-    setImmediate(async () => {
-      try {
-        const booking = await bookingRepository.findBookingById(id);
-        const targetPhone = booking?.phone || booking?.customerPhone;
-        if (booking && targetPhone) {
-          const templates = await this.getWhatsAppTemplates();
-          const vars = {
-            customerName: booking.name || booking.customerName || 'Valued Customer',
-            bookingId: booking.bookingId || `SB-${id.slice(-6)}`,
-            tripName: booking.tripName === 'custom' ? booking.customDestination || 'Custom Trip' : booking.tripName || 'Tour Package',
-            travelDate: booking.travelDate || 'As scheduled',
-            persons: booking.persons || 1,
-            pickupLocation: booking.pickupLocation || 'Pune',
-            invoiceUrl: `https://shailrajtravels.com/invoice-print?id=${id}`,
-          };
+    if (sendWhatsApp) {
+      setImmediate(async () => {
+        try {
+          const booking = await bookingRepository.findBookingById(id);
+          const targetPhone = booking?.phone || booking?.customerPhone;
+          if (booking && targetPhone) {
+            const templates = await this.getWhatsAppTemplates();
+            const vars = {
+              customerName: booking.name || booking.customerName || 'Valued Customer',
+              bookingId: booking.bookingId || `SB-${id.slice(-6)}`,
+              tripName: booking.tripName === 'custom' ? booking.customDestination || 'Custom Trip' : booking.tripName || 'Tour Package',
+              travelDate: booking.travelDate || 'As scheduled',
+              persons: booking.persons || 1,
+              pickupLocation: booking.pickupLocation || 'Pune',
+              invoiceUrl: `https://shailrajtravels.com/invoice-print?id=${id}`,
+            };
 
-          const sLower = (status || '').trim().toLowerCase();
-          if (sLower === 'confirmed') {
-            const msg = this.renderTemplate(templates.confirmed, vars);
-            await this.sendWhatsAppNotification(targetPhone, msg);
-          } else if (sLower === 'cancelled') {
-            const msg = this.renderTemplate(templates.cancelled, vars);
-            await this.sendWhatsAppNotification(targetPhone, msg);
+            const sLower = (status || '').trim().toLowerCase();
+            if (sLower === 'confirmed') {
+              const msg = this.renderTemplate(templates.confirmed, vars);
+              await this.sendWhatsAppNotification(targetPhone, msg);
+            } else if (sLower === 'cancelled') {
+              const msg = this.renderTemplate(templates.cancelled, vars);
+              await this.sendWhatsAppNotification(targetPhone, msg);
+            }
           }
+        } catch (err) {
+          this.logger.error(`Error sending status update WhatsApp for booking ${id}`, String(err));
         }
-      } catch (err) {
-        this.logger.error(`Error sending status update WhatsApp for booking ${id}`, String(err));
-      }
-    });
+      });
+    }
 
     return { success: true };
   }

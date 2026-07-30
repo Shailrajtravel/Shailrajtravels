@@ -329,7 +329,32 @@ export async function sendBookingInvoicePDF(
     const targetId = await resolveChatId(booking.phone || "");
 
     const pkgName = booking.invoiceCustomData?.packageName || booking.packageName || booking.tripName || "Custom Trip";
-    const msg = `🙏 *Shailraj Travels Pune* 🙏\n\nHello *${booking.name || "Customer"}*,\n\nWe have received your payment for *${pkgName}*.\nPlease find the official invoice above. Thank you for choosing us! Have a blessed trip! 🚩`;
+    
+    // Fetch dynamic template from backend
+    let templateStr = `🙏 *Shailraj Travels Pune* 🙏\n\nHello *{customerName}*,\n\nWe have received your payment for *{tripName}*.\nPlease find the official invoice above. Thank you for choosing us! Have a blessed trip! 🚩`;
+    try {
+      const BACKEND_URL = process.env.VITE_WEBSITE_BACKEND_URL || import.meta.env?.VITE_WEBSITE_BACKEND_URL || "https://shailrajtravels.onrender.com/api";
+      const res = await fetch(`${BACKEND_URL}/bookings/templates`);
+      if (res.ok) {
+        const templates = await res.json();
+        if (templates?.invoicePdf) {
+          templateStr = templates.invoicePdf;
+        }
+      }
+    } catch (e) {
+      console.error("[WhatsApp] Failed to fetch invoice template", e);
+    }
+    
+    // Replace variables
+    const msg = templateStr
+      .replace(/{customerName}/g, booking.name || "Customer")
+      .replace(/{tripName}/g, pkgName)
+      .replace(/{bookingId}/g, booking.bookingId || `SB-${(booking._id || "").slice(-6)}`)
+      .replace(/{travelDate}/g, booking.travelDate || "As scheduled")
+      .replace(/{persons}/g, booking.persons || 1)
+      .replace(/{pickupLocation}/g, booking.pickupLocation || "Pune")
+      .replace(/{paidAmount}/g, booking.paidAmount || (booking.invoiceCustomData?.advancePaid) || "")
+      .replace(/{paymentNote}/g, booking.paymentNote || "");
 
     // Simulate typing indicator for anti-ban
     try {

@@ -172,12 +172,27 @@ function AdminPage() {
     isSubmitting: false,
   });
 
+  const [statusModal, setStatusModal] = useState<{
+    isOpen: boolean;
+    booking: any | null;
+    status: 'Confirmed' | 'Cancelled';
+    sendWhatsApp: boolean;
+    isSubmitting: boolean;
+  }>({
+    isOpen: false,
+    booking: null,
+    status: 'Confirmed',
+    sendWhatsApp: true,
+    isSubmitting: false,
+  });
+
   const [templateModal, setTemplateModal] = useState<{
     isOpen: boolean;
-    activeTab: "confirmed" | "cancelled" | "payment";
+    activeTab: "confirmed" | "cancelled" | "payment" | "invoicePdf";
     confirmed: string;
     cancelled: string;
     payment: string;
+    invoicePdf: string;
     loading: boolean;
     saving: boolean;
   }>({
@@ -186,6 +201,7 @@ function AdminPage() {
     confirmed: "",
     cancelled: "",
     payment: "",
+    invoicePdf: "",
     loading: false,
     saving: false,
   });
@@ -1141,6 +1157,7 @@ function AdminPage() {
                         confirmed: res?.confirmed || "",
                         cancelled: res?.cancelled || "",
                         payment: res?.payment || "",
+                        invoicePdf: res?.invoicePdf || "",
                         loading: false,
                         saving: false,
                       });
@@ -1262,12 +1279,23 @@ function AdminPage() {
                               <select
                                 value={bk.status}
                                 onChange={async (e) => {
-                                  try {
-                                    await updateBookingStatusFn({
-                                      data: { adminToken: token, id: bk._id, status: e.target.value },
+                                  const newStatus = e.target.value as 'Pending' | 'Confirmed' | 'Cancelled';
+                                  if (newStatus === "Confirmed" || newStatus === "Cancelled") {
+                                    setStatusModal({
+                                      isOpen: true,
+                                      booking: bk,
+                                      status: newStatus,
+                                      sendWhatsApp: true,
+                                      isSubmitting: false,
                                     });
-                                    loadData();
-                                  } catch (err) {}
+                                  } else {
+                                    try {
+                                      await updateBookingStatusFn({
+                                        data: { adminToken: token, id: bk._id, status: newStatus, sendWhatsApp: false },
+                                      });
+                                      loadData();
+                                    } catch (err) {}
+                                  }
                                 }}
                                 className={`text-sm font-bold px-3 py-1.5 rounded-lg border outline-none cursor-pointer ${
                                   bk.status === "Confirmed"
@@ -1509,17 +1537,22 @@ function AdminPage() {
                               <select
                                 value={bk.status}
                                 onChange={async (e) => {
-                                  const newStatus = e.target.value;
-                                  try {
-                                    await updateBookingStatusFn({
-                                      data: { adminToken: token, id: bk._id, status: newStatus },
+                                  const newStatus = e.target.value as 'Pending' | 'Confirmed' | 'Cancelled';
+                                  if (newStatus === "Confirmed" || newStatus === "Cancelled") {
+                                    setStatusModal({
+                                      isOpen: true,
+                                      booking: bk,
+                                      status: newStatus,
+                                      sendWhatsApp: true,
+                                      isSubmitting: false,
                                     });
-                                    loadData();
-                                    if (newStatus === "Confirmed" || newStatus === "Cancelled") {
-                                      alert(`Booking status updated to ${newStatus}. WhatsApp notification sent to customer.`);
-                                    }
-                                  } catch (err) {
-                                    alert("Failed to update status.");
+                                  } else {
+                                    try {
+                                      await updateBookingStatusFn({
+                                        data: { adminToken: token, id: bk._id, status: newStatus, sendWhatsApp: false },
+                                      });
+                                      loadData();
+                                    } catch (err) {}
                                   }
                                 }}
                                 className={`w-full text-xs font-bold px-2 py-2 rounded-lg border outline-none cursor-pointer ${
@@ -5142,6 +5175,88 @@ function BlogsAdminView({
         document.body
       )}
 
+      {/* Status Update Modal */}
+      {statusModal.isOpen && isMounted && createPortal(
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl w-full max-w-[450px] shadow-2xl border border-slate-100 flex flex-col animate-reveal overflow-hidden">
+            <div className={`p-6 border-b border-slate-100 flex items-center justify-between text-white ${statusModal.status === "Confirmed" ? "bg-gradient-to-r from-green-600 to-green-700" : "bg-gradient-to-r from-red-600 to-red-700"}`}>
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 bg-white/10 rounded-xl">
+                  {statusModal.status === "Confirmed" ? <CheckCircle className="w-6 h-6" /> : <AlertCircle className="w-6 h-6" />}
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold font-display">Mark as {statusModal.status}</h3>
+                  <p className="text-xs text-green-50 mt-0.5">
+                    {statusModal.booking?.generatedBookingId} • {statusModal.booking?.name}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setStatusModal(prev => ({ ...prev, isOpen: false }))}
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="p-6 flex flex-col gap-6 bg-slate-50">
+              <label className="flex items-start gap-4 p-4 rounded-xl bg-white border border-slate-200 cursor-pointer group hover:border-brand-blue transition-colors shadow-sm">
+                <div className="pt-0.5 flex-shrink-0 relative">
+                  <input
+                    type="checkbox"
+                    className="peer sr-only"
+                    checked={statusModal.sendWhatsApp}
+                    onChange={(e) => setStatusModal(prev => ({ ...prev, sendWhatsApp: e.target.checked }))}
+                  />
+                  <div className="w-5 h-5 rounded border-2 border-slate-300 peer-checked:bg-brand-blue peer-checked:border-brand-blue transition-all flex items-center justify-center">
+                    <Check className="w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100 scale-50 peer-checked:scale-100 transition-all" />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-slate-800">Send WhatsApp Notification</p>
+                  <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                    Automatically send a WhatsApp message to {statusModal.booking?.phone || statusModal.booking?.customerPhone || "the customer"} using the {statusModal.status} template.
+                  </p>
+                </div>
+              </label>
+            </div>
+            <div className="p-6 border-t border-slate-100 bg-white flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setStatusModal(prev => ({ ...prev, isOpen: false }))}
+                className="px-5 py-2.5 text-slate-600 font-bold hover:bg-slate-100 rounded-xl transition-colors text-sm"
+                disabled={statusModal.isSubmitting}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={statusModal.isSubmitting}
+                onClick={async () => {
+                  setStatusModal(prev => ({ ...prev, isSubmitting: true }));
+                  try {
+                    await updateBookingStatusFn({
+                      data: { adminToken: token, id: statusModal.booking._id, status: statusModal.status, sendWhatsApp: statusModal.sendWhatsApp },
+                    });
+                    loadData();
+                    setStatusModal(prev => ({ ...prev, isOpen: false }));
+                  } catch (err) {}
+                  setStatusModal(prev => ({ ...prev, isSubmitting: false }));
+                }}
+                className={`px-6 py-2.5 text-white font-bold rounded-xl shadow-lg shadow-brand-blue/30 flex items-center gap-2 transition-all ${statusModal.status === "Confirmed" ? "bg-green-600 hover:bg-green-700" : "bg-red-600 hover:bg-red-700"}`}
+              >
+                {statusModal.isSubmitting ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <CheckCircle className="w-4 h-4" />
+                )}
+                Save Status
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+
       {/* Payment Record & WhatsApp Invoice Modal */}
       {paymentModal.isOpen && isMounted && createPortal(
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 overflow-y-auto">
@@ -5336,7 +5451,13 @@ function BlogsAdminView({
                 onClick={() => setTemplateModal(prev => ({ ...prev, activeTab: "payment" }))}
                 className={`px-4 py-2.5 font-bold text-xs rounded-t-xl transition-all border-b-2 ${templateModal.activeTab === "payment" ? "bg-white text-brand-blue-deep border-brand-blue shadow-sm" : "text-slate-500 hover:text-slate-800 border-transparent"}`}
               >
-                💳 Payment & Invoice Receipt
+                💳 Payment Receipt
+              </button>
+              <button
+                onClick={() => setTemplateModal(prev => ({ ...prev, activeTab: "invoicePdf" }))}
+                className={`px-4 py-2.5 font-bold text-xs rounded-t-xl transition-all border-b-2 ${templateModal.activeTab === "invoicePdf" ? "bg-white text-orange-600 border-orange-500 shadow-sm" : "text-slate-500 hover:text-slate-800 border-transparent"}`}
+              >
+                📄 Invoice PDF Caption
               </button>
             </div>
 
@@ -5365,7 +5486,10 @@ function BlogsAdminView({
 
               <div>
                 <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                  {templateModal.activeTab === "confirmed" ? "Booking Confirmed WhatsApp Message" : templateModal.activeTab === "cancelled" ? "Booking Cancelled WhatsApp Message" : "Payment & Invoice WhatsApp Message"}
+                  {templateModal.activeTab === "confirmed" ? "Booking Confirmed WhatsApp Message" 
+                    : templateModal.activeTab === "cancelled" ? "Booking Cancelled WhatsApp Message" 
+                    : templateModal.activeTab === "payment" ? "Payment Receipt Text Message"
+                    : "Invoice PDF Attachment Caption"}
                 </label>
                 <textarea
                   rows={8}
@@ -5402,6 +5526,7 @@ function BlogsAdminView({
                           confirmed: templateModal.confirmed,
                           cancelled: templateModal.cancelled,
                           payment: templateModal.payment,
+                          invoicePdf: templateModal.invoicePdf,
                         },
                       },
                     });
