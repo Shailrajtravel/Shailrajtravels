@@ -436,7 +436,7 @@ export function InvoicePrint({
             </div>
 
             {/* LEFT LOGO (Absolute to Page) */}
-            <div className="absolute top-[2mm] left-[2mm] z-20">
+            <div className="absolute top-[-10px] left-[-20px] z-20">
               <img
                 src={logo}
                 alt="Shailraj Travel"
