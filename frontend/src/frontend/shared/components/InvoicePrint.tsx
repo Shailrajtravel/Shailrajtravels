@@ -5,6 +5,7 @@ import { MapPin, Phone, Mail, Globe, ZoomIn, ZoomOut, Maximize, Lock, Unlock, Se
 import logo from '@/frontend/shared/assets/shailraj-travels-punelogo.png?w=300&format=webp&as=url';
 import onlyNameLogo from '@/frontend/shared/assets/orange-logo.png';
 import stamp from '@/frontend/shared/assets/stamp1.png';
+import invoicePattern from '@/frontend/shared/assets/invoice-pattern.png';
 import { saveInvoiceFn, sendInvoiceWhatsAppFn } from '@/backend/shared/bookings';
 import { verifyAdminPasswordFn } from '@/backend/infrastructure/auth';
 
@@ -427,9 +428,11 @@ export function InvoicePrint({
             style={{ width: "210mm", height: "297mm", padding: "10mm 10mm 70px" }}
             id={`invoice-${booking._id}`}
           >
-            {/* WATERMARK */}
-            <div className="absolute inset-0 z-0 flex items-center justify-center opacity-[0.04] pointer-events-none select-none">
-              <img src={logo} alt="" className="w-[80%] max-w-[600px] object-contain grayscale" />
+            {/* WATERMARK PATTERN */}
+            <div 
+              className="absolute inset-0 z-0 opacity-10 pointer-events-none select-none"
+              style={{ backgroundImage: `url(${invoicePattern})`, backgroundRepeat: 'repeat' }}
+            >
             </div>
 
             {/* HEADER */}
