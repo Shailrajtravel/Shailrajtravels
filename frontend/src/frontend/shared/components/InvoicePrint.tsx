@@ -429,18 +429,18 @@ export function InvoicePrint({
             id={`invoice-${booking._id}`}
           >
             {/* WATERMARK PATTERN */}
-            <div 
+            <div
               className="absolute inset-0 z-0 opacity-10 pointer-events-none select-none"
               style={{ backgroundImage: `url(${invoicePattern})`, backgroundRepeat: 'repeat' }}
             >
             </div>
 
             {/* LEFT LOGO (Absolute to Page) */}
-            <div className="absolute top-[-10px] left-[-20px] z-20">
+            <div className="absolute top-[-10px] left-[-8px] z-20">
               <img
                 src={logo}
                 alt="Shailraj Travel"
-                className="h-[140px] w-[140px] object-contain scale-[1.3] origin-top-left"
+                className="h-[155px] w-[155px] object-contain scale-[1.3] origin-top-left"
               />
             </div>
 
