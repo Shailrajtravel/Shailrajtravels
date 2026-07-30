@@ -438,11 +438,11 @@ export function InvoicePrint({
             {/* HEADER */}
             <div className="w-full pt-2 relative z-10">
               {/* Left Logo */}
-              <div className="absolute top-1 left-1">
+              <div className="absolute top-2 left-4">
                 <img
                   src={logo}
                   alt="Shailraj Travel"
-                  className="h-[150px] w-[150px] object-contain scale-[1.3] origin-top-left"
+                  className="h-[110px] w-[110px] object-contain"
                 />
               </div>
 
