@@ -441,15 +441,15 @@ export function InvoicePrint({
               {/* Middle Logo & Contact */}
               <div className="flex flex-col items-center">
                 {/* Wrapper provides physical space for scaled logo */}
-                <div className="h-[140px] flex items-center justify-center w-full">
+                <div className="h-[90px] flex items-center justify-center w-full mt-2 mb-2">
                   <img
                     src={onlyNameLogo}
                     alt="Shailraj Travels"
-                    className="h-[190px] object-contain scale-[2.4] origin-center -ml-12"
+                    className="h-[100px] object-contain"
                   />
                 </div>
                 {/* Negative margin pulls contact info up to eliminate transparent gap from image */}
-                <div className="-mt-5 text-[15px] font-medium text-slate-600 flex items-center justify-center gap-4 w-full">
+                <div className="text-[15px] font-medium text-slate-600 flex items-center justify-center gap-4 w-full">
                   <span className="flex items-center gap-1">
                     <MapPin className="h-3.5 w-3.5" /> Pune, Maharashtra, India
                   </span>
