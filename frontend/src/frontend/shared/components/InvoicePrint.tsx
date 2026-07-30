@@ -427,8 +427,13 @@ export function InvoicePrint({
             style={{ width: "210mm", height: "297mm", padding: "10mm 10mm 70px" }}
             id={`invoice-${booking._id}`}
           >
+            {/* WATERMARK */}
+            <div className="absolute inset-0 z-0 flex items-center justify-center opacity-[0.04] pointer-events-none select-none">
+              <img src={logo} alt="" className="w-[80%] max-w-[600px] object-contain grayscale" />
+            </div>
+
             {/* HEADER */}
-            <div className="w-full pt-2">
+            <div className="w-full pt-2 relative z-10">
               {/* Left Logo */}
               <div className="absolute top-1 left-1">
                 <img
@@ -471,7 +476,7 @@ export function InvoicePrint({
             </div>
 
             {/* INVOICE BADGE */}
-            <div className="mt-2 flex justify-center">
+            <div className="mt-2 flex justify-center relative z-10">
               <div
                 className="rounded-[8px] px-10 py-1.5 text-[22px] font-black tracking-widest text-white shadow-sm"
                 style={{ background: DARK }}
@@ -481,7 +486,7 @@ export function InvoicePrint({
             </div>
 
             {/* INVOICE INFO CARD */}
-            <div className="mt-2 rounded-[10px] border shrink-0" style={{ borderColor: BORDER }}>
+            <div className="mt-2 rounded-[10px] border shrink-0 relative z-10" style={{ borderColor: BORDER }}>
               <div className="grid grid-cols-2">
                 <div className="p-2 border-r" style={{ borderColor: BORDER }}>
                   <InfoLine
@@ -517,7 +522,7 @@ export function InvoicePrint({
             </div>
 
             {/* BILL TO + TRIP DETAILS */}
-            <div className="mt-2 grid grid-cols-2 gap-4 shrink-0">
+            <div className="mt-2 grid grid-cols-2 gap-4 shrink-0 relative z-10">
               <Card title="BILL TO">
                 <div className="flex flex-col h-full gap-1">
                   <DetailRow
@@ -561,7 +566,7 @@ export function InvoicePrint({
 
             {/* TABLE */}
             <div
-              className="mt-2 overflow-hidden rounded-[8px] border flex flex-col shrink-0"
+              className="mt-2 overflow-hidden rounded-[8px] border flex flex-col shrink-0 relative z-10"
               style={{ borderColor: BORDER }}
             >
               <table className="w-full text-left text-[13px]">
@@ -642,7 +647,7 @@ export function InvoicePrint({
             </div>
 
             {/* PAYMENT + SIGNATURE */}
-            <div className="mt-2 grid grid-cols-2 gap-4 shrink-0">
+            <div className="mt-2 grid grid-cols-2 gap-4 shrink-0 relative z-10">
               <Card title="PAYMENT DETAILS">
                 <div className="flex flex-col h-full gap-1">
                   {/* Payment Mode Selector / Display */}
@@ -757,7 +762,7 @@ export function InvoicePrint({
             </div>
 
             {/* THANK YOU */}
-            <div className="mt-auto flex w-full flex-col items-center pb-2 pt-1">
+            <div className="mt-auto flex w-full flex-col items-center pb-2 pt-1 relative z-10">
               <div className="flex w-[80%] items-center gap-6 opacity-60">
                 <div
                   className="h-[1px] flex-1"
@@ -786,7 +791,7 @@ export function InvoicePrint({
 
             {/* FOOTER */}
             <div
-              className="absolute bottom-0 left-0 w-full flex items-center justify-around px-6 py-3 text-[13px] font-medium text-white"
+              className="absolute bottom-0 left-0 w-full flex items-center justify-around px-6 py-3 text-[13px] font-medium text-white z-10"
               style={{ background: DARK }}
             >
               <span className="flex items-center gap-2">
