@@ -435,17 +435,17 @@ export function InvoicePrint({
             >
             </div>
 
+            {/* LEFT LOGO (Absolute to Page) */}
+            <div className="absolute top-[2mm] left-[2mm] z-20">
+              <img
+                src={logo}
+                alt="Shailraj Travel"
+                className="h-[140px] w-[140px] object-contain scale-[1.3] origin-top-left"
+              />
+            </div>
+
             {/* HEADER */}
             <div className="w-full pt-2 relative z-10">
-              {/* Left Logo */}
-              <div className="absolute top-0 left-0">
-                <img
-                  src={logo}
-                  alt="Shailraj Travel"
-                  className="h-[130px] w-[130px] object-contain scale-[1.25] origin-top-left"
-                />
-              </div>
-
               {/* Middle Logo & Contact */}
               <div className="flex flex-col items-center">
                 {/* Wrapper provides physical space for scaled logo */}
