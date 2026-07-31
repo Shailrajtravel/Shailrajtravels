@@ -59,8 +59,9 @@ export function InvoicePrint({
     const resolvedRate = hasExplicitRate ? Number(custom.rate) : Number(defaultR);
     
     // Auto-fallback: if the invoice has NO rate whatsoever (0), but we have an advance payment, 
-    // we use the advance payment as the invoice total so it doesn't look empty.
-    const finalRate = (resolvedRate === 0 && advancePaid) ? Number(advancePaid) : resolvedRate;
+    // we use the advance payment as the invoice total (divided by persons) so it doesn't look empty.
+    const personsCount = b.persons ? Number(b.persons) : 1;
+    const finalRate = (resolvedRate === 0 && advancePaid) ? (Number(advancePaid) / personsCount) : resolvedRate;
     const finalDesc = (resolvedRate === 0 && advancePaid) 
        ? (paymentNote || custom.description || "Package Price (Per Person)")
        : (custom.description || "Package Price (Per Person)");

@@ -178,6 +178,21 @@ function AdminPage() {
   >("dashboard");
   const [subTab, setSubTab] = useState<"tours" | "packages" | "vehicles">("tours");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const getBookingRate = (bk: any) => {
+    if (!bk || !bk.tripName || bk.tripName === "custom") return 0;
+    if (bk.defaultRate) return Number(bk.defaultRate);
+    const tripName = bk.tripName;
+    const pkg = packages.find((p: any) => p.title === tripName || p.name === tripName);
+    if (pkg && pkg.price) return Number(pkg.price);
+    const tour = tours.find((t: any) => t.title === tripName || t.name === tripName);
+    if (tour && tour.packages && tour.packages.length > 0) {
+      const match = String(tour.packages[0].price || "").match(/\d+/);
+      if (match) return Number(match[0]);
+    }
+    return 0;
+  };
+
   const [deleteConfirm, setDeleteConfirm] = useState<{
     isOpen: boolean;
     id: string;
@@ -1367,7 +1382,11 @@ function AdminPage() {
                                       isOpen: true,
                                       booking: bk,
                                       paymentStatus: newStatus,
-                                      paidAmount: bk.paidAmount || (bk.invoiceCustomData?.advancePaid) || (newStatus === "PAID" ? (bk.invoiceCustomData?.grandTotal || "") : ""),
+                                      paidAmount: bk.paidAmount || (bk.invoiceCustomData?.advancePaid) || (newStatus === "PAID" ? (() => {
+                                        const rate = bk.invoiceCustomData?.rate ? Number(bk.invoiceCustomData.rate) : getBookingRate(bk);
+                                        const persons = bk.persons ? Number(bk.persons) : 1;
+                                        return rate > 0 ? String(rate * persons) : "";
+                                      })() : ""),
                                       paymentNote: bk.paymentNote || "",
                                       sendWhatsApp: true,
                                       isSubmitting: false,
@@ -1402,7 +1421,11 @@ function AdminPage() {
                                       isOpen: true,
                                       booking: bk,
                                       paymentStatus: bk.paymentStatus || "ADVANCE",
-                                      paidAmount: bk.paidAmount || (bk.invoiceCustomData?.advancePaid) || "",
+                                      paidAmount: bk.paidAmount || (bk.invoiceCustomData?.advancePaid) || ((bk.paymentStatus || "ADVANCE") === "PAID" ? (() => {
+                                        const rate = bk.invoiceCustomData?.rate ? Number(bk.invoiceCustomData.rate) : getBookingRate(bk);
+                                        const persons = bk.persons ? Number(bk.persons) : 1;
+                                        return rate > 0 ? String(rate * persons) : "";
+                                      })() : ""),
                                       paymentNote: bk.paymentNote || "",
                                       sendWhatsApp: true,
                                       isSubmitting: false,
@@ -1891,8 +1914,7 @@ function AdminPage() {
                       let nextPaidAmount = prev.paidAmount;
                       if (status === "PAID" && prev.booking) {
                         const persons = prev.booking.persons ? Number(prev.booking.persons) : 1;
-                        const defaultR = prev.booking.tripName === "custom" ? 0 : (prev.booking.defaultRate || 0);
-                        const rate = prev.booking.invoiceCustomData?.rate ? Number(prev.booking.invoiceCustomData.rate) : Number(defaultR);
+                        const rate = prev.booking.invoiceCustomData?.rate ? Number(prev.booking.invoiceCustomData.rate) : getBookingRate(prev.booking);
                         
                         if (rate > 0) {
                           nextPaidAmount = String(rate * persons);
@@ -2031,10 +2053,17 @@ function AdminPage() {
                       advancePaid: paymentModal.paidAmount,
                       paymentNote: paymentModal.paymentNote,
                       // If the invoice hasn't been manually edited with a rate, 
-                      // auto-fill the bill table with the payment amount and description
+                      // auto-fill the bill table with the rate (per person)
                       ...( (!paymentModal.booking.invoiceCustomData?.rate) 
                              ? { 
-                                 rate: paymentModal.paidAmount, 
+                                 rate: (() => {
+                                   let r = getBookingRate(paymentModal.booking);
+                                   if (!r && paymentModal.paidAmount) {
+                                     const p = paymentModal.booking.persons ? Number(paymentModal.booking.persons) : 1;
+                                     r = Number(paymentModal.paidAmount) / p;
+                                   }
+                                   return r;
+                                 })(), 
                                  description: paymentModal.paymentNote || paymentModal.booking.invoiceCustomData?.description || "Package Price (Per Person)" 
                                } 
                              : {} )
