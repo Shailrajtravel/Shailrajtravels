@@ -1885,7 +1885,22 @@ function AdminPage() {
                 </label>
                 <select
                   value={paymentModal.paymentStatus}
-                  onChange={(e) => setPaymentModal(prev => ({ ...prev, paymentStatus: e.target.value }))}
+                  onChange={(e) => {
+                    const status = e.target.value;
+                    setPaymentModal(prev => {
+                      let nextPaidAmount = prev.paidAmount;
+                      if (status === "PAID" && prev.booking) {
+                        const persons = prev.booking.persons ? Number(prev.booking.persons) : 1;
+                        const defaultR = prev.booking.tripName === "custom" ? 0 : (prev.booking.defaultRate || 0);
+                        const rate = prev.booking.invoiceCustomData?.rate ? Number(prev.booking.invoiceCustomData.rate) : Number(defaultR);
+                        
+                        if (rate > 0) {
+                          nextPaidAmount = String(rate * persons);
+                        }
+                      }
+                      return { ...prev, paymentStatus: status, paidAmount: nextPaidAmount };
+                    });
+                  }}
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none font-bold text-slate-700 bg-white"
                 >
                   <option value="ADVANCE">ADVANCE PAID</option>
