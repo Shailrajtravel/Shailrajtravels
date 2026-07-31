@@ -2014,7 +2014,15 @@ function AdminPage() {
                       ...paymentModal.booking.invoiceCustomData,
                       paymentStatus: paymentModal.paymentStatus,
                       advancePaid: paymentModal.paidAmount,
-                      paymentNote: paymentModal.paymentNote
+                      paymentNote: paymentModal.paymentNote,
+                      // If the invoice hasn't been manually edited with a rate, 
+                      // auto-fill the bill table with the payment amount and description
+                      ...( (!paymentModal.booking.invoiceCustomData?.rate) 
+                             ? { 
+                                 rate: paymentModal.paidAmount, 
+                                 description: paymentModal.paymentNote || paymentModal.booking.invoiceCustomData?.description || "Package Price (Per Person)" 
+                               } 
+                             : {} )
                     }
                   }}
                   token={token}
