@@ -182,14 +182,35 @@ function AdminPage() {
   const getBookingRate = (bk: any) => {
     if (!bk || !bk.tripName || bk.tripName === "custom") return 0;
     if (bk.defaultRate) return Number(bk.defaultRate);
-    const tripName = bk.tripName;
-    const pkg = packages.find((p: any) => p.title === tripName || p.name === tripName);
-    if (pkg && pkg.price) return Number(pkg.price);
-    const tour = tours.find((t: any) => t.title === tripName || t.name === tripName);
-    if (tour && tour.packages && tour.packages.length > 0) {
-      const match = String(tour.packages[0].price || "").match(/\d+/);
-      if (match) return Number(match[0]);
+    
+    const tripName = String(bk.tripName).toLowerCase().trim();
+    
+    // Helper to safely extract digits from a string like "₹ 15,000" or "15000"
+    const extractPrice = (val: any) => {
+      if (!val) return 0;
+      const numStr = String(val).replace(/,/g, '');
+      const match = numStr.match(/\d+(\.\d+)?/);
+      return match ? Number(match[0]) : 0;
+    };
+
+    const pkg = packages.find((p: any) => 
+      String(p.title || "").toLowerCase().trim() === tripName || 
+      String(p.name || "").toLowerCase().trim() === tripName
+    );
+    if (pkg && pkg.price) {
+      const price = extractPrice(pkg.price);
+      if (price > 0) return price;
     }
+    
+    const tour = tours.find((t: any) => 
+      String(t.title || "").toLowerCase().trim() === tripName || 
+      String(t.name || "").toLowerCase().trim() === tripName
+    );
+    if (tour && tour.packages && tour.packages.length > 0) {
+      const price = extractPrice(tour.packages[0].price);
+      if (price > 0) return price;
+    }
+    
     return 0;
   };
 
