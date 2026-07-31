@@ -18,6 +18,7 @@ import { ReviewsModule } from './reviews/reviews.module';
 import { CustomBlogsModule } from './custom-blogs/custom-blogs.module';
 import { RecommendedVehiclesModule } from './recommended-vehicles/recommended-vehicles.module';
 import { WebhooksModule } from './webhooks/webhooks.module';
+import { IssuesModule } from './issues/issues.module';
 
 @Module({
   imports: [
@@ -37,7 +38,8 @@ import { WebhooksModule } from './webhooks/webhooks.module';
     ReviewsModule,
     CustomBlogsModule,
     RecommendedVehiclesModule,
-    WebhooksModule
+    WebhooksModule,
+    IssuesModule
   ],
   controllers: [AppController],
   providers: [AppService],

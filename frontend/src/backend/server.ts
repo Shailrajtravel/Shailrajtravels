@@ -79,6 +79,15 @@ const contactSchema = z.object({
   honeypot: z.string().optional(),
 });
 
+const issueSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Invalid email address"),
+  phone: z.string().optional(),
+  type: z.string().min(2, "Issue type is required"),
+  description: z.string().min(10, "Description must be at least 10 characters"),
+  honeypot: z.string().optional(),
+});
+
 const rateLimit = new Map<string, { count: number; timestamp: number }>();
 const RATE_LIMIT_WINDOW = 15 * 60 * 1000;
 const MAX_REQUESTS = 3;
@@ -155,6 +164,78 @@ export default {
           }
         } catch (apiError) {
           console.error("[API] Failed to save contact:", apiError);
+        }
+
+        return withSecurityHeaders(
+          new Response(JSON.stringify({ success: true }), {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+          }),
+        );
+      }
+
+      // Intercept /api/issues
+      if (request.method === "POST" && url.pathname === "/api/issues") {
+        const ip = request.headers.get("x-forwarded-for") || "unknown";
+        const now = Date.now();
+        const userLimit = rateLimit.get(ip);
+
+        if (userLimit) {
+          if (now - userLimit.timestamp < RATE_LIMIT_WINDOW) {
+            if (userLimit.count >= MAX_REQUESTS) {
+              return withSecurityHeaders(
+                new Response(
+                  JSON.stringify({ error: "Too many requests. Please try again later." }),
+                  {
+                    status: 429,
+                    headers: { "Content-Type": "application/json" },
+                  },
+                ),
+              );
+            }
+            userLimit.count++;
+          } else {
+            rateLimit.set(ip, { count: 1, timestamp: now });
+          }
+        } else {
+          rateLimit.set(ip, { count: 1, timestamp: now });
+        }
+
+        const body = await request.json();
+        const parsed = issueSchema.safeParse(body);
+        if (!parsed.success) {
+          return withSecurityHeaders(
+            new Response(JSON.stringify({ error: parsed.error.errors[0].message }), {
+              status: 400,
+              headers: { "Content-Type": "application/json" },
+            }),
+          );
+        }
+        const data = parsed.data;
+
+        if (data.honeypot && data.honeypot.length > 0) {
+          return withSecurityHeaders(
+            new Response(JSON.stringify({ success: true, message: "Issue received" }), {
+              status: 200,
+              headers: { "Content-Type": "application/json" },
+            }),
+          );
+        }
+
+        try {
+          const backendUrl = process.env.VITE_WEBSITE_BACKEND_URL || "http://localhost:3000/api";
+          const res = await fetch(`${backendUrl}/issues`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+          });
+          if (!res.ok) {
+            console.error("[API] Failed to save issue, status:", res.status);
+          } else {
+            console.log(`[API] Saved issue submission from ${data.email}`);
+          }
+        } catch (apiError) {
+          console.error("[API] Failed to save issue:", apiError);
         }
 
         return withSecurityHeaders(

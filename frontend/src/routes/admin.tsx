@@ -40,6 +40,7 @@ import {
 } from '@/backend/infrastructure/whatsapp-api';
 import { ToursAdmin } from '@/frontend/features/admin/ToursAdmin';
 import { RecommendedVehiclesAdmin } from '@/frontend/features/admin/RecommendedVehiclesAdmin';
+import { IssuesAdmin } from '@/frontend/features/admin/IssuesAdmin';
 import {
   LayoutDashboard,
   Package,
@@ -75,6 +76,7 @@ import {
   Check,
   CheckCircle,
   AlertCircle,
+  Bug,
 } from 'lucide-react';
 // @ts-ignore
 import logo from '@/frontend/shared/assets/shailraj-travels-punelogo.png?w=300&format=webp&as=url';
@@ -147,6 +149,7 @@ function AdminPage() {
     | "revenue"
     | "whatsapp"
     | "blogs"
+    | "issues"
   >("dashboard");
   const [subTab, setSubTab] = useState<"tours" | "packages" | "vehicles">("tours");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -576,6 +579,17 @@ function AdminPage() {
             <ImageIcon className="w-5 h-5" />
             Custom Blogs
           </button>
+          <button
+            onClick={() => {
+              setActiveTab("issues");
+              setIsFormOpen(false);
+              setIsMobileMenuOpen(false);
+            }}
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${activeTab === "issues" ? "bg-brand-blue-deep text-white shadow-md" : "text-slate-500 hover:bg-slate-50 hover:text-brand-blue-deep"}`}
+          >
+            <Bug className="w-5 h-5" />
+            Issues
+          </button>
         </div>
         <div className="p-4 border-t border-slate-100">
           <button
@@ -624,6 +638,8 @@ function AdminPage() {
                                     ? "WhatsApp Engine"
                                     : activeTab === "blogs"
                                       ? "Blogs Management"
+                                      : activeTab === "issues"
+                                      ? "Issues Management"
                                       : "Booking Management"}
             </h1>
           </div>
@@ -1633,6 +1649,8 @@ function AdminPage() {
               blogs={customBlogs}
               setDeleteConfirm={setDeleteConfirm}
             />
+          ) : activeTab === "issues" ? (
+            <IssuesAdmin />
           ) : null}
         </div>
       </main>

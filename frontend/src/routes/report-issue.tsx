@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
 import { generateSEO } from '@/backend/features/seo';
+import { AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from "@/frontend/shared/ui/alert";
 
 export const Route = createFileRoute("/report-issue")({
   head: () => ({
@@ -16,53 +18,202 @@ export const Route = createFileRoute("/report-issue")({
 });
 
 function ReportIssuePage() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    type: 'website',
+    description: '',
+    honeypot: '',
+  });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError('');
+
+    try {
+      const res = await fetch('/api/issues', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to submit issue');
+      }
+
+      setIsSuccess(true);
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        type: 'website',
+        description: '',
+        honeypot: '',
+      });
+    } catch (err: any) {
+      setError(err.message || 'An unexpected error occurred.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
-    <main className="w-full bg-white pb-16 pt-24 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
-      <h1 className="text-4xl md:text-5xl font-extrabold text-brand-blue-deep mb-8">
-        Report an Issue
-      </h1>
-      <div className="prose max-w-none text-gray-700 space-y-6">
-        <p>
-          <strong>Last Updated: 27 June 2026</strong>
-        </p>
+    <main className="w-full bg-slate-50 min-h-screen py-24 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+      <div className="max-w-2xl w-full bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
+        <div className="bg-brand-blue-deep p-8 text-white">
+          <h1 className="text-3xl md:text-4xl font-extrabold mb-2">Report an Issue</h1>
+          <p className="text-brand-blue-light/80 text-lg">
+            Experienced a bug or had an issue on a tour? Let us know so we can fix it.
+          </p>
+        </div>
 
-        <p>
-          At Shailraj Travels, we strive to provide a seamless experience for our customers, both online and during our tours. If you have encountered any issues, bugs on our website, or problems during your trip, we want to hear about it so we can make it right.
-        </p>
+        <div className="p-8">
+          {isSuccess ? (
+            <div className="text-center py-12">
+              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-green-100 mb-6">
+                <CheckCircle className="w-10 h-10 text-green-600" />
+              </div>
+              <h2 className="text-2xl font-bold text-slate-900 mb-2">Issue Reported Successfully</h2>
+              <p className="text-slate-600 mb-8 max-w-md mx-auto">
+                Thank you for bringing this to our attention. Our team will look into this immediately.
+              </p>
+              <button
+                onClick={() => setIsSuccess(false)}
+                className="bg-brand-blue-deep text-white px-6 py-3 rounded-xl font-semibold hover:bg-brand-blue-deep/90 transition"
+              >
+                Report Another Issue
+              </button>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {error && (
+                <Alert variant="destructive">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertTitle>Error</AlertTitle>
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
 
-        <hr className="my-8" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label htmlFor="name" className="block text-sm font-semibold text-slate-700 mb-2">
+                    Full Name <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-blue-deep focus:border-transparent outline-none transition"
+                    placeholder="John Doe"
+                  />
+                </div>
 
-        <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">How to Report an Issue</h2>
-        
-        <h3 className="text-xl font-semibold text-gray-800 mt-6 mb-3">1. Website or App Issues</h3>
-        <p>If you face any technical difficulties while browsing our website or making a booking, please include the following details in your report:</p>
-        <ul className="list-disc pl-6 space-y-2">
-          <li>A clear description of the issue.</li>
-          <li>The steps to reproduce the problem.</li>
-          <li>Screenshots or error messages, if applicable.</li>
-          <li>Your device and browser information.</li>
-        </ul>
+                <div>
+                  <label htmlFor="email" className="block text-sm font-semibold text-slate-700 mb-2">
+                    Email Address <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-blue-deep focus:border-transparent outline-none transition"
+                    placeholder="john@example.com"
+                  />
+                </div>
+              </div>
 
-        <h3 className="text-xl font-semibold text-gray-800 mt-6 mb-3">2. Service or Tour Issues</h3>
-        <p>If you experienced an issue during one of our tours, please provide:</p>
-        <ul className="list-disc pl-6 space-y-2">
-          <li>Your Booking ID and Tour Name.</li>
-          <li>Date of the incident.</li>
-          <li>A detailed account of what happened.</li>
-          <li>Any supporting evidence or photos.</li>
-        </ul>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label htmlFor="phone" className="block text-sm font-semibold text-slate-700 mb-2">
+                    Phone Number
+                  </label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-blue-deep focus:border-transparent outline-none transition"
+                    placeholder="+91 98765 43210"
+                  />
+                </div>
 
-        <hr className="my-8" />
+                <div>
+                  <label htmlFor="type" className="block text-sm font-semibold text-slate-700 mb-2">
+                    Type of Issue <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    id="type"
+                    name="type"
+                    value={formData.type}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-blue-deep focus:border-transparent outline-none transition bg-white"
+                  >
+                    <option value="website">Website / App Bug</option>
+                    <option value="tour">Tour / Service Issue</option>
+                    <option value="booking">Booking / Payment Issue</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+              </div>
 
-        <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">Contact Information</h2>
-        <p>
-          Please send your detailed report to our support team:<br />
-          <strong>Email:</strong> info@shailrajtravels.com<br />
-          <strong>Phone:</strong> +91 97634 33556
-        </p>
-        <p>
-          Our team reviews all reports carefully and will get back to you within 24-48 business hours. Thank you for helping us improve our services.
-        </p>
+              <div>
+                <label htmlFor="description" className="block text-sm font-semibold text-slate-700 mb-2">
+                  Issue Description <span className="text-red-500">*</span>
+                </label>
+                <textarea
+                  id="description"
+                  name="description"
+                  required
+                  rows={5}
+                  value={formData.description}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-blue-deep focus:border-transparent outline-none transition resize-none"
+                  placeholder="Please describe the issue in detail..."
+                ></textarea>
+              </div>
+
+              {/* Honeypot field for spam prevention */}
+              <div className="hidden">
+                <label>Do not fill this out</label>
+                <input type="text" name="honeypot" value={formData.honeypot} onChange={handleChange} tabIndex={-1} autoComplete="off" />
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-brand-blue-deep hover:bg-brand-blue-deep/90 text-white font-bold py-4 rounded-xl transition flex justify-center items-center gap-2 disabled:opacity-70"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                    Submitting...
+                  </>
+                ) : (
+                  'Submit Issue'
+                )}
+              </button>
+            </form>
+          )}
+        </div>
       </div>
     </main>
   );
