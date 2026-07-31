@@ -214,6 +214,15 @@ function AdminPage() {
       const price = extractPrice(tour.packages[0].price);
       if (price > 0) return price;
     }
+
+    const tripOpt = tripOptions.find((t: any) => 
+      normalize(t.name) === tripName ||
+      normalize(t.title) === tripName
+    );
+    if (tripOpt && tripOpt.price) {
+      const price = extractPrice(tripOpt.price);
+      if (price > 0) return price;
+    }
     
     return 0;
   };
