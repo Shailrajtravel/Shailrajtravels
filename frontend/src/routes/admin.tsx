@@ -179,23 +179,27 @@ function AdminPage() {
   const [subTab, setSubTab] = useState<"tours" | "packages" | "vehicles">("tours");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // Helper to safely extract digits from a string like "₹ 15,000" or "15,000"
+  const extractPrice = (val: any) => {
+    if (!val) return 0;
+    const numStr = String(val).replace(/,/g, '');
+    const match = numStr.match(/\d+(\.\d+)?/);
+    return match ? Number(match[0]) : 0;
+  };
+
   const getBookingRate = (bk: any) => {
-    if (!bk || !bk.tripName || bk.tripName === "custom") return 0;
+    if (!bk) return 0;
     if (bk.defaultRate) return Number(bk.defaultRate);
     
-    const tripName = String(bk.tripName).toLowerCase().trim();
-    
-    // Helper to safely extract digits from a string like "₹ 15,000" or "15000"
-    const extractPrice = (val: any) => {
-      if (!val) return 0;
-      const numStr = String(val).replace(/,/g, '');
-      const match = numStr.match(/\d+(\.\d+)?/);
-      return match ? Number(match[0]) : 0;
-    };
+    let rawName = bk.tripName === "custom" ? bk.customDestination : bk.tripName;
+    if (!rawName) return 0;
+
+    const normalize = (s: any) => String(s || "").toLowerCase().replace(/[\s-]+/g, "");
+    const tripName = normalize(rawName);
 
     const pkg = packages.find((p: any) => 
-      String(p.title || "").toLowerCase().trim() === tripName || 
-      String(p.name || "").toLowerCase().trim() === tripName
+      normalize(p.title) === tripName || 
+      normalize(p.name) === tripName
     );
     if (pkg && pkg.price) {
       const price = extractPrice(pkg.price);
@@ -203,8 +207,8 @@ function AdminPage() {
     }
     
     const tour = tours.find((t: any) => 
-      String(t.title || "").toLowerCase().trim() === tripName || 
-      String(t.name || "").toLowerCase().trim() === tripName
+      normalize(t.title) === tripName || 
+      normalize(t.name) === tripName
     );
     if (tour && tour.packages && tour.packages.length > 0) {
       const price = extractPrice(tour.packages[0].price);
@@ -1404,8 +1408,8 @@ function AdminPage() {
                                       booking: bk,
                                       paymentStatus: newStatus,
                                       paidAmount: bk.paidAmount || (bk.invoiceCustomData?.advancePaid) || (newStatus === "PAID" ? (() => {
-                                        const rate = bk.invoiceCustomData?.rate ? Number(bk.invoiceCustomData.rate) : getBookingRate(bk);
-                                        const persons = bk.persons ? Number(bk.persons) : 1;
+                                        const rate = bk.invoiceCustomData?.rate ? extractPrice(bk.invoiceCustomData.rate) : getBookingRate(bk);
+                                        const persons = bk.persons ? extractPrice(bk.persons) || 1 : 1;
                                         return rate > 0 ? String(rate * persons) : "";
                                       })() : ""),
                                       paymentNote: bk.paymentNote || "",
@@ -1443,8 +1447,8 @@ function AdminPage() {
                                       booking: bk,
                                       paymentStatus: bk.paymentStatus || "ADVANCE",
                                       paidAmount: bk.paidAmount || (bk.invoiceCustomData?.advancePaid) || ((bk.paymentStatus || "ADVANCE") === "PAID" ? (() => {
-                                        const rate = bk.invoiceCustomData?.rate ? Number(bk.invoiceCustomData.rate) : getBookingRate(bk);
-                                        const persons = bk.persons ? Number(bk.persons) : 1;
+                                        const rate = bk.invoiceCustomData?.rate ? extractPrice(bk.invoiceCustomData.rate) : getBookingRate(bk);
+                                        const persons = bk.persons ? extractPrice(bk.persons) || 1 : 1;
                                         return rate > 0 ? String(rate * persons) : "";
                                       })() : ""),
                                       paymentNote: bk.paymentNote || "",
@@ -1934,8 +1938,8 @@ function AdminPage() {
                     setPaymentModal(prev => {
                       let nextPaidAmount = prev.paidAmount;
                       if (status === "PAID" && prev.booking) {
-                        const persons = prev.booking.persons ? Number(prev.booking.persons) : 1;
-                        const rate = prev.booking.invoiceCustomData?.rate ? Number(prev.booking.invoiceCustomData.rate) : getBookingRate(prev.booking);
+                        const persons = prev.booking.persons ? extractPrice(prev.booking.persons) || 1 : 1;
+                        const rate = prev.booking.invoiceCustomData?.rate ? extractPrice(prev.booking.invoiceCustomData.rate) : getBookingRate(prev.booking);
                         
                         if (rate > 0) {
                           nextPaidAmount = String(rate * persons);
