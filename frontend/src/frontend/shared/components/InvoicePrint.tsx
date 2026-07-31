@@ -50,6 +50,21 @@ export function InvoicePrint({
     // by the Bookings tab dropdown. invoiceCustomData.paymentStatus may be stale
     // if the invoice was locked before payment was marked as PAID.
     const livePaymentStatus = b.paymentStatus || custom.paymentStatus || "PENDING";
+    
+    const advancePaid = custom.advancePaid || "";
+    const paymentNote = custom.paymentNote || "";
+
+    const hasExplicitRate = custom.rate !== undefined && custom.rate !== "" && custom.rate !== null;
+    const defaultR = b.tripName === "custom" ? 0 : (b.defaultRate || 0);
+    const resolvedRate = hasExplicitRate ? Number(custom.rate) : Number(defaultR);
+    
+    // Auto-fallback: if the invoice has NO rate whatsoever (0), but we have an advance payment, 
+    // we use the advance payment as the invoice total so it doesn't look empty.
+    const finalRate = (resolvedRate === 0 && advancePaid) ? Number(advancePaid) : resolvedRate;
+    const finalDesc = (resolvedRate === 0 && advancePaid) 
+       ? (paymentNote || custom.description || "Package Price (Per Person)")
+       : (custom.description || "Package Price (Per Person)");
+
     return {
       invoiceNo:
         custom.invoiceNo ||
@@ -85,20 +100,15 @@ export function InvoicePrint({
         return format(parsed, "dd MMM yyyy, HH:mm");
       })(),
       pickupPoint: custom.pickupPoint || b.pickupLocation || b.pickupPoint || "Pune",
-      rate:
-        custom.rate !== undefined
-          ? Number(custom.rate)
-          : b.tripName === "custom"
-            ? 0
-            : b.defaultRate || 0,
-      description: custom.description || "Package Price (Per Person)",
+      rate: finalRate,
+      description: finalDesc,
       persons: custom.persons !== undefined ? Number(custom.persons) : b.persons || 1,
       paymentStatus: livePaymentStatus,
       paymentMode: custom.paymentMode || "Cash",
       cashAmount: custom.cashAmount !== undefined ? Number(custom.cashAmount) : 0,
       onlineAmount: custom.onlineAmount !== undefined ? Number(custom.onlineAmount) : 0,
-      advancePaid: custom.advancePaid || "",
-      paymentNote: custom.paymentNote || "",
+      advancePaid: advancePaid,
+      paymentNote: paymentNote,
     };
   };
 
