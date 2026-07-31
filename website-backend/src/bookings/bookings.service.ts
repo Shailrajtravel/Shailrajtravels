@@ -299,6 +299,7 @@ export class BookingsService {
     paymentStatus: string,
     paidAmount?: number | string,
     paymentNote?: string,
+    paymentMode?: string,
     sendWhatsApp: boolean = true,
     pdfBase64?: string,
   ) {
@@ -318,6 +319,9 @@ export class BookingsService {
     if (paymentNote !== undefined && paymentNote !== null) {
       updateFields.paymentNote = paymentNote;
       existingCustom.paymentNote = paymentNote;
+    }
+    if (paymentMode !== undefined && paymentMode !== null) {
+      existingCustom.paymentMode = paymentMode;
     }
     existingCustom.paymentStatus = paymentStatus;
     updateFields.invoiceCustomData = existingCustom;

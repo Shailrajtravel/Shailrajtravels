@@ -243,6 +243,7 @@ function AdminPage() {
     paymentStatus: string;
     paidAmount: string;
     paymentNote: string;
+    paymentMode: string;
     sendWhatsApp: boolean;
     isSubmitting: boolean;
   }>({
@@ -251,6 +252,7 @@ function AdminPage() {
     paymentStatus: "ADVANCE",
     paidAmount: "",
     paymentNote: "",
+    paymentMode: "Cash",
     sendWhatsApp: true,
     isSubmitting: false,
   });
@@ -1422,6 +1424,7 @@ function AdminPage() {
                                         return rate > 0 ? String(rate * persons) : "";
                                       })() : ""),
                                       paymentNote: bk.paymentNote || "",
+                                      paymentMode: bk.invoiceCustomData?.paymentMode || "Cash",
                                       sendWhatsApp: true,
                                       isSubmitting: false,
                                     });
@@ -1461,6 +1464,7 @@ function AdminPage() {
                                         return rate > 0 ? String(rate * persons) : "";
                                       })() : ""),
                                       paymentNote: bk.paymentNote || "",
+                                      paymentMode: bk.invoiceCustomData?.paymentMode || "Cash",
                                       sendWhatsApp: true,
                                       isSubmitting: false,
                                     });
@@ -1588,6 +1592,7 @@ function AdminPage() {
                                     paymentStatus: bk.paymentStatus || "ADVANCE",
                                     paidAmount: bk.paidAmount || (bk.invoiceCustomData?.advancePaid) || "",
                                     paymentNote: bk.paymentNote || "",
+                                    paymentMode: bk.invoiceCustomData?.paymentMode || "Cash",
                                     sendWhatsApp: true,
                                     isSubmitting: false,
                                   });
@@ -1967,6 +1972,21 @@ function AdminPage() {
 
               <div>
                 <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Payment Mode
+                </label>
+                <select
+                  value={paymentModal.paymentMode}
+                  onChange={(e) => setPaymentModal(prev => ({ ...prev, paymentMode: e.target.value }))}
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none font-bold text-slate-700 bg-white"
+                >
+                  <option value="Cash">Cash</option>
+                  <option value="Online">Online / UPI</option>
+                  <option value="Cash + Online">Cash + Online</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
                   Total Paid Amount (₹)
                 </label>
                 <div className="relative">
@@ -2042,6 +2062,7 @@ function AdminPage() {
                         paymentStatus: paymentModal.paymentStatus,
                         paidAmount: paymentModal.paidAmount,
                         paymentNote: paymentModal.paymentNote,
+                        paymentMode: paymentModal.paymentMode,
                         sendWhatsApp: paymentModal.sendWhatsApp,
                         pdfBase64: pdfBase64,
                       },
@@ -2086,6 +2107,7 @@ function AdminPage() {
                       paymentStatus: paymentModal.paymentStatus,
                       advancePaid: paymentModal.paidAmount,
                       paymentNote: paymentModal.paymentNote,
+                      paymentMode: paymentModal.paymentMode,
                       // If the invoice hasn't been manually edited with a rate, 
                       // auto-fill the bill table with the rate (per person)
                       ...( (!paymentModal.booking.invoiceCustomData?.rate) 
