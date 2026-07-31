@@ -4,6 +4,7 @@ import { generateSEO } from '@/backend/features/seo';
 import { AlertCircle, Loader2 } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from "@/frontend/shared/ui/alert";
 import { toast } from 'sonner';
+import { addIssueFn } from '@/backend/features/issues';
 
 export const Route = createFileRoute("/report-issue")({
   head: () => ({
@@ -42,15 +43,10 @@ function ReportIssuePage() {
     setError('');
 
     try {
-      const res = await fetch('/api/issues', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
+      const res = await addIssueFn({ data: formData });
 
-      if (!res.ok) {
-        const errorData = await res.json().catch(() => ({}));
-        throw new Error(errorData.error || 'Failed to submit issue');
+      if (res && res.error) {
+        throw new Error(res.error || 'Failed to submit issue');
       }
 
       toast.success('Issue Reported Successfully', {

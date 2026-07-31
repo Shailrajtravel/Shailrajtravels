@@ -18,6 +18,15 @@ const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
   return text ? JSON.parse(text) : null;
 };
 
+export const addIssueFn = createServerFn({ method: "POST" })
+  .validator((data: any) => data)
+  .handler(async ({ data }) => {
+    return await apiFetch('/issues', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  });
+
 export const getIssuesFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string }) => data)
   .handler(async ({ data }) => {
