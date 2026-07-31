@@ -1418,11 +1418,11 @@ function AdminPage() {
                                       isOpen: true,
                                       booking: bk,
                                       paymentStatus: newStatus,
-                                      paidAmount: bk.paidAmount || (bk.invoiceCustomData?.advancePaid) || (newStatus === "PAID" ? (() => {
+                                      paidAmount: (newStatus === "PAID") ? (() => {
                                         const rate = bk.invoiceCustomData?.rate ? extractPrice(bk.invoiceCustomData.rate) : getBookingRate(bk);
                                         const persons = bk.persons ? extractPrice(bk.persons) || 1 : 1;
-                                        return rate > 0 ? String(rate * persons) : "";
-                                      })() : ""),
+                                        return rate > 0 ? String(rate * persons) : (bk.paidAmount || bk.invoiceCustomData?.advancePaid || "");
+                                      })() : (bk.paidAmount && bk.paidAmount !== "0" && bk.paidAmount !== "null" ? bk.paidAmount : (bk.invoiceCustomData?.advancePaid || "")),
                                       paymentNote: bk.paymentNote || "",
                                       paymentMode: bk.invoiceCustomData?.paymentMode || "Cash",
                                       sendWhatsApp: true,
@@ -1458,11 +1458,11 @@ function AdminPage() {
                                       isOpen: true,
                                       booking: bk,
                                       paymentStatus: bk.paymentStatus || "ADVANCE",
-                                      paidAmount: bk.paidAmount || (bk.invoiceCustomData?.advancePaid) || ((bk.paymentStatus || "ADVANCE") === "PAID" ? (() => {
+                                      paidAmount: ((bk.paymentStatus || "ADVANCE") === "PAID") ? (() => {
                                         const rate = bk.invoiceCustomData?.rate ? extractPrice(bk.invoiceCustomData.rate) : getBookingRate(bk);
                                         const persons = bk.persons ? extractPrice(bk.persons) || 1 : 1;
-                                        return rate > 0 ? String(rate * persons) : "";
-                                      })() : ""),
+                                        return rate > 0 ? String(rate * persons) : (bk.paidAmount || bk.invoiceCustomData?.advancePaid || "");
+                                      })() : (bk.paidAmount && bk.paidAmount !== "0" && bk.paidAmount !== "null" ? bk.paidAmount : (bk.invoiceCustomData?.advancePaid || "")),
                                       paymentNote: bk.paymentNote || "",
                                       paymentMode: bk.invoiceCustomData?.paymentMode || "Cash",
                                       sendWhatsApp: true,
