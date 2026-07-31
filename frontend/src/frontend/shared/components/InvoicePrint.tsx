@@ -97,6 +97,8 @@ export function InvoicePrint({
       paymentMode: custom.paymentMode || "Cash",
       cashAmount: custom.cashAmount !== undefined ? Number(custom.cashAmount) : 0,
       onlineAmount: custom.onlineAmount !== undefined ? Number(custom.onlineAmount) : 0,
+      advancePaid: custom.advancePaid || "",
+      paymentNote: custom.paymentNote || "",
     };
   };
 
