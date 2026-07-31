@@ -35,13 +35,11 @@ export class IssuesService {
 
   async updateIssueStatus(id: string, status: string) {
     try {
-      const result = await issueRepository.updateOne(
-        { _id: new ObjectId(id) },
-        { $set: { status, updatedAt: new Date() } }
-      );
-      if (result.matchedCount === 0) {
+      const issue = await issueRepository.findById(id);
+      if (!issue) {
         throw new NotFoundException('Issue not found');
       }
+      await issueRepository.updateOne(id, { status, updatedAt: new Date() });
       this.logger.log(`[DB] Updated issue ${id} status to ${status}`);
       return { success: true };
     } catch (error) {
@@ -52,10 +50,11 @@ export class IssuesService {
 
   async deleteIssue(id: string) {
     try {
-      const result = await issueRepository.deleteOne({ _id: new ObjectId(id) });
-      if (result.deletedCount === 0) {
+      const issue = await issueRepository.findById(id);
+      if (!issue) {
         throw new NotFoundException('Issue not found');
       }
+      await issueRepository.deleteOne(id);
       this.logger.log(`[DB] Deleted issue ${id}`);
       return { success: true };
     } catch (error) {
