@@ -44,6 +44,7 @@ import { reportLovableError } from '@/backend/shared/lovable-error-reporting';
 import { generateSEO } from '@/backend/features/seo';
 import { AnalyticsScripts } from '@/frontend/shared/components/AnalyticsScripts';
 import { generateLocalBusinessSchema } from '@/backend/shared/schema-generators';
+import { Toaster } from '@/frontend/shared/ui/sonner';
 
 function NotFoundComponent() {
   return (
@@ -252,6 +253,7 @@ function RootComponent() {
             <FloatingWhatsApp />
           </>
         )}
+        <Toaster />
       </LanguageContext.Provider>
     </QueryClientProvider>
   );
