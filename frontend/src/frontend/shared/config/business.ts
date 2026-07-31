@@ -6,6 +6,6 @@ export const businessConfig = {
   pilgrimageDestinations: 25,
   fleetSize: 45,
   founderName: "Shailesh Raj",
-  supportPhone: "+91 97634 33556",
+  supportPhone: "+91 97644 13556",
   headOffice: "Pune, Maharashtra",
 };

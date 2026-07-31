@@ -206,7 +206,7 @@ export function InvoicePrint({
     }
 
     const inputPhone = window.prompt(
-      "Confirm or enter the WhatsApp number to send this invoice to (digits only, with country code, e.g. 919763433556):",
+      "Confirm or enter the WhatsApp number to send this invoice to (digits only, with country code, e.g. 919764413556):",
       data.customerPhone || "",
     );
 
@@ -475,7 +475,7 @@ export function InvoicePrint({
                   </span>
                   <span className="opacity-50">|</span>
                   <span className="flex items-center gap-1">
-                    <Phone className="h-3.5 w-3.5" /> +91 97634 33556
+                    <Phone className="h-3.5 w-3.5" /> +91 97644 13556
                   </span>
                 </div>
                 <div className="mt-1 text-[15px] font-medium text-slate-600 flex items-center justify-center gap-4 w-full">
@@ -861,7 +861,7 @@ export function InvoicePrint({
             >
               <span className="flex items-center gap-2">
                 <Phone className="h-4 w-4" />
-                +91 97634 33556
+                +91 97644 13556
               </span>
               <span className="opacity-50">|</span>
               <span className="flex items-center gap-2">

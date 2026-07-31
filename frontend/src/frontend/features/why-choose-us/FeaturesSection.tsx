@@ -124,7 +124,7 @@ export function FeaturesSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
             {t.btnExplore} <ArrowRight className="w-5 h-5" />
           </a>
           <a
-            href="tel:+919763433556"
+            href="tel:+919764413556"
             className="flex w-full sm:w-[220px] items-center justify-center gap-2 bg-white border-2 border-brand-green-dark text-brand-green-dark hover:bg-brand-green-dark/5 rounded-lg px-6 py-4 text-[16px] font-semibold transition-all hover:shadow-sm hover:-translate-y-0.5"
           >
             {t.btnContact} <ArrowRight className="w-5 h-5" />

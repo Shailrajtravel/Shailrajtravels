@@ -185,10 +185,10 @@ export function FooterSection({ t, lang = "en" }: { t: typeof translations.mr; l
                   <Phone className="w-4 h-4 text-brand-green" />
                 </div>
                 <a
-                  href="tel:+919763433556"
+                  href="tel:+919764413556"
                   className="whitespace-nowrap hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green rounded-sm"
                 >
-                  +91 97634 33556
+                  +91 97644 13556
                 </a>
               </li>
               <li className="flex items-center gap-3.5 group">

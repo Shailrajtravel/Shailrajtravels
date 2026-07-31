@@ -297,7 +297,7 @@ export const translations = {
     faq4Q: "Can I book a last-minute travel package?",
     faq4A: "Yes, depending on seat availability. We recommend booking at least 2-3 weeks in advance for popular yatras like Ashtavinayak or Jyotirlinga, but we do accommodate last-minute bookings if seats are open.",
     faq5Q: "Who can I contact if I want to book directly?",
-    faq5A: "You can book directly by calling us at +91 9763433556 or messaging us on WhatsApp. Our booking office is located in Hadapsar, Pune.",
+    faq5A: "You can book directly by calling us at +91 9764413556 or messaging us on WhatsApp. Our booking office is located in Hadapsar, Pune.",
     faq6Q: "Can I customize my itinerary after booking?",
     faq6A: "Minor changes can be accommodated before the tour starts, depending on hotel availability and travel schedules. Please contact our tour managers as early as possible.",
     reviewWriteBtn: "Write a Google Review",

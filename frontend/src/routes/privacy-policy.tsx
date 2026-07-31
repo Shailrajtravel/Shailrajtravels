@@ -151,7 +151,7 @@ function PrivacyPolicyPage() {
         <p>
           Shailraj Travels<br />
           Email: info@shailrajtravels.com<br />
-          Phone: +91 97634 33556
+          Phone: +91 97644 13556
         </p>
       </div>
     </main>

@@ -6,7 +6,7 @@ export function generateLocalBusinessSchema() {
     image: "https://www.shailrajtravels.com/logo.png",
     "@id": "https://www.shailrajtravels.com",
     url: "https://www.shailrajtravels.com",
-    telephone: "+919763433556",
+    telephone: "+919764413556",
     address: {
       "@type": "PostalAddress",
       streetAddress: "Gopal Patti, Manjri Budruk, Hadapsar",
