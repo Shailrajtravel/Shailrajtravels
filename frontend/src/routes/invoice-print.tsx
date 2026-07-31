@@ -17,7 +17,8 @@ import { getBookingForPrintFn } from '@/backend/shared/bookings';
 
 export const Route = createFileRoute("/invoice-print")({
   validateSearch: (s: Record<string, unknown>) => ({
-    bookingId: String(s.bookingId || ""),
+    id: String(s.id || ""),
+    bookingId: String(s.bookingId || s.id || ""),
     adminToken: String(s.adminToken || ""),
     // Sequential invoice number computed client-side (e.g., INV-V0048)
     generatedInvoiceNo: String(s.generatedInvoiceNo || ""),
@@ -31,8 +32,8 @@ function InvoicePrintPage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!bookingId || !adminToken) {
-      setError("Missing bookingId or adminToken");
+    if (!bookingId) {
+      setError("Missing bookingId or id");
       return;
     }
     getBookingForPrintFn({ data: { bookingId, adminToken } })

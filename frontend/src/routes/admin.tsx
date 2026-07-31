@@ -95,7 +95,7 @@ import {
   Cell,
   LabelList,
 } from 'recharts';
-import html2canvas from 'html2canvas';
+import { toJpeg } from 'html-to-image';
 import { jsPDF } from 'jspdf';
 
 export const Route = createFileRoute("/admin")({
@@ -124,8 +124,8 @@ const generateInvoicePDF = async (elementId: string): Promise<string> => {
   // Wait a moment for any fonts/images to finish rendering
   await new Promise(r => setTimeout(r, 1000));
   
-  const canvas = await html2canvas(element, { scale: 2, useCORS: true });
-  const imgData = canvas.toDataURL('image/jpeg', 0.95);
+  const imgData = await toJpeg(element, { quality: 0.95, pixelRatio: 2 });
+  const rect = element.getBoundingClientRect();
   
   const pdf = new jsPDF({
     orientation: 'portrait',
@@ -134,7 +134,7 @@ const generateInvoicePDF = async (elementId: string): Promise<string> => {
   });
   
   const pdfWidth = pdf.internal.pageSize.getWidth();
-  const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+  const pdfHeight = (rect.height * pdfWidth) / rect.width;
   
   pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
   return pdf.output('datauristring');

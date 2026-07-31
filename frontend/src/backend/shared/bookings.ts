@@ -197,9 +197,9 @@ export const deleteBookingFn = createServerFn({ method: "POST" })
   });
 
 export const getBookingForPrintFn = createServerFn({ method: "POST" })
-  .validator((data: { adminToken: string; bookingId: string }) => data)
+  .validator((data: { adminToken?: string; bookingId: string }) => data)
   .handler(async ({ data }) => {
-    if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
+    // Note: The print endpoint is public so customers can view their invoice via the WhatsApp link
     return await apiFetch(`/bookings/${data.bookingId}/print`);
   });
 
