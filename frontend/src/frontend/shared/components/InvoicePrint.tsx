@@ -712,7 +712,47 @@ export function InvoicePrint({
                     </div>
                   )}
 
-                  <DetailRow label="Paid Amount" value={totalAmount > 0 ? `₹ ${totalAmount.toLocaleString()}` : ""} />
+                  {isEditing ? (
+                    <>
+                      <DetailRow
+                        label="Paid Amount"
+                        value={data.advancePaid || ""}
+                        isEditing={true}
+                        onChange={(v: string) => updateData("advancePaid", v)}
+                      />
+                      <DetailRow
+                        label="Payment Note"
+                        value={data.paymentNote || ""}
+                        isEditing={true}
+                        onChange={(v: string) => updateData("paymentNote", v)}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      {data.paymentStatus?.toUpperCase() !== "PENDING" && (
+                        <DetailRow
+                          label="Paid Amount"
+                          value={
+                            data.paymentStatus?.toUpperCase() === "PAID"
+                              ? (data.advancePaid ? `₹ ${Number(data.advancePaid).toLocaleString()}` : `₹ ${totalAmount.toLocaleString()}`)
+                              : data.advancePaid
+                                ? `₹ ${Number(data.advancePaid).toLocaleString()}`
+                                : ""
+                          }
+                        />
+                      )}
+                      {(data.paymentStatus?.toUpperCase() === "ADVANCE" || data.paymentStatus?.toUpperCase() === "ADVANCE PAID") && (
+                        <DetailRow
+                          label="Balance Due"
+                          value={`₹ ${(totalAmount - Number(data.advancePaid || 0)).toLocaleString()}`}
+                        />
+                      )}
+                      {data.paymentNote && (
+                        <DetailRow label="Note" value={data.paymentNote} />
+                      )}
+                    </>
+                  )}
+                  
                   <div className="mt-1 flex items-center text-[13px]">
                     <div className="w-[130px] font-medium">Payment Status</div>
                     <div className="w-3">:</div>
@@ -720,15 +760,25 @@ export function InvoicePrint({
                       <select
                         className="ml-2 flex-1 border border-slate-300 rounded px-1 py-0.5 outline-none focus:ring-1 focus:ring-brand-blue cursor-pointer font-semibold"
                         value={data.paymentStatus?.toUpperCase() || "PENDING"}
-                        onChange={(e) => updateData("paymentStatus", e.target.value)}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          updateData("paymentStatus", val);
+                          if (val === "ADVANCE" || val === "PAID") {
+                            const amount = window.prompt("Enter confirmed paid amount (₹):", val === "PAID" ? String(totalAmount) : (data.advancePaid || ""));
+                            if (amount !== null) updateData("advancePaid", amount);
+                            
+                            const note = window.prompt("Enter payment description / note (optional):", data.paymentNote || "");
+                            if (note !== null) updateData("paymentNote", note);
+                          }
+                        }}
                       >
                         <option value="PENDING">PENDING</option>
                         <option value="ADVANCE">ADVANCE PAID</option>
-                        <option value="PAID">PAID</option>
+                        <option value="PAID">PAID IN FULL</option>
                       </select>
                     ) : (
                       <span
-                        className={`ml-2 rounded-sm px-2 py-0.5 text-[11px] font-bold text-white ${data.paymentStatus?.toUpperCase() === "PAID"
+                        className={`ml-2 rounded-sm px-2 py-0.5 text-[11px] font-bold text-white ${data.paymentStatus?.toUpperCase() === "PAID" || data.paymentStatus?.toUpperCase() === "PAID IN FULL"
                           ? "bg-green-500"
                           : data.paymentStatus?.toUpperCase() === "ADVANCE" || data.paymentStatus?.toUpperCase() === "ADVANCE PAID"
                             ? "bg-blue-600"
