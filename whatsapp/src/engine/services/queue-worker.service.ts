@@ -209,10 +209,9 @@ export class QueueWorkerService implements OnModuleInit, OnModuleDestroy {
       const session = client.startSession();
       try {
         await session.withTransaction(async () => {
-          await queueColl.updateOne(
+          await queueColl.deleteOne(
             { _id: job._id },
-            { $set: { status: 'DONE', updatedAt: new Date() } },
-            { session },
+            { session }
           );
           await processedColl.updateOne(
             { _id: dedupeId },
@@ -237,7 +236,7 @@ export class QueueWorkerService implements OnModuleInit, OnModuleDestroy {
     }
 
     // Fallback execution
-    await queueColl.updateOne({ _id: job._id }, { $set: { status: 'DONE', updatedAt: new Date() } });
+    await queueColl.deleteOne({ _id: job._id });
     await processedColl.updateOne(
       { _id: dedupeId },
       { $set: { sessionId: job.sessionId, messageId: job.messageId, processedAt: new Date() } },
