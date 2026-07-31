@@ -95,6 +95,8 @@ import {
   Cell,
   LabelList,
 } from 'recharts';
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
 
 export const Route = createFileRoute("/admin")({
   beforeLoad: () => {
@@ -116,14 +118,11 @@ export const Route = createFileRoute("/admin")({
 });
 
 const generateInvoicePDF = async (elementId: string): Promise<string> => {
-  const html2canvas = (await import('html2canvas')).default;
-  const { jsPDF } = await import('jspdf');
-  
   const element = document.getElementById(elementId);
   if (!element) throw new Error('Invoice element not found');
   
   // Wait a moment for any fonts/images to finish rendering
-  await new Promise(r => setTimeout(r, 500));
+  await new Promise(r => setTimeout(r, 1000));
   
   const canvas = await html2canvas(element, { scale: 2, useCORS: true });
   const imgData = canvas.toDataURL('image/jpeg', 0.95);
@@ -1961,6 +1960,7 @@ function AdminPage() {
                         pdfBase64 = await generateInvoicePDF("hidden-invoice-print");
                       } catch (e) {
                         console.error("Failed to generate PDF:", e);
+                        alert("Warning: Could not generate PDF attachment. Sending text receipt instead.");
                       }
                     }
 

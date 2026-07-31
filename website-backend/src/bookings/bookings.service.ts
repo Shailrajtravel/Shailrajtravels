@@ -169,7 +169,8 @@ export class BookingsService {
 
       this.logger.log(`Dispatching WhatsApp Document via session ${activeSess.id} to ${formattedTo}`);
 
-      const rawBase64 = base64Data.includes(',') ? base64Data.split(',')[1] : base64Data;
+      // Ensure the string has the data URI scheme which WAHA understands
+      const fileData = base64Data.startsWith('data:') ? base64Data : `data:application/pdf;base64,${base64Data}`;
 
       // WAHA file payload structure
       const payload = {
@@ -178,7 +179,7 @@ export class BookingsService {
         file: {
           mimetype: "application/pdf",
           filename: filename,
-          data: rawBase64
+          url: fileData // WAHA uses 'url' for both HTTP links and data: URIs!
         },
         caption: caption
       };
@@ -207,11 +208,13 @@ export class BookingsService {
       if (!sendRes.ok) {
         const errBody = await sendRes.text();
         this.logger.error(`OpenWA send-file error: HTTP ${sendRes.status} - ${errBody}`);
+        throw new Error(`Failed to send document: ${sendRes.status} - ${errBody}`);
       } else {
         this.logger.log(`WhatsApp Document successfully sent to ${formattedTo}`);
       }
     } catch (err) {
       this.logger.error(`Failed to send WhatsApp document to ${to}`, String(err));
+      throw err;
     }
   }
 
@@ -348,11 +351,19 @@ export class BookingsService {
             const msg = this.renderTemplate(templates.payment, vars);
             
             if (pdfBase64) {
-              await this.sendWhatsAppDocument(refreshed.phone, pdfBase64, `Invoice_${vars.bookingId}.pdf`, msg);
+              try {
+                await this.sendWhatsAppDocument(refreshed.phone, pdfBase64, `Invoice_${vars.bookingId}.pdf`, msg);
+                whatsappSent = true;
+              } catch (e) {
+                // Fallback to text message if document sending fails
+                this.logger.warn(`Document send failed, falling back to text for booking ${id}`);
+                await this.sendWhatsAppNotification(refreshed.phone, msg);
+                whatsappSent = true;
+              }
             } else {
               await this.sendWhatsAppNotification(refreshed.phone, msg);
+              whatsappSent = true;
             }
-            whatsappSent = true;
           }
         } catch (err) {
           this.logger.error(`Error sending payment status WhatsApp for booking ${id}`, String(err));
