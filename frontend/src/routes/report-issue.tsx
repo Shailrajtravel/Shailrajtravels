@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
 import { generateSEO } from '@/backend/features/seo';
-import { AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
+import { AlertCircle, Loader2 } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from "@/frontend/shared/ui/alert";
+import { toast } from 'sonner';
 
 export const Route = createFileRoute("/report-issue")({
   head: () => ({
@@ -28,7 +29,6 @@ function ReportIssuePage() {
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -53,7 +53,11 @@ function ReportIssuePage() {
         throw new Error(errorData.error || 'Failed to submit issue');
       }
 
-      setIsSuccess(true);
+      toast.success('Issue Reported Successfully', {
+        description: 'Thank you for bringing this to our attention. Our team will look into this immediately.',
+        duration: 5000,
+      });
+
       setFormData({
         name: '',
         email: '',
@@ -80,139 +84,121 @@ function ReportIssuePage() {
         </div>
 
         <div className="p-8">
-          {isSuccess ? (
-            <div className="text-center py-12">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-green-100 mb-6">
-                <CheckCircle className="w-10 h-10 text-green-600" />
-              </div>
-              <h2 className="text-2xl font-bold text-slate-900 mb-2">Issue Reported Successfully</h2>
-              <p className="text-slate-600 mb-8 max-w-md mx-auto">
-                Thank you for bringing this to our attention. Our team will look into this immediately.
-              </p>
-              <button
-                onClick={() => setIsSuccess(false)}
-                className="bg-brand-blue-deep text-white px-6 py-3 rounded-xl font-semibold hover:bg-brand-blue-deep/90 transition"
-              >
-                Report Another Issue
-              </button>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {error && (
-                <Alert variant="destructive">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertTitle>Error</AlertTitle>
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
-              )}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {error && (
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Error</AlertTitle>
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-semibold text-slate-700 mb-2">
-                    Full Name <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    required
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-blue-deep focus:border-transparent outline-none transition"
-                    placeholder="John Doe"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="email" className="block text-sm font-semibold text-slate-700 mb-2">
-                    Email Address <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    required
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-blue-deep focus:border-transparent outline-none transition"
-                    placeholder="john@example.com"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="phone" className="block text-sm font-semibold text-slate-700 mb-2">
-                    Phone Number
-                  </label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-blue-deep focus:border-transparent outline-none transition"
-                    placeholder="+91 98765 43210"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="type" className="block text-sm font-semibold text-slate-700 mb-2">
-                    Type of Issue <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    id="type"
-                    name="type"
-                    value={formData.type}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-blue-deep focus:border-transparent outline-none transition bg-white"
-                  >
-                    <option value="website">Website / App Bug</option>
-                    <option value="tour">Tour / Service Issue</option>
-                    <option value="booking">Booking / Payment Issue</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label htmlFor="name" className="block text-sm font-semibold text-slate-700 mb-2">
+                  Full Name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  required
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-blue-deep focus:border-transparent outline-none transition"
+                  placeholder="John Doe"
+                />
               </div>
 
               <div>
-                <label htmlFor="description" className="block text-sm font-semibold text-slate-700 mb-2">
-                  Issue Description <span className="text-red-500">*</span>
+                <label htmlFor="email" className="block text-sm font-semibold text-slate-700 mb-2">
+                  Email Address <span className="text-red-500">*</span>
                 </label>
-                <textarea
-                  id="description"
-                  name="description"
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
                   required
-                  rows={5}
-                  value={formData.description}
+                  value={formData.email}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-blue-deep focus:border-transparent outline-none transition resize-none"
-                  placeholder="Please describe the issue in detail..."
-                ></textarea>
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-blue-deep focus:border-transparent outline-none transition"
+                  placeholder="john@example.com"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label htmlFor="phone" className="block text-sm font-semibold text-slate-700 mb-2">
+                  Phone Number
+                </label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-blue-deep focus:border-transparent outline-none transition"
+                  placeholder="+91 98765 43210"
+                />
               </div>
 
-              {/* Honeypot field for spam prevention */}
-              <div className="hidden">
-                <label>Do not fill this out</label>
-                <input type="text" name="honeypot" value={formData.honeypot} onChange={handleChange} tabIndex={-1} autoComplete="off" />
+              <div>
+                <label htmlFor="type" className="block text-sm font-semibold text-slate-700 mb-2">
+                  Type of Issue <span className="text-red-500">*</span>
+                </label>
+                <select
+                  id="type"
+                  name="type"
+                  value={formData.type}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-blue-deep focus:border-transparent outline-none transition bg-white"
+                >
+                  <option value="website">Website / App Bug</option>
+                  <option value="tour">Tour / Service Issue</option>
+                  <option value="booking">Booking / Payment Issue</option>
+                  <option value="other">Other</option>
+                </select>
               </div>
+            </div>
 
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-brand-blue-deep hover:bg-brand-blue-deep/90 text-white font-bold py-4 rounded-xl transition flex justify-center items-center gap-2 disabled:opacity-70"
-              >
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="h-5 w-5 animate-spin" />
-                    Submitting...
-                  </>
-                ) : (
-                  'Submit Issue'
-                )}
-              </button>
-            </form>
-          )}
+            <div>
+              <label htmlFor="description" className="block text-sm font-semibold text-slate-700 mb-2">
+                Issue Description <span className="text-red-500">*</span>
+              </label>
+              <textarea
+                id="description"
+                name="description"
+                required
+                rows={5}
+                value={formData.description}
+                onChange={handleChange}
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-blue-deep focus:border-transparent outline-none transition resize-none"
+                placeholder="Please describe the issue in detail..."
+              ></textarea>
+            </div>
+
+            {/* Honeypot field for spam prevention */}
+            <div className="hidden">
+              <label>Do not fill this out</label>
+              <input type="text" name="honeypot" value={formData.honeypot} onChange={handleChange} tabIndex={-1} autoComplete="off" />
+            </div>
+
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full bg-brand-blue-deep hover:bg-brand-blue-deep/90 text-white font-bold py-4 rounded-xl transition flex justify-center items-center gap-2 disabled:opacity-70"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                  Submitting...
+                </>
+              ) : (
+                'Submit Issue'
+              )}
+            </button>
+          </form>
         </div>
       </div>
     </main>

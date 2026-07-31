@@ -231,11 +231,23 @@ export default {
           });
           if (!res.ok) {
             console.error("[API] Failed to save issue, status:", res.status);
+            return withSecurityHeaders(
+              new Response(JSON.stringify({ error: "Failed to submit issue (Backend error)" }), {
+                status: 500,
+                headers: { "Content-Type": "application/json" },
+              }),
+            );
           } else {
             console.log(`[API] Saved issue submission from ${data.email}`);
           }
         } catch (apiError) {
           console.error("[API] Failed to save issue:", apiError);
+          return withSecurityHeaders(
+            new Response(JSON.stringify({ error: "Failed to connect to backend" }), {
+              status: 500,
+              headers: { "Content-Type": "application/json" },
+            }),
+          );
         }
 
         return withSecurityHeaders(
