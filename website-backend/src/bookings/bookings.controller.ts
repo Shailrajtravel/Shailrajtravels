@@ -61,7 +61,7 @@ export class BookingsController {
   @Put(':id/payment')
   async updateBookingPaymentStatus(
     @Param('id') id: string,
-    @Body() body: { paymentStatus: string; paidAmount?: number | string; paymentNote?: string; sendWhatsApp?: boolean },
+    @Body() body: { paymentStatus: string; paidAmount?: number | string; paymentNote?: string; sendWhatsApp?: boolean; pdfBase64?: string },
   ) {
     return this.bookingsService.updateBookingPaymentStatus(
       id,
@@ -69,6 +69,7 @@ export class BookingsController {
       body.paidAmount,
       body.paymentNote,
       body.sendWhatsApp !== false,
+      body.pdfBase64,
     );
   }
 

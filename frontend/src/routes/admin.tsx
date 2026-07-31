@@ -115,6 +115,32 @@ export const Route = createFileRoute("/admin")({
   ),
 });
 
+const generateInvoicePDF = async (elementId: string): Promise<string> => {
+  const html2canvas = (await import('html2canvas')).default;
+  const { jsPDF } = await import('jspdf');
+  
+  const element = document.getElementById(elementId);
+  if (!element) throw new Error('Invoice element not found');
+  
+  // Wait a moment for any fonts/images to finish rendering
+  await new Promise(r => setTimeout(r, 500));
+  
+  const canvas = await html2canvas(element, { scale: 2, useCORS: true });
+  const imgData = canvas.toDataURL('image/jpeg', 0.95);
+  
+  const pdf = new jsPDF({
+    orientation: 'portrait',
+    unit: 'mm',
+    format: 'a4'
+  });
+  
+  const pdfWidth = pdf.internal.pageSize.getWidth();
+  const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+  
+  pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+  return pdf.output('datauristring');
+};
+
 function AdminPage() {
   const navigate = useNavigate();
   const [token, setToken] = useState<string | null>(null);
@@ -1929,6 +1955,15 @@ function AdminPage() {
                 onClick={async () => {
                   setPaymentModal(prev => ({ ...prev, isSubmitting: true }));
                   try {
+                    let pdfBase64;
+                    if (paymentModal.sendWhatsApp) {
+                      try {
+                        pdfBase64 = await generateInvoicePDF("hidden-invoice-print");
+                      } catch (e) {
+                        console.error("Failed to generate PDF:", e);
+                      }
+                    }
+
                     const res = await updateBookingPaymentStatusFn({
                       data: {
                         adminToken: token,
@@ -1937,6 +1972,7 @@ function AdminPage() {
                         paidAmount: paymentModal.paidAmount,
                         paymentNote: paymentModal.paymentNote,
                         sendWhatsApp: paymentModal.sendWhatsApp,
+                        pdfBase64: pdfBase64,
                       },
                     });
                     setPaymentModal(prev => ({ ...prev, isOpen: false, isSubmitting: false }));
@@ -1967,6 +2003,25 @@ function AdminPage() {
               </button>
             </div>
           </div>
+          {paymentModal.sendWhatsApp && paymentModal.booking && (
+            <div style={{ position: 'absolute', top: '-9999px', left: '-9999px', width: '800px' }} aria-hidden="true">
+              <div id="hidden-invoice-print">
+                <InvoicePrint
+                  booking={{
+                    ...paymentModal.booking,
+                    paymentStatus: paymentModal.paymentStatus,
+                    invoiceCustomData: {
+                      ...paymentModal.booking.invoiceCustomData,
+                      paymentStatus: paymentModal.paymentStatus,
+                      advancePaid: paymentModal.paidAmount,
+                      paymentNote: paymentModal.paymentNote
+                    }
+                  }}
+                  token={token}
+                />
+              </div>
+            </div>
+          )}
         </div>,
         document.body
       )}

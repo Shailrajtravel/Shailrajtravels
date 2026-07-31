@@ -147,6 +147,74 @@ export class BookingsService {
     }
   }
 
+  private async sendWhatsAppDocument(to: string, base64Data: string, filename: string, caption: string) {
+    try {
+      const baseUrl = process.env.OPENWA_API_URL || 'https://shailrajtravels-backend.onrender.com';
+      const openwaUrl = baseUrl.replace(/\/+$/, '');
+      const apiKey = process.env.OPENWA_API_KEY || 'shailraj-secret-key';
+      
+      const sessRes = await fetch(`${openwaUrl}/api/sessions`, {
+        headers: { 'X-API-Key': apiKey }
+      });
+      if (!sessRes.ok) return;
+      const sessions = await sessRes.json();
+      const activeSess = Array.isArray(sessions) ? (sessions.find((s: any) => s.status === 'ready' || s.status === 'connected' || s.status === 'working') || sessions[0]) : null;
+      if (!activeSess || !activeSess.id) return;
+
+      let cleanTo = (to || '').trim();
+      let digits = cleanTo.replace(/\D/g, '');
+      if (digits.length === 11 && digits.startsWith('0')) digits = digits.slice(1);
+      if (digits.length === 10) digits = '91' + digits;
+      const formattedTo = cleanTo.includes('@') ? cleanTo : `${digits}@c.us`;
+
+      this.logger.log(`Dispatching WhatsApp Document via session ${activeSess.id} to ${formattedTo}`);
+
+      const rawBase64 = base64Data.includes(',') ? base64Data.split(',')[1] : base64Data;
+
+      // WAHA file payload structure
+      const payload = {
+        session: activeSess.id,
+        chatId: formattedTo,
+        file: {
+          mimetype: "application/pdf",
+          filename: filename,
+          data: rawBase64
+        },
+        caption: caption
+      };
+
+      let sendRes = await fetch(`${openwaUrl}/api/sessions/${activeSess.id}/messages/send-file`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Key': apiKey
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!sendRes.ok && sendRes.status === 404) {
+        // Fallback for newer WAHA endpoints
+        sendRes = await fetch(`${openwaUrl}/api/sendFile`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-API-Key': apiKey
+          },
+          body: JSON.stringify(payload)
+        });
+      }
+
+      if (!sendRes.ok) {
+        const errBody = await sendRes.text();
+        this.logger.error(`OpenWA send-file error: HTTP ${sendRes.status} - ${errBody}`);
+      } else {
+        this.logger.log(`WhatsApp Document successfully sent to ${formattedTo}`);
+      }
+    } catch (err) {
+      this.logger.error(`Failed to send WhatsApp document to ${to}`, String(err));
+    }
+  }
+
   async createBooking(data: any) {
     const now = new Date().toISOString();
     const bookingData = {
@@ -229,6 +297,7 @@ export class BookingsService {
     paidAmount?: number | string,
     paymentNote?: string,
     sendWhatsApp: boolean = true,
+    pdfBase64?: string,
   ) {
     const booking = await bookingRepository.findBookingById(id);
     const existingCustom = booking?.invoiceCustomData || {};
@@ -277,7 +346,12 @@ export class BookingsService {
             };
 
             const msg = this.renderTemplate(templates.payment, vars);
-            await this.sendWhatsAppNotification(refreshed.phone, msg);
+            
+            if (pdfBase64) {
+              await this.sendWhatsAppDocument(refreshed.phone, pdfBase64, `Invoice_${vars.bookingId}.pdf`, msg);
+            } else {
+              await this.sendWhatsAppNotification(refreshed.phone, msg);
+            }
             whatsappSent = true;
           }
         } catch (err) {
