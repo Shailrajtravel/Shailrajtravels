@@ -57,7 +57,7 @@ function ReportIssuePage() {
         <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">Contact Information</h2>
         <p>
           Please send your detailed report to our support team:<br />
-          <strong>Email:</strong> shailrajtravels9999@gmail.com<br />
+          <strong>Email:</strong> info@shailrajtravels.com<br />
           <strong>Phone:</strong> +91 97634 33556
         </p>
         <p>

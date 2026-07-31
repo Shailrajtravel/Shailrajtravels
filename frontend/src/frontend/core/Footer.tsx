@@ -196,10 +196,10 @@ export function FooterSection({ t, lang = "en" }: { t: typeof translations.mr; l
                   <Mail className="w-4 h-4 text-brand-green" />
                 </div>
                 <a
-                  href="mailto:shailrajtravels9999@gmail.com"
+                  href="mailto:info@shailrajtravels.com"
                   className="whitespace-nowrap hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green rounded-sm overflow-hidden text-ellipsis"
                 >
-                  shailrajtravels9999@gmail.com
+                  info@shailrajtravels.com
                 </a>
               </li>
               <li className="mt-2 rounded-xl overflow-hidden h-[150px] border border-slate-700/50 shadow-lg relative group">

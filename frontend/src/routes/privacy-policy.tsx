@@ -133,7 +133,7 @@ function PrivacyPolicyPage() {
           <li>Delete information where legally permissible</li>
           <li>Withdraw consent where applicable</li>
         </ul>
-        <p>Requests may be sent to:<br />Email: shailrajtravels9999@gmail.com</p>
+        <p>Requests may be sent to:<br />Email: info@shailrajtravels.com</p>
 
         <hr className="my-8" />
 
@@ -150,7 +150,7 @@ function PrivacyPolicyPage() {
         <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">11. Contact</h2>
         <p>
           Shailraj Travels<br />
-          Email: shailrajtravels9999@gmail.com<br />
+          Email: info@shailrajtravels.com<br />
           Phone: +91 97634 33556
         </p>
       </div>

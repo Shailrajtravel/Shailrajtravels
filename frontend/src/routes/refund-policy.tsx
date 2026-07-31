@@ -78,7 +78,7 @@ function RefundPolicyPage() {
         <hr className="my-8" />
 
         <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">7. Contact</h2>
-        <p>Email:<br />shailrajtravels9999@gmail.com</p>
+        <p>Email:<br />info@shailrajtravels.com</p>
       </div>
     </main>
   );

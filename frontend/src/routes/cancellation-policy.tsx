@@ -70,7 +70,7 @@ function CancellationPolicyPage() {
         <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">2. Cancellation Procedure</h2>
         <p>Cancellation requests are valid only if submitted:</p>
         <ul className="list-disc pl-6 space-y-2">
-          <li>By email to shailrajtravels9999@gmail.com, or</li>
+          <li>By email to info@shailrajtravels.com, or</li>
           <li>Through the official customer support number.</li>
         </ul>
         <p>Cancellation becomes effective only after written confirmation from Shailraj Travels.</p>

@@ -468,7 +468,7 @@ export function InvoicePrint({
                 </div>
                 <div className="mt-1 text-[15px] font-medium text-slate-600 flex items-center justify-center gap-4 w-full">
                   <span className="flex items-center gap-1">
-                    <Mail className="h-3.5 w-3.5" /> shailrajtravels9999@gmail.com
+                    <Mail className="h-3.5 w-3.5" /> info@shailrajtravels.com
                   </span>
                   <span className="opacity-50">|</span>
                   <span className="flex items-center gap-1">
@@ -803,7 +803,7 @@ export function InvoicePrint({
               </span>
               <span className="opacity-50">|</span>
               <span className="flex items-center gap-2">
-                <Mail className="h-4 w-4" /> shailrajtravels9999@gmail.com
+                <Mail className="h-4 w-4" /> info@shailrajtravels.com
               </span>
               <span className="opacity-50">|</span>
               <span className="flex items-center gap-2">

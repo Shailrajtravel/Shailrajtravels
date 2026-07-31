@@ -57,7 +57,7 @@ function SecurityPolicyPage() {
         <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">5. Contact</h2>
         <p>
           If you have any questions or concerns about our security practices, please contact our security team at:<br />
-          Email: shailrajtravels9999@gmail.com
+          Email: info@shailrajtravels.com
         </p>
       </div>
     </main>
