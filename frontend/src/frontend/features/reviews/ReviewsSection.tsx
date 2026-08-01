@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { Star, CheckCircle2, Sparkles, Loader2, Wand2, MessageSquare, X, Check } from 'lucide-react';
+import { Star, CheckCircle2, Sparkles, Loader2, Wand2, MessageSquare, X, Check, ArrowRight } from 'lucide-react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { addReviewFn } from '@/backend/features/reviews';
 
@@ -136,23 +136,25 @@ export function ReviewsSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
               : "Authentic stories and high-rated travel experiences synced in real-time directly from our official Google Business Profile."}
           </p>
 
-          {/* Action Buttons */}
-          <div className="flex flex-wrap items-center justify-center gap-3.5 pt-2">
+          {/* Action Buttons styled identically to Explore Tours & Contact Us buttons */}
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4 md:gap-6 w-full max-w-md mx-auto sm:max-w-none pt-4">
             <button
               type="button"
               onClick={() => setIsFormOpen(true)}
-              className="inline-flex items-center justify-center px-6 py-2.5 bg-brand-green-dark hover:bg-brand-green-dark/90 text-white font-semibold rounded-xl text-sm shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 cursor-pointer whitespace-nowrap"
+              className="flex w-full sm:w-[260px] items-center justify-center gap-2 bg-brand-green-dark hover:bg-brand-green-dark/90 text-white rounded-lg px-6 py-4 text-[16px] font-semibold transition-all shadow-sm hover:shadow-[0_8px_20px_rgba(16,163,74,0.25)] hover:-translate-y-0.5 cursor-pointer whitespace-nowrap"
             >
               <span>{lang === "mr" ? "AI सोबत अभिप्राय लिहा" : "Write a Review with AI"}</span>
+              <ArrowRight className="w-5 h-5 shrink-0" />
             </button>
 
             <a
               href="https://www.google.com/maps/place/Shailraj+Travels/data=!4m2!3m1!1s0x0:0x5dbc6804756241b3?sa=X&ved=1t:2428&ictx=111"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center px-6 py-2.5 bg-white border-2 border-brand-green-dark text-brand-green-dark hover:bg-brand-green-dark/5 font-semibold rounded-xl text-sm shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 no-underline whitespace-nowrap"
+              className="flex w-full sm:w-[260px] items-center justify-center gap-2 bg-white border-2 border-brand-green-dark text-brand-green-dark hover:bg-brand-green-dark/5 rounded-lg px-6 py-4 text-[16px] font-semibold transition-all hover:shadow-sm hover:-translate-y-0.5 no-underline whitespace-nowrap"
             >
               <span>{lang === "mr" ? "गुगल प्रोफाइल पहा" : "View on Google Maps"}</span>
+              <ArrowRight className="w-5 h-5 shrink-0" />
             </a>
           </div>
         </div>
