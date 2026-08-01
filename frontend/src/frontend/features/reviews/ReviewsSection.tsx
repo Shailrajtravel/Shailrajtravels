@@ -106,24 +106,35 @@ export function ReviewsSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
       </div>
 
       <div className="mx-auto max-w-[1280px] px-6">
-        <div className="flex flex-col items-center text-center gap-6 mb-12">
-          {/* Verified Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs md:text-sm font-bold bg-green-100/80 border border-green-200 text-green-900 uppercase tracking-wider shadow-xs select-none">
-            <CheckCircle2 className="w-4 h-4 text-green-600 fill-green-600 text-white" />
-            <span>{lang === "mr" ? "सत्यापित गुगल प्रतिक्रिया" : "100% Verified Google Reviews"}</span>
+        <div className="flex flex-col items-center justify-center text-center mb-12 animate-reveal">
+          {/* Section Subtitle with green decorative lines */}
+          <div className="flex items-center gap-4 mb-4">
+            <div className="h-[1px] w-10 bg-brand-green" />
+            <span className="text-[13px] md:text-[15px] font-bold tracking-[0.2em] text-brand-green-dark uppercase leading-none flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-brand-green-dark fill-brand-green-dark text-white inline shrink-0" />
+              {lang === "mr" ? "सत्यापित प्रतिक्रिया" : "VERIFIED REVIEWS"}
+            </span>
+            <div className="h-[1px] w-10 bg-brand-green" />
           </div>
 
-          {/* Main Title & Subtext */}
-          <div className="space-y-3 max-w-3xl">
-            <h2 className="text-3xl md:text-5xl font-black text-slate-900 font-display tracking-tight leading-tight">
-              {lang === "mr" ? "आमच्या प्रवाशांचा अनुभव व विश्वास" : "What Our Travelers Say About Us"}
-            </h2>
-            <p className="text-base md:text-lg text-slate-600 font-medium leading-relaxed">
-              {lang === "mr" 
-                ? "गुगल बिझनेस प्रोफाइल वरून थेट आणि रिअल-टाईम प्रवाशांचे अनुभव आणि प्रतिक्रिया. तुमचाही अनुभव नक्की सामायिक करा!"
-                : "Authentic stories and high-rated travel experiences synced in real-time directly from our official Google Business Profile."}
-            </p>
-          </div>
+          {/* Main Title with brand colors */}
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold font-display text-brand-blue-deep leading-tight max-w-4xl mb-4">
+            {lang === "mr" ? (
+              <>
+                आमच्या प्रवाशांचा <span className="text-brand-green-dark">अनुभव व विश्वास</span>
+              </>
+            ) : (
+              <>
+                What Our Travelers <span className="text-brand-green-dark">Say About Us</span>
+              </>
+            )}
+          </h2>
+          
+          <p className="text-base md:text-lg text-slate-600 font-medium leading-relaxed max-w-2xl mb-6">
+            {lang === "mr" 
+              ? "गुगल बिझनेस प्रोफाइल वरून थेट आणि रिअल-टाईम प्रवाशांचे अनुभव आणि प्रतिक्रिया. तुमचाही अनुभव नक्की सामायिक करा!"
+              : "Authentic stories and high-rated travel experiences synced in real-time directly from our official Google Business Profile."}
+          </p>
 
           {/* Action Buttons */}
           <div className="flex flex-wrap items-center justify-center gap-4 pt-2 w-full max-w-lg">
