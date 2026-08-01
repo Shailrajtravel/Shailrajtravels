@@ -9,7 +9,7 @@ import {
   deletePackageFn,
 } from '@/backend/features/packages';
 import { getReviewsFn, deleteReviewFn } from '@/backend/features/reviews';
-import { getCustomBlogsFn, deleteCustomBlogFn, updateCustomBlogFn, toggleBlogVisibilityFn } from '@/backend/features/custom-blogs';
+import { getCustomBlogsFn, deleteCustomBlogFn, updateCustomBlogFn, toggleBlogVisibilityFn, createCustomBlogFn } from '@/backend/features/custom-blogs';
 import {
   getTripOptionsFn,
   createTripOptionFn,
@@ -5780,6 +5780,7 @@ function BlogsAdminView({
   setDeleteConfirm: (confirm: any) => void;
 }) {
   const [editingBlog, setEditingBlog] = useState<any | null>(null);
+  const [isCreatingBlog, setIsCreatingBlog] = useState(false);
   const [editForm, setEditForm] = useState({ title: "", content: "", authorName: "", category: "", thumbnailBase64: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -5799,6 +5800,45 @@ function BlogsAdminView({
       thumbnailBase64: "",
     });
     setErrorMsg("");
+  };
+
+  const handleCreateClick = () => {
+    setIsCreatingBlog(true);
+    setEditForm({
+      title: "",
+      content: "",
+      authorName: "Shailraj Travels Editorial Team",
+      category: "Travel Guides",
+      thumbnailBase64: "",
+    });
+    setErrorMsg("");
+  };
+
+  const handleCreateSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editForm.thumbnailBase64) {
+      setErrorMsg("Thumbnail image is required for SEO blogs.");
+      return;
+    }
+    setErrorMsg("");
+    setIsSubmitting(true);
+    try {
+      await createCustomBlogFn({
+        data: {
+          adminToken: token,
+          title: editForm.title,
+          content: editForm.content,
+          authorName: editForm.authorName,
+          category: editForm.category,
+          thumbnailBase64: editForm.thumbnailBase64,
+        }
+      });
+      setIsCreatingBlog(false);
+      window.location.reload();
+    } catch (err: any) {
+      setErrorMsg(err.message || "Failed to create blog.");
+      setIsSubmitting(false);
+    }
   };
 
   const handleEditSubmit = async (e: React.FormEvent) => {
@@ -5862,12 +5902,18 @@ function BlogsAdminView({
       <div className="flex items-center justify-between mb-6 shrink-0">
         <div>
           <h2 className="text-xl font-bold font-display text-brand-blue-deep mb-1">
-            Custom Yatri Blogs
+            SEO & Travel Blogs Management
           </h2>
           <p className="text-slate-500 text-sm">
-            View, edit, and toggle visibility of custom travelogue blogs.
+            Create authoritative SEO travel blogs, edit stories, and manage overall blog visibility.
           </p>
         </div>
+        <button
+          onClick={handleCreateClick}
+          className="px-5 py-2.5 rounded-xl bg-brand-green hover:bg-brand-green-dark text-[#0a192f] font-bold text-sm transition-all shadow-md flex items-center gap-2 cursor-pointer"
+        >
+          <Plus className="w-4 h-4" /> Write New SEO Blog
+        </button>
       </div>
 
       <div className="flex-1 overflow-auto min-h-0 border border-slate-100 rounded-xl custom-scrollbar">
@@ -6088,6 +6134,136 @@ function BlogsAdminView({
                   </>
                 ) : (
                   "Save Changes"
+                )}
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {/* Create New Blog Modal */}
+      {isCreatingBlog && isMounted && createPortal(
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl w-full max-w-[650px] shadow-2xl border border-slate-100 flex flex-col max-h-[90vh] animate-reveal overflow-hidden">
+            <div className="p-6 md:p-8 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+              <h3 className="text-2xl font-display font-bold text-brand-blue-deep">Write New SEO Blog Post</h3>
+              <button
+                onClick={() => setIsCreatingBlog(false)}
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-slate-200 text-slate-500 hover:bg-brand-blue hover:text-white transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            {errorMsg && (
+              <div className="px-6 md:px-8 pt-6">
+                <div className="p-4 bg-red-50 text-red-700 text-sm font-medium rounded-xl border border-red-100 flex items-start gap-3">
+                  <div className="w-5 h-5 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0 mt-0.5">!</div>
+                  {errorMsg}
+                </div>
+              </div>
+            )}
+
+            <div className="p-6 md:p-8 overflow-y-auto custom-scrollbar flex-1">
+              <form id="createBlogForm" onSubmit={handleCreateSubmit} className="space-y-6">
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-2">Blog Title</label>
+                  <input
+                    type="text"
+                    required
+                    minLength={3}
+                    className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all outline-none"
+                    placeholder="Enter blog article title for SEO"
+                    value={editForm.title}
+                    onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
+                  />
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-bold text-slate-700 mb-2">Author Name</label>
+                    <input
+                      type="text"
+                      required
+                      minLength={2}
+                      className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all outline-none"
+                      value={editForm.authorName}
+                      onChange={(e) => setEditForm({ ...editForm, authorName: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-slate-700 mb-2">Category</label>
+                    <select
+                      className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all outline-none bg-white"
+                      value={editForm.category}
+                      onChange={(e) => setEditForm({ ...editForm, category: e.target.value })}
+                    >
+                      <option value="Travel Guides">Travel Guides</option>
+                      <option value="Temple Guides">Temple Guides</option>
+                      <option value="Pilgrimage Planning">Pilgrimage Planning</option>
+                      <option value="Spiritual Tourism">Spiritual Tourism</option>
+                      <option value="Pilgrimage">Pilgrimage</option>
+                      <option value="Experiences">Experiences</option>
+                      <option value="Tips & Tricks">Tips & Tricks</option>
+                      <option value="News">News</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-2">Thumbnail Image (Required)</label>
+                  <div className="flex items-center gap-4">
+                    {editForm.thumbnailBase64 && (
+                      <div className="w-16 h-16 rounded-lg overflow-hidden border border-slate-200 shrink-0">
+                        <img src={editForm.thumbnailBase64} alt="Preview" className="w-full h-full object-cover" />
+                      </div>
+                    )}
+                    <label className="px-4 py-2 bg-slate-100 text-slate-700 font-bold rounded-xl cursor-pointer hover:bg-slate-200 transition-colors text-sm border border-slate-200">
+                      Upload Thumbnail
+                      <input type="file" required accept="image/*" className="hidden" onChange={handleThumbnailChange} />
+                    </label>
+                    <span className="text-xs text-slate-400">Max 5MB. Highly recommended for SEO representation.</span>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-2">Content (HTML Supported)</label>
+                  <textarea
+                    required
+                    minLength={10}
+                    rows={8}
+                    placeholder="Write detailed spiritual travel content here..."
+                    className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all outline-none resize-y custom-scrollbar"
+                    value={editForm.content}
+                    onChange={(e) => setEditForm({ ...editForm, content: e.target.value })}
+                  />
+                </div>
+              </form>
+            </div>
+
+            <div className="p-6 md:p-8 border-t border-slate-100 bg-slate-50 flex justify-end gap-3 shrink-0">
+              <button
+                type="button"
+                onClick={() => setIsCreatingBlog(false)}
+                className="px-6 py-2.5 text-slate-600 font-bold hover:bg-slate-200 rounded-xl transition-colors"
+                disabled={isSubmitting}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                form="createBlogForm"
+                disabled={isSubmitting}
+                className="px-6 py-2.5 bg-brand-green text-white font-bold rounded-xl hover:bg-brand-green-dark transition-all flex items-center gap-2 shadow-lg shadow-brand-green/20"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Publishing...
+                  </>
+                ) : (
+                  "Publish SEO Blog"
                 )}
               </button>
             </div>

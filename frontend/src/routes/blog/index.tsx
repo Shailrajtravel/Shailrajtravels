@@ -5,9 +5,9 @@ import { blogPosts, blogAuthors } from '@/frontend/shared/data/blogs';
 import { Navbar } from '@/frontend/core/Navbar';
 import { FooterSection as Footer } from '@/frontend/core/Footer';
 import { translations } from '@/frontend/core/i18n';
-import { Calendar, Clock, User, ChevronRight, PenTool, X } from 'lucide-react';
+import { Calendar, Clock, User, ChevronRight } from 'lucide-react';
 import { generateBreadcrumbSchema } from '@/backend/shared/blog-schema';
-import { getCustomBlogsFn, createCustomBlogFn } from '@/backend/features/custom-blogs';
+import { getCustomBlogsFn } from '@/backend/features/custom-blogs';
 
 export const Route = createFileRoute("/blog/")({
   loader: async () => {
@@ -65,65 +65,6 @@ function BlogIndexPage() {
     });
   }, [customBlogs, sortBy]);
 
-  // Modal Form State
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [title, setTitle] = useState("");
-  const [authorName, setAuthorName] = useState("Yatri");
-  const [category, setCategory] = useState("Travel Guides");
-  const [content, setContent] = useState("");
-  const [thumbnailBase64, setThumbnailBase64] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState("");
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) {
-        setError("Image file size must be less than 5MB.");
-        e.target.value = ""; // reset
-        return;
-      }
-      setError("");
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setThumbnailBase64(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!title.trim() || !content.trim() || !authorName.trim() || !thumbnailBase64) {
-      setError("All fields are required, including the thumbnail image.");
-      return;
-    }
-    setError("");
-    setIsSubmitting(true);
-    try {
-      const res = await createCustomBlogFn({
-        data: {
-          title,
-          content,
-          authorName,
-          category,
-          thumbnailBase64,
-        },
-      });
-      if (res.success) {
-        setIsModalOpen(false);
-        setTitle("");
-        setContent("");
-        setAuthorName("Yatri");
-        setThumbnailBase64("");
-        router.invalidate();
-      }
-    } catch (err: any) {
-      setError(err.message || "Failed to publish blog post.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   // Get categories and count
   const categories = useMemo<[string, number][]>(() => {
@@ -158,12 +99,6 @@ function BlogIndexPage() {
             Comprehensive guides, itineraries, and spiritual knowledge to help you plan the perfect
             Darshan.
           </p>
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-brand-green hover:bg-brand-green-dark text-[#0a192f] font-bold rounded-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 focus-visible:outline-none cursor-pointer text-sm"
-          >
-            <PenTool className="w-4 h-4" /> Share Your Story / Write Blog
-          </button>
         </div>
 
         {/* Categories Bar */}
@@ -299,147 +234,6 @@ function BlogIndexPage() {
           </>
         )}
       </main>
-
-      {/* Write Blog Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 overflow-y-auto">
-          <div className="bg-white rounded-3xl w-full max-w-[650px] shadow-2xl border border-slate-100 flex flex-col max-h-[90vh] animate-reveal overflow-hidden">
-            {/* Modal Header */}
-            <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 bg-slate-50/50">
-              <div className="flex items-center gap-2">
-                <PenTool className="w-5 h-5 text-brand-green" />
-                <h3 className="text-xl font-bold text-brand-blue-deep">Write a Travel Story / Blog</h3>
-              </div>
-              <button
-                onClick={() => {
-                  setIsModalOpen(false);
-                  setError("");
-                }}
-                className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Modal Body / Form */}
-            <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-5 custom-scrollbar">
-              {error && (
-                <div className="p-4 bg-red-50 text-red-600 rounded-xl text-sm font-medium border border-red-100">
-                  {error}
-                </div>
-              )}
-
-              <div className="space-y-1.5">
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">
-                  Blog Title
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. My spiritual experience at Mahakaleshwar Ujjain"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-brand-blue transition-colors text-slate-800 text-sm md:text-base font-medium"
-                />
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">
-                    Author Name
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="Your Name (e.g. Rajesh Patil)"
-                    value={authorName}
-                    onChange={(e) => setAuthorName(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-brand-blue transition-colors text-slate-800 text-sm font-medium"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">
-                    Category
-                  </label>
-                  <select
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-brand-blue bg-white transition-colors text-slate-800 text-sm font-medium"
-                  >
-                    <option value="Travel Guides">Travel Guides</option>
-                    <option value="Temple Guides">Temple Guides</option>
-                    <option value="Pilgrimage Planning">Pilgrimage Planning</option>
-                    <option value="Spiritual Tourism">Spiritual Tourism</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">
-                  Thumbnail Image (Max 5MB)
-                </label>
-                <div className="flex items-center gap-4">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    required
-                    onChange={handleFileChange}
-                    className="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-brand-blue-deep/10 file:text-brand-blue-deep hover:file:bg-brand-blue-deep/20 cursor-pointer"
-                  />
-                  {thumbnailBase64 && (
-                    <div className="w-12 h-12 rounded-lg overflow-hidden border border-slate-200 flex-shrink-0">
-                      <img src={thumbnailBase64} alt="Thumbnail preview" className="w-full h-full object-cover" />
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">
-                  Story Content
-                </label>
-                <textarea
-                  required
-                  rows={8}
-                  placeholder="Share your spiritual trip details, tips, and journey story here..."
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-brand-blue transition-colors text-slate-800 text-sm md:text-base leading-relaxed font-normal custom-scrollbar"
-                ></textarea>
-              </div>
-
-              {/* Modal Footer */}
-              <div className="pt-4 flex items-center justify-end gap-3 border-t border-slate-100">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsModalOpen(false);
-                    setError("");
-                  }}
-                  className="px-5 py-2.5 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50 text-sm font-bold transition-colors cursor-pointer"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="px-6 py-2.5 rounded-xl bg-brand-blue-deep hover:bg-brand-blue text-white text-sm font-bold transition-all shadow-md hover:shadow-lg disabled:opacity-50 cursor-pointer flex items-center gap-2"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      Publishing...
-                    </>
-                  ) : (
-                    "Publish Story"
-                  )}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
 
       <Footer t={t} lang={lang} />
     </div>
