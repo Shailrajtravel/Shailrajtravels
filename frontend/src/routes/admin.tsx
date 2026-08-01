@@ -273,6 +273,27 @@ function AdminPage() {
     isSubmitting: false,
   });
 
+  const [notifyModal, setNotifyModal] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    type: 'success' | 'error' | 'info';
+  }>({
+    isOpen: false,
+    title: '',
+    message: '',
+    type: 'success',
+  });
+
+  const customAlert = (message: string, title?: string, type: 'success' | 'error' | 'info' = 'success') => {
+    setNotifyModal({
+      isOpen: true,
+      title: title || (type === 'success' ? 'Success!' : type === 'error' ? 'Error' : 'Notification'),
+      message,
+      type,
+    });
+  };
+
   const [templateModal, setTemplateModal] = useState<{
     isOpen: boolean;
     activeTab: "confirmed" | "cancelled" | "payment" | "invoicePdf";
@@ -1920,9 +1941,9 @@ function AdminPage() {
                       },
                     });
                     setReplyModal({ isOpen: false, booking: null });
-                    alert("Message sent successfully!");
+                    customAlert("Message sent successfully!", "WhatsApp Message Sent", "success");
                   } catch (err: any) {
-                    alert(err.message || "Failed to send message.");
+                    customAlert(err.message || "Failed to send message.", "Send Failed", "error");
                   } finally {
                     setReplying(false);
                   }
@@ -2166,7 +2187,7 @@ function AdminPage() {
                         pdfBase64 = await generateInvoicePDF("hidden-invoice-print");
                       } catch (e) {
                         console.error("Failed to generate PDF:", e);
-                        alert("Warning: Could not generate PDF attachment. Sending text receipt instead.");
+                        customAlert("Could not generate PDF attachment. Sending text receipt instead.", "Warning", "error");
                       }
                     }
 
@@ -2185,13 +2206,13 @@ function AdminPage() {
                     setPaymentModal(prev => ({ ...prev, isOpen: false, isSubmitting: false }));
                     loadData();
                     if (paymentModal.sendWhatsApp) {
-                      alert("Payment updated! Invoice & WhatsApp receipt successfully sent to customer.");
+                      customAlert("Payment updated! Invoice & WhatsApp receipt successfully sent to customer.", "Receipt & Invoice Sent", "success");
                     } else {
-                      alert("Payment updated successfully.");
+                      customAlert("Payment updated successfully.", "Payment Recorded", "success");
                     }
                   } catch (err: any) {
                     setPaymentModal(prev => ({ ...prev, isSubmitting: false }));
-                    alert(err.message || "Failed to update payment.");
+                    customAlert(err.message || "Failed to update payment.", "Payment Update Failed", "error");
                   }
                 }}
                 className="px-6 py-2.5 bg-brand-blue-deep text-white font-bold rounded-xl hover:bg-blue-900 transition-all flex items-center gap-2 text-sm shadow-md"
@@ -2245,6 +2266,40 @@ function AdminPage() {
               </div>
             </div>
           )}
+        </div>,
+        document.body
+      )}
+
+      {/* Luxury Custom Alert / Toast Notification Modal */}
+      {notifyModal.isOpen && isMounted && createPortal(
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-slate-900/60 backdrop-blur-md p-4 animate-fadeIn">
+          <div className="bg-white rounded-3xl w-full max-w-[440px] shadow-2xl border border-slate-100 p-6 flex flex-col items-center text-center animate-scaleUp overflow-hidden relative">
+            <div className={`w-16 h-16 rounded-full mb-4 flex items-center justify-center shadow-inner ${
+              notifyModal.type === 'success' ? 'bg-emerald-100 text-emerald-600' :
+              notifyModal.type === 'error' ? 'bg-rose-100 text-rose-600' : 'bg-blue-100 text-brand-blue'
+            }`}>
+              {notifyModal.type === 'success' && <CheckCircle className="w-9 h-9 animate-bounce" />}
+              {notifyModal.type === 'error' && <AlertCircle className="w-9 h-9 animate-pulse" />}
+              {notifyModal.type === 'info' && <MessageSquare className="w-9 h-9" />}
+            </div>
+
+            <h3 className="text-xl font-bold text-slate-900 font-display mb-2">
+              {notifyModal.title}
+            </h3>
+            <p className="text-sm font-medium text-slate-600 leading-relaxed mb-6 px-2">
+              {notifyModal.message}
+            </p>
+
+            <button
+              onClick={() => setNotifyModal(prev => ({ ...prev, isOpen: false }))}
+              className={`w-full py-3 px-6 rounded-2xl font-bold text-white transition-all shadow-md active:scale-[0.98] ${
+                notifyModal.type === 'success' ? 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-600/20' :
+                notifyModal.type === 'error' ? 'bg-rose-600 hover:bg-rose-700 shadow-rose-600/20' : 'bg-brand-blue-deep hover:bg-blue-900 shadow-blue-900/20'
+              }`}
+            >
+              OK, Got it!
+            </button>
+          </div>
         </div>,
         document.body
       )}
@@ -2368,10 +2423,10 @@ function AdminPage() {
                       },
                     });
                     setTemplateModal(prev => ({ ...prev, isOpen: false, saving: false }));
-                    alert("WhatsApp templates updated successfully!");
+                    customAlert("WhatsApp templates updated successfully!", "Templates Saved", "success");
                   } catch (err: any) {
                     setTemplateModal(prev => ({ ...prev, saving: false }));
-                    alert("Failed to save templates: " + (err.message || "Unknown error"));
+                    customAlert("Failed to save templates: " + (err.message || "Unknown error"), "Save Failed", "error");
                   }
                 }}
                 className="px-6 py-2.5 bg-brand-green text-white font-bold rounded-xl hover:bg-brand-green-dark transition-all flex items-center gap-2 text-sm shadow-md"
