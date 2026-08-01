@@ -141,9 +141,8 @@ export function ReviewsSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
             <button
               type="button"
               onClick={() => setIsFormOpen(true)}
-              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-brand-blue-deep hover:bg-brand-blue text-white font-bold rounded-xl text-sm shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 cursor-pointer whitespace-nowrap"
+              className="inline-flex items-center justify-center px-6 py-2.5 bg-brand-green-dark hover:bg-brand-green-dark/90 text-white font-semibold rounded-xl text-sm shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 cursor-pointer whitespace-nowrap"
             >
-              <Sparkles className="w-4 h-4 text-amber-300 animate-pulse shrink-0" />
               <span>{lang === "mr" ? "AI सोबत अभिप्राय लिहा" : "Write a Review with AI"}</span>
             </button>
 
@@ -151,9 +150,8 @@ export function ReviewsSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
               href="https://www.google.com/maps/place/Shailraj+Travels/data=!4m2!3m1!1s0x0:0x5dbc6804756241b3?sa=X&ved=1t:2428&ictx=111"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-white border border-slate-200 hover:border-brand-blue-deep/60 text-slate-700 hover:text-brand-blue-deep hover:bg-slate-50 font-bold rounded-xl text-sm shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 no-underline whitespace-nowrap"
+              className="inline-flex items-center justify-center px-6 py-2.5 bg-white border-2 border-brand-green-dark text-brand-green-dark hover:bg-brand-green-dark/5 font-semibold rounded-xl text-sm shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 no-underline whitespace-nowrap"
             >
-              <span className="text-base leading-none">📍</span>
               <span>{lang === "mr" ? "गुगल प्रोफाइल पहा" : "View on Google Maps"}</span>
             </a>
           </div>
