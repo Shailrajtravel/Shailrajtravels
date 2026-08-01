@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import * as XLSXStyleMod from 'xlsx-js-style';
+const XLSX = (XLSXStyleMod as any).default || XLSXStyleMod;
 import { createFileRoute, useNavigate, redirect } from '@tanstack/react-router';
 import { verifyAdminFn } from '@/backend/infrastructure/auth';
 import {
@@ -3816,46 +3818,87 @@ function CustomersView({ bookings = [] }: { bookings?: any[] }) {
   }
 }
 
-const applyTableStyles = (XLSX: any, ws: any, titleSz = 16, subtitleSz = 14) => {
-  if (ws["A1"])
-    ws["A1"].s = {
-      font: { bold: true, sz: titleSz, color: { rgb: "1A237E" } },
-      alignment: { horizontal: "center", vertical: "center", wrapText: false },
-      fill: { patternType: "solid", fgColor: { rgb: "E8EAF6" } },
-    };
-  if (ws["A2"])
-    ws["A2"].s = {
-      font: { bold: true, sz: subtitleSz, color: { rgb: "333333" } },
-      alignment: { horizontal: "center", vertical: "center", wrapText: false },
-    };
+const applyTableStyles = (ws: any) => {
+  if (!ws["!ref"]) return;
+  const range = XLSX.utils.decode_range(ws["!ref"]);
+  
+  ws["!rows"] = ws["!rows"] || [];
+  ws["!rows"][0] = { hpt: 32 }; // Tall brand title row
+  ws["!rows"][1] = { hpt: 24 }; // Subtitle row
+  ws["!rows"][2] = { hpt: 22 }; // Table Header row
 
-  if (ws["!ref"]) {
-    const range = XLSX.utils.decode_range(ws["!ref"]);
-    // Set row heights: title row, subtitle row, blank row, header row
-    ws["!rows"] = ws["!rows"] || [];
-    ws["!rows"][0] = { hpt: 28 }; // Title row height
-    ws["!rows"][1] = { hpt: 22 }; // Subtitle row height
-    ws["!rows"][2] = { hpt: 6 };  // Blank spacer row
-    ws["!rows"][3] = { hpt: 20 }; // Header row height
+  const centerCols = new Set([
+    "Total Bookings", "Persons", "Status", "Customer ID", "Booking ID",
+    "First Booking Date", "Latest Booking Date", "Travel Date", "Sub date"
+  ]);
 
-    for (let R = 3; R <= range.e.r; ++R) {
-      for (let C = 0; C <= range.e.c; ++C) {
-        const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
-        if (!ws[cellAddress]) ws[cellAddress] = { t: "s", v: "" };
+  // Determine alignments by inspecting Row 2 headers
+  const colAlignments: { [col: number]: string } = {};
+  for (let C = 0; C <= range.e.c; ++C) {
+    const headerAddr = XLSX.utils.encode_cell({ r: 2, c: C });
+    const headerText = String(ws[headerAddr]?.v || "").trim();
+    colAlignments[C] = centerCols.has(headerText) ? "center" : "left";
+  }
 
-        const isHeader = R === 3;
+  for (let R = 0; R <= range.e.r; ++R) {
+    for (let C = 0; C <= range.e.c; ++C) {
+      const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
+      if (!ws[cellAddress]) ws[cellAddress] = { t: "s", v: "" };
+
+      if (R === 0) {
+        // Title row: Vibrant Shailraj Orange header across all merged columns
         ws[cellAddress].s = {
+          font: { bold: true, sz: 15, color: { rgb: "000000" } },
+          alignment: { horizontal: "center", vertical: "center" },
+          fill: { patternType: "solid", fgColor: { rgb: "F99E3D" } },
           border: {
-            top: { style: "thin", color: { auto: 1 } },
-            bottom: { style: "thin", color: { auto: 1 } },
-            left: { style: "thin", color: { auto: 1 } },
-            right: { style: "thin", color: { auto: 1 } },
+            top: { style: "thin", color: { rgb: "CCCCCC" } },
+            bottom: { style: "thin", color: { rgb: "CCCCCC" } },
+            left: { style: "thin", color: { rgb: "CCCCCC" } },
+            right: { style: "thin", color: { rgb: "CCCCCC" } },
           },
-          alignment: { vertical: "center", wrapText: !isHeader },
-          font: isHeader
-            ? { bold: true, sz: 10, color: { rgb: "FFFFFF" } }
-            : { sz: 9 },
-          fill: isHeader ? { patternType: "solid", fgColor: { rgb: "1E3A8A" } } : undefined,
+        };
+      } else if (R === 1) {
+        // Subtitle row: Clean white fill across merged columns
+        ws[cellAddress].s = {
+          font: { bold: true, sz: 12, color: { rgb: "222222" } },
+          alignment: { horizontal: "center", vertical: "center" },
+          fill: { patternType: "solid", fgColor: { rgb: "FFFFFF" } },
+          border: {
+            top: { style: "thin", color: { rgb: "CCCCCC" } },
+            bottom: { style: "thin", color: { rgb: "CCCCCC" } },
+            left: { style: "thin", color: { rgb: "CCCCCC" } },
+            right: { style: "thin", color: { rgb: "CCCCCC" } },
+          },
+        };
+      } else if (R === 2) {
+        // Table Header row: Clean border styling with proper horizontal alignment
+        ws[cellAddress].s = {
+          font: { bold: true, sz: 11, color: { rgb: "111111" } },
+          alignment: { horizontal: colAlignments[C] || "left", vertical: "center" },
+          fill: { patternType: "solid", fgColor: { rgb: "FFFFFF" } },
+          border: {
+            top: { style: "thin", color: { rgb: "999999" } },
+            bottom: { style: "thin", color: { rgb: "999999" } },
+            left: { style: "thin", color: { rgb: "CCCCCC" } },
+            right: { style: "thin", color: { rgb: "CCCCCC" } },
+          },
+        };
+      } else {
+        // Table Data rows: Grid borders around every cell and centered numbers/dates/IDs
+        ws[cellAddress].s = {
+          font: { sz: 10, color: { rgb: "222222" } },
+          alignment: { 
+            horizontal: colAlignments[C] || "left", 
+            vertical: "center", 
+            wrapText: colAlignments[C] !== "center" 
+          },
+          border: {
+            top: { style: "thin", color: { rgb: "D6D6D6" } },
+            bottom: { style: "thin", color: { rgb: "D6D6D6" } },
+            left: { style: "thin", color: { rgb: "D6D6D6" } },
+            right: { style: "thin", color: { rgb: "D6D6D6" } },
+          },
         };
       }
     }
@@ -3868,21 +3911,9 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
   const [dateFilterType, setDateFilterType] = React.useState<"all" | "custom" | "created" | "travel">("all");
   const [isExporting, setIsExporting] = React.useState<string | null>(null);
 
-  const getXLSX = async () => {
-    try {
-      const mod = await import('xlsx-js-style');
-      return mod.default || mod;
-    } catch (e) {
-      console.warn("Falling back to standard xlsx library", e);
-      const mod = await import('xlsx');
-      return mod.default || mod;
-    }
-  };
-
   const exportBookings = async () => {
     try {
       setIsExporting("bookings");
-      const XLSX = await getXLSX();
       let targetBookings = bookings || [];
 
       if (dateFilterType === "all") {
@@ -4013,12 +4044,11 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
       const ws = XLSX.utils.aoa_to_sheet([
         ["SHAILRAJ TRAVELS PUNE"],
         [reportTitle],
-        [],
         headers,
         ...rows,
       ]);
 
-      applyTableStyles(XLSX, ws);
+      applyTableStyles(ws);
 
       ws["!merges"] = [
         { s: { r: 0, c: 0 }, e: { r: 0, c: headers.length - 1 } },
@@ -4059,7 +4089,6 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
   const exportCustomers = async () => {
     try {
       setIsExporting("customers");
-      const XLSX = await getXLSX();
       const customersMap = new globalThis.Map();
       (bookings || []).forEach((bk) => {
         if (!bk) return;
@@ -4129,12 +4158,11 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
       const ws = XLSX.utils.aoa_to_sheet([
         ["SHAILRAJ TRAVELS PUNE"],
         ["Customer Directory Report"],
-        [],
         headers,
         ...rows,
       ]);
 
-      applyTableStyles(XLSX, ws);
+      applyTableStyles(ws);
 
       ws["!merges"] = [
         { s: { r: 0, c: 0 }, e: { r: 0, c: headers.length - 1 } },
@@ -4189,7 +4217,6 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
     if (!selectedTripGroup) return;
     try {
       setIsExporting("trip");
-      const XLSX = await getXLSX();
       const group = tripGroups.find((g) => g[0] === selectedTripGroup);
       if (!group) return;
 
@@ -4240,12 +4267,11 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
       const ws = XLSX.utils.aoa_to_sheet([
         ["SHAILRAJ TRAVELS PUNE"],
         [`Booking Report: ${groupName}`],
-        [],
         headers,
         ...rows,
       ]);
 
-      applyTableStyles(XLSX, ws);
+      applyTableStyles(ws);
 
       ws["!merges"] = [
         { s: { r: 0, c: 0 }, e: { r: 0, c: headers.length - 1 } },
