@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import * as XLSXStyleMod from 'xlsx-js-style';
+import * as XLSXStyleMod from 'xlsx-js-style/dist/xlsx.bundle.js';
 const XLSX = (XLSXStyleMod as any).default || XLSXStyleMod;
 import { createFileRoute, useNavigate, redirect } from '@tanstack/react-router';
 import { verifyAdminFn } from '@/backend/infrastructure/auth';
