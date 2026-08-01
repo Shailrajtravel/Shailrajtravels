@@ -1688,8 +1688,13 @@ function AdminPage() {
                                       isOpen: true,
                                       booking: bk,
                                       paymentStatus: newStatus,
-                                      paidAmount: bk.paidAmount || (bk.invoiceCustomData?.advancePaid) || (newStatus === "PAID" ? (bk.invoiceCustomData?.grandTotal || "") : ""),
+                                      paidAmount: (newStatus === "PAID") ? (() => {
+                                        const rate = bk.invoiceCustomData?.rate ? extractPrice(bk.invoiceCustomData.rate) : getBookingRate(bk);
+                                        const persons = bk.persons ? extractPrice(bk.persons) || 1 : 1;
+                                        return rate > 0 ? String(rate * persons) : (bk.paidAmount || bk.invoiceCustomData?.advancePaid || "");
+                                      })() : (bk.paidAmount && bk.paidAmount !== "0" && bk.paidAmount !== "null" ? bk.paidAmount : (bk.invoiceCustomData?.advancePaid || "")),
                                       paymentNote: bk.paymentNote || "",
+                                      paymentMode: bk.invoiceCustomData?.paymentMode || "Cash",
                                       sendWhatsApp: true,
                                       isSubmitting: false,
                                     });
@@ -4418,14 +4423,19 @@ function InvoicesView({
 
   return (
     <>
-      <div className="mb-6 animate-reveal">
+      <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 animate-reveal">
         <input
           type="text"
           placeholder="Search by Invoice ID or Customer Name..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full md:w-1/2 lg:w-1/3 px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium text-brand-blue-deep placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-blue/50 focus:border-brand-blue transition-all shadow-sm"
+          className="w-full sm:w-1/2 lg:w-1/3 px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium text-brand-blue-deep placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-blue/50 focus:border-brand-blue transition-all shadow-sm"
         />
+        <div className="inline-flex items-center gap-2.5 px-4 py-3 bg-brand-blue/10 border border-brand-blue/20 rounded-xl font-bold text-brand-blue-deep text-sm w-fit shadow-sm">
+          <Printer className="w-4 h-4 text-brand-blue" />
+          <span>Total Invoices:</span>
+          <span className="bg-brand-blue text-white px-2.5 py-0.5 rounded-lg text-xs font-black">{generatedInvoices.length}</span>
+        </div>
       </div>
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden animate-reveal">
         {generatedInvoices.length === 0 ? (
@@ -4456,14 +4466,15 @@ function InvoicesView({
                     const invoiceNo = bk.generatedInvoiceNo;
                     const isCustomUnlocked = bk.tripName === "custom" && !bk.isInvoiceLocked;
                     const rate =
-                      custom.rate !== undefined
+                      custom.rate !== undefined && custom.rate !== "" && custom.rate !== null
                         ? Number(custom.rate)
-                        : bk.tripName === "custom"
-                          ? 0
-                          : bk.defaultRate || 0;
+                        : getBookingRate(bk);
                     const persons =
                       custom.persons !== undefined ? Number(custom.persons) : Number(bk.persons) || 1;
-                    const total = rate * persons;
+                    let total = rate * persons;
+                    if (!total && (custom.advancePaid || bk.paidAmount)) {
+                      total = Number(custom.advancePaid || bk.paidAmount || 0);
+                    }
                     const customerName = custom.customerName || bk.customerName || bk.name || "";
                     const tripName = custom.packageName || bk.packageName || bk.tripName || "";
 
@@ -4520,14 +4531,15 @@ function InvoicesView({
                 const invoiceNo = bk.generatedInvoiceNo;
                 const isCustomUnlocked = bk.tripName === "custom" && !bk.isInvoiceLocked;
                 const rate =
-                  custom.rate !== undefined
+                  custom.rate !== undefined && custom.rate !== "" && custom.rate !== null
                     ? Number(custom.rate)
-                    : bk.tripName === "custom"
-                      ? 0
-                      : bk.defaultRate || 0;
+                    : getBookingRate(bk);
                 const persons =
                   custom.persons !== undefined ? Number(custom.persons) : Number(bk.persons) || 1;
-                const total = rate * persons;
+                let total = rate * persons;
+                if (!total && (custom.advancePaid || bk.paidAmount)) {
+                  total = Number(custom.advancePaid || bk.paidAmount || 0);
+                }
                 const customerName = custom.customerName || bk.customerName || bk.name || "";
                 const tripName = custom.packageName || bk.packageName || bk.tripName || "";
                 const travelDateStr = (() => {

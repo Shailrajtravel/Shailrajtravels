@@ -171,7 +171,7 @@ export const saveWhatsAppTemplatesFn = createServerFn({ method: "POST" })
   });
 
 export const updateBookingPaymentStatusFn = createServerFn({ method: "POST" })
-  .validator((data: { adminToken: string; id: string; paymentStatus?: string; paidAmount?: string | number; paymentNote?: string; sendWhatsApp?: boolean; pdfBase64?: string }) => data)
+  .validator((data: { adminToken: string; id: string; paymentStatus?: string; paidAmount?: string | number; paymentNote?: string; paymentMode?: string; sendWhatsApp?: boolean; pdfBase64?: string }) => data)
   .handler(async ({ data }) => {
     if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
     return await apiFetch(`/bookings/${data.id}/payment`, {
@@ -180,6 +180,7 @@ export const updateBookingPaymentStatusFn = createServerFn({ method: "POST" })
         paymentStatus: data.paymentStatus,
         paidAmount: data.paidAmount,
         paymentNote: data.paymentNote,
+        paymentMode: data.paymentMode,
         sendWhatsApp: data.sendWhatsApp !== false,
         pdfBase64: data.pdfBase64,
         adminToken: data.adminToken,
