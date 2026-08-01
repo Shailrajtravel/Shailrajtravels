@@ -87,8 +87,46 @@ export class BookingsService {
   }
 
   // --- BOOKINGS ---
+  private async enrichAndPersistInvoiceNumbers(bookings: any[]): Promise<any[]> {
+    if (!Array.isArray(bookings)) return bookings;
+    const confirmed = bookings.filter((b) => b.status === 'Confirmed' || b.generatedInvoiceNo || b.invoiceCustomData?.invoiceNo);
+    confirmed.sort((a, b) => new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime());
+    
+    for (let i = 0; i < confirmed.length; i++) {
+      const bk = confirmed[i];
+      const index = i + 1;
+      const letter = String.fromCharCode(65 + ((index - 1) % 26));
+      const padded = String(index).padStart(4, '0');
+      const expectedNo = bk.invoiceCustomData?.invoiceNo || bk.generatedInvoiceNo || `INV-${letter}${padded}`;
+      
+      if (!bk.generatedInvoiceNo && !bk.invoiceCustomData?.invoiceNo) {
+        bk.generatedInvoiceNo = expectedNo;
+        const id = bk._id || bk.id;
+        if (id && typeof id === 'string') {
+          bookingRepository.updateOne(id, { generatedInvoiceNo: expectedNo }).catch(() => {});
+        }
+      }
+    }
+    return bookings;
+  }
+
+  private async getOrAssignBookingInvoiceNo(booking: any, id: string): Promise<string> {
+    if (booking?.invoiceCustomData?.invoiceNo) return booking.invoiceCustomData.invoiceNo;
+    if (booking?.generatedInvoiceNo) return booking.generatedInvoiceNo;
+    
+    const all = await bookingRepository.findAllSorted();
+    await this.enrichAndPersistInvoiceNumbers(all);
+    
+    const updated = await bookingRepository.findBookingById(id);
+    if (updated?.invoiceCustomData?.invoiceNo) return updated.invoiceCustomData.invoiceNo;
+    if (updated?.generatedInvoiceNo) return updated.generatedInvoiceNo;
+    
+    return `INV-${id.slice(-6).toUpperCase()}`;
+  }
+
   async getBookings() {
-    return await bookingRepository.findAllSorted();
+    const bookings = await bookingRepository.findAllSorted();
+    return await this.enrichAndPersistInvoiceNumbers(bookings);
   }
 
   private async sendWhatsAppNotification(to: string, text: string) {
@@ -269,15 +307,17 @@ export class BookingsService {
           const booking = await bookingRepository.findBookingById(id);
           const targetPhone = booking?.phone || booking?.customerPhone;
           if (booking && targetPhone) {
+            const invoiceNo = await this.getOrAssignBookingInvoiceNo(booking, id);
             const templates = await this.getWhatsAppTemplates();
             const vars = {
               customerName: booking.name || booking.customerName || 'Valued Customer',
               bookingId: booking.bookingId || `SB-${id.slice(-6)}`,
+              invoiceId: invoiceNo,
               tripName: booking.tripName === 'custom' ? booking.customDestination || 'Custom Trip' : booking.tripName || 'Tour Package',
               travelDate: booking.travelDate || 'As scheduled',
               persons: booking.persons || 1,
               pickupLocation: booking.pickupLocation || 'Pune',
-              invoiceUrl: `https://shailrajtravels.com/invoice-print?id=${id}`,
+              invoiceUrl: `https://shailrajtravels.com/invoice-print?id=${id}&generatedInvoiceNo=${encodeURIComponent(invoiceNo)}`,
             };
 
             const sLower = (status || '').trim().toLowerCase();
@@ -339,6 +379,7 @@ export class BookingsService {
         try {
           const refreshed = await bookingRepository.findBookingById(id);
           if (refreshed && refreshed.phone) {
+            const invoiceNo = await this.getOrAssignBookingInvoiceNo(refreshed, id);
             const templates = await this.getWhatsAppTemplates();
             const statusUpper = (paymentStatus || '').toUpperCase();
             const formattedStatus = statusUpper.includes('PAID') && !statusUpper.includes('ADVANCE') ? 'PAID IN FULL' : 'ADVANCE RECEIVED';
@@ -346,7 +387,7 @@ export class BookingsService {
             const vars = {
               customerName: refreshed.name || refreshed.customerName || 'Valued Customer',
               bookingId: refreshed.bookingId || `SB-${id.slice(-6)}`,
-              invoiceId: refreshed.invoiceCustomData?.invoiceNo || refreshed.generatedInvoiceNo || `INV-${id.slice(-6).toUpperCase()}`,
+              invoiceId: invoiceNo,
               tripName: refreshed.tripName || 'Tour Package',
               travelDate: refreshed.travelDate || 'As scheduled',
               persons: refreshed.persons || 1,
@@ -354,7 +395,7 @@ export class BookingsService {
               paidAmount: refreshed.paidAmount || paidAmount || '0',
               paymentNote: refreshed.paymentNote || paymentNote || (statusUpper.includes('PAID') ? 'Full payment received' : 'Advance received'),
               paymentStatus: formattedStatus,
-              invoiceUrl: `https://shailrajtravels.com/invoice-print?id=${id}`,
+              invoiceUrl: `https://shailrajtravels.com/invoice-print?id=${id}&generatedInvoiceNo=${encodeURIComponent(invoiceNo)}`,
             };
 
             const msg = this.renderTemplate(templates.payment, vars);
@@ -398,11 +439,13 @@ export class BookingsService {
       const phone = invoiceCustomData?.customerPhone || booking?.phone;
 
       if (phone) {
+        const invoiceNo = await this.getOrAssignBookingInvoiceNo(booking, id);
+        const finalInvoiceId = invoiceCustomData?.invoiceNo || invoiceNo;
         const templates = await this.getWhatsAppTemplates();
         const vars = {
           customerName: invoiceCustomData?.customerName || booking?.name || 'Valued Customer',
           bookingId: booking?.bookingId || `SB-${id.slice(-6)}`,
-          invoiceId: invoiceCustomData?.invoiceNo || booking?.generatedInvoiceNo || `INV-${id.slice(-6).toUpperCase()}`,
+          invoiceId: finalInvoiceId,
           tripName: invoiceCustomData?.tripName || booking?.tripName || 'Tour Package',
           travelDate: invoiceCustomData?.travelDate || booking?.travelDate || 'As scheduled',
           persons: booking?.persons || 1,
@@ -410,7 +453,7 @@ export class BookingsService {
           paidAmount: invoiceCustomData?.advancePaid || invoiceCustomData?.grandTotal || '0',
           paymentNote: invoiceCustomData?.paymentNote || 'Invoice issued',
           paymentStatus: (paymentStatus || '').toUpperCase(),
-          invoiceUrl: `https://shailrajtravels.com/invoice-print?id=${id}`,
+          invoiceUrl: `https://shailrajtravels.com/invoice-print?id=${id}&generatedInvoiceNo=${encodeURIComponent(finalInvoiceId)}`,
         };
 
         const msg = this.renderTemplate(templates.payment, vars);
@@ -431,12 +474,14 @@ export class BookingsService {
     const targetPhone = phone || booking.invoiceCustomData?.customerPhone || booking.phone;
     if (!targetPhone) return { success: false, message: 'No phone number' };
 
+    const invoiceNo = await this.getOrAssignBookingInvoiceNo(booking, id);
     const templates = await this.getWhatsAppTemplates();
     const custom = booking.invoiceCustomData || {};
+    const finalInvoiceId = custom.invoiceNo || invoiceNo;
     const vars = {
       customerName: custom.customerName || booking.name || 'Valued Customer',
       bookingId: booking.bookingId || `SB-${id.slice(-6)}`,
-      invoiceId: custom.invoiceNo || booking.generatedInvoiceNo || `INV-${id.slice(-6).toUpperCase()}`,
+      invoiceId: finalInvoiceId,
       tripName: custom.tripName || booking.tripName || 'Tour Package',
       travelDate: custom.travelDate || booking.travelDate || 'As scheduled',
       persons: booking.persons || 1,
@@ -444,7 +489,7 @@ export class BookingsService {
       paidAmount: booking.paidAmount || custom.advancePaid || '0',
       paymentNote: booking.paymentNote || 'Invoice issued',
       paymentStatus: (booking.paymentStatus || custom.paymentStatus || 'PENDING').toUpperCase(),
-      invoiceUrl: `https://shailrajtravels.com/invoice-print?id=${id}`,
+      invoiceUrl: `https://shailrajtravels.com/invoice-print?id=${id}&generatedInvoiceNo=${encodeURIComponent(finalInvoiceId)}`,
     };
 
     const msg = this.renderTemplate(templates.payment, vars);

@@ -35,17 +35,30 @@ export abstract class BaseRepository<T extends Document> {
     const docId = id || new ObjectId().toString();
     const col = await this.getCollectionForWrite(docId);
     
-    // Ensure _id is an ObjectId
+    // Ensure _id is an ObjectId & initialize optimistic locking version
     const insertDoc = { ...doc };
+    if (insertDoc.__v === undefined) insertDoc.__v = 1;
     if (!insertDoc._id) insertDoc._id = new ObjectId(docId);
     
     await col.insertOne(insertDoc);
     return docId;
   }
 
-  async updateOne(id: string, updateData: any): Promise<void> {
-    const col = await this.getCollectionForRead(id); // Use Read route to find where it is currently stored
-    await col.updateOne({ _id: new ObjectId(id) } as any, { $set: updateData });
+  async updateOne(id: string, updateData: any, expectedVersion?: number): Promise<void> {
+    const col = await this.getCollectionForRead(id);
+    const filter: any = { _id: new ObjectId(id) };
+    if (expectedVersion !== undefined) {
+      filter.__v = expectedVersion;
+    }
+    
+    // Increment version counter atomically on update
+    const updatePayload: any = { $set: { ...updateData }, $inc: { __v: 1 } };
+    delete updatePayload.$set.__v; // Protect __v from accidental manual override
+
+    const res = await col.updateOne(filter, updatePayload);
+    if (expectedVersion !== undefined && res.matchedCount === 0) {
+      throw new Error(`Concurrency Conflict: Document version mismatch (expected __v: ${expectedVersion}). Re-fetch required.`);
+    }
   }
 
   async deleteOne(id: string): Promise<void> {

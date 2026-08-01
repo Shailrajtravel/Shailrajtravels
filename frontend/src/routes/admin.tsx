@@ -494,16 +494,23 @@ function AdminPage() {
     const query = bookingSearch.toLowerCase().trim();
     if (!query) return true;
 
-    const bookingId = (bk.generatedBookingId || "").toLowerCase();
-    const name = (bk.name || "").toLowerCase();
-    const phone = (bk.phone || "").toLowerCase();
+    const bookingId = (bk.generatedBookingId || bk.bookingId || "").toLowerCase();
+    const invoiceNo = (bk.generatedInvoiceNo || bk.invoiceCustomData?.invoiceNo || "").toLowerCase();
+    const mongoId = (bk._id ? bk._id.toString() : "").toLowerCase();
+    const hexId = (mongoId ? mongoId.slice(-6) : "").toLowerCase();
+    const name = (bk.name || bk.customerName || bk.invoiceCustomData?.customerName || "").toLowerCase();
+    const phone = (bk.phone || bk.invoiceCustomData?.customerPhone || "").toLowerCase();
     const tripName = (bk.tripName === "custom" ? "custom trip" : bk.tripName || "").toLowerCase();
     const customDest = (bk.customDestination || "").toLowerCase();
     const pickup = (bk.pickupLocation || "").toLowerCase();
-    const travelDate = (bk.travelDate || "").toLowerCase();
+    const travelDate = (bk.travelDate || bk.invoiceCustomData?.travelDate || "").toLowerCase();
 
     return (
       bookingId.includes(query) ||
+      invoiceNo.includes(query) ||
+      mongoId.includes(query) ||
+      hexId.includes(query) ||
+      `inv-${hexId}`.includes(query) ||
       name.includes(query) ||
       phone.includes(query) ||
       tripName.includes(query) ||
@@ -4694,8 +4701,8 @@ function InvoicesView({
     const index = idx + 1;
     const letter = String.fromCharCode(65 + ((index - 1) % 26));
     const padded = String(index).padStart(4, "0");
-    // Use custom invoice number if already locked/saved
-    const customNo = bk.invoiceCustomData?.invoiceNo;
+    // Use custom or server-persisted invoice number if available
+    const customNo = bk.invoiceCustomData?.invoiceNo || bk.generatedInvoiceNo;
     return { ...bk, generatedInvoiceNo: customNo || `INV-${letter}${padded}` };
   });
 
@@ -4705,10 +4712,25 @@ function InvoicesView({
   if (searchQuery.trim()) {
     const q = searchQuery.toLowerCase().trim();
     generatedInvoices = generatedInvoices.filter((bk) => {
-      const invoiceNo = bk.generatedInvoiceNo;
+      const invoiceNo = (bk.generatedInvoiceNo || "").toLowerCase();
+      const bookingId = (bk.generatedBookingId || bk.bookingId || "").toLowerCase();
+      const mongoId = (bk._id ? bk._id.toString() : "").toLowerCase();
+      const hexId = (mongoId ? mongoId.slice(-6) : "").toLowerCase();
       const custom = bk.invoiceCustomData || {};
-      const customerName = custom.customerName || bk.customerName || bk.name || "";
-      return invoiceNo.toLowerCase().includes(q) || customerName.toLowerCase().includes(q);
+      const customerName = (custom.customerName || bk.customerName || bk.name || "").toLowerCase();
+      const phone = (custom.customerPhone || bk.phone || "").toLowerCase();
+      const tripName = (custom.tripName || bk.tripName || "").toLowerCase();
+
+      return (
+        invoiceNo.includes(q) ||
+        bookingId.includes(q) ||
+        mongoId.includes(q) ||
+        hexId.includes(q) ||
+        `inv-${hexId}`.includes(q) ||
+        customerName.includes(q) ||
+        phone.includes(q) ||
+        tripName.includes(q)
+      );
     });
   }
 

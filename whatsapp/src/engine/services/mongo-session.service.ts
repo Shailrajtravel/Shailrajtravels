@@ -53,13 +53,13 @@ export class MongoSessionService implements OnModuleInit, OnModuleDestroy {
       );
       await this.db.collection('offline_queue').createIndex(
         { createdAt: 1 },
-        { expireAfterSeconds: 259200, name: 'idx_offline_queue_ttl' }
+        { expireAfterSeconds: 3600, name: 'idx_offline_queue_ttl' }
       );
 
-      // 3. processed_messages 48-hour TTL index (172800 seconds)
+      // 3. processed_messages 12-hour TTL index (43200 seconds)
       await this.db.collection('processed_messages').createIndex(
         { processedAt: 1 },
-        { expireAfterSeconds: 172800, name: 'idx_processed_ttl' }
+        { expireAfterSeconds: 43200, name: 'idx_processed_ttl' }
       );
 
       // 4. queue_lock TTL index

@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { BookingsService } from './bookings.service';
 
 @Controller('bookings')
@@ -43,6 +44,7 @@ export class BookingsController {
     return this.bookingsService.getBookings();
   }
 
+  @Throttle({ default: { limit: 15, ttl: 60000 } })
   @Post()
   async createBooking(@Body() data: any) {
     return this.bookingsService.createBooking(data);

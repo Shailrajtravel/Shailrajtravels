@@ -1,5 +1,7 @@
-import { Module } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
@@ -19,10 +21,16 @@ import { CustomBlogsModule } from './custom-blogs/custom-blogs.module';
 import { RecommendedVehiclesModule } from './recommended-vehicles/recommended-vehicles.module';
 import { WebhooksModule } from './webhooks/webhooks.module';
 import { IssuesModule } from './issues/issues.module';
+import { TraceIdMiddleware } from './shared/trace.middleware';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    ThrottlerModule.forRoot([{
+      name: 'default',
+      ttl: 60000,
+      limit: 150,
+    }]),
     DatabaseModule,
     AuthModule,
     BookingsModule,
@@ -42,6 +50,16 @@ import { IssuesModule } from './issues/issues.module';
     IssuesModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(TraceIdMiddleware).forRoutes('*');
+  }
+}

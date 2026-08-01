@@ -68,7 +68,7 @@ export function InvoicePrint({
       invoiceNo:
         custom.invoiceNo ||
         b.generatedInvoiceNo ||
-        `INV-${safeDate(b.createdAt).getFullYear()}-${b._id ? b._id.slice(-6).toUpperCase() : "0001"}`,
+        `INV-${b._id ? b._id.slice(-6).toUpperCase() : "0001"}`,
       invoiceDate:
         custom.invoiceDate ||
         safeDate(b.createdAt || Date.now()).toLocaleDateString("en-GB", {
