@@ -106,100 +106,63 @@ export function ReviewsSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
       </div>
 
       <div className="mx-auto max-w-[1280px] px-6">
-        {/* Main Dashboard Widget Layout */}
-        <div className="bg-white border border-slate-100 rounded-[32px] p-6 md:p-10 shadow-xl shadow-slate-200/50 flex flex-col gap-8 md:gap-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
-            
-            {/* Left side: EXCELLENT Rating Summary widget */}
-            <div className="lg:col-span-4 flex flex-col items-center justify-center p-6 md:py-8 bg-slate-50/70 rounded-2xl border border-slate-100 text-center select-none shrink-0 sticky top-32">
-              <span className="font-extrabold text-slate-800 text-xl md:text-2xl tracking-wider uppercase mb-1">
-                EXCELLENT
-              </span>
-              
-              {/* 5 Yellow Stars */}
-              <div className="flex gap-1 text-amber-400 my-2.5">
-                <Star className="w-6 h-6 fill-current" />
-                <Star className="w-6 h-6 fill-current" />
-                <Star className="w-6 h-6 fill-current" />
-                <Star className="w-6 h-6 fill-current" />
-                <Star className="w-6 h-6 fill-current" />
-              </div>
-
-              {/* Based on total reviews */}
-              <span className="text-xs md:text-sm text-slate-600 font-bold mb-4">
-                {lang === "mr" 
-                  ? "एकूण 150+ सत्यापित गुगल अभिप्रायांवर आधारित" 
-                  : "Based on 150+ verified Google reviews"}
-              </span>
-
-              {/* Colorful Google Wordmark */}
-              <div className="flex items-center justify-center font-display font-black text-3xl tracking-tighter mb-6">
-                <span className="text-[#4285F4]">G</span>
-                <span className="text-[#EA4335]">o</span>
-                <span className="text-[#FBBC05]">o</span>
-                <span className="text-[#4285F4]">g</span>
-                <span className="text-[#34A853]">l</span>
-                <span className="text-[#EA4335]">e</span>
-              </div>
-
-              <div className="w-full flex flex-col gap-3">
-                {/* View Google Maps Profile button */}
-                <a
-                  href="https://www.google.com/maps/place/Shailraj+Travels/data=!4m2!3m1!1s0x0:0x5dbc6804756241b3?sa=X&ved=1t:2428&ictx=111"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full py-3 bg-brand-blue hover:bg-brand-blue-deep text-white font-bold rounded-xl text-sm shadow-md transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer no-underline"
-                >
-                  <Sparkles className="w-4 h-4 text-amber-300 animate-pulse" />
-                  {lang === "mr" ? "गुगल प्रोफाइल पहा" : "View Google Profile"}
-                </a>
-
-                {/* Write a review button */}
-                <button
-                  type="button"
-                  onClick={() => setIsFormOpen(true)}
-                  className="w-full py-3 border border-slate-200 hover:border-brand-blue bg-white hover:bg-slate-50 text-slate-700 hover:text-brand-blue font-bold rounded-xl text-sm shadow-sm transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
-                >
-                  <Star className="w-4 h-4 fill-current text-amber-500" />
-                  {lang === "mr" ? "अभिप्राय लिहा (AI सोबत)" : "Write a Review (with AI)"}
-                </button>
-              </div>
-            </div>
-
-            {/* Right side: Live SociableKit Google Reviews Widget */}
-            <div className="lg:col-span-8 flex flex-col gap-4 relative">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-                <div className="flex items-center gap-2">
-                  <h3 className="text-lg md:text-xl font-extrabold text-brand-blue-deep font-display">
-                    {lang === "mr" ? "गुगल वरील थेट प्रतिक्रिया" : "Live Google Reviews"}
-                  </h3>
-                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-green-100 text-green-800 uppercase tracking-wider">
-                    <CheckCircle2 className="w-3 h-3 text-green-600 fill-green-600 text-white" />
-                    Verified
-                  </span>
-                </div>
-              </div>
-
-              {/* SociableKit Embed Widget Container via direct iframe to guarantee instantaneous loading on both localhost and production */}
-              <div className="w-full min-h-[500px] rounded-2xl bg-transparent overflow-hidden">
-                <iframe
-                  src="https://widgets.sociablekit.com/google-reviews/iframe/25701887"
-                  width="100%"
-                  height="550"
-                  frameBorder="0"
-                  title="Shailraj Travels Google Reviews"
-                  className="w-full rounded-2xl border-none shadow-sm"
-                  style={{ width: '100%', border: 'none' }}
-                />
-              </div>
-            </div>
-
+        <div className="flex flex-col items-center text-center gap-6 mb-12">
+          {/* Verified Badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs md:text-sm font-bold bg-green-100/80 border border-green-200 text-green-900 uppercase tracking-wider shadow-xs select-none">
+            <CheckCircle2 className="w-4 h-4 text-green-600 fill-green-600 text-white" />
+            <span>{lang === "mr" ? "सत्यापित गुगल प्रतिक्रिया" : "100% Verified Google Reviews"}</span>
           </div>
 
-          {/* Footer Row */}
-          <div className="flex justify-center pt-6 border-t border-slate-100 text-xs font-bold text-slate-500 select-none">
+          {/* Main Title & Subtext */}
+          <div className="space-y-3 max-w-3xl">
+            <h2 className="text-3xl md:text-5xl font-black text-slate-900 font-display tracking-tight leading-tight">
+              {lang === "mr" ? "आमच्या प्रवाशांचा अनुभव व विश्वास" : "What Our Travelers Say About Us"}
+            </h2>
+            <p className="text-base md:text-lg text-slate-600 font-medium leading-relaxed">
+              {lang === "mr" 
+                ? "गुगल बिझनेस प्रोफाइल वरून थेट आणि रिअल-टाईम प्रवाशांचे अनुभव आणि प्रतिक्रिया. तुमचाही अनुभव नक्की सामायिक करा!"
+                : "Authentic stories and high-rated travel experiences synced in real-time directly from our official Google Business Profile."}
+            </p>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex flex-wrap items-center justify-center gap-4 pt-2 w-full max-w-lg">
+            <button
+              type="button"
+              onClick={() => setIsFormOpen(true)}
+              className="flex-1 min-w-[220px] py-4 px-6 bg-gradient-to-r from-brand-blue via-blue-600 to-indigo-600 text-white font-extrabold rounded-2xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/35 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 flex items-center justify-center gap-2.5 text-sm md:text-base cursor-pointer"
+            >
+              <Sparkles className="w-5 h-5 text-amber-300 animate-pulse shrink-0" />
+              <span>{lang === "mr" ? "AI सोबत अभिप्राय लिहा" : "Write a Review with AI"}</span>
+            </button>
+
+            <a
+              href="https://www.google.com/maps/place/Shailraj+Travels/data=!4m2!3m1!1s0x0:0x5dbc6804756241b3?sa=X&ved=1t:2428&ictx=111"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 min-w-[220px] py-4 px-6 bg-white border-2 border-slate-200 hover:border-brand-blue/60 text-slate-800 hover:text-brand-blue font-extrabold rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 flex items-center justify-center gap-2.5 text-sm md:text-base no-underline"
+            >
+              <span className="text-lg leading-none">📍</span>
+              <span>{lang === "mr" ? "गुगल प्रोफाइल पहा" : "View on Google Maps"}</span>
+            </a>
+          </div>
+        </div>
+
+        {/* Full-Width SociableKit Widget Layout */}
+        <div className="w-full bg-white border border-slate-200/80 rounded-[32px] p-4 md:p-8 shadow-2xl shadow-slate-200/40 overflow-hidden">
+          <iframe
+            src="https://widgets.sociablekit.com/google-reviews/iframe/25701887"
+            width="100%"
+            height="850"
+            frameBorder="0"
+            title="Shailraj Travels Google Reviews"
+            className="w-full rounded-2xl border-none shadow-none transition-all duration-300"
+            style={{ width: '100%', border: 'none', overflow: 'hidden', minHeight: '850px' }}
+          />
+          
+          <div className="flex justify-center pt-6 border-t border-slate-100 text-xs font-bold text-slate-400 select-none">
             <span>
-              {lang === "mr" ? "गुगल बिझनेस प्रोफाइल वरून थेट प्रमाणित प्रतिक्रिया" : "Authentic reviews synced directly from Google Business Profile"}
+              {lang === "mr" ? "गुगल बिझनेस प्रोफाइल वरून थेट आणि स्वयंचलित प्रसारित" : "Live synchronization via Google Business Profile Ecosystem"}
             </span>
           </div>
         </div>
