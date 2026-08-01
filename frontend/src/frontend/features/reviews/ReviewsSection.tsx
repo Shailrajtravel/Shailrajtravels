@@ -137,13 +137,13 @@ export function ReviewsSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
           </p>
 
           {/* Action Buttons */}
-          <div className="flex flex-wrap items-center justify-center gap-4 pt-2 w-full max-w-lg">
+          <div className="flex flex-wrap items-center justify-center gap-3.5 pt-2">
             <button
               type="button"
               onClick={() => setIsFormOpen(true)}
-              className="flex-1 min-w-[220px] py-4 px-6 bg-gradient-to-r from-brand-blue via-blue-600 to-indigo-600 text-white font-extrabold rounded-2xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/35 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 flex items-center justify-center gap-2.5 text-sm md:text-base cursor-pointer"
+              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-brand-blue-deep hover:bg-brand-blue text-white font-bold rounded-xl text-sm shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 cursor-pointer whitespace-nowrap"
             >
-              <Sparkles className="w-5 h-5 text-amber-300 animate-pulse shrink-0" />
+              <Sparkles className="w-4 h-4 text-amber-300 animate-pulse shrink-0" />
               <span>{lang === "mr" ? "AI सोबत अभिप्राय लिहा" : "Write a Review with AI"}</span>
             </button>
 
@@ -151,9 +151,9 @@ export function ReviewsSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
               href="https://www.google.com/maps/place/Shailraj+Travels/data=!4m2!3m1!1s0x0:0x5dbc6804756241b3?sa=X&ved=1t:2428&ictx=111"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 min-w-[220px] py-4 px-6 bg-white border-2 border-slate-200 hover:border-brand-blue/60 text-slate-800 hover:text-brand-blue font-extrabold rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 flex items-center justify-center gap-2.5 text-sm md:text-base no-underline"
+              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-white border border-slate-200 hover:border-brand-blue-deep/60 text-slate-700 hover:text-brand-blue-deep hover:bg-slate-50 font-bold rounded-xl text-sm shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 no-underline whitespace-nowrap"
             >
-              <span className="text-lg leading-none">📍</span>
+              <span className="text-base leading-none">📍</span>
               <span>{lang === "mr" ? "गुगल प्रोफाइल पहा" : "View on Google Maps"}</span>
             </a>
           </div>
