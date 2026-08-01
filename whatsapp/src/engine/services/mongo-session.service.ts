@@ -51,6 +51,10 @@ export class MongoSessionService implements OnModuleInit, OnModuleDestroy {
         { sessionId: 1, messageId: 1 },
         { unique: true, name: 'idx_session_msg_unique' }
       );
+      await this.db.collection('offline_queue').createIndex(
+        { createdAt: 1 },
+        { expireAfterSeconds: 259200, name: 'idx_offline_queue_ttl' }
+      );
 
       // 3. processed_messages 48-hour TTL index (172800 seconds)
       await this.db.collection('processed_messages').createIndex(

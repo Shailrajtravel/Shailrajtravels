@@ -18,6 +18,7 @@ export class WebhooksController {
           sessionId: payload?.sessionId || 'default',
           data: payload?.data || payload,
           receivedAt: new Date().toISOString(),
+          createdAt: new Date(),
         });
       } catch (e: any) {
         this.logger.warn(`Failed to log webhook event to MongoDB: ${e.message}`);
