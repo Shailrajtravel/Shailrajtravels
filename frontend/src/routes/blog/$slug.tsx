@@ -13,8 +13,8 @@ import {
   User,
   Share2,
   Facebook,
-  Twitter,
-  Linkedin,
+  Instagram,
+  Youtube,
   ArrowRight,
 } from 'lucide-react';
 import { AuthorProfile } from '@/frontend/shared/components/AuthorProfile';
@@ -236,31 +236,34 @@ function BlogPostPage() {
 
               <div className="flex items-center gap-3">
                 <span className="text-sm font-bold text-slate-400 uppercase tracking-wider mr-2">
-                  Share:
+                  Follow Us:
                 </span>
                 <a
-                  href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`}
+                  href="https://www.instagram.com/wings_of_mayur_9999/"
                   target="_blank"
                   rel="noreferrer"
-                  className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-blue-600 hover:text-white transition-colors"
+                  aria-label="Instagram"
+                  className="w-10 h-10 rounded-full bg-[#E1306C]/10 flex items-center justify-center text-[#E1306C] hover:bg-[#E1306C] hover:text-white transition-all duration-300 shadow-sm hover:scale-110"
+                >
+                  <Instagram className="w-4 h-4" />
+                </a>
+                <a
+                  href="https://www.facebook.com/share/1E2RUhpSAf/?mibextid=wwXIfr"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Facebook"
+                  className="w-10 h-10 rounded-full bg-[#3B5998]/10 flex items-center justify-center text-[#3B5998] hover:bg-[#3B5998] hover:text-white transition-all duration-300 shadow-sm hover:scale-110"
                 >
                   <Facebook className="w-4 h-4" />
                 </a>
                 <a
-                  href={`https://twitter.com/intent/tweet?url=${shareUrl}&text=${shareTitle}`}
+                  href="https://www.youtube.com/@ShailrajTravels"
                   target="_blank"
                   rel="noreferrer"
-                  className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-sky-500 hover:text-white transition-colors"
+                  aria-label="YouTube"
+                  className="w-10 h-10 rounded-full bg-[#FF0000]/10 flex items-center justify-center text-[#FF0000] hover:bg-[#FF0000] hover:text-white transition-all duration-300 shadow-sm hover:scale-110"
                 >
-                  <Twitter className="w-4 h-4" />
-                </a>
-                <a
-                  href={`https://www.linkedin.com/shareArticle?mini=true&url=${shareUrl}&title=${shareTitle}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-blue-700 hover:text-white transition-colors"
-                >
-                  <Linkedin className="w-4 h-4" />
+                  <Youtube className="w-4 h-4 fill-current" />
                 </a>
               </div>
             </div>

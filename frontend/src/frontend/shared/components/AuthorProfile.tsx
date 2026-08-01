@@ -1,5 +1,6 @@
 import React from 'react';
 import { Author } from '@/frontend/shared/types/author';
+import { Instagram, Facebook, Youtube } from 'lucide-react';
 
 interface AuthorProfileProps {
   author: Author;
@@ -28,20 +29,35 @@ export const AuthorProfile: React.FC<AuthorProfileProps> = ({
               <h3 className="text-xl font-bold text-slate-800">{author.name}</h3>
               <p className="text-brand-orange font-medium">{author.role}</p>
             </div>
-            {(author.socialLinks?.linkedin || author.socialLinks?.twitter) && (
-              <div className="flex gap-3">
-                {author.socialLinks.linkedin && (
-                  <a
-                    href={author.socialLinks.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-slate-400 hover:text-blue-600 transition-colors"
-                  >
-                    LinkedIn
-                  </a>
-                )}
-              </div>
-            )}
+            <div className="flex items-center gap-2.5">
+              <a
+                href="https://www.instagram.com/wings_of_mayur_9999/"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Instagram"
+                className="w-8 h-8 rounded-full bg-[#E1306C]/10 text-[#E1306C] hover:bg-[#E1306C] hover:text-white flex items-center justify-center transition-all duration-300 shadow-sm"
+              >
+                <Instagram className="w-4 h-4" />
+              </a>
+              <a
+                href="https://www.facebook.com/share/1E2RUhpSAf/?mibextid=wwXIfr"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Facebook"
+                className="w-8 h-8 rounded-full bg-[#3B5998]/10 text-[#3B5998] hover:bg-[#3B5998] hover:text-white flex items-center justify-center transition-all duration-300 shadow-sm"
+              >
+                <Facebook className="w-4 h-4" />
+              </a>
+              <a
+                href="https://www.youtube.com/@ShailrajTravels"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="YouTube"
+                className="w-8 h-8 rounded-full bg-[#FF0000]/10 text-[#FF0000] hover:bg-[#FF0000] hover:text-white flex items-center justify-center transition-all duration-300 shadow-sm"
+              >
+                <Youtube className="w-4 h-4 fill-current" />
+              </a>
+            </div>
           </div>
 
           <p className="text-slate-600 leading-relaxed mb-4">{author.bio}</p>
