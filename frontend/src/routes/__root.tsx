@@ -122,7 +122,7 @@ export type Language = "mr" | "en";
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   validateSearch: (search: Record<string, unknown>): { lang?: Language } => {
-    return { lang: (search.lang === "mr" ? "mr" : "en") as Language };
+    return { lang: (search.lang === "mr" || search.lang === "en" ? search.lang : undefined) as Language | undefined };
   },
   head: () =>
     ({
@@ -224,15 +224,34 @@ function FloatingWhatsApp() {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const search = Route.useSearch();
-  const [langState, setLangState] = useState<Language>("en");
+  const [langState, setLangState] = useState<Language>(() => {
+    try {
+      const saved = localStorage.getItem("shailraj_lang");
+      return (saved === "mr" || saved === "en") ? (saved as Language) : "en";
+    } catch {
+      return "en";
+    }
+  });
   const lang = (search.lang || langState) as Language;
   const navigate = useNavigate();
   const location = useLocation();
   const isExcludedView = location.pathname.startsWith("/admin") || location.pathname.startsWith("/invoice-print");
 
+  useEffect(() => {
+    if (search.lang && (search.lang === "mr" || search.lang === "en")) {
+      setLangState(search.lang as Language);
+      try {
+        localStorage.setItem("shailraj_lang", search.lang as string);
+      } catch {}
+    }
+  }, [search.lang]);
+
   const toggleLang = () => {
     const newLang = lang === "mr" ? "en" : "mr";
     setLangState(newLang);
+    try {
+      localStorage.setItem("shailraj_lang", newLang);
+    } catch {}
     navigate({ search: ((old: any) => ({ ...old, lang: newLang })) as any, replace: true });
   };
 
