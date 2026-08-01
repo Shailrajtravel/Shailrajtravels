@@ -76,6 +76,7 @@ const AnimatedCounter = ({
 export function AboutSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
   const [stats, setStats] = useState({
     travelersCount: 0,
+    customersCount: 0,
     packagesCount: 0,
     toursCount: 0,
     tripOptionsCount: 0,
@@ -97,7 +98,7 @@ export function AboutSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
   const currentMonth = new Date().getMonth(); // June is 5
   const elapsedMonths = (currentYear - 2026) * 12 + (currentMonth - 5);
   const yearsOfExperience = (1.5 + elapsedMonths / 12).toFixed(1);
-  const happyYatris = 150 + Math.max(0, stats.travelersCount - 121);
+  const happyYatris = Math.floor((150 + (stats.customersCount || 0)) / 10) * 10;
   // Current database count is 9 packages + tours. Start at 50, and increase as new ones are added.
   const currentDestinationsCount = stats.packagesCount + stats.toursCount;
   const sacredDestinations = 50 + Math.max(0, currentDestinationsCount - 9);

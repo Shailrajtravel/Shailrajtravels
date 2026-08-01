@@ -6,8 +6,8 @@ import { storageManager } from '../database/StorageManager';
 const DEFAULT_TEMPLATES = {
   confirmed: `Namaste {customerName}! 🎉\n\nGreat news! Your booking (*{bookingId}*) for *{tripName}* has been *CONFIRMED* by Shailraj Travels!\n\n📅 *Travel Date:* {travelDate}\n📍 *Pickup:* {pickupLocation}\n👥 *Persons:* {persons}\n\nWe look forward to giving you a wonderful journey! Call us anytime: +91 9359570497.`,
   cancelled: `Namaste {customerName}.\n\nYour booking (*{bookingId}*) for *{tripName}* has been *CANCELLED* by Shailraj Travels.\n\nIf you have any questions or wish to re-book, please contact us at +91 9359570497.`,
-  payment: `Namaste {customerName}! 🧾\n\nHere is your Official Payment Receipt & Invoice from *Shailraj Travels*!\n\n📋 *Booking ID:* {bookingId}\n🚘 *Trip:* {tripName}\n📅 *Travel Date:* {travelDate}\n💵 *Paid Amount:* ₹{paidAmount}\n📝 *Note:* {paymentNote}\n💳 *Payment Status:* *{paymentStatus}* ✅\n\n📄 *View & Print Invoice:* {invoiceUrl}\n\nThank you for choosing Shailraj Travels! Call us anytime: +91 9359570497.`,
-  invoicePdf: `🙏 *Shailraj Travels Pune* 🙏\n\nHello *{customerName}*,\n\nWe have received your payment for *{tripName}*.\nPlease find the official invoice above. Thank you for choosing us! Have a blessed trip! 🚩`,
+  payment: `Namaste {customerName}! 🧾\n\nHere is your Official Payment Receipt & Invoice from *Shailraj Travels*!\n\n📋 *Booking ID:* {bookingId}\n🧾 *Invoice ID:* {invoiceId}\n🚘 *Trip:* {tripName}\n📅 *Travel Date:* {travelDate}\n💵 *Paid Amount:* ₹{paidAmount}\n📝 *Note:* {paymentNote}\n💳 *Payment Status:* *{paymentStatus}* ✅\n\n📄 *View & Print Invoice:* {invoiceUrl}\n\nThank you for choosing Shailraj Travels! Call us anytime: +91 9359570497.`,
+  invoicePdf: `🙏 *Shailraj Travels Pune* 🙏\n\nHello *{customerName}*,\n\nWe have received your payment for *{tripName}* (Invoice ID: *{invoiceId}*).\nPlease find the official invoice above. Thank you for choosing us! Have a blessed trip! 🚩`,
 };
 
 @Injectable()
@@ -20,10 +20,14 @@ export class BookingsService {
       const col = await storageManager.getGlobalCollection('whatsapp_templates');
       const doc = await col.findOne({ _id: 'booking_templates' as any });
       if (doc) {
+        let paymentTpl = doc.payment || DEFAULT_TEMPLATES.payment;
+        if (paymentTpl && !paymentTpl.includes('{invoiceId}')) {
+          paymentTpl = paymentTpl.replace('{bookingId}', '{bookingId}\n🧾 *Invoice ID:* {invoiceId}');
+        }
         return {
           confirmed: doc.confirmed || DEFAULT_TEMPLATES.confirmed,
           cancelled: doc.cancelled || DEFAULT_TEMPLATES.cancelled,
-          payment: doc.payment || DEFAULT_TEMPLATES.payment,
+          payment: paymentTpl,
           invoicePdf: doc.invoicePdf || DEFAULT_TEMPLATES.invoicePdf,
         };
       }
@@ -342,6 +346,7 @@ export class BookingsService {
             const vars = {
               customerName: refreshed.name || refreshed.customerName || 'Valued Customer',
               bookingId: refreshed.bookingId || `SB-${id.slice(-6)}`,
+              invoiceId: refreshed.invoiceCustomData?.invoiceNo || refreshed.generatedInvoiceNo || `INV-${id.slice(-6).toUpperCase()}`,
               tripName: refreshed.tripName || 'Tour Package',
               travelDate: refreshed.travelDate || 'As scheduled',
               persons: refreshed.persons || 1,
@@ -356,7 +361,7 @@ export class BookingsService {
             
             if (pdfBase64) {
               try {
-                await this.sendWhatsAppDocument(refreshed.phone, pdfBase64, `Invoice_${vars.bookingId}.pdf`, msg);
+                await this.sendWhatsAppDocument(refreshed.phone, pdfBase64, `Invoice_${vars.invoiceId}.pdf`, msg);
                 whatsappSent = true;
               } catch (e) {
                 // Fallback to text message if document sending fails
@@ -396,7 +401,8 @@ export class BookingsService {
         const templates = await this.getWhatsAppTemplates();
         const vars = {
           customerName: invoiceCustomData?.customerName || booking?.name || 'Valued Customer',
-          bookingId: invoiceCustomData?.invoiceNo || booking?.bookingId || `INV-${id.slice(-6)}`,
+          bookingId: booking?.bookingId || `SB-${id.slice(-6)}`,
+          invoiceId: invoiceCustomData?.invoiceNo || booking?.generatedInvoiceNo || `INV-${id.slice(-6).toUpperCase()}`,
           tripName: invoiceCustomData?.tripName || booking?.tripName || 'Tour Package',
           travelDate: invoiceCustomData?.travelDate || booking?.travelDate || 'As scheduled',
           persons: booking?.persons || 1,
@@ -429,7 +435,8 @@ export class BookingsService {
     const custom = booking.invoiceCustomData || {};
     const vars = {
       customerName: custom.customerName || booking.name || 'Valued Customer',
-      bookingId: custom.invoiceNo || booking.bookingId || `INV-${id.slice(-6)}`,
+      bookingId: booking.bookingId || `SB-${id.slice(-6)}`,
+      invoiceId: custom.invoiceNo || booking.generatedInvoiceNo || `INV-${id.slice(-6).toUpperCase()}`,
       tripName: custom.tripName || booking.tripName || 'Tour Package',
       travelDate: custom.travelDate || booking.travelDate || 'As scheduled',
       persons: booking.persons || 1,
@@ -456,14 +463,21 @@ export class BookingsService {
   async getPublicStats() {
     try {
       const bookingsCol = await storageManager.getCollectionForRead("booking", "dummy", "bookings");
-      const confirmedBookings = await bookingsCol
-        .find({ status: "Confirmed" }, { projection: { persons: 1 } })
-        .toArray();
+      const allBookings = await bookingsCol.find({}, { projection: { persons: 1, status: 1, phone: 1 } }).toArray();
+      const confirmedBookings = allBookings.filter((b: any) => b.status === "Confirmed");
         
       const travelersCount = confirmedBookings.reduce((sum: number, b: any) => {
         const p = parseInt(b.persons);
         return sum + (isNaN(p) ? 1 : p);
       }, 0);
+
+      const uniquePhones = new Set();
+      for (const b of allBookings) {
+        if (b.phone && typeof b.phone === "string" && b.phone.trim() !== "") {
+          uniquePhones.add(b.phone.trim());
+        }
+      }
+      const customersCount = uniquePhones.size;
       
       const packagesCount = await (await storageManager.getGlobalCollection("packages")).countDocuments();
       const toursCount = await (await storageManager.getGlobalCollection("tours")).countDocuments();
@@ -478,6 +492,7 @@ export class BookingsService {
 
       return {
         travelersCount,
+        customersCount,
         packagesCount,
         toursCount,
         tripOptionsCount,
@@ -487,6 +502,7 @@ export class BookingsService {
       this.logger.error("Failed to fetch public stats", error);
       return {
         travelersCount: 0,
+        customersCount: 0,
         packagesCount: 0,
         toursCount: 0,
         tripOptionsCount: 0,

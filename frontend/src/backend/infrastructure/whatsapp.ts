@@ -350,6 +350,7 @@ export async function sendBookingInvoicePDF(
       .replace(/{customerName}/g, booking.name || "Customer")
       .replace(/{tripName}/g, pkgName)
       .replace(/{bookingId}/g, booking.bookingId || `SB-${(booking._id || "").slice(-6)}`)
+      .replace(/{invoiceId}/g, invoiceNo)
       .replace(/{travelDate}/g, booking.travelDate || "As scheduled")
       .replace(/{persons}/g, booking.persons || 1)
       .replace(/{pickupLocation}/g, booking.pickupLocation || "Pune")

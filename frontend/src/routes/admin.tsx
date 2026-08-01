@@ -2192,7 +2192,7 @@ function AdminPage() {
               <div>
                 <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Available Placeholder Chips (Click to Insert):</span>
                 <div className="flex flex-wrap gap-1.5">
-                  {["{customerName}", "{bookingId}", "{tripName}", "{travelDate}", "{persons}", "{pickupLocation}", "{paidAmount}", "{paymentNote}", "{paymentStatus}", "{invoiceUrl}"].map((chip) => (
+                  {["{customerName}", "{bookingId}", "{invoiceId}", "{tripName}", "{travelDate}", "{persons}", "{pickupLocation}", "{paidAmount}", "{paymentNote}", "{paymentStatus}", "{invoiceUrl}"].map((chip) => (
                     <button
                       key={chip}
                       type="button"
@@ -3561,14 +3561,19 @@ function CustomersView({ bookings = [] }: { bookings?: any[] }) {
 
     return (
       <>
-        <div className="mb-6 animate-reveal">
+        <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 animate-reveal">
           <input
             type="text"
             placeholder="Search by Customer ID, Name, or Phone..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full md:w-1/2 lg:w-1/3 px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium text-brand-blue-deep placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-blue/50 focus:border-brand-blue transition-all shadow-sm"
+            className="w-full sm:w-1/2 lg:w-1/3 px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium text-brand-blue-deep placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-blue/50 focus:border-brand-blue transition-all shadow-sm"
           />
+          <div className="inline-flex items-center gap-2.5 px-4 py-3 bg-brand-blue/10 border border-brand-blue/20 rounded-xl font-bold text-brand-blue-deep text-sm w-fit shadow-sm">
+            <Users className="w-4 h-4 text-brand-blue" />
+            <span>Total Customers:</span>
+            <span className="bg-brand-blue text-white px-2.5 py-0.5 rounded-lg text-xs font-black">{sortedCustomers.length}</span>
+          </div>
         </div>
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden animate-reveal">
           {displayCustomers.length === 0 ? (
