@@ -2003,7 +2003,7 @@ function AdminPage() {
 
               <div>
                 <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                  Description / Note (Optional)
+                  Bill Description (Optional)
                 </label>
                 <input
                   type="text"
@@ -2108,6 +2108,7 @@ function AdminPage() {
                       advancePaid: paymentModal.paidAmount,
                       paymentNote: paymentModal.paymentNote,
                       paymentMode: paymentModal.paymentMode,
+                      description: paymentModal.paymentNote || paymentModal.booking.invoiceCustomData?.description || "Package Price (Per Person)",
                       // If the invoice hasn't been manually edited with a rate, 
                       // auto-fill the bill table with the rate (per person)
                       ...( (!paymentModal.booking.invoiceCustomData?.rate) 
@@ -2119,8 +2120,7 @@ function AdminPage() {
                                      r = Number(paymentModal.paidAmount) / p;
                                    }
                                    return r;
-                                 })(), 
-                                 description: paymentModal.paymentNote || paymentModal.booking.invoiceCustomData?.description || "Package Price (Per Person)" 
+                                 })()
                                } 
                              : {} )
                     }

@@ -62,9 +62,7 @@ export function InvoicePrint({
     // we use the advance payment as the invoice total (divided by persons) so it doesn't look empty.
     const personsCount = b.persons ? Number(b.persons) : 1;
     const finalRate = (resolvedRate === 0 && advancePaid) ? (Number(advancePaid) / personsCount) : resolvedRate;
-    const finalDesc = (resolvedRate === 0 && advancePaid) 
-       ? (paymentNote || custom.description || "Package Price (Per Person)")
-       : (custom.description || "Package Price (Per Person)");
+    const finalDesc = custom.description || paymentNote || "Package Price (Per Person)";
 
     return {
       invoiceNo:
@@ -733,12 +731,6 @@ export function InvoicePrint({
                         isEditing={true}
                         onChange={(v: string) => updateData("advancePaid", v)}
                       />
-                      <DetailRow
-                        label="Payment Note"
-                        value={data.paymentNote || ""}
-                        isEditing={true}
-                        onChange={(v: string) => updateData("paymentNote", v)}
-                      />
                     </>
                   ) : (
                     <>
@@ -759,9 +751,6 @@ export function InvoicePrint({
                           label="Balance Due"
                           value={`₹ ${(totalAmount - Number(data.advancePaid || 0)).toLocaleString()}`}
                         />
-                      )}
-                      {data.paymentNote && (
-                        <DetailRow label="Note" value={data.paymentNote} />
                       )}
                     </>
                   )}
