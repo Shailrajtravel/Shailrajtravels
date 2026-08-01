@@ -16,17 +16,6 @@ export function ReviewsSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
 
   useEffect(() => {
     setIsMounted(true);
-    const scriptId = 'sociablekit-widget-script';
-    let script = document.getElementById(scriptId) as HTMLScriptElement;
-    if (!script) {
-      script = document.createElement('script');
-      script.id = scriptId;
-      script.src = "https://widgets.sociablekit.com/google-reviews/widget.js";
-      script.defer = true;
-      document.body.appendChild(script);
-    } else if (typeof (window as any).sk_init_widget === 'function') {
-      (window as any).sk_init_widget();
-    }
   }, []);
 
   const handleRefine = async () => {
@@ -191,9 +180,17 @@ export function ReviewsSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
                 </div>
               </div>
 
-              {/* SociableKit Embed Widget Container */}
-              <div className="w-full min-h-[400px] rounded-2xl bg-transparent">
-                <div className="sk-ww-google-reviews" data-embed-id="25701887"></div>
+              {/* SociableKit Embed Widget Container via direct iframe to guarantee instantaneous loading on both localhost and production */}
+              <div className="w-full min-h-[500px] rounded-2xl bg-transparent overflow-hidden">
+                <iframe
+                  src="https://widgets.sociablekit.com/google-reviews/iframe/25701887"
+                  width="100%"
+                  height="550"
+                  frameBorder="0"
+                  title="Shailraj Travels Google Reviews"
+                  className="w-full rounded-2xl border-none shadow-sm"
+                  style={{ width: '100%', border: 'none' }}
+                />
               </div>
             </div>
 
