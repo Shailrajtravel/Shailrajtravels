@@ -3865,303 +3865,307 @@ const applyTableStyles = (XLSX: any, ws: any, titleSz = 16, subtitleSz = 14) => 
 function ReportsView({ bookings = [] }: { bookings?: any[] }) {
   const [startDate, setStartDate] = React.useState<string>("");
   const [endDate, setEndDate] = React.useState<string>("");
-  const [dateFilterType, setDateFilterType] = React.useState<"all" | "custom" | "created" | "travel">("created");
+  const [dateFilterType, setDateFilterType] = React.useState<"all" | "custom" | "created" | "travel">("all");
+  const [isExporting, setIsExporting] = React.useState<string | null>(null);
+
+  const getXLSX = async () => {
+    try {
+      const mod = await import('xlsx-js-style');
+      return mod.default || mod;
+    } catch (e) {
+      console.warn("Falling back to standard xlsx library", e);
+      const mod = await import('xlsx');
+      return mod.default || mod;
+    }
+  };
 
   const exportBookings = async () => {
-    const XLSX = await import('xlsx-js-style/dist/xlsx.bundle.js');
-    let targetBookings = bookings;
+    try {
+      setIsExporting("bookings");
+      const XLSX = await getXLSX();
+      let targetBookings = bookings || [];
 
-    // Quick filters: All / Custom
-    if (dateFilterType === "all") {
-      // No filtering — export everything
-    } else if (dateFilterType === "custom") {
-      targetBookings = targetBookings.filter((bk) => bk.tripName === "custom");
-    } else if (startDate || endDate) {
-      targetBookings = targetBookings.filter((bk) => {
-        if (dateFilterType === "created") {
-          if (!bk.createdAt) return false;
-          const bkDate = new Date(bk.createdAt);
-          bkDate.setHours(0, 0, 0, 0);
+      if (dateFilterType === "all") {
+        // No filtering
+      } else if (dateFilterType === "custom") {
+        targetBookings = targetBookings.filter((bk) => bk.tripName === "custom");
+      } else if (startDate || endDate) {
+        targetBookings = targetBookings.filter((bk) => {
+          if (dateFilterType === "created") {
+            if (!bk.createdAt) return false;
+            const bkDate = new Date(bk.createdAt);
+            bkDate.setHours(0, 0, 0, 0);
 
-          if (startDate) {
-            const start = new Date(startDate);
-            start.setHours(0, 0, 0, 0);
-            if (bkDate < start) return false;
-          }
-          if (endDate) {
-            const end = new Date(endDate);
-            end.setHours(23, 59, 59, 999);
-            if (bkDate > end) return false;
-          }
-          return true;
-        } else {
-          if (!bk.travelDate) return false;
-          const tDate = new Date(bk.travelDate);
-          if (isNaN(tDate.getTime())) return false;
+            if (startDate) {
+              const start = new Date(startDate);
+              start.setHours(0, 0, 0, 0);
+              if (bkDate < start) return false;
+            }
+            if (endDate) {
+              const end = new Date(endDate);
+              end.setHours(23, 59, 59, 999);
+              if (bkDate > end) return false;
+            }
+            return true;
+          } else {
+            if (!bk.travelDate) return false;
+            const tDate = new Date(bk.travelDate);
+            if (isNaN(tDate.getTime())) return false;
 
-          tDate.setHours(0, 0, 0, 0);
-          if (startDate) {
-            const start = new Date(startDate);
-            start.setHours(0, 0, 0, 0);
-            if (tDate < start) return false;
+            tDate.setHours(0, 0, 0, 0);
+            if (startDate) {
+              const start = new Date(startDate);
+              start.setHours(0, 0, 0, 0);
+              if (tDate < start) return false;
+            }
+            if (endDate) {
+              const end = new Date(endDate);
+              end.setHours(23, 59, 59, 999);
+              if (tDate > end) return false;
+            }
+            return true;
           }
-          if (endDate) {
-            const end = new Date(endDate);
-            end.setHours(23, 59, 59, 999);
-            if (tDate > end) return false;
-          }
-          return true;
-        }
+        });
+      }
+
+      if (targetBookings.length === 0) {
+        alert("No bookings match your selected criteria.");
+        setIsExporting(null);
+        return;
+      }
+
+      const getBookingIndex = (bk: any) => {
+        const match = (bk.generatedBookingId || "").match(/\d+$/);
+        return match ? parseInt(match[0], 10) : 0;
+      };
+
+      const sortedTargetBookings = [...targetBookings].sort((a, b) => {
+        const idxA = getBookingIndex(a);
+        const idxB = getBookingIndex(b);
+        if (idxA !== idxB) return idxB - idxA;
+        return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime();
       });
-    }
 
-    if (targetBookings.length === 0) {
-      alert("No bookings found in this date range.");
-      return;
-    }
-
-    const headers = [
-      "Booking ID",
-      "Cus_Name",
-      "Contact",
-      "Trip Name",
-      "Persons",
-      "Travel Date",
-      "Status",
-      "Sub date",
-      "Pickup Point",
-      "Custom Dest",
-    ];
-
-    const getBookingIndex = (bk: any) => {
-      const match = (bk.generatedBookingId || "").match(/\d+$/);
-      return match ? parseInt(match[0], 10) : 0;
-    };
-
-    const sortedTarget = [...targetBookings].sort((a, b) => {
-      const idxA = getBookingIndex(a);
-      const idxB = getBookingIndex(b);
-      if (idxA !== idxB) return idxA - idxB;
-      return new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime();
-    });
-
-    const rows = sortedTarget.map((bk, idx) => {
-      const bId = bk.generatedBookingId;
-      const phoneStr = (bk.phone || "").replace(/[\r\n]+/g, " ");
-      const dateStr = bk.createdAt ? new Date(bk.createdAt).toLocaleDateString() : "";
-      const custom = bk.invoiceCustomData || {};
-      const pickupPoint = custom.pickupPoint || bk.pickupLocation || bk.pickupPoint || "Pune";
-      return [
-        bId,
-        (bk.name || "").replace(/[\r\n]+/g, " "),
-        phoneStr,
-        (bk.tripName === "custom" ? "Custom Trip" : bk.tripName || "").replace(/[\r\n]+/g, " "),
-        bk.persons || "",
-        (bk.travelDate || "").replace(/[\r\n]+/g, " "),
-        bk.status || "",
-        dateStr,
-        pickupPoint.replace(/[\r\n]+/g, " "),
-        (bk.customDestination || "").replace(/[\r\n]+/g, " "),
+      const headers = [
+        "Booking ID",
+        "Cus_Name",
+        "Contact",
+        "Trip Name",
+        "Persons",
+        "Travel Date",
+        "Status",
+        "Sub date",
+        "Pickup Point",
+        "Custom Dest",
       ];
-    });
 
-    let reportTitle = "Booking Report";
-    if (dateFilterType === "all") {
-      reportTitle = "Booking Report: All Bookings";
-    } else if (dateFilterType === "custom") {
-      reportTitle = "Booking Report for Custom Trips";
-    } else if (dateFilterType === "created") {
-      const startStr = startDate ? new Date(startDate).toLocaleDateString("en-GB") : "";
-      const endStr = endDate ? new Date(endDate).toLocaleDateString("en-GB") : "";
-      if (startStr && endStr) {
-        reportTitle = `Booking Report: Submission Date from ${startStr} to ${endStr}`;
-      } else if (startStr) {
-        reportTitle = `Booking Report: Submission Date starting ${startStr}`;
-      } else if (endStr) {
-        reportTitle = `Booking Report: Submission Date ending ${endStr}`;
-      } else {
-        reportTitle = "Booking Report: Filter by Submission Date";
+      const rows = sortedTargetBookings.map((bk: any) => {
+        const bId = bk.generatedBookingId || `SB-${(bk._id || "").slice(-6)}`;
+        const phoneStr = (bk.phone || "").replace(/[\r\n]+/g, " ");
+        const dateStr = bk.createdAt ? new Date(bk.createdAt).toLocaleDateString() : "";
+        const custom = bk.invoiceCustomData || {};
+        const pickupPoint = custom.pickupPoint || bk.pickupLocation || bk.pickupPoint || "Pune";
+        return [
+          bId,
+          (bk.name || "").replace(/[\r\n]+/g, " "),
+          phoneStr,
+          (bk.tripName === "custom" ? "Custom Trip" : bk.tripName || "").replace(/[\r\n]+/g, " "),
+          bk.persons || "",
+          (bk.travelDate || "").replace(/[\r\n]+/g, " "),
+          bk.status || "",
+          dateStr,
+          pickupPoint.replace(/[\r\n]+/g, " "),
+          (bk.customDestination || "").replace(/[\r\n]+/g, " "),
+        ];
+      });
+
+      let reportTitle = "Booking Report";
+      if (dateFilterType === "all") {
+        reportTitle = "Booking Report: All Bookings";
+      } else if (dateFilterType === "custom") {
+        reportTitle = "Booking Report for Custom Trips";
+      } else if (dateFilterType === "created") {
+        const startStr = startDate ? new Date(startDate).toLocaleDateString("en-GB") : "";
+        const endStr = endDate ? new Date(endDate).toLocaleDateString("en-GB") : "";
+        if (startStr && endStr) {
+          reportTitle = `Booking Report: Submission Date from ${startStr} to ${endStr}`;
+        } else if (startStr) {
+          reportTitle = `Booking Report: Submission Date starting ${startStr}`;
+        } else if (endStr) {
+          reportTitle = `Booking Report: Submission Date ending ${endStr}`;
+        } else {
+          reportTitle = "Booking Report: Filter by Submission Date";
+        }
+      } else if (dateFilterType === "travel") {
+        const startStr = startDate ? new Date(startDate).toLocaleDateString("en-GB") : "";
+        const endStr = endDate ? new Date(endDate).toLocaleDateString("en-GB") : "";
+        if (startStr && endStr) {
+          reportTitle = `Booking Report: Travel Date from ${startStr} to ${endStr}`;
+        } else if (startStr) {
+          reportTitle = `Booking Report: Travel Date starting ${startStr}`;
+        } else if (endStr) {
+          reportTitle = `Booking Report: Travel Date ending ${endStr}`;
+        } else {
+          reportTitle = "Booking Report: Filter by Travel Date";
+        }
       }
-    } else if (dateFilterType === "travel") {
-      const startStr = startDate ? new Date(startDate).toLocaleDateString("en-GB") : "";
-      const endStr = endDate ? new Date(endDate).toLocaleDateString("en-GB") : "";
-      if (startStr && endStr) {
-        reportTitle = `Booking Report: Travel Date from ${startStr} to ${endStr}`;
-      } else if (startStr) {
-        reportTitle = `Booking Report: Travel Date starting ${startStr}`;
-      } else if (endStr) {
-        reportTitle = `Booking Report: Travel Date ending ${endStr}`;
-      } else {
-        reportTitle = "Booking Report: Filter by Travel Date";
-      }
+
+      const ws = XLSX.utils.aoa_to_sheet([
+        ["SHAILRAJ TRAVELS PUNE"],
+        [reportTitle],
+        [],
+        headers,
+        ...rows,
+      ]);
+
+      applyTableStyles(XLSX, ws);
+
+      ws["!merges"] = [
+        { s: { r: 0, c: 0 }, e: { r: 0, c: headers.length - 1 } },
+        { s: { r: 1, c: 0 }, e: { r: 1, c: headers.length - 1 } },
+      ];
+
+      ws["!cols"] = [
+        { wch: 12 }, // Booking ID
+        { wch: 18 }, // Cus_Name
+        { wch: 14 }, // Contact
+        { wch: 20 }, // Trip Name
+        { wch: 9  }, // Persons
+        { wch: 13 }, // Travel Date
+        { wch: 11 }, // Status
+        { wch: 12 }, // Sub date
+        { wch: 16 }, // Pickup Point
+        { wch: 18 }, // Custom Dest
+      ];
+
+      ws["!fitToPage"] = true;
+      ws["!pageSetup"] = {
+        orientation: "landscape",
+        fitToWidth: 1,
+        fitToHeight: 0,
+      };
+
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Bookings");
+      XLSX.writeFile(wb, `bookings_report_${new Date().toISOString().split("T")[0]}.xlsx`);
+    } catch (err) {
+      console.error("Error exporting bookings:", err);
+      alert("An error occurred while exporting bookings. Please try again.");
+    } finally {
+      setIsExporting(null);
     }
-
-    const ws = XLSX.utils.aoa_to_sheet([
-      ["SHAILRAJ TRAVELS PUNE"],
-      [reportTitle],
-      [],
-      headers,
-      ...rows,
-    ]);
-
-    applyTableStyles(XLSX, ws);
-
-    ws["!merges"] = [
-      { s: { r: 0, c: 0 }, e: { r: 0, c: headers.length - 1 } },
-      { s: { r: 1, c: 0 }, e: { r: 1, c: headers.length - 1 } },
-    ];
-
-    ws["!cols"] = [
-      { wch: 9  }, // Booking ID
-      { wch: 14 }, // Cus_Name
-      { wch: 11 }, // Contact
-      { wch: 16 }, // Trip Name
-      { wch: 7  }, // Persons
-      { wch: 11 }, // Travel Date
-      { wch: 9  }, // Status
-      { wch: 11 }, // Sub date
-      { wch: 14 }, // Pickup Point
-      { wch: 15 }, // Custom Dest
-    ];
-
-    ws["!fitToPage"] = true;
-    ws["!pageSetup"] = {
-      orientation: "landscape",
-      fitToWidth: 1,
-      fitToHeight: 0,
-    };
-    ws["!margins"] = {
-      left: 0.4,
-      right: 0.4,
-      top: 0.5,
-      bottom: 0.5,
-      header: 0.2,
-      footer: 0.2,
-    } as any;
-
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Bookings");
-    XLSX.writeFile(wb, `bookings_report_${new Date().toISOString().split("T")[0]}.xlsx`);
   };
 
   const exportCustomers = async () => {
-    const XLSX = await import('xlsx-js-style/dist/xlsx.bundle.js');
-    const customersMap = new globalThis.Map();
-    (bookings || []).forEach((bk) => {
-      if (!bk) return;
-      const phone = bk.phone || "Unknown";
-      if (!customersMap.has(phone)) {
-        customersMap.set(phone, {
-          name: bk.name || "Unknown",
-          phone: phone,
-          totalBookings: 1,
-          firstBookingDate: bk.createdAt,
-          latestBookingDate: bk.createdAt,
-          allTrips: new Set([bk.tripName === "custom" ? "Custom Trip" : bk.tripName || "Unknown"]),
-        });
-      } else {
-        const cust = customersMap.get(phone);
-        if (cust) {
-          cust.totalBookings += 1;
-          const currentLatest = cust.latestBookingDate
-            ? new Date(cust.latestBookingDate).getTime()
-            : 0;
-          const currentFirst = cust.firstBookingDate
-            ? new Date(cust.firstBookingDate).getTime()
-            : Infinity;
-          const newDate = bk.createdAt ? new Date(bk.createdAt).getTime() : 0;
-          if (newDate > currentLatest) cust.latestBookingDate = bk.createdAt;
-          if (newDate > 0 && newDate < currentFirst) cust.firstBookingDate = bk.createdAt;
-          cust.allTrips.add(bk.tripName === "custom" ? "Custom Trip" : bk.tripName || "Unknown");
+    try {
+      setIsExporting("customers");
+      const XLSX = await getXLSX();
+      const customersMap = new globalThis.Map();
+      (bookings || []).forEach((bk) => {
+        if (!bk) return;
+        const phone = (bk.phone || "Unknown").trim();
+        if (!customersMap.has(phone)) {
+          customersMap.set(phone, {
+            name: (bk.name || "Unknown").trim(),
+            phone: phone,
+            totalBookings: 1,
+            firstBookingDate: bk.createdAt,
+            latestBookingDate: bk.createdAt,
+            allTrips: new Set([bk.tripName === "custom" ? "Custom Trip" : bk.tripName || "Unknown"]),
+          });
+        } else {
+          const cust = customersMap.get(phone);
+          if (cust) {
+            cust.totalBookings += 1;
+            const currentLatest = cust.latestBookingDate ? new Date(cust.latestBookingDate).getTime() : 0;
+            const currentFirst = cust.firstBookingDate ? new Date(cust.firstBookingDate).getTime() : Infinity;
+            const newDate = bk.createdAt ? new Date(bk.createdAt).getTime() : 0;
+            if (newDate > currentLatest) cust.latestBookingDate = bk.createdAt;
+            if (newDate > 0 && newDate < currentFirst) cust.firstBookingDate = bk.createdAt;
+            cust.allTrips.add(bk.tripName === "custom" ? "Custom Trip" : bk.tripName || "Unknown");
+          }
         }
-      }
-    });
+      });
 
-    const sortedCustomers = Array.from(customersMap.values()).sort((a, b) => {
-      const timeA = a.firstBookingDate ? new Date(a.firstBookingDate).getTime() : 0;
-      const timeB = b.firstBookingDate ? new Date(b.firstBookingDate).getTime() : 0;
-      return timeA - timeB;
-    });
+      const sortedCustomers = Array.from(customersMap.values()).sort((a, b) => {
+        const timeA = a.firstBookingDate ? new Date(a.firstBookingDate).getTime() : 0;
+        const timeB = b.firstBookingDate ? new Date(b.firstBookingDate).getTime() : 0;
+        return timeA - timeB;
+      });
 
-    sortedCustomers.forEach((cust, index) => {
-      cust.customerId = `cus-${String(index + 1).padStart(5, "0")}`;
-    });
+      sortedCustomers.forEach((cust, index) => {
+        cust.customerId = `cus-${String(index + 1).padStart(5, "0")}`;
+      });
 
-    const displayCustomers = [...sortedCustomers].reverse();
+      const displayCustomers = [...sortedCustomers].reverse();
 
-    const headers = [
-      "Customer ID",
-      "Cus_Name",
-      "Contact",
-      "Total Bookings",
-      "First Booking Date",
-      "Latest Booking Date",
-      "Trips Taken",
-    ];
-
-    const rows = displayCustomers.map((cust: any) => {
-      const tripsStr = Array.from(cust.allTrips).join("; ");
-      const phoneStr = (cust.phone || "").replace(/[\r\n]+/g, " ");
-      const firstDateStr = cust.firstBookingDate
-        ? new Date(cust.firstBookingDate).toLocaleDateString()
-        : "N/A";
-      const lastDateStr = cust.latestBookingDate
-        ? new Date(cust.latestBookingDate).toLocaleDateString()
-        : "N/A";
-
-      return [
-        cust.customerId,
-        (cust.name || "").replace(/[\r\n]+/g, " "),
-        phoneStr,
-        cust.totalBookings,
-        firstDateStr,
-        lastDateStr,
-        tripsStr.replace(/[\r\n]+/g, " "),
+      const headers = [
+        "Customer ID",
+        "Cus_Name",
+        "Contact",
+        "Total Bookings",
+        "First Booking Date",
+        "Latest Booking Date",
+        "Trips Taken",
       ];
-    });
 
-    const ws = XLSX.utils.aoa_to_sheet([
-      ["SHAILRAJ TRAVELS PUNE"],
-      ["Customer Report"],
-      [],
-      headers,
-      ...rows,
-    ]);
+      const rows = displayCustomers.map((cust: any) => {
+        const tripsStr = Array.from(cust.allTrips).join("; ");
+        const phoneStr = (cust.phone || "").replace(/[\r\n]+/g, " ");
+        const firstDateStr = cust.firstBookingDate ? new Date(cust.firstBookingDate).toLocaleDateString() : "N/A";
+        const lastDateStr = cust.latestBookingDate ? new Date(cust.latestBookingDate).toLocaleDateString() : "N/A";
 
-    applyTableStyles(XLSX, ws);
+        return [
+          cust.customerId,
+          (cust.name || "").replace(/[\r\n]+/g, " "),
+          phoneStr,
+          cust.totalBookings,
+          firstDateStr,
+          lastDateStr,
+          tripsStr.replace(/[\r\n]+/g, " "),
+        ];
+      });
 
-    ws["!merges"] = [
-      { s: { r: 0, c: 0 }, e: { r: 0, c: headers.length - 1 } },
-      { s: { r: 1, c: 0 }, e: { r: 1, c: headers.length - 1 } },
-    ];
+      const ws = XLSX.utils.aoa_to_sheet([
+        ["SHAILRAJ TRAVELS PUNE"],
+        ["Customer Directory Report"],
+        [],
+        headers,
+        ...rows,
+      ]);
 
-    ws["!cols"] = [
-      { wch: 11 }, // Customer ID
-      { wch: 18 }, // Customer Name
-      { wch: 12 }, // Phone Number
-      { wch: 13 }, // Total Bookings
-      { wch: 14 }, // First Booking Date
-      { wch: 14 }, // Latest Booking Date
-      { wch: 35 }, // Trips Taken
-    ];
-    ws["!fitToPage"] = true;
-    ws["!pageSetup"] = {
-      orientation: "landscape",
-      fitToWidth: 1,
-      fitToHeight: 0,
-    };
-    ws["!margins"] = {
-      left: 0.4,
-      right: 0.4,
-      top: 0.5,
-      bottom: 0.5,
-      header: 0.2,
-      footer: 0.2,
-    } as any;
+      applyTableStyles(XLSX, ws);
 
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Customers");
-    XLSX.writeFile(wb, `customers_report_${new Date().toISOString().split("T")[0]}.xlsx`);
+      ws["!merges"] = [
+        { s: { r: 0, c: 0 }, e: { r: 0, c: headers.length - 1 } },
+        { s: { r: 1, c: 0 }, e: { r: 1, c: headers.length - 1 } },
+      ];
+
+      ws["!cols"] = [
+        { wch: 13 }, // Customer ID
+        { wch: 20 }, // Customer Name
+        { wch: 15 }, // Phone Number
+        { wch: 15 }, // Total Bookings
+        { wch: 16 }, // First Booking Date
+        { wch: 16 }, // Latest Booking Date
+        { wch: 40 }, // Trips Taken
+      ];
+      ws["!fitToPage"] = true;
+      ws["!pageSetup"] = {
+        orientation: "landscape",
+        fitToWidth: 1,
+        fitToHeight: 0,
+      };
+
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Customers");
+      XLSX.writeFile(wb, `customers_report_${new Date().toISOString().split("T")[0]}.xlsx`);
+    } catch (err) {
+      console.error("Error exporting customers:", err);
+      alert("An error occurred while exporting customers report.");
+    } finally {
+      setIsExporting(null);
+    }
   };
 
   const groupsMap = new globalThis.Map<string, any[]>();
@@ -4173,7 +4177,6 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
     }
   });
   const tripGroups = Array.from(groupsMap.entries());
-
   const [selectedTripGroup, setSelectedTripGroup] = React.useState<string>("");
 
   React.useEffect(() => {
@@ -4184,206 +4187,346 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
 
   const exportSpecificTrip = async () => {
     if (!selectedTripGroup) return;
-    const XLSX = await import('xlsx-js-style/dist/xlsx.bundle.js');
-    const group = tripGroups.find((g) => g[0] === selectedTripGroup);
-    if (!group) return;
+    try {
+      setIsExporting("trip");
+      const XLSX = await getXLSX();
+      const group = tripGroups.find((g) => g[0] === selectedTripGroup);
+      if (!group) return;
 
-    const [groupName, groupBks] = group;
-    const headers = [
-      "Booking ID",
-      "Cus_Name",
-      "Contact",
-      "Trip Name",
-      "Persons",
-      "Travel Date",
-      "Status",
-      "Sub date",
-      "Pickup Point",
-    ];
-
-    const getBookingIndex = (bk: any) => {
-      const match = (bk.generatedBookingId || "").match(/\d+$/);
-      return match ? parseInt(match[0], 10) : 0;
-    };
-
-    const sortedGroupBks = [...groupBks].sort((a, b) => {
-      const idxA = getBookingIndex(a);
-      const idxB = getBookingIndex(b);
-      if (idxA !== idxB) return idxA - idxB;
-      return new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime();
-    });
-
-    const rows = sortedGroupBks.map((bk: any) => {
-      const bId = bk.generatedBookingId;
-      const phoneStr = (bk.phone || "").replace(/[\r\n]+/g, " ");
-      const dateStr = bk.createdAt ? new Date(bk.createdAt).toLocaleDateString() : "";
-      const custom = bk.invoiceCustomData || {};
-      const pickupPoint = custom.pickupPoint || bk.pickupLocation || bk.pickupPoint || "Pune";
-      return [
-        bId,
-        (bk.name || "").replace(/[\r\n]+/g, " "),
-        phoneStr,
-        (bk.tripName === "custom" ? "Custom Trip" : bk.tripName || "").replace(/[\r\n]+/g, " "),
-        bk.persons || "",
-        (bk.travelDate || "").replace(/[\r\n]+/g, " "),
-        bk.status || "",
-        dateStr,
-        pickupPoint.replace(/[\r\n]+/g, " "),
+      const [groupName, groupBks] = group;
+      const headers = [
+        "Booking ID",
+        "Cus_Name",
+        "Contact",
+        "Trip Name",
+        "Persons",
+        "Travel Date",
+        "Status",
+        "Sub date",
+        "Pickup Point",
       ];
-    });
 
-    const ws = XLSX.utils.aoa_to_sheet([
-      ["SHAILRAJ TRAVELS PUNE"],
-      [`Booking Report: ${groupName}`],
-      [],
-      headers,
-      ...rows,
-    ]);
+      const getBookingIndex = (bk: any) => {
+        const match = (bk.generatedBookingId || "").match(/\d+$/);
+        return match ? parseInt(match[0], 10) : 0;
+      };
 
-    applyTableStyles(XLSX, ws);
+      const sortedGroupBks = [...groupBks].sort((a, b) => {
+        const idxA = getBookingIndex(a);
+        const idxB = getBookingIndex(b);
+        if (idxA !== idxB) return idxA - idxB;
+        return new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime();
+      });
 
-    ws["!merges"] = [
-      { s: { r: 0, c: 0 }, e: { r: 0, c: headers.length - 1 } },
-      { s: { r: 1, c: 0 }, e: { r: 1, c: headers.length - 1 } },
-    ];
+      const rows = sortedGroupBks.map((bk: any) => {
+        const bId = bk.generatedBookingId || `SB-${(bk._id || "").slice(-6)}`;
+        const phoneStr = (bk.phone || "").replace(/[\r\n]+/g, " ");
+        const dateStr = bk.createdAt ? new Date(bk.createdAt).toLocaleDateString() : "";
+        const custom = bk.invoiceCustomData || {};
+        const pickupPoint = custom.pickupPoint || bk.pickupLocation || bk.pickupPoint || "Pune";
+        return [
+          bId,
+          (bk.name || "").replace(/[\r\n]+/g, " "),
+          phoneStr,
+          (bk.tripName === "custom" ? "Custom Trip" : bk.tripName || "").replace(/[\r\n]+/g, " "),
+          bk.persons || "",
+          (bk.travelDate || "").replace(/[\r\n]+/g, " "),
+          bk.status || "",
+          dateStr,
+          pickupPoint.replace(/[\r\n]+/g, " "),
+        ];
+      });
 
-    ws["!cols"] = [
-      { wch: 9  }, // Booking ID
-      { wch: 15 }, // Customer Name
-      { wch: 11 }, // Phone Number
-      { wch: 18 }, // Trip Name
-      { wch: 7  }, // Persons
-      { wch: 12 }, // Travel Date
-      { wch: 9  }, // Status
-      { wch: 11 }, // Submission Date
-      { wch: 14 }, // Pickup Location
-    ];
-    ws["!fitToPage"] = true;
-    ws["!pageSetup"] = {
-      orientation: "landscape",
-      fitToWidth: 1,
-      fitToHeight: 0,
-    };
-    ws["!margins"] = {
-      left: 0.4,
-      right: 0.4,
-      top: 0.5,
-      bottom: 0.5,
-      header: 0.2,
-      footer: 0.2,
-    } as any;
+      const ws = XLSX.utils.aoa_to_sheet([
+        ["SHAILRAJ TRAVELS PUNE"],
+        [`Booking Report: ${groupName}`],
+        [],
+        headers,
+        ...rows,
+      ]);
 
-    const wb = XLSX.utils.book_new();
-    const safeSheetName = groupName.replace(/[\\/*?:\[\]]/g, "").substring(0, 31);
-    XLSX.utils.book_append_sheet(wb, ws, safeSheetName);
+      applyTableStyles(XLSX, ws);
 
-    const safeFileName = groupName.replace(/[^a-z0-9]/gi, "_").toLowerCase();
-    XLSX.writeFile(
-      wb,
-      `trip_report_${safeFileName}_${new Date().toISOString().split("T")[0]}.xlsx`,
-    );
+      ws["!merges"] = [
+        { s: { r: 0, c: 0 }, e: { r: 0, c: headers.length - 1 } },
+        { s: { r: 1, c: 0 }, e: { r: 1, c: headers.length - 1 } },
+      ];
+
+      ws["!cols"] = [
+        { wch: 12 }, // Booking ID
+        { wch: 18 }, // Customer Name
+        { wch: 14 }, // Phone Number
+        { wch: 22 }, // Trip Name
+        { wch: 9  }, // Persons
+        { wch: 14 }, // Travel Date
+        { wch: 11 }, // Status
+        { wch: 13 }, // Submission Date
+        { wch: 16 }, // Pickup Location
+      ];
+      ws["!fitToPage"] = true;
+      ws["!pageSetup"] = {
+        orientation: "landscape",
+        fitToWidth: 1,
+        fitToHeight: 0,
+      };
+
+      const wb = XLSX.utils.book_new();
+      const safeSheetName = groupName.replace(/[\\/*?:\[\]]/g, "").substring(0, 31);
+      XLSX.utils.book_append_sheet(wb, ws, safeSheetName);
+
+      const safeFileName = groupName.replace(/[^a-z0-9]/gi, "_").toLowerCase();
+      XLSX.writeFile(wb, `trip_report_${safeFileName}_${new Date().toISOString().split("T")[0]}.xlsx`);
+    } catch (err) {
+      console.error("Error exporting trip group report:", err);
+      alert("An error occurred while exporting trip report.");
+    } finally {
+      setIsExporting(null);
+    }
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-reveal">
-      <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center text-center">
-        <div className="w-16 h-16 bg-brand-blue/10 text-brand-blue rounded-2xl flex items-center justify-center mb-4">
-          <CalendarCheck className="w-8 h-8" />
+    <div className="flex flex-col gap-8 animate-reveal">
+      {/* Executive Header */}
+      <div className="bg-gradient-to-r from-brand-blue-deep via-slate-800 to-brand-blue/90 text-white p-6 md:p-8 rounded-3xl shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden border border-white/10">
+        <div className="relative z-10">
+          <h2 className="text-2xl md:text-3xl font-black mb-2 flex items-center gap-3">
+            <FileSpreadsheet className="w-8 h-8 text-amber-400 shrink-0" />
+            Export & Analytics Studio
+          </h2>
+          <p className="text-slate-200 text-sm max-w-2xl leading-relaxed font-medium">
+            Generate customized Excel workbooks for your accounting, customer management, and departure rosters. Reports automatically feature corporate header formatting and auto-adjusted table columns.
+          </p>
         </div>
-        <h3 className="text-xl font-bold text-brand-blue-deep mb-2">Bookings Report</h3>
-        <p className="text-slate-500 text-sm mb-4 max-w-xs">
-          Download an Excel spreadsheet of your trip bookings.
-        </p>
-
-        <div className="w-full max-w-xs mb-4 text-left flex flex-col gap-2">
-          <select
-            value={dateFilterType}
-            onChange={(e) => setDateFilterType(e.target.value as any)}
-            className="w-full p-2 text-sm border border-slate-200 rounded-lg outline-none"
-          >
-            <option value="all">All Bookings</option>
-            <option value="custom">Custom Trip Bookings</option>
-            <option value="created">Filter by Submission Date</option>
-            <option value="travel">Filter by Travel Date</option>
-          </select>
-          <div className="flex gap-2">
-            <div className="flex-1">
-              <label className="text-xs text-slate-500 font-bold ml-1">Start Date</label>
-              <input
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                className="w-full p-2 text-sm border border-slate-200 rounded-lg outline-none"
-              />
-            </div>
-            <div className="flex-1">
-              <label className="text-xs text-slate-500 font-bold ml-1">End Date</label>
-              <input
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                className="w-full p-2 text-sm border border-slate-200 rounded-lg outline-none"
-              />
-            </div>
+        <div className="flex items-center gap-4 relative z-10 shrink-0">
+          <div className="px-5 py-3.5 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 text-center shadow-inner">
+            <div className="text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-0.5">Total Bookings</div>
+            <div className="text-2xl font-black text-white">{bookings?.length || 0}</div>
+          </div>
+          <div className="px-5 py-3.5 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 text-center shadow-inner">
+            <div className="text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-0.5">Active Tours</div>
+            <div className="text-2xl font-black text-amber-400">{tripGroups.length}</div>
           </div>
         </div>
-
-        <button
-          onClick={exportBookings}
-          className="w-full max-w-xs bg-brand-blue-deep hover:bg-brand-blue text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-lg shadow-brand-blue/20 mt-auto"
-        >
-          <FileSpreadsheet className="w-5 h-5" />
-          Export Bookings
-        </button>
       </div>
 
-      <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center text-center">
-        <div className="w-16 h-16 bg-brand-green/10 text-brand-green rounded-2xl flex items-center justify-center mb-4">
-          <Users className="w-8 h-8" />
+      {/* Reports Cards Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+        
+        {/* Bookings Report Card */}
+        <div className="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-brand-blue/5 rounded-bl-[100px] pointer-events-none transition-transform group-hover:scale-105" />
+          
+          <div>
+            <div className="w-14 h-14 bg-brand-blue/10 text-brand-blue rounded-2xl flex items-center justify-center mb-5 shadow-sm">
+              <CalendarCheck className="w-7 h-7" />
+            </div>
+            <h3 className="text-xl font-black text-brand-blue-deep mb-2">Master Bookings Report</h3>
+            <p className="text-slate-500 text-sm mb-6 leading-relaxed">
+              Export complete trip booking records with advanced filtering options by submission or scheduled travel dates.
+            </p>
+
+            <div className="space-y-4 mb-6">
+              <div>
+                <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">Select Export Scope</label>
+                <select
+                  value={dateFilterType}
+                  onChange={(e) => {
+                    setDateFilterType(e.target.value as any);
+                    if (e.target.value === "all" || e.target.value === "custom") {
+                      setStartDate("");
+                      setEndDate("");
+                    }
+                  }}
+                  className="w-full px-3.5 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:ring-2 focus:ring-brand-blue/30 focus:border-brand-blue outline-none transition-all cursor-pointer shadow-xs"
+                >
+                  <option value="all">📁 All Bookings (Full Database)</option>
+                  <option value="created">📅 Filter by Booking Submission Date</option>
+                  <option value="travel">🚌 Filter by Scheduled Travel Date</option>
+                  <option value="custom">✨ Custom Trip Inquiries Only</option>
+                </select>
+              </div>
+
+              {(dateFilterType === "created" || dateFilterType === "travel") && (
+                <div className="p-4 bg-slate-50/80 border border-slate-200/80 rounded-2xl space-y-3">
+                  <div className="text-xs font-bold text-brand-blue uppercase tracking-wider flex items-center gap-1.5">
+                    <CalendarCheck className="w-3.5 h-3.5" />
+                    Specify Date Horizon
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-[11px] text-slate-600 font-bold mb-1">Start Date</label>
+                      <input
+                        type="date"
+                        value={startDate}
+                        onChange={(e) => setStartDate(e.target.value)}
+                        className="w-full px-3 py-2 bg-white text-xs font-bold text-slate-800 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-blue/30 focus:border-brand-blue outline-none shadow-xs"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] text-slate-600 font-bold mb-1">End Date</label>
+                      <input
+                        type="date"
+                        value={endDate}
+                        onChange={(e) => setEndDate(e.target.value)}
+                        className="w-full px-3 py-2 bg-white text-xs font-bold text-slate-800 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-blue/30 focus:border-brand-blue outline-none shadow-xs"
+                      />
+                    </div>
+                  </div>
+                  {(startDate || endDate) && (
+                    <div className="flex justify-end pt-1">
+                      <button
+                        type="button"
+                        onClick={() => { setStartDate(""); setEndDate(""); }}
+                        className="text-[11px] text-red-600 hover:text-red-700 font-extrabold underline cursor-pointer"
+                      >
+                        Reset Dates
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <button
+            onClick={exportBookings}
+            disabled={isExporting === "bookings"}
+            className="w-full bg-brand-blue-deep hover:bg-brand-blue text-white font-bold py-3.5 px-6 rounded-2xl flex items-center justify-center gap-2.5 transition-all shadow-lg shadow-brand-blue/20 disabled:opacity-50 mt-auto cursor-pointer text-sm active:scale-[0.99]"
+          >
+            {isExporting === "bookings" ? (
+              <>
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <span>Generating Excel...</span>
+              </>
+            ) : (
+              <>
+                <FileSpreadsheet className="w-5 h-5 text-amber-300" />
+                <span>Download Bookings Report</span>
+              </>
+            )}
+          </button>
         </div>
-        <h3 className="text-xl font-bold text-brand-blue-deep mb-2">Customers Report</h3>
-        <p className="text-slate-500 text-sm mb-6 max-w-xs">
-          Download an Excel summary of all your unique customers and their trips.
-        </p>
-        <button
-          onClick={exportCustomers}
-          className="w-full max-w-xs bg-brand-green hover:bg-brand-green-dark text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-lg shadow-brand-green/20"
-        >
-          <FileSpreadsheet className="w-5 h-5" />
-          Export Customers
-        </button>
-      </div>
 
-      <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center text-center">
-        <div className="w-16 h-16 bg-brand-orange/10 text-brand-orange rounded-2xl flex items-center justify-center mb-4">
-          <MapPin className="w-8 h-8" />
+        {/* Customers Directory Report Card */}
+        <div className="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-bl-[100px] pointer-events-none transition-transform group-hover:scale-105" />
+          
+          <div>
+            <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mb-5 shadow-sm border border-emerald-100">
+              <Users className="w-7 h-7" />
+            </div>
+            <h3 className="text-xl font-black text-slate-800 mb-2">Customer Directory Report</h3>
+            <p className="text-slate-500 text-sm mb-6 leading-relaxed">
+              Generate a unified client summary detailing unique travelers, trip histories, and total lifetime bookings per passenger.
+            </p>
+
+            <div className="p-5 bg-emerald-50/50 border border-emerald-100 rounded-2xl mb-6 space-y-2.5">
+              <div className="flex items-center justify-between text-xs font-bold text-slate-700">
+                <span>Spreadsheet Features</span>
+                <span className="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md font-black text-[10px]">AUTO-SORTED</span>
+              </div>
+              <ul className="text-xs text-slate-600 space-y-2 font-medium">
+                <li className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
+                  Unique Client IDs & formatted phone numbers
+                </li>
+                <li className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
+                  Total tours completed by each customer
+                </li>
+                <li className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
+                  First and most recent booking timestamps
+                </li>
+                <li className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
+                  Comprehensive listing of all destinations taken
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <button
+            onClick={exportCustomers}
+            disabled={isExporting === "customers"}
+            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-6 rounded-2xl flex items-center justify-center gap-2.5 transition-all shadow-lg shadow-emerald-600/20 disabled:opacity-50 mt-auto cursor-pointer text-sm active:scale-[0.99]"
+          >
+            {isExporting === "customers" ? (
+              <>
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <span>Exporting Directory...</span>
+              </>
+            ) : (
+              <>
+                <FileSpreadsheet className="w-5 h-5 text-amber-200" />
+                <span>Download Customers Report</span>
+              </>
+            )}
+          </button>
         </div>
-        <h3 className="text-xl font-bold text-brand-blue-deep mb-2">Trip Report</h3>
-        <p className="text-slate-500 text-sm mb-4 max-w-xs">
-          Select a specific trip to download its bookings.
-        </p>
 
-        <select
-          value={selectedTripGroup}
-          onChange={(e) => setSelectedTripGroup(e.target.value)}
-          className="w-full max-w-xs p-3 mb-4 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-blue/50 outline-none"
-        >
-          {tripGroups.map((g) => (
-            <option key={g[0]} value={g[0]}>
-              {g[0]} ({g[1].length} bookings)
-            </option>
-          ))}
-          {tripGroups.length === 0 && <option value="">No specific trips found</option>}
-        </select>
+        {/* Departure Roster Report Card */}
+        <div className="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-bl-[100px] pointer-events-none transition-transform group-hover:scale-105" />
+          
+          <div>
+            <div className="w-14 h-14 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mb-5 shadow-sm border border-amber-100">
+              <MapPin className="w-7 h-7" />
+            </div>
+            <h3 className="text-xl font-black text-slate-800 mb-2">Departure & Tour Roster</h3>
+            <p className="text-slate-500 text-sm mb-6 leading-relaxed">
+              Select a specific upcoming or archived departure date to download an exact traveler manifest for operational check-ins.
+            </p>
 
-        <button
-          onClick={exportSpecificTrip}
-          disabled={!selectedTripGroup}
-          className="w-full max-w-xs bg-brand-orange hover:bg-orange-600 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-lg shadow-brand-orange/20 disabled:opacity-50 disabled:cursor-not-allowed mt-auto"
-        >
-          <FileSpreadsheet className="w-5 h-5" />
-          Export Trip Report
-        </button>
+            <div className="space-y-3 mb-6">
+              <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider">Select Scheduled Departure</label>
+              <select
+                value={selectedTripGroup}
+                onChange={(e) => setSelectedTripGroup(e.target.value)}
+                className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 outline-none transition-all cursor-pointer shadow-xs truncate"
+              >
+                {tripGroups.map((g) => (
+                  <option key={g[0]} value={g[0]}>
+                    🚩 {g[0]} ({g[1].length} {g[1].length === 1 ? "passenger" : "passengers"})
+                  </option>
+                ))}
+                {tripGroups.length === 0 && <option value="">No departures currently found</option>}
+              </select>
+              
+              {selectedTripGroup ? (
+                <div className="p-3.5 bg-amber-50/60 border border-amber-200/60 rounded-xl flex items-center justify-between text-xs font-semibold text-amber-900">
+                  <span>Selected Roster Ready</span>
+                  <span className="font-extrabold bg-amber-200/80 text-amber-900 px-2 py-0.5 rounded text-[11px]">
+                    {tripGroups.find(g => g[0] === selectedTripGroup)?.[1].length || 0} Travelers
+                  </span>
+                </div>
+              ) : (
+                <div className="p-3.5 bg-slate-50 text-slate-400 border border-slate-200 rounded-xl text-xs text-center font-medium">
+                  Please select a departure above
+                </div>
+              )}
+            </div>
+          </div>
+
+          <button
+            onClick={exportSpecificTrip}
+            disabled={!selectedTripGroup || isExporting === "trip"}
+            className="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3.5 px-6 rounded-2xl flex items-center justify-center gap-2.5 transition-all shadow-lg shadow-amber-600/20 disabled:opacity-50 disabled:cursor-not-allowed mt-auto cursor-pointer text-sm active:scale-[0.99]"
+          >
+            {isExporting === "trip" ? (
+              <>
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <span>Exporting Roster...</span>
+              </>
+            ) : (
+              <>
+                <FileSpreadsheet className="w-5 h-5 text-white" />
+                <span>Download Departure Roster</span>
+              </>
+            )}
+          </button>
+        </div>
+
       </div>
     </div>
   );
