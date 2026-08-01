@@ -1730,7 +1730,7 @@ function AdminPage() {
           ) : activeTab === "reports" ? (
             <ReportsView bookings={bookings} />
           ) : activeTab === "invoices" ? (
-            <InvoicesView bookings={bookings} token={token} loadData={loadData} />
+            <InvoicesView bookings={bookings} token={token} loadData={loadData} getBookingRate={getBookingRate} />
           ) : activeTab === "revenue" ? (
             <RevenueView bookings={bookings} />
           ) : activeTab === "whatsapp" ? (
@@ -4332,10 +4332,12 @@ function InvoicesView({
   bookings,
   token,
   loadData,
+  getBookingRate,
 }: {
   bookings: any[];
   token: string | null;
   loadData: (t?: string) => Promise<void>;
+  getBookingRate: (bk: any) => number;
 }) {
   const [selectedBookingId, setSelectedBookingId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
