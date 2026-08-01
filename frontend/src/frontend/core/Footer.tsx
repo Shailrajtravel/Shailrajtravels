@@ -63,7 +63,9 @@ export function FooterSection({ t, lang = "en" }: { t: typeof translations.mr; l
               <div className="flex items-center gap-4">
                 {/* Facebook */}
                 <a
-                  href="#"
+                  href="https://www.facebook.com/share/1E2RUhpSAf/?mibextid=wwXIfr"
+                  target="_blank"
+                  rel="noreferrer"
                   aria-label="Facebook"
                   className="w-10 h-10 rounded-full bg-[#3B5998] flex items-center justify-center text-white hover:scale-110 hover:-translate-y-1 transition-all duration-300 shadow-md shadow-[#3B5998]/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a192f] cursor-pointer"
                 >
