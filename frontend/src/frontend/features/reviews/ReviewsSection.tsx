@@ -159,21 +159,21 @@ export function ReviewsSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
           </div>
         </div>
 
-        {/* Full-Width SociableKit Widget Layout */}
-        <div className="w-full bg-white border border-slate-200/80 rounded-[32px] p-4 md:p-8 shadow-2xl shadow-slate-200/40 overflow-hidden">
+        {/* Compact SociableKit Carousel Layout without redundant outer box spacing */}
+        <div className="w-full max-w-6xl mx-auto overflow-hidden rounded-[24px] shadow-lg shadow-slate-200/50 border border-slate-200/60 bg-white">
           <iframe
             src="https://widgets.sociablekit.com/google-reviews/iframe/25701887"
             width="100%"
-            height="850"
+            height="480"
             frameBorder="0"
             title="Shailraj Travels Google Reviews"
-            className="w-full rounded-2xl border-none shadow-none transition-all duration-300"
-            style={{ width: '100%', border: 'none', overflow: 'hidden', minHeight: '850px' }}
+            className="w-full border-none block"
+            style={{ width: '100%', border: 'none', height: '480px', overflow: 'hidden' }}
           />
           
-          <div className="flex justify-center pt-6 border-t border-slate-100 text-xs font-bold text-slate-400 select-none">
+          <div className="flex justify-center py-3 border-t border-slate-100 bg-slate-50/50 text-xs font-bold text-slate-500 select-none">
             <span>
-              {lang === "mr" ? "गुगल बिझनेस प्रोफाइल वरून थेट आणि स्वयंचलित प्रसारित" : "Live synchronization via Google Business Profile Ecosystem"}
+              {lang === "mr" ? "गुगल बिझनेस प्रोफाइल वरून थेट प्रमाणित प्रतिक्रिया" : "Live synchronization via Google Business Profile Ecosystem"}
             </span>
           </div>
         </div>
