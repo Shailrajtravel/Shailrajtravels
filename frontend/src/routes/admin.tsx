@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import * as XLSXStyleMod from 'xlsx-js-style/dist/xlsx.bundle.js';
-const XLSX = (XLSXStyleMod as any).default || XLSXStyleMod;
 import { createFileRoute, useNavigate, redirect } from '@tanstack/react-router';
 import { verifyAdminFn } from '@/backend/infrastructure/auth';
 import {
@@ -3818,7 +3816,7 @@ function CustomersView({ bookings = [] }: { bookings?: any[] }) {
   }
 }
 
-const applyTableStyles = (ws: any) => {
+const applyTableStyles = (XLSX: any, ws: any) => {
   if (!ws["!ref"]) return;
   const range = XLSX.utils.decode_range(ws["!ref"]);
   
@@ -3905,6 +3903,67 @@ const applyTableStyles = (ws: any) => {
   }
 };
 
+const ensureBufferPolyfill = () => {
+  if (typeof globalThis !== 'undefined' && typeof (globalThis as any).Buffer !== 'function') {
+    const BufferPolyfill: any = function (this: any, arg: any, encoding?: string) {
+      if (typeof arg === 'number') {
+        return new Uint8Array(arg);
+      }
+      if (typeof arg === 'string') {
+        const encoder = new globalThis.TextEncoder();
+        return encoder.encode(arg);
+      }
+      if (arg instanceof ArrayBuffer || Array.isArray(arg) || arg instanceof Uint8Array) {
+        return new Uint8Array(arg);
+      }
+      return new Uint8Array(0);
+    };
+    BufferPolyfill.prototype = Object.create(Uint8Array.prototype);
+    BufferPolyfill.prototype.constructor = BufferPolyfill;
+    BufferPolyfill.alloc = (n: number) => new Uint8Array(n);
+    BufferPolyfill.allocUnsafe = (n: number) => new Uint8Array(n);
+    BufferPolyfill.isBuffer = (obj: any) => obj != null && (obj instanceof Uint8Array || Boolean(obj._isBuffer));
+    BufferPolyfill.from = (arg: any, encoding?: string) => new (BufferPolyfill as any)(arg, encoding);
+    BufferPolyfill.concat = (list: Uint8Array[], totalLength?: number) => {
+      if (!totalLength) {
+        totalLength = list.reduce((acc, curr) => acc + (curr ? curr.length : 0), 0);
+      }
+      const result = new Uint8Array(totalLength);
+      let offset = 0;
+      for (const buf of list) {
+        if (buf) {
+          result.set(buf, offset);
+          offset += buf.length;
+        }
+      }
+      return result;
+    };
+
+    (globalThis as any).Buffer = BufferPolyfill;
+    if (typeof window !== 'undefined') {
+      (window as any).Buffer = BufferPolyfill;
+    }
+  }
+};
+
+const getXLSX = async () => {
+  ensureBufferPolyfill();
+  try {
+    const mod = await import('xlsx-js-style/dist/xlsx.bundle.js');
+    return mod.default || mod;
+  } catch (e) {
+    console.warn("Retrying direct xlsx-js-style import", e);
+    try {
+      const mod = await import('xlsx-js-style');
+      return mod.default || mod;
+    } catch (e2) {
+      console.warn("Falling back to standard xlsx library", e2);
+      const mod = await import('xlsx');
+      return mod.default || mod;
+    }
+  }
+};
+
 function ReportsView({ bookings = [] }: { bookings?: any[] }) {
   const [startDate, setStartDate] = React.useState<string>("");
   const [endDate, setEndDate] = React.useState<string>("");
@@ -3914,6 +3973,7 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
   const exportBookings = async () => {
     try {
       setIsExporting("bookings");
+      const XLSX = await getXLSX();
       let targetBookings = bookings || [];
 
       if (dateFilterType === "all") {
@@ -4048,7 +4108,7 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
         ...rows,
       ]);
 
-      applyTableStyles(ws);
+      applyTableStyles(XLSX, ws);
 
       ws["!merges"] = [
         { s: { r: 0, c: 0 }, e: { r: 0, c: headers.length - 1 } },
@@ -4089,6 +4149,7 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
   const exportCustomers = async () => {
     try {
       setIsExporting("customers");
+      const XLSX = await getXLSX();
       const customersMap = new globalThis.Map();
       (bookings || []).forEach((bk) => {
         if (!bk) return;
@@ -4162,7 +4223,7 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
         ...rows,
       ]);
 
-      applyTableStyles(ws);
+      applyTableStyles(XLSX, ws);
 
       ws["!merges"] = [
         { s: { r: 0, c: 0 }, e: { r: 0, c: headers.length - 1 } },
@@ -4217,6 +4278,7 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
     if (!selectedTripGroup) return;
     try {
       setIsExporting("trip");
+      const XLSX = await getXLSX();
       const group = tripGroups.find((g) => g[0] === selectedTripGroup);
       if (!group) return;
 
@@ -4271,7 +4333,7 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
         ...rows,
       ]);
 
-      applyTableStyles(ws);
+      applyTableStyles(XLSX, ws);
 
       ws["!merges"] = [
         { s: { r: 0, c: 0 }, e: { r: 0, c: headers.length - 1 } },
