@@ -233,6 +233,8 @@ function AdminPage() {
     type: "package" | "review" | "photo" | "trip" | "booking" | "tour" | "blog";
   } | null>(null);
   const [bookingSearch, setBookingSearch] = useState("");
+  const [bookingDateFilter, setBookingDateFilter] = useState<"all" | "today" | "7days" | "30days" | "custom">("all");
+  const [customDateRange, setCustomDateRange] = useState<{ start: string; end: string }>({ start: "", end: "" });
   const [replyModal, setReplyModal] = useState<{isOpen: boolean, booking: any}>({isOpen: false, booking: null});
   const [replyMessage, setReplyMessage] = useState("");
   const [replying, setReplying] = useState(false);
@@ -454,6 +456,41 @@ function AdminPage() {
   };
 
   const filteredBookings = bookings.filter((bk) => {
+    if (bookingDateFilter !== "all") {
+      const created = bk.createdAt ? new Date(bk.createdAt) : null;
+      const travel = bk.travelDate ? new Date(bk.travelDate) : null;
+
+      const checkDate = (d: Date | null) => {
+        if (!d || isNaN(d.getTime())) return false;
+        const now = new Date();
+        if (bookingDateFilter === "today") {
+          return d.toDateString() === now.toDateString();
+        } else if (bookingDateFilter === "7days") {
+          const diffDays = Math.abs(now.getTime() - d.getTime()) / (1000 * 60 * 60 * 24);
+          return diffDays <= 7;
+        } else if (bookingDateFilter === "30days") {
+          const diffDays = Math.abs(now.getTime() - d.getTime()) / (1000 * 60 * 60 * 24);
+          return diffDays <= 30;
+        } else if (bookingDateFilter === "custom") {
+          if (!customDateRange.start && !customDateRange.end) return true;
+          const startTime = customDateRange.start ? new Date(customDateRange.start) : null;
+          if (startTime) startTime.setHours(0, 0, 0, 0);
+          const endTime = customDateRange.end ? new Date(customDateRange.end) : null;
+          if (endTime) endTime.setHours(23, 59, 59, 999);
+          
+          const time = d.getTime();
+          const startValid = !startTime || (!isNaN(startTime.getTime()) && time >= startTime.getTime());
+          const endValid = !endTime || (!isNaN(endTime.getTime()) && time <= endTime.getTime());
+          return startValid && endValid;
+        }
+        return true;
+      };
+
+      if (!checkDate(created) && !checkDate(travel)) {
+        return false;
+      }
+    }
+
     const query = bookingSearch.toLowerCase().trim();
     if (!query) return true;
 
@@ -1225,49 +1262,115 @@ function AdminPage() {
             )
           ) : activeTab === "bookings" ? (
             <div className="flex flex-col gap-6 animate-reveal">
-              {/* Search Bar */}
-              <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center gap-4">
-                <div className="relative flex-1">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                  <input
-                    type="text"
-                    placeholder="Search bookings by customer, phone, booking ID, destination, etc..."
-                    value={bookingSearch}
-                    onChange={(e) => setBookingSearch(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-blue-deep/20 focus:border-brand-blue-deep transition-all text-sm font-medium"
-                  />
-                  {bookingSearch && (
-                    <button
-                      onClick={() => setBookingSearch("")}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 font-bold"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
-                  )}
+              {/* Search and Date Filters */}
+              <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col gap-4">
+                <div className="flex flex-col md:flex-row md:items-center gap-4">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                    <input
+                      type="text"
+                      placeholder="Search bookings by customer, phone, booking ID, destination, etc..."
+                      value={bookingSearch}
+                      onChange={(e) => setBookingSearch(e.target.value)}
+                      className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-blue-deep/20 focus:border-brand-blue-deep transition-all text-sm font-medium"
+                    />
+                    {bookingSearch && (
+                      <button
+                        onClick={() => setBookingSearch("")}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 font-bold"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+                  <button
+                    onClick={async () => {
+                      try {
+                        const res = await getWhatsAppTemplatesFn({ data: { adminToken: token } });
+                        setTemplateModal({
+                          isOpen: true,
+                          activeTab: "confirmed",
+                          confirmed: res?.confirmed || "",
+                          cancelled: res?.cancelled || "",
+                          payment: res?.payment || "",
+                          invoicePdf: res?.invoicePdf || "",
+                          loading: false,
+                          saving: false,
+                        });
+                      } catch (e) {
+                        alert("Failed to load templates");
+                      }
+                    }}
+                    className="flex items-center gap-2 px-4 py-3 bg-brand-blue/10 text-brand-blue-deep hover:bg-brand-blue/20 font-bold rounded-xl transition-all text-sm shrink-0 border border-brand-blue/20"
+                  >
+                    <MessageSquare className="w-4 h-4 text-brand-blue" />
+                    Edit WhatsApp Templates
+                  </button>
                 </div>
-                <button
-                  onClick={async () => {
-                    try {
-                      const res = await getWhatsAppTemplatesFn({ data: { adminToken: token } });
-                      setTemplateModal({
-                        isOpen: true,
-                        activeTab: "confirmed",
-                        confirmed: res?.confirmed || "",
-                        cancelled: res?.cancelled || "",
-                        payment: res?.payment || "",
-                        invoicePdf: res?.invoicePdf || "",
-                        loading: false,
-                        saving: false,
-                      });
-                    } catch (e) {
-                      alert("Failed to load templates");
-                    }
-                  }}
-                  className="flex items-center gap-2 px-4 py-3 bg-brand-blue/10 text-brand-blue-deep hover:bg-brand-blue/20 font-bold rounded-xl transition-all text-sm shrink-0 border border-brand-blue/20"
-                >
-                  <MessageSquare className="w-4 h-4 text-brand-blue" />
-                  Edit WhatsApp Templates
-                </button>
+
+                <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mr-1">Date Filter:</span>
+                    {[
+                      { id: "all", label: "All Bookings" },
+                      { id: "today", label: "Today's Bookings" },
+                      { id: "7days", label: "Last 7 Days" },
+                      { id: "30days", label: "1 Month Bookings" },
+                      { id: "custom", label: "📅 Custom Dates" },
+                    ].map((btn) => (
+                      <button
+                        key={btn.id}
+                        type="button"
+                        onClick={() => setBookingDateFilter(btn.id as any)}
+                        className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                          bookingDateFilter === btn.id
+                            ? "bg-brand-blue text-white shadow-md shadow-brand-blue/20 scale-[1.02]"
+                            : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                        }`}
+                      >
+                        {btn.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="text-xs font-bold text-slate-500">
+                    Showing <span className="text-brand-blue-deep font-extrabold">{filteredBookings.length}</span> of {bookings.length} bookings
+                  </div>
+                </div>
+
+                {bookingDateFilter === "custom" && (
+                  <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl flex flex-wrap items-center gap-4 animate-in fade-in duration-200">
+                    <div className="flex items-center gap-2">
+                      <CalendarCheck className="w-4 h-4 text-brand-blue" />
+                      <span className="text-xs font-bold text-slate-700">From Date:</span>
+                      <input
+                        type="date"
+                        value={customDateRange.start}
+                        onChange={(e) => setCustomDateRange(prev => ({ ...prev, start: e.target.value }))}
+                        className="px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-blue"
+                      />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CalendarCheck className="w-4 h-4 text-brand-blue" />
+                      <span className="text-xs font-bold text-slate-700">To Date:</span>
+                      <input
+                        type="date"
+                        value={customDateRange.end}
+                        onChange={(e) => setCustomDateRange(prev => ({ ...prev, end: e.target.value }))}
+                        className="px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 focus:outline-none focus:border-brand-blue"
+                      />
+                    </div>
+                    {(customDateRange.start || customDateRange.end) && (
+                      <button
+                        type="button"
+                        onClick={() => setCustomDateRange({ start: "", end: "" })}
+                        className="text-xs text-red-600 hover:text-red-700 font-bold underline ml-auto"
+                      >
+                        Reset Range
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
 
               <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
