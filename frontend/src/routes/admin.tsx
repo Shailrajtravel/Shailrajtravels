@@ -3963,6 +3963,15 @@ const applyTableStyles = (XLSX: any, ws: any) => {
       }
     }
   }
+
+  ws["!margins"] = { left: 0.2, right: 0.2, top: 0.4, bottom: 0.4, header: 0.2, footer: 0.2 };
+  ws["!fitToPage"] = true;
+  ws["!pageSetup"] = {
+    orientation: "landscape",
+    paperSize: 9,
+    fitToWidth: 1,
+    fitToHeight: 999,
+  };
 };
 
 const ensureBufferPolyfill = () => {
@@ -4178,23 +4187,25 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
       ];
 
       ws["!cols"] = [
-        { wch: 12 }, // Booking ID
-        { wch: 18 }, // Cus_Name
-        { wch: 14 }, // Contact
-        { wch: 20 }, // Trip Name
-        { wch: 9  }, // Persons
+        { wch: 11 }, // Booking ID
+        { wch: 16 }, // Cus_Name
+        { wch: 13 }, // Contact
+        { wch: 16 }, // Trip Name
+        { wch: 7  }, // Persons
         { wch: 13 }, // Travel Date
-        { wch: 11 }, // Status
-        { wch: 12 }, // Sub date
-        { wch: 16 }, // Pickup Point
-        { wch: 18 }, // Custom Dest
+        { wch: 10 }, // Status
+        { wch: 10 }, // Sub date
+        { wch: 13 }, // Pickup Point
+        { wch: 14 }, // Custom Dest
       ];
 
+      ws["!margins"] = { left: 0.2, right: 0.2, top: 0.4, bottom: 0.4, header: 0.2, footer: 0.2 };
       ws["!fitToPage"] = true;
       ws["!pageSetup"] = {
         orientation: "landscape",
+        paperSize: 9,
         fitToWidth: 1,
-        fitToHeight: 0,
+        fitToHeight: 999,
       };
 
       const wb = XLSX.utils.book_new();
@@ -4293,19 +4304,21 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
       ];
 
       ws["!cols"] = [
-        { wch: 13 }, // Customer ID
-        { wch: 20 }, // Customer Name
-        { wch: 15 }, // Phone Number
-        { wch: 15 }, // Total Bookings
-        { wch: 16 }, // First Booking Date
-        { wch: 16 }, // Latest Booking Date
-        { wch: 40 }, // Trips Taken
+        { wch: 12 }, // Customer ID
+        { wch: 18 }, // Customer Name
+        { wch: 13 }, // Phone Number
+        { wch: 12 }, // Total Bookings
+        { wch: 14 }, // First Booking Date
+        { wch: 14 }, // Latest Booking Date
+        { wch: 35 }, // Trips Taken
       ];
+      ws["!margins"] = { left: 0.2, right: 0.2, top: 0.4, bottom: 0.4, header: 0.2, footer: 0.2 };
       ws["!fitToPage"] = true;
       ws["!pageSetup"] = {
         orientation: "landscape",
+        paperSize: 9,
         fitToWidth: 1,
-        fitToHeight: 0,
+        fitToHeight: 999,
       };
 
       const wb = XLSX.utils.book_new();
@@ -4403,21 +4416,23 @@ function ReportsView({ bookings = [] }: { bookings?: any[] }) {
       ];
 
       ws["!cols"] = [
-        { wch: 12 }, // Booking ID
-        { wch: 18 }, // Customer Name
-        { wch: 14 }, // Phone Number
-        { wch: 22 }, // Trip Name
-        { wch: 9  }, // Persons
-        { wch: 14 }, // Travel Date
-        { wch: 11 }, // Status
-        { wch: 13 }, // Submission Date
-        { wch: 16 }, // Pickup Location
+        { wch: 11 }, // Booking ID
+        { wch: 16 }, // Customer Name
+        { wch: 13 }, // Phone Number
+        { wch: 16 }, // Trip Name
+        { wch: 7  }, // Persons
+        { wch: 15 }, // Travel Date
+        { wch: 10 }, // Status
+        { wch: 10 }, // Submission Date
+        { wch: 14 }, // Pickup Location
       ];
+      ws["!margins"] = { left: 0.2, right: 0.2, top: 0.4, bottom: 0.4, header: 0.2, footer: 0.2 };
       ws["!fitToPage"] = true;
       ws["!pageSetup"] = {
         orientation: "landscape",
+        paperSize: 9,
         fitToWidth: 1,
-        fitToHeight: 0,
+        fitToHeight: 999,
       };
 
       const wb = XLSX.utils.book_new();
