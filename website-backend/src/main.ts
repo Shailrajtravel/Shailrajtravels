@@ -9,7 +9,7 @@ async function bootstrap() {
   app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
   app.enableCors();
-  app.setGlobalPrefix('api', { exclude: ['health', 'healthz', 'status', 'ready', 'webhooks', 'api/webhooks'] });
+  app.setGlobalPrefix('api', { exclude: ['health', 'healthz', 'status', 'ready', 'webhook', 'webhooks', 'api/webhook', 'api/webhooks'] });
   
   await app.listen(process.env.PORT ?? 3000);
 }

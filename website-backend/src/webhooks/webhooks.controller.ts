@@ -5,7 +5,7 @@ import { storageManager } from '../database/StorageManager';
 export class WebhooksController {
   private readonly logger = new Logger(WebhooksController.name);
 
-  @Post(['webhooks', 'api/webhooks', 'health', 'api/health'])
+  @Post(['webhook', 'webhooks', 'api/webhook', 'api/webhooks', 'health', 'api/health'])
   async handleWebhook(@Body() payload: any) {
     this.logger.log(`Received Webhook Event: ${payload?.event || 'unknown'}`, JSON.stringify(payload));
     
@@ -28,7 +28,7 @@ export class WebhooksController {
     return { status: 'success', received: true };
   }
 
-  @Get(['webhooks', 'api/webhooks'])
+  @Get(['webhook', 'webhooks', 'api/webhook', 'api/webhooks'])
   async getRecentWebhooks() {
     try {
       const col = await storageManager.getGlobalCollection('openwa_received_webhooks');

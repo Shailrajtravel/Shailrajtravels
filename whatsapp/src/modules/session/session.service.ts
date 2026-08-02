@@ -33,6 +33,7 @@ import { ShailrajApiService } from '../shailraj-api/shailraj-api.service';
 import { EventsGateway } from '../events/events.gateway';
 import { WebhookService } from '../webhook/webhook.service';
 import { HookManager } from '../../core/hooks';
+import { DEFAULT_RULES } from '../bot-rules/bot-rules.controller';
 import {
   deliveryStatusToMessageStatus,
   deliveryStatusToAck,
@@ -752,29 +753,48 @@ export class SessionService implements OnModuleDestroy, OnModuleInit, OnApplicat
               const text = incoming.body.toLowerCase().trim();
               let matchedRule: any = null;
               try {
-                let rulesPath = require('path').resolve(process.cwd(), 'data', 'chatbot-rules.json');
-                if (!require('fs').existsSync(rulesPath)) {
-                  rulesPath = require('path').resolve(process.cwd(), 'chatbot-rules.json');
+                let rulesList: any[] | null = null;
+                if (this.shailrajApiService) {
+                  const mongoRules = await this.shailrajApiService.getOpenWaBotRules();
+                  if (mongoRules && Array.isArray(mongoRules.rules) && mongoRules.rules.length > 0) {
+                    rulesList = mongoRules.rules;
+                  }
+                }
+                if (!rulesList) {
+                  let rulesPath = require('path').resolve(process.cwd(), 'data', 'chatbot-rules.json');
                   if (!require('fs').existsSync(rulesPath)) {
-                    rulesPath = require('path').resolve(process.cwd(), '../chatbot-rules.json');
+                    rulesPath = require('path').resolve(process.cwd(), 'chatbot-rules.json');
+                    if (!require('fs').existsSync(rulesPath)) {
+                      rulesPath = require('path').resolve(process.cwd(), '../chatbot-rules.json');
+                    }
+                  }
+                  if (require('fs').existsSync(rulesPath)) {
+                    const rulesData = JSON.parse(require('fs').readFileSync(rulesPath, 'utf8'));
+                    if (Array.isArray(rulesData.rules) && rulesData.rules.length > 0) {
+                      rulesList = rulesData.rules;
+                    }
                   }
                 }
-                if (require('fs').existsSync(rulesPath)) {
-                  const rulesData = JSON.parse(require('fs').readFileSync(rulesPath, 'utf8'));
-                  if (Array.isArray(rulesData.rules)) {
-                    matchedRule = rulesData.rules.find((rule: any) =>
-                      Array.isArray(rule.keywords) && rule.keywords.some((k: string) => {
-                        const kw = k.trim().toLowerCase();
-                        if (!kw) return false;
-                        if (text === kw) return true;
-                        if (kw === 'hi' && (text === 'hii' || text === 'hiii')) return true;
-                        return false;
-                      })
-                    );
-                  }
+                if (!rulesList) {
+                  rulesList = DEFAULT_RULES;
                 }
+
+                matchedRule = rulesList.find((rule: any) =>
+                  Array.isArray(rule.keywords) && rule.keywords.some((k: string) => {
+                    const kw = k.trim().toLowerCase();
+                    if (!kw) return false;
+                    if (text === kw) return true;
+                    if (text.startsWith(kw + ' ') || text.endsWith(' ' + kw) || text.includes(' ' + kw + ' ')) return true;
+                    if (kw === 'hi' && /^h+i+$/i.test(text)) return true;
+                    if (kw === 'hey' && /^h+e+y+$/i.test(text)) return true;
+                    return false;
+                  })
+                );
               } catch (err) {
                 this.logger.error('Error reading chatbot rules for auto-reply', String(err));
+                if (!matchedRule) {
+                  matchedRule = DEFAULT_RULES[0]; // fallback to welcome message on error
+                }
               }
 
               if (matchedRule && matchedRule.reply) {

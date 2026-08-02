@@ -1,9 +1,10 @@
-import { Controller, Get, Put, Body, InternalServerErrorException } from '@nestjs/common';
+import { Controller, Get, Put, Body, InternalServerErrorException, Optional } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import * as fs from 'fs';
 import * as path from 'path';
 import { RequireRole } from '../auth/decorators/auth.decorators';
 import { ApiKeyRole } from '../auth/entities/api-key.entity';
+import { ShailrajApiService } from '../shailraj-api/shailraj-api.service';
 
 export interface ChatbotRule {
   keywords: string[];
@@ -14,13 +15,13 @@ export interface ChatbotRulesDto {
   rules: ChatbotRule[];
 }
 
-const DEFAULT_RULES: ChatbotRule[] = [
+export const DEFAULT_RULES: ChatbotRule[] = [
   {
-    keywords: ["hi", "hello", "namaste", "start", "menu", "help", "options", "shailraj"],
+    keywords: ["hi", "hii", "hiii", "hiiii", "hey", "heyy", "hello", "namaste", "gm", "good morning", "good evening", "start", "menu", "help", "options", "shailraj"],
     reply: "Namaste! 🙏 Welcome to *Shailraj Travels* - Your Trusted Travel Partner in Pune! 🚗✨\n\nHere is how we can assist you:\n1️⃣ *Book a Cab/Bus* - Reply 'book' or visit https://shailrajtravels.com\n2️⃣ *Tour Packages* - Reply 'packages' or 'tours'\n3️⃣ *Office Address* - Reply 'address'\n4️⃣ *Contact Us* - Reply 'contact'\n\nHow can we help you today?"
   },
   {
-    keywords: ["book", "booking", "cab", "car", "bus", "rental", "hire"],
+    keywords: ["book", "booking", "cab", "car", "bus", "rental", "hire", "taxi"],
     reply: "🚗 *Book Your Ride with Shailraj Travels!*\n\nWe offer Sedan, SUV, Urbania, & Tempo Traveller rentals for outstation & local tours.\n\n👉 Book online directly: https://shailrajtravels.com/bookings\n📞 Or call us directly at +91 9359570497 for instant confirmation!"
   },
   {
@@ -40,6 +41,11 @@ const DEFAULT_RULES: ChatbotRule[] = [
 @ApiTags('bot-rules')
 @Controller('bot-rules')
 export class BotRulesController {
+  constructor(
+    @Optional()
+    private readonly shailrajApiService?: ShailrajApiService,
+  ) {}
+
   private getRulesPath(): string {
     const dataDir = path.resolve(process.cwd(), 'data');
     if (!fs.existsSync(dataDir)) {
@@ -68,19 +74,36 @@ export class BotRulesController {
   @Get()
   @ApiOperation({ summary: 'Get chatbot rules' })
   @ApiResponse({ status: 200, description: 'Current chatbot rules' })
-  getRules(): ChatbotRulesDto {
+  async getRules(): Promise<ChatbotRulesDto> {
     try {
+      if (this.shailrajApiService) {
+        const mongoRules = await this.shailrajApiService.getOpenWaBotRules();
+        if (mongoRules) {
+          try {
+            fs.writeFileSync(this.getRulesPath(), JSON.stringify(mongoRules, null, 2), 'utf8');
+          } catch (e) {}
+          return mongoRules as ChatbotRulesDto;
+        }
+      }
+
       const rulesPath = this.getRulesPath();
       if (fs.existsSync(rulesPath)) {
         const content = fs.readFileSync(rulesPath, 'utf8');
         const data = JSON.parse(content);
         if (Array.isArray(data.rules) && data.rules.length > 0) {
+          if (this.shailrajApiService) {
+            await this.shailrajApiService.saveOpenWaBotRules(data);
+          }
           return data as ChatbotRulesDto;
         }
       }
+
       try {
         fs.writeFileSync(rulesPath, JSON.stringify({ rules: DEFAULT_RULES }, null, 2), 'utf8');
       } catch (e) {}
+      if (this.shailrajApiService) {
+        await this.shailrajApiService.saveOpenWaBotRules({ rules: DEFAULT_RULES });
+      }
       return { rules: DEFAULT_RULES };
     } catch (err) {
       return { rules: DEFAULT_RULES };
@@ -91,10 +114,13 @@ export class BotRulesController {
   @RequireRole(ApiKeyRole.ADMIN)
   @ApiOperation({ summary: 'Update chatbot rules' })
   @ApiResponse({ status: 200, description: 'Rules updated successfully' })
-  updateRules(@Body() dto: ChatbotRulesDto): { success: boolean } {
+  async updateRules(@Body() dto: ChatbotRulesDto): Promise<{ success: boolean }> {
     try {
       const rulesPath = this.getRulesPath();
       fs.writeFileSync(rulesPath, JSON.stringify(dto, null, 2), 'utf8');
+      if (this.shailrajApiService) {
+        await this.shailrajApiService.saveOpenWaBotRules(dto);
+      }
       return { success: true };
     } catch (err) {
       throw new InternalServerErrorException('Failed to write chatbot rules');

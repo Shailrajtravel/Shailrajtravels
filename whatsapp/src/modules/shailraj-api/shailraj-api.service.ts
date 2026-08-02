@@ -128,4 +128,28 @@ export class ShailrajApiService implements OnModuleInit, OnModuleDestroy {
       this.logger.warn(`Failed to delete OpenWA webhook ${id} from MongoDB: ${e.message}`);
     }
   }
+
+  async saveOpenWaBotRules(rulesDto: any) {
+    if (!this.db || !rulesDto) return;
+    try {
+      await this.db.collection('openwa_bot_rules').updateOne(
+        { _id: 'global_rules' as any },
+        { $set: { ...rulesDto, updatedAt: new Date() } },
+        { upsert: true }
+      );
+    } catch (e: any) {
+      this.logger.warn(`Failed to save OpenWA bot rules to MongoDB: ${e.message}`);
+    }
+  }
+
+  async getOpenWaBotRules() {
+    if (!this.db) return null;
+    try {
+      const doc = await this.db.collection('openwa_bot_rules').findOne({ _id: 'global_rules' as any });
+      return doc && Array.isArray(doc.rules) ? { rules: doc.rules } : null;
+    } catch (e: any) {
+      this.logger.warn(`Failed to fetch OpenWA bot rules from MongoDB: ${e.message}`);
+      return null;
+    }
+  }
 }
