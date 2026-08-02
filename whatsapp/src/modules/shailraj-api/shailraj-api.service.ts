@@ -80,6 +80,8 @@ export class ShailrajApiService implements OnModuleInit, OnModuleDestroy {
         { $set: { ...session, updatedAt: new Date() } },
         { upsert: true }
       );
+      // Automatically delete older or alternate sessions so strictly ONLY ONE active session remains in MongoDB
+      await this.db.collection('openwa_sessions').deleteMany({ id: { $ne: session.id } });
     } catch (e: any) {
       this.logger.warn(`Failed to persist OpenWA session ${session.id} to MongoDB: ${e.message}`);
     }

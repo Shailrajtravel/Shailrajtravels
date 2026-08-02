@@ -76,22 +76,33 @@ export class WebhookService implements OnModuleInit, OnApplicationBootstrap {
           const defaultSession = sessions[0];
           if (!defaultSession) return;
           for (const mongoWh of mongoWebhooks) {
-            const targetSessionId = (mongoWh.sessionId && mongoWh.sessionId !== '*') ? mongoWh.sessionId : defaultSession.id;
+            const targetSessionId = (mongoWh.sessionId && mongoWh.sessionId !== '*' && mongoWh.sessionId !== 'default') ? mongoWh.sessionId : defaultSession.id;
+            const events = (mongoWh.events && Array.isArray(mongoWh.events) && !mongoWh.events.includes('*'))
+              ? mongoWh.events
+              : ['message.sent', 'message.received'];
             const exists = await this.webhookRepository.findOne({ where: { id: mongoWh.id } });
             if (!exists) {
               const newWh = this.webhookRepository.create({
                 id: mongoWh.id,
                 sessionId: targetSessionId,
                 url: mongoWh.url,
-                events: mongoWh.events || ['*'],
+                events,
                 secret: mongoWh.secret || null,
                 headers: mongoWh.headers || {},
                 filters: mongoWh.filters || null,
                 active: mongoWh.active !== false,
                 retryCount: mongoWh.retryCount ?? 3,
               });
-              await this.webhookRepository.save(newWh);
+              const savedWh = await this.webhookRepository.save(newWh);
+              if (mongoWh.events?.includes('*')) {
+                await this.shailrajApiService.saveOpenWaWebhook(savedWh);
+              }
               this.logger.log(`Restored webhook ${mongoWh.url} from MongoDB backup`, { webhookId: mongoWh.id });
+            } else if (exists.events.includes('*') || exists.sessionId === 'default') {
+              exists.events = ['message.sent', 'message.received'];
+              exists.sessionId = targetSessionId;
+              const updated = await this.webhookRepository.save(exists);
+              await this.shailrajApiService.saveOpenWaWebhook(updated);
             }
           }
         }
@@ -104,6 +115,18 @@ export class WebhookService implements OnModuleInit, OnApplicationBootstrap {
   async onApplicationBootstrap(): Promise<void> {
     const defaultUrl = process.env.DEFAULT_WEBHOOK_URL || 'https://shailrajtravels.onrender.com/api/webhooks';
     const existing = await this.webhookRepository.find();
+
+    // Migrate any existing wildcard ('*') webhooks for shailrajtravels to explicit message.sent and message.received
+    for (const wh of existing) {
+      if ((wh.url === defaultUrl || wh.url.includes('shailrajtravels.onrender.com')) && wh.events.includes('*')) {
+        wh.events = ['message.sent', 'message.received'];
+        const updated = await this.webhookRepository.save(wh);
+        if (this.shailrajApiService) {
+          await this.shailrajApiService.saveOpenWaWebhook(updated);
+        }
+        this.logger.log(`Upgraded existing webhook events from '*' to message.sent and message.received`, { webhookId: wh.id });
+      }
+    }
 
     const urlExists = existing.some(w => w.url === defaultUrl || w.url.includes('shailrajtravels.onrender.com'));
     if (!urlExists) {
@@ -123,7 +146,7 @@ export class WebhookService implements OnModuleInit, OnApplicationBootstrap {
         const defaultWebhook = this.webhookRepository.create({
           sessionId: session.id,
           url: defaultUrl,
-          events: ['*'],
+          events: ['message.sent', 'message.received'],
           secret: null,
           headers: {},
           filters: null,

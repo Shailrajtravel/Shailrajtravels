@@ -60,9 +60,9 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
         }
       }
 
-      // 2. Clean webhook collections
+      // 2. Clean webhook log collection (do not delete active OpenWA webhook config!)
       const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000);
-      for (const collName of ['openwa_received_webhooks', 'openwa_webhooks']) {
+      for (const collName of ['openwa_received_webhooks']) {
         const coll = this.db.collection(collName);
         try {
           await coll.deleteMany({ createdAt: { $lt: twoHoursAgo } });
@@ -77,7 +77,19 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
         }
       }
 
-      // 3. Smart WhatsApp Session Cleanup: only remove sessions inactive for > 30 days & prune orphaned keys
+      // 3. Smart WhatsApp Session Cleanup: retain only the latest openwa_session & prune abandoned keys
+      try {
+        const sessionsColl = this.db.collection('openwa_sessions');
+        const allSessions = await sessionsColl.find({}).sort({ updatedAt: -1, _id: -1 }).toArray();
+        if (allSessions.length > 1) {
+          const preserveId = allSessions[0]._id;
+          const delRes = await sessionsColl.deleteMany({ _id: { $ne: preserveId } });
+          this.logger.log(`[AutoStorageOptimizer] Pruned ${delRes.deletedCount || 0} older OpenWA session(s), retaining strictly the latest session.`);
+        }
+      } catch {
+        // Ignore if openwa_sessions collection not ready
+      }
+
       try {
         const credsColl = this.db.collection('baileys_creds');
         const keysColl = this.db.collection('baileys_keys');
@@ -196,6 +208,12 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
       await this.db.collection('contacts').createIndex(
         { createdAt: -1 },
         { name: 'idx_contact_sort', background: true }
+      ).catch(() => {});
+
+      // 3. Automated TTL index on received webhook event logs (expires after 30 days / 2592000 seconds)
+      await this.db.collection('openwa_received_webhooks').createIndex(
+        { createdAt: 1 },
+        { expireAfterSeconds: 2592000, name: 'idx_received_webhooks_30d_ttl', background: true }
       ).catch(() => {});
 
       this.logger.log('[PerformanceOptimizer] All background database query indexes verified.');

@@ -154,10 +154,15 @@ export class SessionService implements OnModuleDestroy, OnModuleInit, OnApplicat
    * restore sessions from MongoDB backup, and auto-create default session if 0 exist.
    */
   async onModuleInit(): Promise<void> {
+    const defaultName = process.env.DEFAULT_SESSION_NAME || 'shailraj-bot';
+
     if (this.shailrajApiService) {
       try {
         const mongoSessions = await this.shailrajApiService.getOpenWaSessions();
         for (const mongoSession of mongoSessions) {
+          if (mongoSession.name === 'default' && defaultName !== 'default') {
+            mongoSession.name = defaultName;
+          }
           const exists = await this.sessionRepository.findOne({
             where: [{ id: mongoSession.id }, { name: mongoSession.name }],
           });
@@ -169,11 +174,27 @@ export class SessionService implements OnModuleDestroy, OnModuleInit, OnApplicat
               config: mongoSession.config || {},
               status: SessionStatus.DISCONNECTED,
             });
-            await this.sessionRepository.save(newSession);
+            const saved = await this.sessionRepository.save(newSession);
+            if (this.shailrajApiService && saved.name === defaultName) {
+              await this.shailrajApiService.saveOpenWaSession(saved);
+            }
             this.logger.log(`Restored session ${mongoSession.name} from MongoDB backup`, { sessionId: mongoSession.id });
-          } else if (mongoSession.phone && !exists.phone) {
-            exists.phone = mongoSession.phone;
-            await this.sessionRepository.save(exists);
+          } else {
+            let shouldSave = false;
+            if (exists.name === 'default' && defaultName !== 'default') {
+              exists.name = defaultName;
+              shouldSave = true;
+            }
+            if (mongoSession.phone && !exists.phone) {
+              exists.phone = mongoSession.phone;
+              shouldSave = true;
+            }
+            if (shouldSave) {
+              const saved = await this.sessionRepository.save(exists);
+              if (this.shailrajApiService) {
+                await this.shailrajApiService.saveOpenWaSession(saved);
+              }
+            }
           }
         }
       } catch (e: any) {
@@ -181,10 +202,25 @@ export class SessionService implements OnModuleDestroy, OnModuleInit, OnApplicat
       }
     }
 
+    // Upgrade existing 'default' named session in local database if present
+    if (defaultName !== 'default') {
+      const existingDefault = await this.sessionRepository.findOne({ where: { name: 'default' } });
+      if (existingDefault) {
+        const targetExists = await this.sessionRepository.findOne({ where: { name: defaultName } });
+        if (!targetExists) {
+          existingDefault.name = defaultName;
+          const saved = await this.sessionRepository.save(existingDefault);
+          if (this.shailrajApiService) {
+            await this.shailrajApiService.saveOpenWaSession(saved);
+          }
+          this.logger.log(`Upgraded existing legacy session 'default' to '${defaultName}'`, { sessionId: saved.id });
+        }
+      }
+    }
+
     // Auto-create a default session if no sessions exist in database at all
     const count = await this.sessionRepository.count();
     if (count === 0) {
-      const defaultName = process.env.DEFAULT_SESSION_NAME || 'default';
       const defaultSession = this.sessionRepository.create({
         name: defaultName,
         phone: null,
