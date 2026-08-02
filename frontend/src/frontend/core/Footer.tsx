@@ -292,7 +292,14 @@ export function FooterSection({ t, lang = "en" }: { t: typeof translations.mr; l
           </p>
           <p className="flex items-center gap-1.5">
             {t.footerDesignedBy || "Designed & Developed by"}{" "}
-            <span className="text-slate-300 font-semibold">Axenor Studio</span>
+            <a
+              href="https://www.instagram.com/axenor_studio/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-slate-300 font-semibold hover:text-[#FF5C5C] hover:underline underline-offset-4 transition-colors"
+            >
+              Axenor Studio
+            </a>
           </p>
         </div>
       </div>
