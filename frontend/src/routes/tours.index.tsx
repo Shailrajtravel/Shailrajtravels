@@ -85,20 +85,32 @@ function ToursListingPage() {
     return ["All", ...Array.from(dests)].sort();
   }, [tours]);
 
-  // Filter tours based on search term and selected destination
+  // Filter tours based on smart search term and selected destination
   const filteredTours = useMemo(() => {
     return tours.filter((tour: any) => {
-      const titleMatch = tour.title?.toLowerCase().includes(searchTerm.toLowerCase());
-      const descMatch = tour.heroContent?.description
-        ?.toLowerCase()
-        .includes(searchTerm.toLowerCase());
-      const matchesSearch = titleMatch || descMatch;
-
       const matchesDest =
         selectedDestination === "All" ||
         (tour.destinations && tour.destinations.includes(selectedDestination));
+      if (!matchesDest) return false;
 
-      return matchesSearch && matchesDest;
+      if (!searchTerm.trim()) return true;
+
+      const clean = (s: string) => (s || '').toLowerCase().replace(/[^a-z0-9\s]/g, ' ');
+      const stopWords = new Set(['to', 'from', 'the', 'a', 'an', 'in', 'at', 'by', 'for', 'with', 'and', 'via']);
+      const rawTokens = clean(searchTerm).split(/\s+/).filter(Boolean);
+      const keywords = rawTokens.filter((t) => !stopWords.has(t));
+      const searchTokens = keywords.length > 0 ? keywords : rawTokens;
+
+      const fullSearchText = clean([
+        tour.title,
+        tour.heroContent?.description,
+        ...(tour.destinations || []),
+        ...(tour.highlights || []),
+        tour.metaDescription,
+        tour.overview,
+      ].filter(Boolean).join(' '));
+
+      return searchTokens.every((tok) => fullSearchText.includes(tok));
     });
   }, [tours, searchTerm, selectedDestination]);
 

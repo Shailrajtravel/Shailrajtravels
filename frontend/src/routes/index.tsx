@@ -60,11 +60,13 @@ function HomePage() {
     setBookingTour(tour);
   };
 
+  const allPackages = (dbPackages && dbPackages.length > 0) ? dbPackages : (tours || []);
+
   return (
     <div className="font-sans text-slate-800 bg-white selection:bg-brand-green/20 selection:text-brand-blue-deep overflow-x-hidden">
       <Navbar t={t} />
       <main>
-        <Hero lang={lang} t={t} tripOptions={tripOptions} activeTripId="" />
+        <Hero lang={lang} t={t} tripOptions={tripOptions} packages={allPackages} activeTripId="" />
         <React.Suspense
           fallback={
             <div className="w-full max-w-7xl mx-auto py-16 px-4 md:px-8 animate-pulse space-y-12">

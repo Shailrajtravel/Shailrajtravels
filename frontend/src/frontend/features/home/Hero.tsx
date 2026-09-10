@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Command } from 'cmdk';
 import {
   Search,
@@ -61,14 +61,17 @@ export function Hero({
   lang,
   t,
   tripOptions = [],
+  packages = [],
   activeTripId,
 }: {
   lang: "en" | "mr";
   t: typeof translations.mr;
   tripOptions?: any[];
+  packages?: any[];
   activeTripId?: string;
 }) {
   const [selectedTrip, setSelectedTrip] = useState<string>(tripOptions[0]?._id || "custom");
+  const [customDestinationText, setCustomDestinationText] = useState("");
   const [isCustomDate, setIsCustomDate] = useState(false);
   const [persons, setPersons] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -101,7 +104,23 @@ export function Hero({
     }
   }, [activeTripId]);
 
-  const selectedTripData = tripOptions.find((t) => t._id === selectedTrip);
+  const selectedTripData = useMemo(() => {
+    const fromTrips = tripOptions.find((t) => t._id === selectedTrip);
+    if (fromTrips) return fromTrips;
+    const fromPackages = packages.find((p) => p._id === selectedTrip);
+    if (fromPackages) {
+      return {
+        _id: fromPackages._id,
+        name: fromPackages.title || fromPackages.name,
+        dates: Array.isArray(fromPackages.dates)
+          ? fromPackages.dates
+          : fromPackages.schedule
+          ? [fromPackages.schedule]
+          : [],
+      };
+    }
+    return null;
+  }, [tripOptions, packages, selectedTrip]);
 
   const isUpcomingDate = (dateStr: string): boolean => {
     if (typeof dateStr !== "string") return false;
@@ -304,7 +323,8 @@ export function Hero({
                 if (selectedTripData) {
                   data.tripName = selectedTripData.name;
                 } else if (selectedTrip === "custom") {
-                  data.tripName = "custom";
+                  const customDest = (data.customDestination as string)?.trim() || customDestinationText.trim();
+                  data.tripName = customDest ? `Custom: ${customDest}` : "custom";
                 }
 
                 data.idempotencyKey = generateUUID();
@@ -363,22 +383,31 @@ export function Hero({
                       autoComplete="off"
                       required
                       autoFocus
+                      value={customDestinationText}
+                      onChange={(e) => setCustomDestinationText(e.target.value)}
                       placeholder={t.formCustomPlace}
                       className="w-full bg-transparent text-[15px] font-semibold text-brand-blue-deep placeholder:text-slate-400 placeholder:font-medium focus:outline-none pr-14"
                     />
                     <button
                       type="button"
-                      onClick={() => setSelectedTrip(tripOptions[0]?._id || "")}
+                      onClick={() => {
+                        setSelectedTrip(tripOptions[0]?._id || "");
+                        setCustomDestinationText("");
+                      }}
                       className="absolute right-0 text-slate-400 hover:text-brand-blue text-[12px] font-semibold underline"
                     >
-                      List
+                      Search
                     </button>
                   </div>
                 ) : (
                   <TripSearchCombobox
                     tripOptions={tripOptions}
+                    packages={packages}
                     selectedTrip={selectedTrip}
-                    onSelect={(id) => setSelectedTrip(id)}
+                    onSelect={(id, customText) => {
+                      setSelectedTrip(id);
+                      if (customText) setCustomDestinationText(customText);
+                    }}
                     customLabel={t.tripCustom}
                     placeholder={t.formCustomPlace || "Search trips..."}
                   />
@@ -505,15 +534,17 @@ export function Hero({
 
 /* ─── Smart Trip Search Combobox ────────────────────────────────────── */
 function TripSearchCombobox({
-  tripOptions,
+  tripOptions = [],
+  packages = [],
   selectedTrip,
   onSelect,
   customLabel,
   placeholder,
 }: {
   tripOptions: any[];
+  packages: any[];
   selectedTrip: string;
-  onSelect: (id: string) => void;
+  onSelect: (id: string, customText?: string) => void;
   customLabel: string;
   placeholder: string;
 }) {
@@ -522,7 +553,112 @@ function TripSearchCombobox({
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const selectedName = tripOptions.find((t) => t._id === selectedTrip)?.name || "";
+  // Build a unified searchable list from tripOptions + packages
+  const allItems = React.useMemo(() => {
+    const clean = (s: string) => (s || "").toLowerCase().replace(/[^a-z0-9\s]/g, " ");
+    const items: Array<{
+      id: string;
+      name: string;
+      searchableText: string;
+      type: "trip" | "package";
+      price?: string;
+      duration?: string;
+    }> = [];
+
+    // Daily services / trip options
+    for (const trip of tripOptions) {
+      const parts = [
+        trip.name,
+        trip.schedule,
+        ...(trip.route || []),
+        ...(trip.includes || []),
+        "daily",
+        "service",
+        "services",
+        "bus",
+        "ac",
+      ].filter(Boolean);
+      items.push({
+        id: trip._id,
+        name: trip.name,
+        searchableText: clean(parts.join(" ")),
+        type: "trip",
+        price: trip.price,
+        duration: trip.schedule || "Daily",
+      });
+    }
+
+    // Tour packages
+    for (const pkg of packages) {
+      const parts = [
+        pkg.title || pkg.name,
+        pkg.location,
+        pkg.frequency,
+        pkg.subtitle,
+        pkg.durationBadge,
+        ...(pkg.route || []),
+        ...(pkg.tags || []),
+        ...(pkg.destinations || []),
+        "tour",
+        "tours",
+        "package",
+        "packages",
+        "darshan",
+        "spiritual",
+        "jyotirlinga",
+      ].filter(Boolean);
+      items.push({
+        id: pkg._id,
+        name: pkg.title || pkg.name,
+        searchableText: clean(parts.join(" ")),
+        type: "package",
+        price: pkg.price,
+        duration: pkg.durationBadge || pkg.subtitle || pkg.frequency,
+      });
+    }
+
+    return items;
+  }, [tripOptions, packages]);
+
+  // Tokenized smart matching:
+  // e.g. "pune to ujjain" -> keywords ["pune", "ujjain"] -> matches items containing both!
+  // "ujjain" -> matches any tour containing Ujjain (Satara-Ujjain, Pune-Ujjain, etc.)
+  // "satara to ujjain" -> matches Satara-Ujjain
+  // "tours" / "tour" -> matches all tour packages
+  // "daily" -> matches all daily services
+  const filteredItems = React.useMemo(() => {
+    if (!search || !search.trim()) {
+      return allItems;
+    }
+
+    const clean = (s: string) => (s || "").toLowerCase().replace(/[^a-z0-9\s]/g, " ");
+    const stopWords = new Set(["to", "from", "the", "a", "an", "in", "at", "by", "for", "with", "and", "via", "trip", "trips"]);
+    const rawTokens = clean(search).split(/\s+/).filter(Boolean);
+    const keywords = rawTokens.filter((t) => !stopWords.has(t));
+    const searchTokens = keywords.length > 0 ? keywords : rawTokens;
+
+    return allItems
+      .map((item) => {
+        const matchesAll = searchTokens.every((tok) => item.searchableText.includes(tok));
+        if (!matchesAll) return null;
+
+        let score = 0;
+        const cleanName = clean(item.name);
+        const cleanSearch = clean(search);
+        if (cleanName === cleanSearch) score += 200;
+        else if (cleanName.includes(cleanSearch)) score += 100;
+        if (searchTokens.every((tok) => cleanName.includes(tok))) score += 50;
+        score += searchTokens.length * 10;
+
+        return { item, score };
+      })
+      .filter((x): x is { item: typeof allItems[0]; score: number } => x !== null)
+      .sort((a, b) => b.score - a.score)
+      .map((x) => x.item);
+  }, [allItems, search]);
+
+  const selectedItem = allItems.find((item) => item.id === selectedTrip);
+  const selectedName = selectedItem?.name || "";
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -543,18 +679,21 @@ function TripSearchCombobox({
       setOpen(false);
       inputRef.current?.blur();
     }
-    // Prevent form submission on Enter inside combobox
     if (e.key === "Enter" && open) {
       e.preventDefault();
       e.stopPropagation();
     }
   }, [open]);
 
-  const handleSelect = (id: string) => {
-    onSelect(id);
+  const handleSelect = (id: string, customText?: string) => {
+    onSelect(id, customText);
     setSearch("");
     setOpen(false);
   };
+
+  // Separate items by type for grouped display
+  const tripItems = filteredItems.filter((i) => i.type === "trip");
+  const packageItems = filteredItems.filter((i) => i.type === "package");
 
   return (
     <div ref={containerRef} className="relative w-full" onKeyDown={handleKeyDown}>
@@ -603,49 +742,102 @@ function TripSearchCombobox({
         <div className="absolute left-[-56px] md:left-[-60px] right-0 top-[calc(100%+12px)] z-[100] w-[calc(100%+56px)] md:w-[calc(100%+60px)] animate-in fade-in slide-in-from-top-2 duration-200">
           <Command
             className="rounded-2xl border border-slate-200/80 bg-white shadow-xl overflow-hidden"
-            shouldFilter={true}
+            shouldFilter={false}
           >
             <div className="sr-only">
               <Command.Input value={search} onValueChange={setSearch} />
             </div>
-            <Command.List className="max-h-[240px] overflow-y-auto overscroll-contain py-1.5">
-              <Command.Empty className="px-4 py-6 text-center text-[14px] text-slate-400">
-                <div className="flex flex-col items-center gap-2">
-                  <Search className="h-5 w-5 text-slate-300" />
-                  <span>No trips found for "<strong className="text-brand-blue-deep">{search}</strong>"</span>
-                  <button
-                    type="button"
-                    onClick={() => handleSelect("custom")}
-                    className="mt-1 text-[13px] text-brand-green-dark font-bold hover:underline"
-                  >
-                    + Add custom destination
-                  </button>
-                </div>
-              </Command.Empty>
-
-              {tripOptions.map((trip) => (
-                <Command.Item
-                  key={trip._id}
-                  value={trip.name}
-                  onSelect={() => handleSelect(trip._id)}
-                  className="group/item flex items-center gap-3 px-4 py-2.5 cursor-pointer text-[14px] text-brand-blue-deep transition-colors hover:bg-brand-mist data-[selected=true]:bg-brand-mist"
-                >
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-brand-green/10 text-brand-green-dark transition-colors group-hover/item:bg-brand-green/20">
-                    <MapPin className="h-3.5 w-3.5" />
-                  </span>
-                  <span className="flex-1 truncate font-semibold">{trip.name}</span>
-                  {trip._id === selectedTrip && (
-                    <span className="ml-auto text-brand-green">
-                      <ShieldCheck className="h-4 w-4" />
+            <Command.List className="max-h-[320px] overflow-y-auto overscroll-contain py-1">
+              {filteredItems.length === 0 ? (
+                <div className="px-4 py-6 text-center text-[14px] text-slate-400">
+                  <div className="flex flex-col items-center gap-2">
+                    <Search className="h-5 w-5 text-slate-300" />
+                    <span>
+                      No trips found for "<strong className="text-brand-blue-deep">{search}</strong>"
                     </span>
+                    <button
+                      type="button"
+                      onClick={() => handleSelect("custom", search)}
+                      className="mt-1 text-[13px] text-brand-green-dark font-bold hover:underline"
+                    >
+                      + Book custom trip: "{search}"
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {/* Daily Services group */}
+                  {tripItems.length > 0 && (
+                    <Command.Group
+                      heading="Daily Services"
+                      className="[&_[cmdk-group-heading]]:px-4 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-[11px] [&_[cmdk-group-heading]]:font-bold [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-wider [&_[cmdk-group-heading]]:text-slate-400"
+                    >
+                      {tripItems.map((item) => (
+                        <Command.Item
+                          key={item.id}
+                          value={item.id}
+                          onSelect={() => handleSelect(item.id)}
+                          className="group/item flex items-center gap-3 px-4 py-2.5 cursor-pointer text-[14px] text-brand-blue-deep transition-colors hover:bg-brand-mist data-[selected=true]:bg-brand-mist"
+                        >
+                          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-brand-green/10 text-brand-green-dark transition-colors group-hover/item:bg-brand-green/20">
+                            <MapPin className="h-3.5 w-3.5" />
+                          </span>
+                          <div className="flex-1 min-w-0">
+                            <span className="block truncate font-semibold">{item.name}</span>
+                            {item.price && (
+                              <span className="block text-[11px] text-slate-400 font-medium">{item.price}</span>
+                            )}
+                          </div>
+                          {item.id === selectedTrip && (
+                            <span className="ml-auto text-brand-green">
+                              <ShieldCheck className="h-4 w-4" />
+                            </span>
+                          )}
+                        </Command.Item>
+                      ))}
+                    </Command.Group>
                   )}
-                </Command.Item>
-              ))}
+
+                  {/* Tour Packages group */}
+                  {packageItems.length > 0 && (
+                    <Command.Group
+                      heading="Tour Packages"
+                      className="[&_[cmdk-group-heading]]:px-4 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-[11px] [&_[cmdk-group-heading]]:font-bold [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-wider [&_[cmdk-group-heading]]:text-slate-400"
+                    >
+                      {packageItems.map((item) => (
+                        <Command.Item
+                          key={item.id}
+                          value={item.id}
+                          onSelect={() => handleSelect(item.id)}
+                          className="group/item flex items-center gap-3 px-4 py-2 cursor-pointer text-[14px] text-brand-blue-deep transition-colors hover:bg-brand-mist data-[selected=true]:bg-brand-mist"
+                        >
+                          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-brand-blue/10 text-brand-blue transition-colors group-hover/item:bg-brand-blue/20">
+                            <Compass className="h-3.5 w-3.5" />
+                          </span>
+                          <div className="flex-1 min-w-0">
+                            <span className="block truncate font-semibold text-[13px]">{item.name}</span>
+                            {(item.duration || item.price) && (
+                              <span className="block text-[11px] text-slate-400 font-medium">
+                                {[item.duration, item.price].filter(Boolean).join(" · ")}
+                              </span>
+                            )}
+                          </div>
+                          {item.id === selectedTrip && (
+                            <span className="ml-auto text-brand-green">
+                              <ShieldCheck className="h-4 w-4" />
+                            </span>
+                          )}
+                        </Command.Item>
+                      ))}
+                    </Command.Group>
+                  )}
+                </>
+              )}
 
               {/* Custom trip option - always at the bottom */}
               <Command.Item
-                value={`${customLabel} custom destination your trip`}
-                onSelect={() => handleSelect("custom")}
+                value="custom-trip-bottom-option"
+                onSelect={() => handleSelect("custom", search)}
                 className="group/item flex items-center gap-3 px-4 py-2.5 cursor-pointer text-[14px] border-t border-slate-100 text-slate-500 transition-colors hover:bg-brand-orange/5 data-[selected=true]:bg-brand-orange/5"
               >
                 <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-brand-orange/10 text-brand-orange transition-colors group-hover/item:bg-brand-orange/20">

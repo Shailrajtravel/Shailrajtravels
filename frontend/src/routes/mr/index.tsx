@@ -65,11 +65,13 @@ function MarathiHomePage() {
     setBookingTour(tour);
   };
 
+  const allPackages = (dbPackages && dbPackages.length > 0) ? dbPackages : (tours || []);
+
   return (
     <div className="font-sans text-slate-800 bg-white selection:bg-brand-green/20 selection:text-brand-blue-deep overflow-x-hidden">
       <Navbar t={t} />
       <main>
-        <Hero lang={lang} t={t} tripOptions={tripOptions} activeTripId="" />
+        <Hero lang={lang} t={t} tripOptions={tripOptions} packages={allPackages} activeTripId="" />
         <React.Suspense fallback={<div className="h-64 w-full flex items-center justify-center bg-brand-mist/20 animate-pulse"></div>}>
           <AboutSection lang={lang} t={t} />
           <FeaturesSection lang={lang} t={t} />
