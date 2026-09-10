@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Plus, Minus } from 'lucide-react';
+import { LazyImage } from '@/frontend/shared/ui/lazy-image';
 
 export function FaqSection({ lang, t }: { lang: string; t: any }) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -35,13 +36,13 @@ export function FaqSection({ lang, t }: { lang: string; t: any }) {
             
             {/* Vector Illustration */}
             <div className="w-full select-none">
-              <img
+              <LazyImage
                 src="/images/faq_illustration.webp"
                 alt="FAQ Illustration"
                 width={450}
                 height={450}
-                loading="lazy"
-                className="w-full h-auto max-w-[450px] mx-auto object-contain transform hover:scale-102 transition-transform duration-300"
+                containerClassName="w-full h-auto max-w-[450px] mx-auto min-h-[280px] rounded-2xl"
+                className="w-full h-auto object-contain transform hover:scale-102 transition-transform duration-300"
               />
             </div>
           </div>

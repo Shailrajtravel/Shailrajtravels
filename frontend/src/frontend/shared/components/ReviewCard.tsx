@@ -1,6 +1,7 @@
 import React from 'react';
 import { Review } from '@/frontend/shared/types/review';
 import { Star, ShieldCheck, MapPin } from 'lucide-react';
+import { LazyImage } from '@/frontend/shared/ui/lazy-image';
 
 interface ReviewCardProps {
   review: Review;
@@ -31,13 +32,18 @@ export const ReviewCard: React.FC<ReviewCardProps> = ({ review, className = "" }
 
       <div className="border-t border-slate-100 pt-4 flex items-center gap-3">
         {review.photoUrl ? (
-          <img
+          <LazyImage
             src={review.photoUrl}
             alt={review.customerName}
-            className="w-10 h-10 rounded-full object-cover"
+            width={40}
+            height={40}
+            optimizedWidth={100}
+            containerClassName="w-10 h-10 rounded-full overflow-hidden shrink-0"
+            skeletonClassName="rounded-full"
+            className="w-full h-full object-cover"
           />
         ) : (
-          <div className="w-10 h-10 rounded-full bg-brand-blue/10 flex items-center justify-center text-brand-blue font-bold text-sm">
+          <div className="w-10 h-10 rounded-full bg-brand-blue/10 flex items-center justify-center text-brand-blue font-bold text-sm shrink-0">
             {review.customerName.charAt(0)}
           </div>
         )}

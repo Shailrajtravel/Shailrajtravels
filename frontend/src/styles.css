@@ -112,8 +112,15 @@
 
 @utility animate-float-leaf { animation: float-leaf 15s ease-in-out infinite; }
 @utility animate-float-feather { animation: float-feather 9s ease-in-out infinite; }
-@utility animate-hero-zoom { animation: hero-zoom 1.8s ease-out both; }
-@utility animate-reveal { animation: reveal-up 0.9s cubic-bezier(.2,.7,.2,1) both; }
+@utility animate-hero-zoom {
+  animation: hero-zoom 1.8s ease-out both;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+@utility animate-reveal {
+  animation: reveal-up 0.9s cubic-bezier(.2,.7,.2,1) both;
+  will-change: transform, opacity;
+}
 
 @utility btn-cta {
   background-image: var(--gradient-cta);

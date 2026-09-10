@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { Star, CheckCircle2, Sparkles, Loader2, Wand2, MessageSquare, X, Check, ArrowRight } from 'lucide-react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { addReviewFn } from '@/backend/features/reviews';
+import { Skeleton } from '@/frontend/shared/ui/skeleton';
+import { cn } from '@/backend/shared/utils';
 
 export function ReviewsSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
   const [rating, setRating] = useState(5);
@@ -14,8 +16,36 @@ export function ReviewsSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
 
+  // Lazy-load SociableKit iframe to prevent blocking main thread
+  const [shouldLoadIframe, setShouldLoadIframe] = useState(false);
+  const [iframeLoaded, setIframeLoaded] = useState(false);
+  const iframeContainerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
+      setShouldLoadIframe(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setShouldLoadIframe(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '400px' }
+    );
+
+    if (iframeContainerRef.current) {
+      observer.observe(iframeContainerRef.current);
+    }
+
+    return () => observer.disconnect();
   }, []);
 
   const handleRefine = async () => {
@@ -160,16 +190,65 @@ export function ReviewsSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
         </div>
 
         {/* Live Synchronized SociableKit Widget Container */}
-        <div className="w-full max-w-6xl mx-auto overflow-hidden rounded-[24px] shadow-lg shadow-slate-200/50 border border-slate-200/60 bg-white">
-          <iframe
-            src="https://widgets.sociablekit.com/google-reviews/iframe/25701887"
-            width="100%"
-            height="450"
-            frameBorder="0"
-            title="Shailraj Travels Live Google Reviews"
-            className="w-full border-none block"
-            style={{ width: '100%', border: 'none', minHeight: '360px', height: '450px', overflow: 'hidden' }}
-          />
+        <div
+          ref={iframeContainerRef}
+          className="w-full max-w-6xl mx-auto overflow-hidden rounded-[24px] shadow-lg shadow-slate-200/50 border border-slate-200/60 bg-white relative min-h-[450px]"
+        >
+          {/* Skeleton while iframe is loading or deferred */}
+          {!iframeLoaded && (
+            <div className="w-full p-8 flex flex-col justify-between min-h-[450px] bg-slate-50/50 animate-pulse">
+              <div className="flex items-center justify-between pb-6 border-b border-slate-100">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-slate-200" />
+                  <div className="flex flex-col gap-2">
+                    <Skeleton className="h-4 w-36 bg-slate-200" />
+                    <Skeleton className="h-3 w-24 bg-slate-100" />
+                  </div>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Skeleton className="h-6 w-28 rounded-full bg-amber-100" />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-auto">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="p-5 bg-white rounded-2xl border border-slate-100 shadow-sm flex flex-col gap-3">
+                    <div className="flex items-center gap-3">
+                      <Skeleton className="w-10 h-10 rounded-full bg-slate-200 shrink-0" />
+                      <div className="flex flex-col gap-1.5 flex-1">
+                        <Skeleton className="h-3.5 w-24 bg-slate-200" />
+                        <Skeleton className="h-2.5 w-16 bg-slate-100" />
+                      </div>
+                    </div>
+                    <Skeleton className="h-3 w-20 bg-amber-100 rounded" />
+                    <Skeleton className="h-3 w-full bg-slate-100 rounded" />
+                    <Skeleton className="h-3 w-4/5 bg-slate-100 rounded" />
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex items-center justify-center pt-4">
+                <Skeleton className="h-3 w-64 bg-slate-200" />
+              </div>
+            </div>
+          )}
+
+          {shouldLoadIframe && (
+            <iframe
+              src="https://widgets.sociablekit.com/google-reviews/iframe/25701887"
+              width="100%"
+              height="450"
+              frameBorder="0"
+              loading="lazy"
+              title="Shailraj Travels Live Google Reviews"
+              className={cn(
+                "w-full border-none block transition-opacity duration-500",
+                iframeLoaded ? "opacity-100" : "opacity-0 absolute inset-0 pointer-events-none"
+              )}
+              style={{ width: '100%', border: 'none', minHeight: '360px', height: '450px', overflow: 'hidden' }}
+              onLoad={() => setIframeLoaded(true)}
+            />
+          )}
           
           <div className="flex justify-center py-3 border-t border-slate-100 bg-slate-50/50 text-xs font-bold text-slate-500 select-none">
             <span>

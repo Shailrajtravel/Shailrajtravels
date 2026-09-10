@@ -16,12 +16,14 @@ const GallerySection = React.lazy(() => import('@/frontend/features/gallery/Gall
 const BookingModal = React.lazy(() => import('@/frontend/features/tours/BookingModal').then(m => ({ default: m.BookingModal })));
 
 import { getPackagesFn } from '@/backend/features/packages';
+import { HomeSkeleton } from '@/frontend/shared/ui/HomeSkeleton';
 
 export const Route = createFileRoute("/")({
   validateSearch: (search: Record<string, unknown>): { lang?: string } => ({
     lang: search.lang as string | undefined,
   }),
   loaderDeps: ({ search: { lang } }) => ({ lang }),
+  pendingComponent: HomeSkeleton,
   component: HomePage,
   loader: async ({ deps: { lang } }) => {
     try {
@@ -63,7 +65,17 @@ function HomePage() {
       <Navbar t={t} />
       <main>
         <Hero lang={lang} t={t} tripOptions={tripOptions} activeTripId="" />
-        <React.Suspense fallback={<div className="h-64 w-full flex items-center justify-center bg-brand-mist/20 animate-pulse"></div>}>
+        <React.Suspense
+          fallback={
+            <div className="w-full max-w-7xl mx-auto py-16 px-4 md:px-8 animate-pulse space-y-12">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="h-96 rounded-3xl bg-slate-100 border border-slate-200/60" />
+                ))}
+              </div>
+            </div>
+          }
+        >
           <AboutSection lang={lang} t={t} />
           <FeaturesSection lang={lang} t={t} />
           <ToursSection

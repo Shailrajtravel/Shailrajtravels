@@ -24,6 +24,7 @@ import {
   generateFAQSchema,
 } from '@/backend/shared/blog-schema';
 import { getCustomBlogBySlugFn } from '@/backend/features/custom-blogs';
+import { LazyImage } from '@/frontend/shared/ui/lazy-image';
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: async ({ params }) => {
@@ -41,6 +42,7 @@ export const Route = createFileRoute("/blog/$slug")({
     if (!post || post.isHidden) throw notFound();
     return { post };
   },
+  pendingComponent: BlogPostSkeleton,
   head: ({ loaderData }) => {
     if (!loaderData) return {};
     const { post } = loaderData;
@@ -173,9 +175,13 @@ function BlogPostPage() {
             {/* Featured Image */}
             {post.featuredImage && (
               <div className="rounded-2xl overflow-hidden mb-12 aspect-[16/9] shadow-inner bg-slate-100">
-                <img
+                <LazyImage
                   src={post.featuredImage}
                   alt={post.title}
+                  width={800}
+                  height={450}
+                  optimizedWidth={900}
+                  containerClassName="w-full h-full"
                   className="w-full h-full object-cover"
                   loading="eager"
                 />
@@ -397,6 +403,39 @@ function BlogPostPage() {
       </main>
 
       <Footer t={t} lang={lang} />
+    </div>
+  );
+}
+
+function BlogPostSkeleton() {
+  return (
+    <div className="w-full bg-[#FAFCFB] min-h-screen">
+      <Navbar t={translations.en} />
+      <main className="pt-28 pb-20">
+        <div className="max-w-[900px] mx-auto px-4 md:px-8 text-center animate-pulse">
+          <div className="h-6 w-28 bg-slate-200 rounded-full mx-auto mb-6" />
+          <div className="h-10 md:h-14 w-4/5 bg-slate-300 rounded-2xl mx-auto mb-6" />
+          <div className="flex items-center justify-center gap-6 mb-12">
+            <div className="h-4 w-28 bg-slate-200 rounded" />
+            <div className="h-4 w-24 bg-slate-200 rounded" />
+          </div>
+        </div>
+        <div className="max-w-[1200px] mx-auto px-4 md:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12">
+          <div className="lg:col-span-8 bg-white rounded-3xl p-6 md:p-12 border border-slate-100 animate-pulse space-y-6">
+            <div className="w-full aspect-[16/9] rounded-2xl bg-slate-200 mb-8" />
+            <div className="h-4 w-full bg-slate-100 rounded" />
+            <div className="h-4 w-full bg-slate-100 rounded" />
+            <div className="h-4 w-3/4 bg-slate-100 rounded" />
+            <div className="h-6 w-1/2 bg-slate-200 rounded mt-6" />
+            <div className="h-4 w-full bg-slate-100 rounded" />
+            <div className="h-4 w-5/6 bg-slate-100 rounded" />
+          </div>
+          <div className="lg:col-span-4 space-y-6">
+            <div className="h-64 rounded-3xl bg-white border border-slate-100 p-6 animate-pulse" />
+          </div>
+        </div>
+      </main>
+      <Footer t={translations.en} lang="en" />
     </div>
   );
 }

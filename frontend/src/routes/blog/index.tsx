@@ -8,6 +8,7 @@ import { translations } from '@/frontend/core/i18n';
 import { Calendar, Clock, User, ChevronRight } from 'lucide-react';
 import { generateBreadcrumbSchema } from '@/backend/shared/blog-schema';
 import { getCustomBlogsFn } from '@/backend/features/custom-blogs';
+import { LazyImage } from '@/frontend/shared/ui/lazy-image';
 
 export const Route = createFileRoute("/blog/")({
   loader: async () => {
@@ -19,6 +20,7 @@ export const Route = createFileRoute("/blog/")({
       return { customBlogs: [] };
     }
   },
+  pendingComponent: BlogListingSkeleton,
   head: () => ({
     meta: generateSEO({
       title: "Spiritual Travel Blog & Pilgrimage Guides | Shailraj Travels",
@@ -45,6 +47,38 @@ export const Route = createFileRoute("/blog/")({
   }),
   component: BlogIndexPage,
 });
+
+function BlogListingSkeleton() {
+  return (
+    <div className="w-full bg-[#FAFCFB] min-h-screen">
+      <Navbar t={translations.en} />
+      <div className="max-w-[1200px] mx-auto px-4 md:px-8 pt-28 pb-16 animate-pulse">
+        <div className="text-center max-w-2xl mx-auto mb-12 space-y-4">
+          <div className="h-6 w-32 bg-slate-200 rounded-full mx-auto" />
+          <div className="h-10 w-72 bg-slate-300 rounded-xl mx-auto" />
+          <div className="h-4 w-96 bg-slate-200 rounded mx-auto" />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="bg-white rounded-2xl h-44 border border-slate-100 p-4 flex gap-4">
+              <div className="w-[150px] sm:w-[180px] h-full rounded-xl bg-slate-200 shrink-0" />
+              <div className="flex-1 flex flex-col justify-between py-2">
+                <div className="space-y-2">
+                  <div className="h-4 w-20 bg-slate-200 rounded" />
+                  <div className="h-5 w-48 bg-slate-300 rounded" />
+                  <div className="h-3 w-full bg-slate-100 rounded" />
+                </div>
+                <div className="h-3 w-24 bg-slate-200 rounded" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <Footer t={translations.en} lang="en" />
+    </div>
+  );
+}
 
 function BlogIndexPage() {
   const lang = "en";
@@ -168,9 +202,13 @@ function BlogIndexPage() {
                     {/* Left: Image */}
                     <div className="w-[150px] sm:w-[220px] h-full relative overflow-hidden bg-slate-100 shrink-0">
                       {post.featuredImage ? (
-                        <img
+                        <LazyImage
                           src={post.featuredImage}
                           alt={post.title}
+                          width={220}
+                          height={150}
+                          optimizedWidth={400}
+                          containerClassName="w-full h-full"
                           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                           loading={idx === 0 ? "eager" : "lazy"}
                         />

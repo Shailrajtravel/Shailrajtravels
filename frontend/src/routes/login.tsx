@@ -4,8 +4,10 @@ import { verifyAdminFn } from '@/backend/infrastructure/auth';
 import { Lock, Mail, Loader2, ArrowRight } from 'lucide-react';
 // @ts-ignore
 import logo from '@/frontend/shared/assets/shailraj-travels-punelogo.png?w=300&format=webp&as=url';
+import { LoginSkeleton } from '@/frontend/shared/ui/LoginSkeleton';
 
 export const Route = createFileRoute("/login")({
+  pendingComponent: LoginSkeleton,
   component: LoginPage,
 });
 
