@@ -151,7 +151,7 @@ export function Hero({
               src={bgMobileWebp}
               alt="Pandharpur temple ghats at golden sunrise"
               className="h-full w-full object-cover object-center animate-hero-zoom"
-              fetchPriority="high"
+              fetchPriority="auto"
               loading="eager"
               width={720}
               height={1080}
