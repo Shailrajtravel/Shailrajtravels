@@ -1,6 +1,11 @@
 const { MongoClient, ObjectId } = require('mongodb');
 
-const uri = process.env.MONGODB_URI || "mongodb+srv://shailrajtravels:shailrajtravels9999@cluster0.5jmdhjm.mongodb.net/shailraj?appName=Cluster0";
+const uris = Array.from(new Set([
+  process.env.MONGO_URI,
+  process.env.MONGODB_URI,
+  "mongodb+srv://shailrajtravels_db_user:jvNZSBTFl3qATVPb@shailraj.bcsrsu2.mongodb.net/shailraj?appName=shailraj",
+  "mongodb+srv://shailrajtravels:shailrajtravels9999@cluster0.5jmdhjm.mongodb.net/shailraj?appName=Cluster0"
+].filter(Boolean)));
 
 // Helper to generate upcoming departure dates
 function generateUpcomingDates(count = 20, intervalDays = 1, startDayOffset = 1) {
@@ -717,11 +722,13 @@ const tourPackages = [
   }
 ];
 
-async function seed() {
-  const client = new MongoClient(uri);
+async function seed(targetUri) {
+  console.log("\n==========================================");
+  console.log("Connecting to:", targetUri.replace(/:([^:@]+)@/, ':****@'));
+  const client = new MongoClient(targetUri);
   try {
     await client.connect();
-    console.log("Connected to MongoDB!");
+    console.log("Connected to MongoDB successfully!");
     const db = client.db('shailraj');
 
     // 1. Clean up old dummy records
@@ -729,6 +736,7 @@ async function seed() {
     await db.collection('trip_options').deleteMany({
       $or: [
         { name: "Pune -Ujjain-Pune" },
+        { name: "ashtavinayak" },
         { name: /test/i }
       ]
     });
@@ -857,8 +865,7 @@ async function seed() {
     const finalPkgs = await db.collection('packages').countDocuments();
     const finalTours = await db.collection('tours').countDocuments();
 
-    console.log("\n==========================================");
-    console.log(`SEEDING COMPLETED SUCCESSFULLY!`);
+    console.log("\nSEEDING COMPLETED FOR TARGET!");
     console.log(`Total Daily Services (trip_options): ${finalTrips}`);
     console.log(`Total Tour Packages (packages): ${finalPkgs}`);
     console.log(`Total Tour Pages (tours): ${finalTours}`);
@@ -871,4 +878,11 @@ async function seed() {
   }
 }
 
-seed();
+async function runAll() {
+  for (const u of uris) {
+    await seed(u);
+  }
+  console.log("\nALL TARGET DATABASES SEEDED SUCCESSFULLY!");
+}
+
+runAll();
