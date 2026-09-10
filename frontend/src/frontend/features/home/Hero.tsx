@@ -100,17 +100,23 @@ export function Hero({
     }
   }, [activeTripId]);
 
+  useEffect(() => {
+    setIsCustomDate(false);
+  }, [selectedTrip]);
+
   const selectedTripData = useMemo(() => {
-    const fromTrips = tripOptions.find((t) => t._id === selectedTrip);
+    const fromTrips = tripOptions.find((t) => t._id === selectedTrip || t.id === selectedTrip);
     if (fromTrips) return fromTrips;
-    const fromPackages = packages.find((p) => p._id === selectedTrip);
+    const fromPackages = packages.find(
+      (p) => p._id === selectedTrip || p.tourId === selectedTrip || p.id === selectedTrip
+    );
     if (fromPackages) {
       return {
         _id: fromPackages._id,
         name: fromPackages.title || fromPackages.name,
-        dates: Array.isArray(fromPackages.dates)
+        dates: Array.isArray(fromPackages.dates) && fromPackages.dates.length > 0
           ? fromPackages.dates
-          : fromPackages.schedule
+          : fromPackages.schedule && !/every|daily|weekly|departures/i.test(fromPackages.schedule)
           ? [fromPackages.schedule]
           : [],
       };
@@ -122,23 +128,30 @@ export function Hero({
     if (typeof dateStr !== "string") return false;
     
     const cleanStr = dateStr.trim();
+    if (!cleanStr || /flexible|custom|on request|daily|weekly|every/i.test(cleanStr)) {
+      return false;
+    }
     
     // Extract year from string if present, otherwise default to current year
     const yearMatch = cleanStr.match(/\b(\d{4})\b/);
     const year = yearMatch ? yearMatch[1] : String(new Date().getFullYear());
     
     // Parse start date from range if it's a range
-    const startPart = cleanStr.split(/\s+to\s+/i)[0].trim();
+    const startPart = cleanStr.split(/\s+(?:to|–|—|-)\s+/i)[0].trim();
     
     // Clean startPart: remove day names (Sun, Mon, etc.) to help parser
     const cleanStart = startPart.replace(/^(Sun|Mon|Tue|Wed|Thu|Fri|Sat)\.?\s+/i, "").trim();
     
-    // If the cleanStart doesn't end with a year, append the extracted year
-    const finalParseString = /\b\d{4}\b/.test(cleanStart) 
-      ? cleanStart 
-      : `${cleanStart} ${year}`;
-      
-    const parsedDate = new Date(finalParseString);
+    const dmyMatch = cleanStart.match(/^(\d{1,2})[/-](\d{1,2})[/-](\d{4})$/);
+    let parsedDate: Date;
+    if (dmyMatch) {
+      parsedDate = new Date(Number(dmyMatch[3]), Number(dmyMatch[2]) - 1, Number(dmyMatch[1]));
+    } else {
+      const finalParseString = /\b\d{4}\b/.test(cleanStart) 
+        ? cleanStart 
+        : `${cleanStart} ${year}`;
+      parsedDate = new Date(finalParseString);
+    }
     
     if (!isNaN(parsedDate.getTime())) {
       const now = new Date();
@@ -146,7 +159,7 @@ export function Hero({
       return parsedDate >= now;
     }
     
-    return true;
+    return false;
   };
 
   const validDates = Array.isArray(selectedTripData?.dates)

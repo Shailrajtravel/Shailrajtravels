@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
 import { useLanguage } from '@/routes/__root';
 import { getReviewsFn } from '@/backend/features/reviews';
@@ -60,7 +60,49 @@ function HomePage() {
     setBookingTour(tour);
   };
 
-  const allPackages = (dbPackages && dbPackages.length > 0) ? dbPackages : (tours || []);
+  const allPackages = useMemo(() => {
+    const tourMap = new Map();
+    for (const tour of tours || []) {
+      if (tour.title) tourMap.set(tour.title.toLowerCase().trim(), tour);
+      if (tour.slug) tourMap.set(tour.slug.toLowerCase().trim(), tour);
+      if (tour._id) tourMap.set(String(tour._id), tour);
+    }
+
+    const merged = (dbPackages || []).map((pkg: any) => {
+      const match =
+        tourMap.get((pkg.title || "").toLowerCase().trim()) ||
+        tourMap.get((pkg.slug || "").toLowerCase().trim()) ||
+        tourMap.get(String(pkg._id));
+
+      const tourDates = match && Array.isArray(match.dates) && match.dates.length > 0 ? match.dates : null;
+      const pkgDates = Array.isArray(pkg.dates) && pkg.dates.length > 0 ? pkg.dates : null;
+
+      return {
+        ...pkg,
+        tourId: match?._id,
+        dates: tourDates || pkgDates || (pkg.schedule && !/every|daily|weekly|departures/i.test(pkg.schedule) ? [pkg.schedule] : []),
+      };
+    });
+
+    const existingTitles = new Set(merged.map((p: any) => (p.title || "").toLowerCase().trim()));
+    for (const tour of tours || []) {
+      const key = (tour.title || "").toLowerCase().trim();
+      if (!existingTitles.has(key)) {
+        merged.push({
+          _id: tour._id,
+          tourId: tour._id,
+          title: tour.title,
+          name: tour.title,
+          slug: tour.slug,
+          dates: Array.isArray(tour.dates) ? tour.dates : [],
+          image: tour.heroContent?.image || "",
+          price: tour.packages?.[0]?.price ? `₹${tour.packages[0].price}` : undefined,
+          ...tour,
+        });
+      }
+    }
+    return merged;
+  }, [dbPackages, tours]);
 
   return (
     <div className="font-sans text-slate-800 bg-white selection:bg-brand-green/20 selection:text-brand-blue-deep overflow-x-hidden">

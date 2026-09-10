@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { tourRepository } from '../repositories/TourRepository';
+import { packageRepository } from '../repositories/PackageRepository';
 import { uploadImageToCloudinary } from '../shared/cloudinary';
 
 // Extracted from frontend bookings.ts
@@ -126,6 +127,23 @@ export class ToursService {
     const updateData = { ...processedData };
     delete updateData._id;
     await tourRepository.updateOne(id, updateData);
+
+    if (updateData.dates && Array.isArray(updateData.dates)) {
+      try {
+        const existingTour = await tourRepository.findById(id);
+        const titleToMatch = updateData.title || existingTour?.title;
+        if (titleToMatch) {
+          const col = await (packageRepository as any).getCollectionForWrite(id);
+          await col.updateMany(
+            { title: titleToMatch },
+            { $set: { dates: updateData.dates } }
+          );
+        }
+      } catch (e: any) {
+        this.logger.warn(`Failed to sync dates to packages: ${e.message}`);
+      }
+    }
+
     return { success: true };
   }
 

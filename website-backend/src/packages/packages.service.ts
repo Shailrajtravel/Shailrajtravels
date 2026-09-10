@@ -27,6 +27,7 @@ export class PackagesService {
         price: p.price,
         itinerary: p.itinerary,
         includes: p.includes,
+        dates: Array.isArray(p.dates) ? p.dates : [],
       }));
     } catch (error) {
       this.logger.error("Failed to fetch packages", error);
