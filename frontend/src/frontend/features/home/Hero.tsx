@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Command } from 'cmdk';
 import {
   Search,
   ChevronDown,
@@ -138,7 +139,7 @@ export function Hero({
     : [];
 
   return (
-    <section className="relative w-full overflow-hidden bg-brand-mist flex flex-col justify-start pt-[104px] pb-5 lg:pt-[136px]">
+    <section className="relative w-full overflow-x-hidden bg-brand-mist flex flex-col justify-start pt-[104px] pb-5 lg:pt-[136px]">
       {/* Background split */}
       <div className="absolute inset-0">
         {/* image right */}
@@ -374,25 +375,13 @@ export function Hero({
                     </button>
                   </div>
                 ) : (
-                  <div className="relative flex items-center w-full">
-                    <select
-                      suppressHydrationWarning
-                      name="trip"
-                      id="hero-trip"
-                      autoComplete="off"
-                      className="w-full appearance-none bg-transparent text-[15px] font-semibold text-brand-blue-deep focus:outline-none cursor-pointer"
-                      value={selectedTrip}
-                      onChange={(e) => setSelectedTrip(e.target.value)}
-                    >
-                      {tripOptions.map((trip) => (
-                        <option key={trip._id} value={trip._id}>
-                          {trip.name}
-                        </option>
-                      ))}
-                      <option value="custom">{t.tripCustom}</option>
-                    </select>
-                    <ChevronDown className="absolute right-0 h-4 w-4 text-slate-400 pointer-events-none" />
-                  </div>
+                  <TripSearchCombobox
+                    tripOptions={tripOptions}
+                    selectedTrip={selectedTrip}
+                    onSelect={(id) => setSelectedTrip(id)}
+                    customLabel={t.tripCustom}
+                    placeholder={t.formCustomPlace || "Search trips..."}
+                  />
                 )}
               </FieldBox>
 
@@ -511,6 +500,165 @@ export function Hero({
         </div>
       </div>
     </section>
+  );
+}
+
+/* ─── Smart Trip Search Combobox ────────────────────────────────────── */
+function TripSearchCombobox({
+  tripOptions,
+  selectedTrip,
+  onSelect,
+  customLabel,
+  placeholder,
+}: {
+  tripOptions: any[];
+  selectedTrip: string;
+  onSelect: (id: string) => void;
+  customLabel: string;
+  placeholder: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const containerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const selectedName = tripOptions.find((t) => t._id === selectedTrip)?.name || "";
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    if (open) {
+      document.addEventListener("mousedown", handler);
+    }
+    return () => document.removeEventListener("mousedown", handler);
+  }, [open]);
+
+  // Close on Escape
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === "Escape") {
+      setOpen(false);
+      inputRef.current?.blur();
+    }
+    // Prevent form submission on Enter inside combobox
+    if (e.key === "Enter" && open) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  }, [open]);
+
+  const handleSelect = (id: string) => {
+    onSelect(id);
+    setSearch("");
+    setOpen(false);
+  };
+
+  return (
+    <div ref={containerRef} className="relative w-full" onKeyDown={handleKeyDown}>
+      {/* Hidden input for form submission */}
+      <input type="hidden" name="trip" value={selectedTrip} />
+
+      {/* Search input */}
+      <div className="relative flex items-center w-full">
+        <input
+          ref={inputRef}
+          suppressHydrationWarning
+          type="text"
+          id="hero-trip"
+          autoComplete="off"
+          value={open ? search : selectedName}
+          placeholder={placeholder}
+          onFocus={() => {
+            setOpen(true);
+            setSearch("");
+          }}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            if (!open) setOpen(true);
+          }}
+          className="w-full bg-transparent text-[15px] font-semibold text-brand-blue-deep placeholder:text-slate-400 placeholder:font-medium focus:outline-none cursor-pointer pr-6"
+        />
+        <button
+          type="button"
+          tabIndex={-1}
+          onClick={() => {
+            if (open) {
+              setOpen(false);
+            } else {
+              setOpen(true);
+              inputRef.current?.focus();
+            }
+          }}
+          className="absolute right-0 p-0.5 text-slate-400 hover:text-brand-blue transition-transform"
+        >
+          <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
+        </button>
+      </div>
+
+      {/* Dropdown list */}
+      {open && (
+        <div className="absolute left-[-56px] md:left-[-60px] right-0 top-[calc(100%+12px)] z-[100] w-[calc(100%+56px)] md:w-[calc(100%+60px)] animate-in fade-in slide-in-from-top-2 duration-200">
+          <Command
+            className="rounded-2xl border border-slate-200/80 bg-white shadow-xl overflow-hidden"
+            shouldFilter={true}
+          >
+            <div className="sr-only">
+              <Command.Input value={search} onValueChange={setSearch} />
+            </div>
+            <Command.List className="max-h-[240px] overflow-y-auto overscroll-contain py-1.5">
+              <Command.Empty className="px-4 py-6 text-center text-[14px] text-slate-400">
+                <div className="flex flex-col items-center gap-2">
+                  <Search className="h-5 w-5 text-slate-300" />
+                  <span>No trips found for "<strong className="text-brand-blue-deep">{search}</strong>"</span>
+                  <button
+                    type="button"
+                    onClick={() => handleSelect("custom")}
+                    className="mt-1 text-[13px] text-brand-green-dark font-bold hover:underline"
+                  >
+                    + Add custom destination
+                  </button>
+                </div>
+              </Command.Empty>
+
+              {tripOptions.map((trip) => (
+                <Command.Item
+                  key={trip._id}
+                  value={trip.name}
+                  onSelect={() => handleSelect(trip._id)}
+                  className="group/item flex items-center gap-3 px-4 py-2.5 cursor-pointer text-[14px] text-brand-blue-deep transition-colors hover:bg-brand-mist data-[selected=true]:bg-brand-mist"
+                >
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-brand-green/10 text-brand-green-dark transition-colors group-hover/item:bg-brand-green/20">
+                    <MapPin className="h-3.5 w-3.5" />
+                  </span>
+                  <span className="flex-1 truncate font-semibold">{trip.name}</span>
+                  {trip._id === selectedTrip && (
+                    <span className="ml-auto text-brand-green">
+                      <ShieldCheck className="h-4 w-4" />
+                    </span>
+                  )}
+                </Command.Item>
+              ))}
+
+              {/* Custom trip option - always at the bottom */}
+              <Command.Item
+                value={`${customLabel} custom destination your trip`}
+                onSelect={() => handleSelect("custom")}
+                className="group/item flex items-center gap-3 px-4 py-2.5 cursor-pointer text-[14px] border-t border-slate-100 text-slate-500 transition-colors hover:bg-brand-orange/5 data-[selected=true]:bg-brand-orange/5"
+              >
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-brand-orange/10 text-brand-orange transition-colors group-hover/item:bg-brand-orange/20">
+                  <Compass className="h-3.5 w-3.5" />
+                </span>
+                <span className="flex-1 font-semibold text-brand-blue-deep">{customLabel}</span>
+                <span className="text-[11px] text-slate-400 font-medium">Type your own</span>
+              </Command.Item>
+            </Command.List>
+          </Command>
+        </div>
+      )}
+    </div>
   );
 }
 
