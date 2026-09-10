@@ -22,14 +22,10 @@ import {
 import { Leaf } from '@/frontend/core/icons';
 import { translations } from '@/frontend/core/i18n';
 import { highlightBrandName } from '@/frontend/core/BrandHighlight';
-// @ts-ignore: vite-imagetools handles query string imports
-import bgMobileAvif from '@/frontend/shared/assets/111.webp?w=250&q=5&format=avif&as=url';
-// @ts-ignore
-import bgMobileWebp from '@/frontend/shared/assets/111.webp?w=250&q=5&format=webp&as=url';
-// @ts-ignore
-import templeAvif from '@/frontend/shared/assets/111.webp?w=1920&q=60&format=avif&as=url';
-// @ts-ignore
-import templeWebp from '@/frontend/shared/assets/111.webp?w=1920&q=60&format=webp&as=url';
+import newhomeMobileAvif from '@/frontend/shared/assets/newhome-mobile.avif';
+import newhomeMobileWebp from '@/frontend/shared/assets/newhome-mobile.webp';
+import newhomeAvif from '@/frontend/shared/assets/newhome.avif';
+import newhomeWebp from '@/frontend/shared/assets/newhome.webp';
 import { createBookingFn } from '@/backend/shared/bookings';
 
 export function getUpcomingDates(allowedDaysOfWeek: number[]) {
@@ -162,38 +158,38 @@ export function Hero({
       {/* Background split */}
       <div className="absolute inset-0">
         {/* image right */}
-        <div className="absolute inset-y-0 right-0 w-full lg:w-[60%] overflow-hidden">
+        <div className="absolute inset-y-0 right-0 w-full lg:w-[65%] overflow-hidden">
           {/* Mobile background */}
           <picture className="block lg:hidden h-full w-full">
-            <source srcSet={bgMobileAvif} type="image/avif" />
-            <source srcSet={bgMobileWebp} type="image/webp" />
+            <source srcSet={newhomeMobileAvif} type="image/avif" />
+            <source srcSet={newhomeMobileWebp} type="image/webp" />
             <img
-              src={bgMobileWebp}
-              alt="Pandharpur temple ghats at golden sunrise"
-              className="h-full w-full object-cover object-center animate-hero-zoom"
+              src={newhomeMobileWebp}
+              alt="Shailraj Travels Pilgrimage Tour and AC Force Urbania Service"
+              className="h-full w-full object-cover object-[70%_center] animate-hero-zoom"
               fetchPriority="auto"
               loading="eager"
               width={720}
-              height={1080}
+              height={400}
             />
           </picture>
           
           {/* Desktop background */}
           <picture className="hidden lg:block h-full w-full">
-            <source srcSet={templeAvif} type="image/avif" />
-            <source srcSet={templeWebp} type="image/webp" />
+            <source srcSet={newhomeAvif} type="image/avif" />
+            <source srcSet={newhomeWebp} type="image/webp" />
             <img
-              src={templeWebp}
-              alt="Pandharpur temple ghats at golden sunrise"
-              className="h-full w-full object-cover object-center animate-hero-zoom"
+              src={newhomeWebp}
+              alt="Shailraj Travels Pilgrimage Tour and AC Force Urbania Service"
+              className="h-full w-full object-cover object-right-bottom animate-hero-zoom"
               fetchPriority="high"
               loading="eager"
-              width={1920}
-              height={1080}
+              width={1738}
+              height={905}
             />
           </picture>
           {/* white fade for text legibility */}
-          <div className="absolute inset-0 bg-gradient-to-br from-white/95 via-white/40 to-transparent lg:bg-gradient-to-r lg:from-white lg:via-white/40 lg:to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-br from-white/95 via-white/40 to-transparent lg:bg-gradient-to-r lg:from-white lg:via-white/30 lg:to-transparent" />
           {/* bottom soft fade */}
           <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-brand-mist to-transparent" />
         </div>

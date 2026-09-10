@@ -35,10 +35,8 @@ import '@fontsource-variable/plus-jakarta-sans';
 // @ts-ignore
 import '@fontsource/tiro-devanagari-marathi';
 import appCss from '@/styles.css?url';
-// @ts-ignore: vite-imagetools handles query string imports
-import bgMobileAvif from '@/frontend/shared/assets/111.webp?w=250&q=5&format=avif&as=url';
-// @ts-ignore
-import templeAvif from '@/frontend/shared/assets/111.webp?w=1920&q=60&format=avif&as=url';
+import newhomeMobileAvif from '@/frontend/shared/assets/newhome-mobile.avif';
+import newhomeAvif from '@/frontend/shared/assets/newhome.avif';
 
 import { reportLovableError } from '@/backend/shared/lovable-error-reporting';
 import { generateSEO } from '@/backend/features/seo';
@@ -141,8 +139,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         { rel: "stylesheet", href: appCss },
         { rel: "icon", type: "image/png", href: "/favicon.png" },
         { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
-        { rel: "preload", as: "image", href: templeAvif, type: "image/avif", fetchPriority: "high", media: "(min-width: 1024px)" },
-        { rel: "preload", as: "image", href: bgMobileAvif, type: "image/avif", fetchPriority: "auto", media: "(max-width: 1023px)" },
+        { rel: "preload", as: "image", href: newhomeAvif, type: "image/avif", fetchPriority: "high", media: "(min-width: 1024px)" },
+        { rel: "preload", as: "image", href: newhomeMobileAvif, type: "image/avif", fetchPriority: "auto", media: "(max-width: 1023px)" },
       ],
     }) as any,
   shellComponent: RootShell,
