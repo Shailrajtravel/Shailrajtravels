@@ -85,6 +85,8 @@ function MarathiHomePage() {
       return {
         ...pkg,
         image: match?.heroContent?.image || match?.image || pkg.image,
+        heroContent: match?.heroContent || pkg.heroContent,
+        destinations: match?.destinations || pkg.destinations || [],
         tourId: match?._id,
         slug: match?.slug || pkg.slug,
         dates: tourDates || pkgDates || (pkg.schedule && !/every|daily|weekly|departures/i.test(pkg.schedule) ? [pkg.schedule] : []),
@@ -103,12 +105,15 @@ function MarathiHomePage() {
           slug: tour.slug,
           dates: Array.isArray(tour.dates) ? tour.dates : [],
           image: tour.heroContent?.image || "",
+          heroContent: tour.heroContent,
+          destinations: tour.destinations || [],
           price: tour.packages?.[0]?.price ? `₹${tour.packages[0].price}` : undefined,
           ...tour,
         });
       }
     }
-    return merged;
+    // Only show cards that match an actual tour (have a valid slug)
+    return merged.filter((p: any) => p.slug && p.title);
   }, [dbPackages, tours]);
 
   return (
