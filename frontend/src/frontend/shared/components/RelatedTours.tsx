@@ -18,12 +18,13 @@ export function RelatedTours({ tours }: { tours: RelatedItem[] }) {
             className="block group"
           >
             <div className="border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-              <div className="bg-gray-100 h-32 flex items-center justify-center relative overflow-hidden">
+              <div className="w-full aspect-[1654/561] bg-slate-950 flex items-center justify-center relative overflow-hidden">
                 {tour.image ? (
                   <LazyImage
                     src={tour.image}
                     alt={tour.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    autoOptimizeCloudinary={false}
                   />
                 ) : (
                   <span className="text-brand-orange font-bold text-lg">Shailraj Travels</span>

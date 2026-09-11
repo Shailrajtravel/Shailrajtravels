@@ -189,13 +189,14 @@ function ToursListingPage() {
                   className="group block h-full"
                 >
                   <div className="border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-full flex flex-col bg-white hover:-translate-y-1">
-                    <div className="h-56 relative overflow-hidden bg-slate-100">
+                    <div className="w-full aspect-[1654/561] relative overflow-hidden bg-slate-950 flex items-center justify-center">
                       <LazyImage
                         src={tour.heroContent?.image || ""}
                         alt={tour.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                        optimizedWidth={1200}
+                        autoOptimizeCloudinary={false}
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>
                     <div className="p-6 flex flex-col flex-grow">
                       <div className="flex gap-2 mb-3 flex-wrap">
@@ -221,7 +222,7 @@ function ToursListingPage() {
                       </p>
                       <div className="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
                         <span className="text-brand-orange font-bold text-sm group-hover:underline flex items-center gap-1">
-                          {t.toursIndexViewDetails || "View Tour Details"}
+                          {t.toursIndexViewDetails ? t.toursIndexViewDetails.replace(/→/g, '').trim() : "View Tour Details"}
                           <span className="transition-transform group-hover:translate-x-1">→</span>
                         </span>
                       </div>

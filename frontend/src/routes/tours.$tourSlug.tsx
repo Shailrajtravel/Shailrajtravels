@@ -64,17 +64,8 @@ function TourPageSkeleton() {
 
   return (
     <main className="w-full bg-white pb-16">
-      {/* Hero Section Skeleton */}
-      <section className="relative w-full h-[60vh] min-h-[450px] bg-slate-100 flex flex-col items-center justify-center animate-pulse">
-        <div className="text-center px-4 max-w-4xl w-full">
-          <div className="h-12 md:h-16 bg-slate-200 rounded-md w-3/4 mx-auto mb-6" />
-          <div className="h-5 bg-slate-200 rounded-md max-w-xl mx-auto mb-8" />
-          <div className="flex justify-center gap-4">
-            <div className="h-12 bg-slate-200 rounded-lg w-32" />
-            <div className="h-12 bg-slate-200 rounded-lg w-32" />
-          </div>
-        </div>
-      </section>
+      {/* Hero Banner Skeleton */}
+      <section className="relative w-full aspect-[1654/561] max-h-[561px] bg-slate-200 animate-pulse" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Breadcrumb Skeleton */}

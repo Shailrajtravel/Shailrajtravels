@@ -78,72 +78,53 @@ export function TourPageTemplate({ data, recommendedVehicles = [] }: TourPageTem
     <main className="w-full bg-white">
       <SchemaMarkup schema={data.schemaData} />
 
-      {/* Hero Section */}
-      <section className="relative w-full flex flex-col md:block md:h-[60vh] md:min-h-[450px] overflow-hidden bg-slate-900">
-        {/* Image Area */}
-        <div className="relative w-full md:absolute md:inset-0 md:h-full z-0 flex flex-col items-center justify-center">
-          {/* Desktop blurred background */}
-          <LazyImage
-            src={data.heroContent.image}
-            alt={data.title}
-    className="hidden md:block absolute inset-0 w-full h-full object-cover blur-2xl opacity-50 scale-110"
-    loading="eager"
-  />
+      {/* Tour Banner / Poster Section */}
+      <section className="relative w-full bg-slate-950 flex justify-center items-center overflow-hidden">
+        {/* Visually hidden H1 for SEO and screen-reader accessibility */}
+        <h1 className="sr-only">{data.title}</h1>
 
-  {/* Mobile Image */ }
-          <LazyImage
-            src={data.heroContent.mobileImage || data.heroContent.image}
-            alt={data.title}
-    className="block md:hidden w-full h-auto object-contain relative z-10"
-    loading="eager"
-  />
-
-  {/* Desktop Main Image */ }
-          <LazyImage
-            src={data.heroContent.image}
-            alt={data.title}
-    className="hidden md:block w-full h-full object-contain relative z-10"
-    loading="eager"
-  />
-
-  {/* Desktop Overlay only */ }
-  <div className="hidden md:block absolute inset-0 bg-black/60 z-20" />
-        </div >
-
-    {/* Text Content Area */ }
-    < div className = "relative z-30 text-center px-4 py-8 md:py-0 md:absolute md:inset-0 md:flex md:flex-col md:items-center md:justify-center max-w-4xl mx-auto w-full" >
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-white mb-4 md:mb-6 drop-shadow-md">
-            {data.title}
-          </h1>
-          <p className="hidden md:block text-base md:text-xl text-slate-200 mb-6 md:mb-8 max-w-2xl mx-auto drop-shadow-sm">
-            {data.heroContent.description}
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
-            <button
-              className="w-full sm:w-auto px-8 py-3 bg-brand-orange text-white font-semibold rounded-lg hover:bg-brand-orange-dark transition-colors"
-              onClick={() => {
-                window.dataLayer?.push({ event: "book_now_hero", tour: data.title });
-                document
-                  .getElementById("sidebar-booking-form")
-                  ?.scrollIntoView({ behavior: "smooth" });
-                setTimeout(() => {
-                  const input = document.getElementById("booking-name-input");
-                  if (input) (input as HTMLElement).focus();
-                }, 500);
-              }}
-            >
-              {t.formBook || "Book Now"}
-            </button>
-            <a
-              href="tel:+918600396056"
-              className="w-full sm:w-auto text-center px-8 py-3 bg-white/10 text-white font-semibold rounded-lg border border-white md:border-white/50 hover:bg-white hover:text-brand-blue-deep transition-colors backdrop-blur-sm"
-              onClick={() => window.dataLayer?.push({ event: "call_now_hero", tour: data.title })}
-            >
-              {t.callNow || "Call Now"}
-            </a>
-          </div>
-        </div >
-      </section >
+        <div className="w-full max-w-[1920px] mx-auto flex justify-center items-center">
+          {data.heroContent?.mobileImage ? (
+            <>
+              {/* Mobile Poster Image */}
+              <div className="block md:hidden w-full">
+                <LazyImage
+                  src={data.heroContent.mobileImage}
+                  alt={data.title}
+                  containerClassName="w-full h-auto"
+                  className="w-full h-auto object-cover block"
+                  loading="eager"
+                  autoOptimizeCloudinary={false}
+                />
+              </div>
+              {/* Desktop Poster / Banner */}
+              <div className="hidden md:block w-full aspect-[1654/561] max-h-[561px]">
+                <LazyImage
+                  src={data.heroContent.image}
+                  alt={data.title}
+                  containerClassName="w-full h-full"
+                  className="w-full h-full object-cover block"
+                  loading="eager"
+                  optimizedWidth={1920}
+                  autoOptimizeCloudinary={false}
+                />
+              </div>
+            </>
+          ) : (
+            <div className="w-full aspect-[1654/561] max-h-[561px]">
+              <LazyImage
+                src={data.heroContent?.image || ""}
+                alt={data.title}
+                containerClassName="w-full h-full"
+                className="w-full h-full object-cover block"
+                loading="eager"
+                optimizedWidth={1920}
+                autoOptimizeCloudinary={false}
+              />
+            </div>
+          )}
+        </div>
+      </section>
 
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       <SEOBreadcrumbs items={breadcrumbs} />
