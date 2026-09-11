@@ -21,26 +21,27 @@ const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
 
 import { seedGallery } from '@/backend/shared/seed-data';
 
-export const getGalleryPhotosFn = createServerFn({ method: "POST" }).handler(async () => {
-  try {
-    const cached = await getCachedData<any[]>('gallery:all');
-    if (cached && Array.isArray(cached)) {
-      return cached;
-    }
-    // Background revalidation
-    apiFetch('/gallery')
-      .then((data) => {
-        if (data && Array.isArray(data)) {
-          setCachedData('gallery:all', data, 600);
+export const getGalleryPhotosFn = createServerFn({ method: "POST" })
+  .validator((data?: { forceFresh?: boolean }) => data)
+  .handler(async ({ data }) => {
+    try {
+      if (!data?.forceFresh) {
+        const cached = await getCachedData<any[]>('gallery:all');
+        if (cached && Array.isArray(cached) && cached.length > 0) {
+          return cached;
         }
-      })
-      .catch(() => {});
-    return seedGallery;
-  } catch (error) {
-    console.error("Failed to fetch gallery photos", error);
-    return seedGallery;
-  }
-});
+      }
+      const liveData = await apiFetch('/gallery');
+      if (liveData && Array.isArray(liveData) && liveData.length > 0) {
+        await setCachedData('gallery:all', liveData, 600);
+        return liveData;
+      }
+      return seedGallery;
+    } catch (error) {
+      console.error("Failed to fetch gallery photos", error);
+      return seedGallery;
+    }
+  });
 
 type GalleryInput = {
   adminToken: string;

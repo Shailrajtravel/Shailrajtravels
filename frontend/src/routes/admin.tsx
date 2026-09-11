@@ -345,7 +345,7 @@ function AdminPage() {
     setErrorMsg(null);
     try {
       // Fetch individually so one failure doesn't break the whole dashboard
-      const pkgsPromise = getPackagesFn().catch((e) => {
+      const pkgsPromise = getPackagesFn({ data: { forceFresh: true } }).catch((e) => {
         console.error("Packages error:", e);
         return [];
       });
@@ -353,7 +353,7 @@ function AdminPage() {
         console.error("Reviews error:", e);
         return [];
       });
-      const tripsPromise = getTripOptionsFn().catch((e) => {
+      const tripsPromise = getTripOptionsFn({ data: { forceFresh: true } }).catch((e) => {
         console.error("Trips error:", e);
         return [];
       });
@@ -363,7 +363,7 @@ function AdminPage() {
             return [];
           })
         : Promise.resolve([]);
-      const photosPromise = getGalleryPhotosFn().catch((e) => {
+      const photosPromise = getGalleryPhotosFn({ data: { forceFresh: true } }).catch((e) => {
         console.error("Photos error:", e);
         return [];
       });
@@ -373,7 +373,7 @@ function AdminPage() {
             return [];
           })
         : Promise.resolve([]);
-      const toursPromise = getToursFn().catch((e) => {
+      const toursPromise = getToursFn({ data: { forceFresh: true } }).catch((e) => {
         console.error("Tours error:", e);
         return [];
       });
@@ -3060,7 +3060,7 @@ function TripOptionForm({ token, initialData, onClose, onSuccess }: any) {
             <label className="text-[13px] font-bold text-slate-700 uppercase tracking-wider">
               Cover Image
             </label>
-            <div className="flex items-center gap-4">
+            <div className="flex items-start gap-4">
               {formData.image && (
                 <div className="relative w-24 h-24 rounded-lg bg-slate-100 overflow-hidden shrink-0 border border-slate-200">
                   <img src={formData.image} alt="Preview" className="w-full h-full object-cover" />
@@ -3068,26 +3068,40 @@ function TripOptionForm({ token, initialData, onClose, onSuccess }: any) {
                     type="button"
                     onClick={() => setFormData({ ...formData, image: "" })}
                     className="absolute top-1 right-1 bg-slate-900/60 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-500 transition-colors shadow-sm"
+                    title="Remove image"
                   >
                     ×
                   </button>
                 </div>
               )}
-              <div className="flex-1">
+              <div className="flex-1 flex flex-col gap-2.5">
                 <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (!file) return;
-                    const reader = new FileReader();
-                    reader.onloadend = () => {
-                      setFormData({ ...formData, image: reader.result as string });
-                    };
-                    reader.readAsDataURL(file);
-                  }}
-                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-blue/50 focus:border-brand-blue transition-all file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-brand-blue/10 file:text-brand-blue-deep hover:file:bg-brand-blue/20 cursor-pointer text-sm text-slate-500"
+                  type="text"
+                  name="image"
+                  value={formData.image && !formData.image.startsWith("data:") ? formData.image : ""}
+                  onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                  placeholder="Paste Image URL (or upload from device below)"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-blue/50 focus:border-brand-blue transition-all text-sm text-slate-700"
                 />
+                <div>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      const reader = new FileReader();
+                      reader.onloadend = () => {
+                        setFormData({ ...formData, image: reader.result as string });
+                      };
+                      reader.readAsDataURL(file);
+                    }}
+                    className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-blue/50 focus:border-brand-blue transition-all file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-brand-blue/10 file:text-brand-blue-deep hover:file:bg-brand-blue/20 cursor-pointer text-xs text-slate-500"
+                  />
+                  <p className="text-[11px] text-slate-400 mt-1">
+                    Upload an image file from your device or enter a URL above. Uploaded files are automatically optimized and saved to Cloudinary.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -3385,7 +3399,7 @@ function TripOptionForm({ token, initialData, onClose, onSuccess }: any) {
             className="px-6 py-3 bg-brand-green hover:bg-brand-green-dark text-white font-bold rounded-xl flex items-center gap-2 transition-all disabled:opacity-70 shadow-lg shadow-brand-green/20"
           >
             {loading && <Loader2 className="w-5 h-5 animate-spin" />}
-            Save Trip
+            {loading ? "Saving..." : "Save Trip"}
           </button>
         </div>
       </form>

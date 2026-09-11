@@ -22,24 +22,23 @@ const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
 import { seedTours } from '@/backend/shared/seed-data';
 
 export const getToursFn = createServerFn({ method: "POST" })
-  .validator((data?: { lang?: string }) => data || {})
+  .validator((data?: { lang?: string; forceFresh?: boolean }) => data || {})
   .handler(async ({ data }) => {
     const langKey = data?.lang || "en";
     const cacheKey = `tours:${langKey}`;
     try {
-      const cached = await getCachedData<any[]>(cacheKey);
-      if (cached && Array.isArray(cached) && cached.length > 0) {
-        return cached;
+      if (!data?.forceFresh) {
+        const cached = await getCachedData<any[]>(cacheKey);
+        if (cached && Array.isArray(cached) && cached.length > 0) {
+          return cached;
+        }
       }
-      // Background revalidation
       const qs = data?.lang ? `?lang=${data.lang}` : "";
-      apiFetch(`/tours${qs}`)
-        .then((result) => {
-          if (Array.isArray(result) && result.length > 0) {
-            setCachedData(cacheKey, result, 600);
-          }
-        })
-        .catch(() => {});
+      const result = await apiFetch(`/tours${qs}`);
+      if (Array.isArray(result) && result.length > 0) {
+        await setCachedData(cacheKey, result, 600);
+        return result;
+      }
       return seedTours;
     } catch (error) {
       console.error("Failed to fetch tours", error);

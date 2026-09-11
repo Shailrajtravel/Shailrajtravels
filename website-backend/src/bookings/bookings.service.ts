@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { bookingRepository } from '../repositories/BookingRepository';
 import { tripOptionRepository } from '../repositories/TripOptionRepository';
 import { storageManager } from '../database/StorageManager';
+import { uploadImageToCloudinary } from '../shared/cloudinary';
 
 const DEFAULT_TEMPLATES = {
   confirmed: `Namaste {customerName}! 🎉\n\nGreat news! Your booking (*{bookingId}*) for *{tripName}* has been *CONFIRMED* by Shailraj Travels!\n\n📅 *Travel Date:* {travelDate}\n📍 *Pickup:* {pickupLocation}\n👥 *Persons:* {persons}\n\nWe look forward to giving you a wonderful journey! Call us anytime: +91 9359570497.`,
@@ -75,11 +76,19 @@ export class BookingsService {
   }
 
   async createTripOption(data: any) {
-    return await tripOptionRepository.insertOne(data);
+    const newData = { ...data };
+    if (newData.image && typeof newData.image === 'string' && newData.image.startsWith('data:image')) {
+      newData.image = await uploadImageToCloudinary(newData.image, "trips");
+    }
+    return await tripOptionRepository.insertOne(newData);
   }
 
   async updateTripOption(id: string, data: any) {
-    return await tripOptionRepository.updateOne(id, data);
+    const newData = { ...data };
+    if (newData.image && typeof newData.image === 'string' && newData.image.startsWith('data:image')) {
+      newData.image = await uploadImageToCloudinary(newData.image, "trips");
+    }
+    return await tripOptionRepository.updateOne(id, newData);
   }
 
   async deleteTripOption(id: string) {

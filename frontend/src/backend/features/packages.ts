@@ -21,26 +21,27 @@ const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
 
 import { seedPackages } from '@/backend/shared/seed-data';
 
-export const getPackagesFn = createServerFn({ method: "POST" }).handler(async () => {
-  try {
-    const cached = await getCachedData<any[]>('packages:all');
-    if (cached && Array.isArray(cached) && cached.length > 0) {
-      return cached;
-    }
-    // Background revalidation
-    apiFetch('/packages')
-      .then((data) => {
-        if (data && Array.isArray(data) && data.length > 0) {
-          setCachedData('packages:all', data, 600);
+export const getPackagesFn = createServerFn({ method: "POST" })
+  .validator((data?: { forceFresh?: boolean }) => data)
+  .handler(async ({ data }) => {
+    try {
+      if (!data?.forceFresh) {
+        const cached = await getCachedData<any[]>('packages:all');
+        if (cached && Array.isArray(cached) && cached.length > 0) {
+          return cached;
         }
-      })
-      .catch(() => {});
-    return seedPackages;
-  } catch (error) {
-    console.error("Failed to fetch packages", error);
-    return seedPackages;
-  }
-});
+      }
+      const liveData = await apiFetch('/packages');
+      if (liveData && Array.isArray(liveData) && liveData.length > 0) {
+        await setCachedData('packages:all', liveData, 600);
+        return liveData;
+      }
+      return seedPackages;
+    } catch (error) {
+      console.error("Failed to fetch packages", error);
+      return seedPackages;
+    }
+  });
 
 type PackageInput = {
   adminToken: string;

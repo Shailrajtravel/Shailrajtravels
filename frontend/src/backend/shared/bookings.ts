@@ -27,36 +27,46 @@ const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
 };
 
 import { seedTripOptions } from '@/backend/shared/seed-data';
+import { uploadImageToCloudinary } from '@/backend/shared/cloudinary';
 
 // ---- TRIP OPTIONS ----
-export const getTripOptionsFn = createServerFn({ method: "POST" }).handler(async () => {
-  try {
-    const cached = await getCachedData<any[]>('trip-options:all');
-    if (cached && Array.isArray(cached) && cached.length > 0) {
-      return cached;
-    }
-    // Background revalidation
-    apiFetch('/bookings/trip-options')
-      .then((data) => {
-        if (data && Array.isArray(data) && data.length > 0) {
-          setCachedData('trip-options:all', data, 600);
+export const getTripOptionsFn = createServerFn({ method: "POST" })
+  .validator((data?: { forceFresh?: boolean }) => data)
+  .handler(async ({ data }) => {
+    try {
+      if (!data?.forceFresh) {
+        const cached = await getCachedData<any[]>('trip-options:all');
+        if (cached && Array.isArray(cached) && cached.length > 0) {
+          return cached;
         }
-      })
-      .catch(() => {});
-    return seedTripOptions;
-  } catch (error) {
-    console.error("Failed to fetch trip options", error);
-    return seedTripOptions;
-  }
-});
+      }
+      const freshData = await apiFetch('/bookings/trip-options');
+      if (freshData && Array.isArray(freshData) && freshData.length > 0) {
+        await setCachedData('trip-options:all', freshData, 600);
+        return freshData;
+      }
+      return seedTripOptions;
+    } catch (error) {
+      console.error("Failed to fetch trip options", error);
+      return seedTripOptions;
+    }
+  });
 
 export const createTripOptionFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string; data: any }) => data)
   .handler(async ({ data }) => {
     if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
+    const tripData = { ...data.data };
+    if (tripData.image && typeof tripData.image === 'string' && tripData.image.startsWith('data:image')) {
+      try {
+        tripData.image = await uploadImageToCloudinary(tripData.image, "trips");
+      } catch (err) {
+        console.error("Failed to upload trip image to Cloudinary", err);
+      }
+    }
     const result = await apiFetch('/bookings/trip-options', {
       method: "POST",
-      body: JSON.stringify(data.data),
+      body: JSON.stringify(tripData),
     });
     await invalidateCache('trip-options:all');
     return result;
@@ -66,9 +76,17 @@ export const updateTripOptionFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string; id: string; data: any }) => data)
   .handler(async ({ data }) => {
     if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
+    const tripData = { ...data.data };
+    if (tripData.image && typeof tripData.image === 'string' && tripData.image.startsWith('data:image')) {
+      try {
+        tripData.image = await uploadImageToCloudinary(tripData.image, "trips");
+      } catch (err) {
+        console.error("Failed to upload trip image to Cloudinary", err);
+      }
+    }
     const result = await apiFetch(`/bookings/trip-options/${data.id}`, {
       method: "PUT",
-      body: JSON.stringify(data.data),
+      body: JSON.stringify(tripData),
     });
     await invalidateCache('trip-options:all');
     return result;
