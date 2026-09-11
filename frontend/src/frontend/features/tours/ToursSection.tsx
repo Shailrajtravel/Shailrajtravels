@@ -3,7 +3,7 @@ import { Link } from '@tanstack/react-router';
 import { LazyImage } from '@/frontend/shared/ui/lazy-image';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Route } from 'lucide-react';
 // @ts-ignore
 import bgFallback from '@/frontend/shared/assets/hero-pandharpur.webp?w=600&format=webp&as=url';
 
@@ -114,6 +114,8 @@ export function ToursSection({
                 const cardDescription = tour.heroContent?.description || tour.metaDescription || tour.overview || "";
                 const cardDestinations = tour.destinations || [];
                 const cardSlug = tour.slug;
+                const cardRoute = tour.route || tour.destinations || [];
+                const cardPrice = tour.price || (tour.packages?.[0]?.price ? `₹${tour.packages[0].price}` : "");
 
                 const cardContent = (
                   <div className="border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-full flex flex-col bg-white hover:-translate-y-1">
@@ -142,15 +144,45 @@ export function ToursSection({
                           </span>
                         )}
                       </div>
-                      <h3 className="text-xl font-bold text-slate-800 mb-3 group-hover:text-brand-orange transition-colors">
+                      <h3 className="text-xl font-bold text-slate-800 mb-2 group-hover:text-brand-orange transition-colors">
                         {cardTitle}
                       </h3>
-                      <p className="text-sm text-slate-500 line-clamp-3 mb-6 leading-relaxed">
+                      <p className="text-sm text-slate-500 line-clamp-2 mb-4 leading-relaxed">
                         {cardDescription}
                       </p>
+
+                      {/* Route */}
+                      {cardRoute.length > 0 && (
+                        <div className="bg-slate-50 rounded-xl p-3 mb-4">
+                          <div className="flex items-center gap-1.5 mb-1.5">
+                            <Route className="w-3.5 h-3.5 text-slate-500" />
+                            <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider">Route</span>
+                          </div>
+                          <div className="flex flex-wrap items-center text-[13px] text-slate-700 font-medium leading-relaxed gap-x-1">
+                            {cardRoute.map((stop: string, index: number) => (
+                              <React.Fragment key={index}>
+                                <span>{stop}</span>
+                                {index < cardRoute.length - 1 && (
+                                  <span className="text-brand-orange text-[11px] opacity-70">›</span>
+                                )}
+                              </React.Fragment>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Price & Details Footer */}
                       <div className="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
-                        <span className="text-brand-orange font-bold text-sm group-hover:underline flex items-center gap-1">
-                          {t.toursIndexViewDetails ? t.toursIndexViewDetails.replace(/→/g, '').trim() : "View Tour Details"}
+                        {cardPrice ? (
+                          <div>
+                            <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Per person</p>
+                            <p className="text-xl font-bold text-brand-blue-deep">{cardPrice}</p>
+                          </div>
+                        ) : (
+                          <div />
+                        )}
+                        <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-brand-orange/10 text-brand-orange font-bold text-sm group-hover:bg-brand-orange group-hover:text-white transition-colors">
+                          {t.toursIndexViewDetails ? t.toursIndexViewDetails.replace(/→/g, '').trim() : "View Details"}
                           <span className="transition-transform group-hover:translate-x-1">→</span>
                         </span>
                       </div>
