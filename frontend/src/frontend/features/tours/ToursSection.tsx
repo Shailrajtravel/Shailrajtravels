@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { TourCard } from '@/frontend/features/tours/TourCard';
-import { TourModal } from '@/frontend/features/tours/TourModal';
-import { getMockTours, TourData } from '@/frontend/features/tours/data';
+import { Link } from '@tanstack/react-router';
+import { LazyImage } from '@/frontend/shared/ui/lazy-image';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -25,58 +24,23 @@ export function ToursSection({
   onBookSeat?: (tour: any) => void;
   mode?: "packages" | "tours";
 }) {
-  const [selectedTour, setSelectedTour] = useState<TourData | null>(null);
-
   const mappedTripOptions = (tripOptions || []).map((trip: any) => ({
     id: trip._id,
+    slug: trip.slug,
     image: trip.image || bgFallback,
-    durationBadge: "Weekly Trip",
-    subtitle: trip.name,
     title: trip.name,
-    location: "Various",
-    schedule:
-      trip.schedule ||
-      (Array.isArray(trip.dates) && trip.dates.length > 0 ? trip.dates.join(", ") : "Flexible"),
-    dates: trip.dates || [],
-    frequency: "Weekly",
-    route: trip.route || [],
-    tags: ["Pilgrimage"],
-    seatsAvailable: 15,
-    seatsTotal: 20,
-    price: trip.price || "On Request",
-    itinerary: trip.itinerary || [],
-    includes: trip.includes || [],
+    destinations: trip.route || [],
+    heroContent: { description: trip.description || "", image: trip.image || bgFallback },
   }));
 
-  const mappedTours = (tours || []).map((tour: any) => {
-    const packagePrice = tour.packages?.[0]?.price ? `₹${tour.packages[0].price}` : "On Request";
-    const inclusions = tour.packages?.[0]?.inclusions || [];
-    const tourRoute =
-      tour.destinations && tour.destinations.length > 0 ? tour.destinations : [tour.title];
-
-    return {
-      id: tour._id,
-      slug: tour.slug,
-      image: tour.heroContent?.image || bgFallback,
-      durationBadge: tour.packages?.[0]?.title || "Pilgrimage",
-      subtitle: tour.metaTitle || tour.title,
-      title: tour.title,
-      location: tour.destinations?.[0] || "Various",
-      schedule:
-        Array.isArray(tour.dates) && tour.dates.length > 0 ? tour.dates.join(", ") : "Flexible",
-      dates: tour.dates || [],
-      frequency: "Special Tour",
-      route: tourRoute,
-      tags: ["Popular", "Tour"],
-      seatsAvailable: 12,
-      seatsTotal: 16,
-      price: packagePrice,
-      itinerary: Array.isArray(tour.highlights)
-        ? tour.highlights.map((h: string, idx: number) => ({ day: `Point ${idx + 1}`, title: h }))
-        : [],
-      includes: inclusions,
-    };
-  });
+  const mappedTours = (tours || []).map((tour: any) => ({
+    id: tour._id,
+    slug: tour.slug,
+    image: tour.heroContent?.image || bgFallback,
+    title: tour.title,
+    destinations: tour.destinations || [],
+    heroContent: tour.heroContent || { description: "", image: bgFallback },
+  }));
 
   // Display DB packages, mapped trip options, or mapped popular tours based on mode
   const displayPackages = mode === "packages"
@@ -144,19 +108,77 @@ export function ToursSection({
         <div className="relative group">
           <div className="overflow-hidden -mx-4 px-4 pb-4" ref={emblaRef}>
             <div className="flex gap-8">
-              {displayPackages.map((tour: any) => (
-                <div
-                  key={tour.id || tour._id}
-                  className="flex-[0_0_100%] md:flex-[0_0_calc(50%-1rem)] lg:flex-[0_0_calc(33.333%-1.33rem)] min-w-0 flex flex-col"
-                >
-                  <TourCard
-                    tour={tour}
-                    onOpenDetails={setSelectedTour}
-                    onBookSeat={onBookSeat}
-                    t={t}
-                  />
-                </div>
-              ))}
+              {displayPackages.map((tour: any) => {
+                const cardImage = tour.heroContent?.image || tour.image || bgFallback;
+                const cardTitle = tour.title || tour.name || "";
+                const cardDescription = tour.heroContent?.description || tour.metaDescription || tour.overview || "";
+                const cardDestinations = tour.destinations || [];
+                const cardSlug = tour.slug;
+
+                const cardContent = (
+                  <div className="border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-full flex flex-col bg-white hover:-translate-y-1">
+                    <div className="w-full aspect-[1654/561] relative overflow-hidden bg-slate-950 flex items-center justify-center">
+                      <LazyImage
+                        src={cardImage}
+                        alt={cardTitle}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                        optimizedWidth={1200}
+                        autoOptimizeCloudinary={false}
+                      />
+                    </div>
+                    <div className="p-6 flex flex-col flex-grow">
+                      <div className="flex gap-2 mb-3 flex-wrap">
+                        {cardDestinations.slice(0, 2).map((dest: string, idx: number) => (
+                          <span
+                            key={idx}
+                            className="px-2.5 py-1 bg-brand-blue/5 text-brand-blue-deep text-[11px] font-bold rounded-lg border border-brand-blue/10 uppercase tracking-wider"
+                          >
+                            {dest}
+                          </span>
+                        ))}
+                        {cardDestinations.length > 2 && (
+                          <span className="px-2.5 py-1 bg-slate-50 text-slate-500 text-[11px] font-bold rounded-lg border border-slate-100 uppercase tracking-wider">
+                            +{cardDestinations.length - 2}
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="text-xl font-bold text-slate-800 mb-3 group-hover:text-brand-orange transition-colors">
+                        {cardTitle}
+                      </h3>
+                      <p className="text-sm text-slate-500 line-clamp-3 mb-6 leading-relaxed">
+                        {cardDescription}
+                      </p>
+                      <div className="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
+                        <span className="text-brand-orange font-bold text-sm group-hover:underline flex items-center gap-1">
+                          {t.toursIndexViewDetails ? t.toursIndexViewDetails.replace(/→/g, '').trim() : "View Tour Details"}
+                          <span className="transition-transform group-hover:translate-x-1">→</span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                );
+
+                return (
+                  <div
+                    key={tour.id || tour._id || cardTitle}
+                    className="flex-[0_0_100%] md:flex-[0_0_calc(50%-1rem)] lg:flex-[0_0_calc(33.333%-1.33rem)] min-w-0 flex flex-col group"
+                  >
+                    {cardSlug ? (
+                      <Link
+                        to="/tours/$tourSlug"
+                        params={{ tourSlug: cardSlug }}
+                        className="block h-full"
+                      >
+                        {cardContent}
+                      </Link>
+                    ) : (
+                      <div className="h-full">
+                        {cardContent}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
 
@@ -174,15 +196,6 @@ export function ToursSection({
           </button>
         </div>
       </div>
-
-      {selectedTour && (
-        <TourModal
-          tour={selectedTour}
-          onClose={() => setSelectedTour(null)}
-          onBookSeat={onBookSeat}
-          t={t}
-        />
-      )}
     </section>
   );
 }
