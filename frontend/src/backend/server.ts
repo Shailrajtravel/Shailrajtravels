@@ -40,16 +40,28 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
   });
 }
 
-function withSecurityHeaders(response: Response): Response {
+function withSecurityHeaders(response: Response, url?: string): Response {
   const newHeaders = new Headers(response.headers);
   newHeaders.set(
     "Content-Security-Policy",
-    "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://images.unsplash.com https://plus.unsplash.com; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net wss: ws:;",
+    "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://images.unsplash.com https://plus.unsplash.com https://res.cloudinary.com; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net wss: ws:;",
   );
   newHeaders.set("X-Frame-Options", "SAMEORIGIN");
   newHeaders.set("X-Content-Type-Options", "nosniff");
   newHeaders.set("Referrer-Policy", "strict-origin-when-cross-origin");
   newHeaders.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+
+  const contentType = response.headers.get("content-type") ?? "";
+  const isHtml = contentType.includes("text/html");
+  const isAdminOrAuth = url ? (url.includes("/admin") || url.includes("/login") || url.includes("/api")) : false;
+
+  if (response.status === 200 && isHtml && !isAdminOrAuth) {
+    if (!newHeaders.has("Cache-Control")) {
+      newHeaders.set("Cache-Control", "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400");
+    }
+  } else if (isAdminOrAuth) {
+    newHeaders.set("Cache-Control", "no-store, no-cache, must-revalidate");
+  }
 
   const isNullBodyStatus =
     response.status === 101 ||
@@ -261,14 +273,14 @@ export default {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       const normalized = await normalizeCatastrophicSsrResponse(response);
-      return withSecurityHeaders(normalized);
+      return withSecurityHeaders(normalized, request.url);
     } catch (error) {
       console.error(error);
       const errorResp = new Response(renderErrorPage(), {
         status: 500,
         headers: { "content-type": "text/html; charset=utf-8" },
       });
-      return withSecurityHeaders(errorResp);
+      return withSecurityHeaders(errorResp, request.url);
     }
   },
 };
