@@ -47,6 +47,7 @@ export default defineConfig({
           "/pilgrimage-guides",
           "/blog",
           "/blog/pune-to-ujjain-tour-guide-mahakal-darshan-itinerary",
+          "/blog/pune-to-ujjain-road-trip-itinerary",
           "/tours",
           "/tours/ashtavinayak-yatra",
           "/tours/jyotirlinga-darshan",

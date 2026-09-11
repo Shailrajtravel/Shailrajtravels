@@ -95,8 +95,8 @@ function BlogIndexPage() {
     const uniqueStatic = blogPosts.filter((b) => !customSlugs.has(b.slug));
     const combined = [...visibleCustomBlogs, ...uniqueStatic];
     return combined.sort((a, b) => {
-      const timeA = new Date(a.publishedAt).getTime();
-      const timeB = new Date(b.publishedAt).getTime();
+      const timeA = new Date(a.publishedAt || a.createdAt || 0).getTime();
+      const timeB = new Date(b.publishedAt || b.createdAt || 0).getTime();
       return sortBy === 'newest' ? timeB - timeA : timeA - timeB;
     });
   }, [customBlogs, sortBy]);
@@ -250,7 +250,7 @@ function BlogIndexPage() {
                           <div className="flex items-center gap-1.5">
                             <Calendar className="w-3.5 h-3.5 text-brand-green" />
                             <span>
-                              {new Date(post.publishedAt).toLocaleDateString("en-IN", {
+                              {new Date(post.publishedAt || post.createdAt || Date.now()).toLocaleDateString("en-IN", {
                                 month: "short",
                                 day: "numeric",
                                 year: "numeric",
@@ -259,7 +259,7 @@ function BlogIndexPage() {
                           </div>
                           <div className="hidden sm:flex items-center gap-1.5">
                             <Clock className="w-3.5 h-3.5 text-brand-green" />
-                            <span>{post.readingTimeMinutes} min read</span>
+                            <span>{post.readingTimeMinutes || 9} min read</span>
                           </div>
                         </div>
                         <div className="flex items-center gap-1 font-bold text-brand-blue">

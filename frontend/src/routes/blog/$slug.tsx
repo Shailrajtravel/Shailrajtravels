@@ -32,18 +32,7 @@ export const Route = createFileRoute("/blog/$slug")({
 
     // 1. Check live custom blogs from database first so admin changes take immediate effect
     try {
-      let customBlog = await getCustomBlogBySlugFn({ data: { slug: params.slug } });
-      if (!customBlog) {
-        const alias =
-          params.slug === "pune-to-ujjain-road-trip-itinerary"
-            ? "pune-to-ujjain-tour-guide-mahakal-darshan-itinerary"
-            : params.slug === "pune-to-ujjain-tour-guide-mahakal-darshan-itinerary"
-            ? "pune-to-ujjain-road-trip-itinerary"
-            : null;
-        if (alias) {
-          customBlog = await getCustomBlogBySlugFn({ data: { slug: alias } });
-        }
-      }
+      const customBlog = await getCustomBlogBySlugFn({ data: { slug: params.slug } });
       if (customBlog) {
         post = customBlog;
       }
@@ -54,17 +43,6 @@ export const Route = createFileRoute("/blog/$slug")({
     // 2. Fallback to static snapshot in blogs.ts if not found in database or if offline
     if (!post) {
       post = blogPosts.find((p) => p.slug === params.slug);
-      if (!post) {
-        const alias =
-          params.slug === "pune-to-ujjain-road-trip-itinerary"
-            ? "pune-to-ujjain-tour-guide-mahakal-darshan-itinerary"
-            : params.slug === "pune-to-ujjain-tour-guide-mahakal-darshan-itinerary"
-            ? "pune-to-ujjain-road-trip-itinerary"
-            : null;
-        if (alias) {
-          post = blogPosts.find((p) => p.slug === alias);
-        }
-      }
     }
 
     if (!post || post.isHidden) throw notFound();
@@ -210,7 +188,7 @@ function BlogPostPage() {
               <div className="flex items-center gap-2">
                 <Calendar className="w-5 h-5 text-brand-green" />
                 <span>
-                  {new Date(post.publishedAt).toLocaleDateString("en-IN", {
+                  {new Date(post.publishedAt || post.createdAt || Date.now()).toLocaleDateString("en-IN", {
                     month: "long",
                     day: "numeric",
                     year: "numeric",
@@ -436,7 +414,7 @@ function BlogPostPage() {
                             {article.title}
                           </h4>
                           <p className="text-xs text-slate-500">
-                            {new Date(article.publishedAt).toLocaleDateString("en-IN", {
+                            {new Date(article.publishedAt || article.createdAt || Date.now()).toLocaleDateString("en-IN", {
                               month: "short",
                               day: "numeric",
                               year: "numeric",

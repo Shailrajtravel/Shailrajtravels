@@ -133,7 +133,7 @@ function BlogCategoryPage() {
                   <div className="pt-5 border-t border-slate-100 mt-auto flex items-center justify-between text-xs text-slate-500">
                     <div className="flex items-center gap-1.5">
                       <Calendar className="w-3.5 h-3.5" />
-                      {new Date(post.publishedAt).toLocaleDateString("en-IN", {
+                      {new Date(post.publishedAt || post.createdAt || Date.now()).toLocaleDateString("en-IN", {
                         month: "short",
                         day: "numeric",
                         year: "numeric",
