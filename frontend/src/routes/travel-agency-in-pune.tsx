@@ -111,8 +111,8 @@ function TravelAgencyInPunePage() {
     ],
     aggregateRating: {
       "@type": "AggregateRating",
-      ratingValue: "4.9",
-      reviewCount: "580",
+      ratingValue: businessConfig.reviewRating || "4.9",
+      reviewCount: businessConfig.reviewCount || "580",
     },
     areaServed: [
       { "@type": "City", name: "Pune" },

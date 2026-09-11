@@ -1,3 +1,5 @@
+import { businessConfig } from '@/frontend/shared/config/business';
+
 export function generateLocalBusinessSchema() {
   return {
     "@context": "https://schema.org",
@@ -10,12 +12,12 @@ export function generateLocalBusinessSchema() {
     image: "https://www.shailrajtravels.com/logo.png",
     "@id": "https://www.shailrajtravels.com",
     url: "https://www.shailrajtravels.com",
-    telephone: "+919764413556",
+    telephone: businessConfig.supportPhone,
     priceRange: "₹₹",
     aggregateRating: {
       "@type": "AggregateRating",
-      ratingValue: "4.9",
-      reviewCount: "580",
+      ratingValue: businessConfig.reviewRating || "4.9",
+      reviewCount: businessConfig.reviewCount || "580",
       bestRating: "5",
       worstRating: "1",
     },
