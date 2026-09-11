@@ -19,6 +19,8 @@ const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
   return text ? JSON.parse(text) : null;
 };
 
+import { seedTours } from '@/backend/shared/seed-data';
+
 export const getToursFn = createServerFn({ method: "POST" })
   .validator((data?: { lang?: string }) => data || {})
   .handler(async ({ data }) => {
@@ -29,23 +31,19 @@ export const getToursFn = createServerFn({ method: "POST" })
       if (cached && Array.isArray(cached) && cached.length > 0) {
         return cached;
       }
+      // Background revalidation
       const qs = data?.lang ? `?lang=${data.lang}` : "";
-      let result = await apiFetch(`/tours${qs}`);
-      if (Array.isArray(result) && result.length > 0) {
-        await setCachedData(cacheKey, result, 600);
-        return result;
-      }
-      if (data?.lang && data.lang !== "en") {
-        const enResult = await apiFetch(`/tours?lang=en`);
-        if (enResult && Array.isArray(enResult) && enResult.length > 0) {
-          await setCachedData(cacheKey, enResult, 600);
-          return enResult;
-        }
-      }
-      return result || [];
+      apiFetch(`/tours${qs}`)
+        .then((result) => {
+          if (Array.isArray(result) && result.length > 0) {
+            setCachedData(cacheKey, result, 600);
+          }
+        })
+        .catch(() => {});
+      return seedTours;
     } catch (error) {
       console.error("Failed to fetch tours", error);
-      return [];
+      return seedTours;
     }
   });
 

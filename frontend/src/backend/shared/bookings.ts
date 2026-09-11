@@ -26,6 +26,8 @@ const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
   }
 };
 
+import { seedTripOptions } from '@/backend/shared/seed-data';
+
 // ---- TRIP OPTIONS ----
 export const getTripOptionsFn = createServerFn({ method: "POST" }).handler(async () => {
   try {
@@ -33,14 +35,18 @@ export const getTripOptionsFn = createServerFn({ method: "POST" }).handler(async
     if (cached && Array.isArray(cached) && cached.length > 0) {
       return cached;
     }
-    const data = await apiFetch('/bookings/trip-options');
-    if (data && Array.isArray(data) && data.length > 0) {
-      await setCachedData('trip-options:all', data, 600);
-    }
-    return data || [];
+    // Background revalidation
+    apiFetch('/bookings/trip-options')
+      .then((data) => {
+        if (data && Array.isArray(data) && data.length > 0) {
+          setCachedData('trip-options:all', data, 600);
+        }
+      })
+      .catch(() => {});
+    return seedTripOptions;
   } catch (error) {
     console.error("Failed to fetch trip options", error);
-    return [];
+    return seedTripOptions;
   }
 });
 

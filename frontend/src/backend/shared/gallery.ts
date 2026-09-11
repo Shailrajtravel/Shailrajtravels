@@ -19,20 +19,26 @@ const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
   return text ? JSON.parse(text) : null;
 };
 
+import { seedGallery } from '@/backend/shared/seed-data';
+
 export const getGalleryPhotosFn = createServerFn({ method: "POST" }).handler(async () => {
   try {
     const cached = await getCachedData<any[]>('gallery:all');
     if (cached && Array.isArray(cached)) {
       return cached;
     }
-    const data = await apiFetch('/gallery');
-    if (data && Array.isArray(data)) {
-      await setCachedData('gallery:all', data, 600);
-    }
-    return data || [];
+    // Background revalidation
+    apiFetch('/gallery')
+      .then((data) => {
+        if (data && Array.isArray(data)) {
+          setCachedData('gallery:all', data, 600);
+        }
+      })
+      .catch(() => {});
+    return seedGallery;
   } catch (error) {
     console.error("Failed to fetch gallery photos", error);
-    return [];
+    return seedGallery;
   }
 });
 

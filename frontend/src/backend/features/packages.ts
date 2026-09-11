@@ -19,20 +19,26 @@ const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
   return text ? JSON.parse(text) : null;
 };
 
+import { seedPackages } from '@/backend/shared/seed-data';
+
 export const getPackagesFn = createServerFn({ method: "POST" }).handler(async () => {
   try {
     const cached = await getCachedData<any[]>('packages:all');
     if (cached && Array.isArray(cached) && cached.length > 0) {
       return cached;
     }
-    const data = await apiFetch('/packages');
-    if (data && Array.isArray(data) && data.length > 0) {
-      await setCachedData('packages:all', data, 600);
-    }
-    return data || [];
+    // Background revalidation
+    apiFetch('/packages')
+      .then((data) => {
+        if (data && Array.isArray(data) && data.length > 0) {
+          setCachedData('packages:all', data, 600);
+        }
+      })
+      .catch(() => {});
+    return seedPackages;
   } catch (error) {
     console.error("Failed to fetch packages", error);
-    return [];
+    return seedPackages;
   }
 });
 

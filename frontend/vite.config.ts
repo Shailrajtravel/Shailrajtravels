@@ -25,7 +25,7 @@ import { visualizer } from "rollup-plugin-visualizer";
 
 export default defineConfig({
   nitro: {
-    preset: "cloudflare-pages"
+    preset: "cloudflare-pages",
   },
   tanstackStart: {
     server: { entry: "server" },
