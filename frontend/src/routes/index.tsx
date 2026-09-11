@@ -79,7 +79,9 @@ function HomePage() {
 
       return {
         ...pkg,
+        image: match?.heroContent?.image || match?.image || pkg.image,
         tourId: match?._id,
+        slug: match?.slug || pkg.slug,
         dates: tourDates || pkgDates || (pkg.schedule && !/every|daily|weekly|departures/i.test(pkg.schedule) ? [pkg.schedule] : []),
       };
     });
@@ -125,7 +127,7 @@ function HomePage() {
           <ToursSection
             lang={lang}
             t={t}
-            packages={dbPackages}
+            packages={allPackages}
             tripOptions={tripOptions}
             onBookSeat={handleBookSeat}
             mode="packages"

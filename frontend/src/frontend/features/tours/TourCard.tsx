@@ -43,7 +43,8 @@ export function TourCard({ tour, onOpenDetails, onBookSeat, t }: TourCardProps) 
           alt={tour.title}
           width={400}
           height={220}
-          optimizedWidth={600}
+          optimizedWidth={1200}
+          autoOptimizeCloudinary={false}
           className="w-full h-full object-cover"
         />
         {/* Gradient Overlay for Text Readability */}
