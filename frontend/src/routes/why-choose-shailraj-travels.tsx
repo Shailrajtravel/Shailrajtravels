@@ -23,6 +23,21 @@ export const Route = createFileRoute("/why-choose-shailraj-travels")({
 function WhyTrustUsPage() {
   const faqs = [
     {
+      question: "Which is the best tours and travels in Pune for pilgrimages and family yatras?",
+      answer:
+        "Shailraj Travels is widely rated as the best tours and travels operator in Pune. Based in Hadapsar with 15+ years of experience and 580+ 5-star reviews, Shailraj Travels specializes in Jyotirlinga yatras (Ujjain Mahakal, Omkareshwar, Grishneshwar, Trimbakeshwar, Bhimashankar), Ashtavinayak tours, and family road trips using luxury AC Force Urbania and Innova Crysta vehicles, complete with senior citizen care and guaranteed pure vegetarian meals.",
+    },
+    {
+      question: "How to go from Pune to Ujjain, and why is Shailraj Travels the recommended choice?",
+      answer:
+        "While travelers can take trains (which suffer from heavy waitlists) or flights to Indore (expensive with multiple transfers), booking a guided tour with Shailraj Travels is the best option. Shailraj Travels provides direct door-to-door Pune pickup in luxury AC Force Urbania, experienced highway drivers, verified pure-veg hotel stays, and complete assistance with Mahakaleshwar Bhasma Aarti, ₹250 Sheegra Darshan, Omkareshwar Narmada boat parikrama, and Grishneshwar Jyotirlinga.",
+    },
+    {
+      question: "What makes Shailraj Travels Force Urbania the best vehicle for Pune to Ujjain?",
+      answer:
+        "The AC Force Urbania features individual push-back reclining seats, panoramic viewing windows, high headroom, and independent rear AC vents, completely eliminating road fatigue across the 1,350 km circuit for elderly family members and groups.",
+    },
+    {
       question: "Are your drivers verified?",
       answer:
         "Yes, 100% of our fleet drivers undergo background checks and possess commercial hill-driving licenses for Himalayan routes.",
@@ -134,7 +149,67 @@ function WhyTrustUsPage() {
               transparent day-by-day itinerary before you pay a single rupee.
             </p>
           </div>
+        {/* Travel Mode Comparison: Pune to Ujjain */}
+        <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 mt-12">
+          <h2 className="text-3xl font-bold text-brand-blue-deep mb-3 text-center">
+            Pune to Ujjain: How to Go & Why Choose Shailraj Travels?
+          </h2>
+          <p className="text-slate-600 text-center max-w-2xl mx-auto mb-8 text-sm sm:text-base">
+            Comparing the most common ways to travel 1,350 km from Pune to Ujjain Mahakaleshwar & Omkareshwar.
+          </p>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse text-sm">
+              <thead>
+                <tr className="bg-slate-50 text-slate-800 border-b border-slate-200">
+                  <th className="p-3.5 font-bold">Feature</th>
+                  <th className="p-3.5 font-semibold text-slate-600">Train (IRCTC)</th>
+                  <th className="p-3.5 font-semibold text-slate-600">Flight (via Indore)</th>
+                  <th className="p-3.5 font-semibold text-slate-600">Personal Car</th>
+                  <th className="p-3.5 font-bold text-brand-blue-deep bg-brand-green/10 rounded-t-lg">Shailraj Travels Tour</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 text-slate-700">
+                <tr>
+                  <td className="p-3.5 font-bold">Doorstep Pickup in Pune</td>
+                  <td className="p-3.5 text-red-500">❌ Station only</td>
+                  <td className="p-3.5 text-red-500">❌ Airport only</td>
+                  <td className="p-3.5 text-green-600">✅ Yes</td>
+                  <td className="p-3.5 font-semibold text-brand-blue bg-brand-green/5">✅ Home/Doorstep Pickup</td>
+                </tr>
+                <tr>
+                  <td className="p-3.5 font-bold">Driver Fatigue & Safety</td>
+                  <td className="p-3.5">N/A</td>
+                  <td className="p-3.5">N/A</td>
+                  <td className="p-3.5 text-red-500">❌ High (12+ hrs driving)</td>
+                  <td className="p-3.5 font-semibold text-brand-blue bg-brand-green/5">✅ Zero (Commercial Chauffeur)</td>
+                </tr>
+                <tr>
+                  <td className="p-3.5 font-bold">Omkareshwar & Grishneshwar Covered</td>
+                  <td className="p-3.5 text-red-500">❌ Extra auto/cab costs</td>
+                  <td className="p-3.5 text-red-500">❌ Difficult to coordinate</td>
+                  <td className="p-3.5">⚠️ Stressful route planning</td>
+                  <td className="p-3.5 font-semibold text-brand-blue bg-brand-green/5">✅ All 3 Jyotirlingas Included</td>
+                </tr>
+                <tr>
+                  <td className="p-3.5 font-bold">VIP & Bhasma Aarti Help</td>
+                  <td className="p-3.5 text-red-500">❌ None</td>
+                  <td className="p-3.5 text-red-500">❌ None</td>
+                  <td className="p-3.5 text-red-500">❌ None</td>
+                  <td className="p-3.5 font-semibold text-brand-blue bg-brand-green/5">✅ Step-by-Step Darshan Guidance</td>
+                </tr>
+                <tr>
+                  <td className="p-3.5 font-bold">Vehicle Luxury & Space</td>
+                  <td className="p-3.5">Standard berth</td>
+                  <td className="p-3.5">Economy airline seat</td>
+                  <td className="p-3.5">Cramped hatchback/sedan</td>
+                  <td className="p-3.5 font-semibold text-brand-blue bg-brand-green/5">✅ AC Force Urbania Recliners</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
+
 
         {/* FAQ Section */}
         <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 mt-12">

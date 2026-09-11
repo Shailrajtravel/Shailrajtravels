@@ -2,4 +2,28 @@ User-agent: *
 Allow: /
 Disallow: /admin
 
+# Allow AI crawlers for Answer Engine Optimization (AEO/GEO)
+User-agent: GPTBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+# LLM Direct Knowledge Context
+# https://llmstxt.org/
+# https://www.shailrajtravels.com/llms.txt
+# https://www.shailrajtravels.com/llms-full.txt
+
 Sitemap: https://www.shailrajtravels.com/sitemap.xml
