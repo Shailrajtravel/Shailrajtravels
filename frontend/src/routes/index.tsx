@@ -61,18 +61,36 @@ function HomePage() {
   };
 
   const allPackages = useMemo(() => {
+    function norm(s: string) {
+      return (s || '')
+        .toLowerCase()
+        .replace(/[–—\-_()]/g, ' ')
+        .replace(/dhoomeshwar|dhrushneshwar/g, 'ghrishneshwar')
+        .replace(/tour/gi, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
     const tourMap = new Map();
     for (const tour of tours || []) {
-      if (tour.title) tourMap.set(tour.title.toLowerCase().trim(), tour);
+      if (tour.title) {
+        tourMap.set(tour.title.toLowerCase().trim(), tour);
+        tourMap.set(norm(tour.title), tour);
+      }
       if (tour.slug) tourMap.set(tour.slug.toLowerCase().trim(), tour);
       if (tour._id) tourMap.set(String(tour._id), tour);
     }
 
     const merged = (dbPackages || []).map((pkg: any) => {
-      const match =
+      let match =
         tourMap.get((pkg.title || "").toLowerCase().trim()) ||
+        tourMap.get(norm(pkg.title)) ||
         tourMap.get((pkg.slug || "").toLowerCase().trim()) ||
         tourMap.get(String(pkg._id));
+
+      if (!match && norm(pkg.title).includes('ujjain') && norm(pkg.title).includes('omkareshwar')) {
+        match = (tours || []).find((t: any) => t.slug === 'ujjain-omkareshwar-Ghrishneshwar-maheshwar-tour');
+      }
 
       const tourDates = match && Array.isArray(match.dates) && match.dates.length > 0 ? match.dates : null;
       const pkgDates = Array.isArray(pkg.dates) && pkg.dates.length > 0 ? pkg.dates : null;
@@ -91,7 +109,7 @@ function HomePage() {
     const existingTitles = new Set(merged.map((p: any) => (p.title || "").toLowerCase().trim()));
     for (const tour of tours || []) {
       const key = (tour.title || "").toLowerCase().trim();
-      if (!existingTitles.has(key)) {
+      if (!existingTitles.has(key) && !existingTitles.has(norm(tour.title))) {
         merged.push({
           _id: tour._id,
           tourId: tour._id,

@@ -22,8 +22,15 @@ export const getToursFn = createServerFn({ method: "POST" })
   .validator((data?: { lang?: string }) => data || {})
   .handler(async ({ data }) => {
     try {
-      const qs = data.lang ? `?lang=${data.lang}` : "";
-      return await apiFetch(`/tours${qs}`);
+      const qs = data?.lang ? `?lang=${data.lang}` : "";
+      const result = await apiFetch(`/tours${qs}`);
+      if (Array.isArray(result) && result.length > 0) {
+        return result;
+      }
+      if (data?.lang && data.lang !== "en") {
+        return (await apiFetch(`/tours?lang=en`)) || [];
+      }
+      return result || [];
     } catch (error) {
       console.error("Failed to fetch tours", error);
       return [];

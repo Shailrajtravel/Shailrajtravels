@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link } from '@tanstack/react-router';
-import { LazyImage } from '@/frontend/shared/ui/lazy-image';
+import { TourCard, TourData } from '@/frontend/features/tours/TourCard';
+import { TourModal } from '@/frontend/features/tours/TourModal';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
-import { ChevronLeft, ChevronRight, Route } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 // @ts-ignore
 import bgFallback from '@/frontend/shared/assets/hero-pandharpur.webp?w=600&format=webp&as=url';
 
@@ -24,31 +24,121 @@ export function ToursSection({
   onBookSeat?: (tour: any) => void;
   mode?: "packages" | "tours";
 }) {
-  const mappedTripOptions = (tripOptions || []).map((trip: any) => ({
-    id: trip._id,
-    slug: trip.slug,
-    image: trip.image || bgFallback,
-    title: trip.name,
-    destinations: trip.route || [],
-    heroContent: { description: trip.description || "", image: trip.image || bgFallback },
-  }));
+  const [selectedTour, setSelectedTour] = useState<TourData | null>(null);
 
-  const mappedTours = (tours || []).map((tour: any) => ({
-    id: tour._id,
-    slug: tour.slug,
-    image: tour.heroContent?.image || bgFallback,
-    title: tour.title,
-    destinations: tour.destinations || [],
-    heroContent: tour.heroContent || { description: "", image: bgFallback },
-  }));
+  const formatTourData = (item: any): TourData => {
+    const cardImage = item.heroContent?.image || item.image || bgFallback;
+    const cardTitle = item.title || item.name || "";
+    const cardSubtitle =
+      item.subtitle ||
+      item.metaTitle ||
+      item.heroContent?.description ||
+      item.metaDescription ||
+      item.overview ||
+      "Special Spiritual Tour";
 
-  // Display DB packages, mapped trip options, or mapped popular tours based on mode
-  const displayPackages = mode === "packages"
-    ? [...(packages || []), ...mappedTripOptions]
-    : mappedTours;
+    const durationBadge =
+      item.durationBadge ||
+      item.packages?.[0]?.title ||
+      (item.duration ? `${item.duration}` : "Weekly Trip");
+
+    const tourRoute =
+      Array.isArray(item.route) && item.route.length > 0
+        ? item.route
+        : Array.isArray(item.destinations) && item.destinations.length > 0
+        ? item.destinations
+        : [cardTitle];
+
+    const tourLocation =
+      item.location ||
+      (Array.isArray(item.destinations) && item.destinations.length > 0
+        ? item.destinations.join(", ")
+        : "Maharashtra");
+
+    const tourSchedule =
+      item.schedule ||
+      (Array.isArray(item.dates) && item.dates.length > 0
+        ? item.dates.join(", ")
+        : "Every Friday & Weekend Departures");
+
+    const tourFrequency = item.frequency || "Weekly";
+
+    const tourTags =
+      Array.isArray(item.tags) && item.tags.length > 0
+        ? item.tags
+        : ["Jyotirlinga", "Temple Tour", "Spiritual Tour"];
+
+    const tourPrice =
+      item.price ||
+      (item.packages?.[0]?.price ? `₹${item.packages[0].price}` : "₹6,999");
+
+    const tourItinerary =
+      Array.isArray(item.itinerary) && item.itinerary.length > 0
+        ? item.itinerary
+        : Array.isArray(item.highlights)
+        ? item.highlights.map((h: string, idx: number) => ({
+            day: `Day ${idx + 1}`,
+            title: h,
+          }))
+        : [];
+
+    const tourIncludes =
+      Array.isArray(item.includes) && item.includes.length > 0
+        ? item.includes
+        : item.packages?.[0]?.inclusions || [
+            "AC Travel",
+            "Temple Darshan",
+            "Verified Hotels",
+            "Travel Assistance",
+          ];
+
+    return {
+      id: item._id || item.id || item.tourId || cardTitle,
+      slug: item.slug,
+      image: cardImage,
+      images: Array.isArray(item.images) && item.images.length > 0 ? item.images : [cardImage],
+      durationBadge,
+      subtitle: cardSubtitle,
+      title: cardTitle,
+      location: tourLocation,
+      schedule: tourSchedule,
+      frequency: tourFrequency,
+      route: tourRoute,
+      tags: tourTags,
+      seatsAvailable: typeof item.seatsAvailable === 'number' ? item.seatsAvailable : 14,
+      seatsTotal: typeof item.seatsTotal === 'number' ? item.seatsTotal : 17,
+      price: tourPrice,
+      itinerary: tourItinerary,
+      includes: tourIncludes,
+      dates: Array.isArray(item.dates) ? item.dates : [],
+    };
+  };
+
+  const mappedTripOptions = (tripOptions || []).map((trip: any) =>
+    formatTourData({
+      _id: trip._id,
+      slug: trip.slug,
+      image: trip.image,
+      title: trip.name,
+      route: trip.route,
+      subtitle: trip.description,
+      itinerary: trip.itinerary,
+      includes: trip.includes,
+      dates: trip.dates,
+      schedule: trip.schedule,
+      price: trip.price,
+    })
+  );
+
+  const mappedTours = (tours || []).map((tour: any) => formatTourData(tour));
+
+  const displayList: TourData[] =
+    mode === "packages"
+      ? [...(packages || []).map(formatTourData), ...mappedTripOptions]
+      : mappedTours;
 
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "start" }, [
-    Autoplay({ delay: 3000, stopOnInteraction: true }),
+    Autoplay({ delay: 3500, stopOnInteraction: true }),
   ]);
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(true);
@@ -69,21 +159,24 @@ export function ToursSection({
     emblaApi.on("reInit", onSelect);
   }, [emblaApi, onSelect]);
 
-  if (displayPackages.length === 0) {
+  if (displayList.length === 0) {
     return null;
   }
 
-  const sectionSubtitle = mode === "packages"
-    ? (t.toursSubtitle || "PACKAGES")
-    : (t.toursSectionSubtitle || "UPCOMING TOURS");
+  const sectionSubtitle =
+    mode === "packages"
+      ? t.toursSubtitle || "PACKAGES"
+      : t.toursSectionSubtitle || "UPCOMING TOURS";
 
-  const titlePrefix = mode === "packages"
-    ? (t.toursTitlePrefix || "Popular")
-    : (t.toursSectionTitlePrefix || "Special");
+  const titlePrefix =
+    mode === "packages"
+      ? t.toursTitlePrefix || "Popular"
+      : t.toursSectionTitlePrefix || "Special";
 
-  const titleHighlight = mode === "packages"
-    ? (t.toursTitleHighlight || "Journeys")
-    : (t.toursSectionTitleHighlight || "Departures");
+  const titleHighlight =
+    mode === "packages"
+      ? t.toursTitleHighlight || "Journeys"
+      : t.toursSectionTitleHighlight || "Departures";
 
   return (
     <section
@@ -108,126 +201,47 @@ export function ToursSection({
         <div className="relative group">
           <div className="overflow-hidden -mx-4 px-4 pb-4" ref={emblaRef}>
             <div className="flex gap-8">
-              {displayPackages.map((tour: any) => {
-                const cardImage = tour.heroContent?.image || tour.image || bgFallback;
-                const cardTitle = tour.title || tour.name || "";
-                const cardDescription = tour.heroContent?.description || tour.metaDescription || tour.overview || "";
-                const cardDestinations = tour.destinations || [];
-                const cardSlug = tour.slug;
-                const cardRoute = tour.route || tour.destinations || [];
-                const cardPrice = tour.price || (tour.packages?.[0]?.price ? `₹${tour.packages[0].price}` : "");
-
-                const cardContent = (
-                  <div className="border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-full flex flex-col bg-white hover:-translate-y-1">
-                    <div className="w-full aspect-[1654/561] relative overflow-hidden bg-slate-950 flex items-center justify-center">
-                      <LazyImage
-                        src={cardImage}
-                        alt={cardTitle}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
-                        optimizedWidth={1200}
-                        autoOptimizeCloudinary={false}
-                      />
-                    </div>
-                    <div className="p-6 flex flex-col flex-grow">
-                      <div className="flex gap-2 mb-3 flex-wrap">
-                        {cardDestinations.slice(0, 2).map((dest: string, idx: number) => (
-                          <span
-                            key={idx}
-                            className="px-2.5 py-1 bg-brand-blue/5 text-brand-blue-deep text-[11px] font-bold rounded-lg border border-brand-blue/10 uppercase tracking-wider"
-                          >
-                            {dest}
-                          </span>
-                        ))}
-                        {cardDestinations.length > 2 && (
-                          <span className="px-2.5 py-1 bg-slate-50 text-slate-500 text-[11px] font-bold rounded-lg border border-slate-100 uppercase tracking-wider">
-                            +{cardDestinations.length - 2}
-                          </span>
-                        )}
-                      </div>
-                      <h3 className="text-xl font-bold text-slate-800 mb-2 group-hover:text-brand-orange transition-colors">
-                        {cardTitle}
-                      </h3>
-                      <p className="text-sm text-slate-500 line-clamp-2 mb-4 leading-relaxed">
-                        {cardDescription}
-                      </p>
-
-                      {/* Route */}
-                      {cardRoute.length > 0 && (
-                        <div className="bg-slate-50 rounded-xl p-3 mb-4">
-                          <div className="flex items-center gap-1.5 mb-1.5">
-                            <Route className="w-3.5 h-3.5 text-slate-500" />
-                            <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider">Route</span>
-                          </div>
-                          <div className="flex flex-wrap items-center text-[13px] text-slate-700 font-medium leading-relaxed gap-x-1">
-                            {cardRoute.map((stop: string, index: number) => (
-                              <React.Fragment key={index}>
-                                <span>{stop}</span>
-                                {index < cardRoute.length - 1 && (
-                                  <span className="text-brand-orange text-[11px] opacity-70">›</span>
-                                )}
-                              </React.Fragment>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Price & Details Footer */}
-                      <div className="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
-                        {cardPrice ? (
-                          <div>
-                            <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Per person</p>
-                            <p className="text-xl font-bold text-brand-blue-deep">{cardPrice}</p>
-                          </div>
-                        ) : (
-                          <div />
-                        )}
-                        <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-brand-orange/10 text-brand-orange font-bold text-sm group-hover:bg-brand-orange group-hover:text-white transition-colors">
-                          {t.toursIndexViewDetails ? t.toursIndexViewDetails.replace(/→/g, '').trim() : "View Details"}
-                          <span className="transition-transform group-hover:translate-x-1">→</span>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                );
-
-                return (
-                  <div
-                    key={tour.id || tour._id || cardTitle}
-                    className="flex-[0_0_100%] md:flex-[0_0_calc(50%-1rem)] lg:flex-[0_0_calc(33.333%-1.33rem)] min-w-0 flex flex-col group"
-                  >
-                    {cardSlug ? (
-                      <Link
-                        to="/tours/$tourSlug"
-                        params={{ tourSlug: cardSlug }}
-                        className="block h-full"
-                      >
-                        {cardContent}
-                      </Link>
-                    ) : (
-                      <div className="h-full">
-                        {cardContent}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+              {displayList.map((tour: TourData) => (
+                <div
+                  key={tour.id || tour.slug || tour.title}
+                  className="flex-[0_0_100%] md:flex-[0_0_calc(50%-1rem)] lg:flex-[0_0_calc(33.333%-1.33rem)] min-w-0 flex flex-col"
+                >
+                  <TourCard
+                    tour={tour}
+                    onOpenDetails={setSelectedTour}
+                    onBookSeat={onBookSeat}
+                    t={t}
+                  />
+                </div>
+              ))}
             </div>
           </div>
 
           <button
             onClick={scrollPrev}
-            className="hidden md:flex absolute -left-5 top-1/2 -translate-y-1/2 z-20 h-14 w-14 items-center justify-center rounded-full bg-white shadow-xl border border-slate-100 text-brand-blue-deep opacity-0 transition-all hover:bg-brand-green hover:text-white group-hover:opacity-100 hover:scale-110"
+            aria-label="Previous tours"
+            className="hidden md:flex absolute -left-5 top-1/2 -translate-y-1/2 z-20 h-12 w-12 items-center justify-center rounded-full bg-[#16a34a] hover:bg-[#15803d] text-white shadow-xl hover:scale-110 transition-all cursor-pointer"
           >
-            <ChevronLeft className="h-7 w-7 ml-[-2px]" />
+            <ChevronLeft className="h-6 w-6 ml-[-2px]" />
           </button>
           <button
             onClick={scrollNext}
-            className="hidden md:flex absolute -right-5 top-1/2 -translate-y-1/2 z-20 h-14 w-14 items-center justify-center rounded-full bg-white shadow-xl border border-slate-100 text-brand-blue-deep opacity-0 transition-all hover:bg-brand-green hover:text-white group-hover:opacity-100 hover:scale-110"
+            aria-label="Next tours"
+            className="hidden md:flex absolute -right-5 top-1/2 -translate-y-1/2 z-20 h-12 w-12 items-center justify-center rounded-full bg-[#16a34a] hover:bg-[#15803d] text-white shadow-xl hover:scale-110 transition-all cursor-pointer"
           >
-            <ChevronRight className="h-7 w-7 mr-[-2px]" />
+            <ChevronRight className="h-6 w-6 mr-[-2px]" />
           </button>
         </div>
       </div>
+
+      {selectedTour && (
+        <TourModal
+          tour={selectedTour}
+          onClose={() => setSelectedTour(null)}
+          onBookSeat={onBookSeat}
+          t={t}
+        />
+      )}
     </section>
   );
 }

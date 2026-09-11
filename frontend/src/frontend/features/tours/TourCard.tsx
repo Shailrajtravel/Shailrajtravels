@@ -37,34 +37,72 @@ export function TourCard({ tour, onOpenDetails, onBookSeat, t }: TourCardProps) 
   return (
     <div className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 flex flex-col max-w-[400px] w-full mx-auto h-full">
       {/* Image Header */}
-      <div className="relative h-[220px] w-full overflow-hidden">
-        <LazyImage
-          src={tour.image}
-          alt={tour.title}
-          width={400}
-          height={220}
-          optimizedWidth={1200}
-          autoOptimizeCloudinary={false}
-          className="w-full h-full object-cover"
-        />
-        {/* Gradient Overlay for Text Readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#112233] via-[#112233]/60 to-transparent" />
+      {tour.slug ? (
+        <Link
+          to="/tours/$tourSlug"
+          params={{ tourSlug: tour.slug }}
+          className="relative h-[220px] w-full overflow-hidden block group/header cursor-pointer"
+        >
+          <LazyImage
+            src={tour.image}
+            alt={tour.title}
+            width={400}
+            height={220}
+            optimizedWidth={1200}
+            autoOptimizeCloudinary={false}
+            className="w-full h-full object-cover group-hover/header:scale-105 transition-transform duration-500 ease-out"
+          />
+          {/* Gradient Overlay for Text Readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#112233] via-[#112233]/60 to-transparent" />
 
-        {/* Duration Badge */}
-        <div className="absolute top-4 right-4 bg-[#F59E0B] text-[#112233] font-bold text-[13px] px-3 py-1.5 rounded-full shadow-md z-10">
-          {tour.durationBadge}
-        </div>
+          {/* Duration Badge */}
+          <div className="absolute top-4 right-4 bg-[#F59E0B] text-[#112233] font-bold text-[13px] px-3 py-1.5 rounded-full shadow-md z-10">
+            {tour.durationBadge}
+          </div>
 
-        {/* Text Overlays */}
-        <div className="absolute bottom-4 left-5 right-5 z-10">
-          <p className="text-[#F59E0B] font-medium text-[13px] mb-1 drop-shadow-sm">
-            {tour.subtitle}
-          </p>
-          <h3 className="text-white font-bold text-2xl leading-tight drop-shadow-md">
-            {tour.title}
-          </h3>
+          {/* Text Overlays */}
+          <div className="absolute bottom-4 left-5 right-5 z-10">
+            <p className="text-[#F59E0B] font-medium text-[13px] mb-1 drop-shadow-sm">
+              {tour.subtitle}
+            </p>
+            <h3 className="text-white font-bold text-2xl leading-tight drop-shadow-md group-hover/header:text-amber-200 transition-colors">
+              {tour.title}
+            </h3>
+          </div>
+        </Link>
+      ) : (
+        <div
+          onClick={() => onOpenDetails(tour)}
+          className="relative h-[220px] w-full overflow-hidden cursor-pointer group/header"
+        >
+          <LazyImage
+            src={tour.image}
+            alt={tour.title}
+            width={400}
+            height={220}
+            optimizedWidth={1200}
+            autoOptimizeCloudinary={false}
+            className="w-full h-full object-cover group-hover/header:scale-105 transition-transform duration-500 ease-out"
+          />
+          {/* Gradient Overlay for Text Readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#112233] via-[#112233]/60 to-transparent" />
+
+          {/* Duration Badge */}
+          <div className="absolute top-4 right-4 bg-[#F59E0B] text-[#112233] font-bold text-[13px] px-3 py-1.5 rounded-full shadow-md z-10">
+            {tour.durationBadge}
+          </div>
+
+          {/* Text Overlays */}
+          <div className="absolute bottom-4 left-5 right-5 z-10">
+            <p className="text-[#F59E0B] font-medium text-[13px] mb-1 drop-shadow-sm">
+              {tour.subtitle}
+            </p>
+            <h3 className="text-white font-bold text-2xl leading-tight drop-shadow-md">
+              {tour.title}
+            </h3>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Info Section */}
       <div className="p-5 flex-1 flex flex-col">
