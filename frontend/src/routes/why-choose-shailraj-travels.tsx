@@ -149,6 +149,8 @@ function WhyTrustUsPage() {
               transparent day-by-day itinerary before you pay a single rupee.
             </p>
           </div>
+        </div>
+
         {/* Travel Mode Comparison: Pune to Ujjain */}
         <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 mt-12">
           <h2 className="text-3xl font-bold text-brand-blue-deep mb-3 text-center">
