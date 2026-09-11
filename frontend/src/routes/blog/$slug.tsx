@@ -50,8 +50,8 @@ export const Route = createFileRoute("/blog/$slug")({
 
     return {
       meta: generateSEO({
-        title: post.metaTitle,
-        description: post.metaDescription,
+        title: post.metaTitle || post.title,
+        description: post.metaDescription || post.excerpt || post.title,
         canonicalUrl: `https://www.shailrajtravels.com/blog/${post.slug}`,
         type: "article",
         image: post.ogImage || post.featuredImage,
@@ -63,7 +63,16 @@ export const Route = createFileRoute("/blog/$slug")({
       scripts: [
         {
           type: "application/ld+json",
-          children: JSON.stringify(generateArticleSchema(post, author?.name || "Shailraj Travels")),
+          children: JSON.stringify(
+            generateArticleSchema(
+              {
+                ...post,
+                metaTitle: post.metaTitle || post.title,
+                metaDescription: post.metaDescription || post.excerpt || post.title,
+              },
+              author?.name || post.authorName || "Shailraj Travels"
+            )
+          ),
         },
         {
           type: "application/ld+json",
@@ -91,12 +100,12 @@ function BlogPostPage() {
   const { post } = Route.useLoaderData();
   const lang = "en";
   const t = translations[lang];
-  const author = blogAuthors[post.authorId];
+  const author = post.authorId ? blogAuthors[post.authorId] : undefined;
   const reviewer = post.reviewerId ? blogAuthors[post.reviewerId] : undefined;
 
   // Resolve related content
   const relatedArticles = useMemo(() => {
-    return blogPosts.filter((p) => post.relatedArticleSlugs.includes(p.slug)).slice(0, 3);
+    return blogPosts.filter((p) => post.relatedArticleSlugs?.includes(p.slug)).slice(0, 3);
   }, [post.relatedArticleSlugs]);
 
   // Handle sharing
@@ -228,7 +237,7 @@ function BlogPostPage() {
                 <span className="text-sm font-bold text-slate-400 uppercase tracking-wider mr-2">
                   Tags:
                 </span>
-                {post.tags.map((tag) => (
+                {(post.tags || []).map((tag: string) => (
                   <Link
                     key={tag}
                     to={`/blog/tag/$tagSlug`}
@@ -323,27 +332,22 @@ function BlogPostPage() {
 
               {post.relatedTourSlugs && post.relatedTourSlugs.length > 0 ? (
                 <div className="space-y-3 relative z-10">
-                  {post.relatedTourSlugs.slice(0, 2).map((tourSlug, idx) => {
-                    const tour = require("../../frontend/features/tours/data").tours.find(
-                      (t: any) => t.slug === tourSlug,
-                    );
-                    return (
-                      <Link
-                        key={idx}
-                        to={`/tours/$tourSlug`}
-                        params={{ tourSlug }}
-                        className="flex flex-col items-start justify-between w-full p-4 bg-white/10 hover:bg-white/20 rounded-xl transition-colors backdrop-blur-sm group"
-                      >
-                        <span className="font-bold text-sm text-brand-green mb-1 flex items-center justify-between w-full">
-                          Book Now
-                          <ArrowRight className="w-4 h-4 text-brand-green group-hover:translate-x-1 transition-transform" />
-                        </span>
-                        <span className="font-medium text-[15px] truncate pr-4 text-white">
-                          {tour ? tour.title : "View Tour Details"}
-                        </span>
-                      </Link>
-                    );
-                  })}
+                  {post.relatedTourSlugs.slice(0, 2).map((tourSlug, idx) => (
+                    <Link
+                      key={idx}
+                      to={`/tours/$tourSlug`}
+                      params={{ tourSlug }}
+                      className="flex flex-col items-start justify-between w-full p-4 bg-white/10 hover:bg-white/20 rounded-xl transition-colors backdrop-blur-sm group"
+                    >
+                      <span className="font-bold text-sm text-brand-green mb-1 flex items-center justify-between w-full">
+                        Book Now
+                        <ArrowRight className="w-4 h-4 text-brand-green group-hover:translate-x-1 transition-transform" />
+                      </span>
+                      <span className="font-medium text-[15px] truncate pr-4 text-white">
+                        {tourSlug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())}
+                      </span>
+                    </Link>
+                  ))}
                 </div>
               ) : (
                 <a

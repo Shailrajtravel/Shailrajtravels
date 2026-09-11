@@ -53,6 +53,10 @@ export class CustomBlogsService {
         readingTimeMinutes: Math.max(1, Math.ceil((blog.content || "").split(/\s+/).length / 200)),
         tags: blog.tags || ["Community"],
         isHidden: blog.isHidden || false,
+        metaTitle: blog.metaTitle || blog.title,
+        metaDescription: blog.metaDescription,
+        tableOfContents: blog.tableOfContents,
+        faqs: blog.faqs,
       };
     } catch (error) {
       this.logger.error("Failed to fetch custom blog by slug", error);
