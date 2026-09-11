@@ -11,16 +11,24 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as YatriStoriesRouteImport } from './routes/yatri-stories'
 import { Route as WhyChooseShailrajTravelsRouteImport } from './routes/why-choose-shailraj-travels'
+import { Route as TravelAgencyInPuneRouteImport } from './routes/travel-agency-in-pune'
+import { Route as TourPackagesFromPuneRouteImport } from './routes/tour-packages-from-pune'
+import { Route as TourOperatorInPuneRouteImport } from './routes/tour-operator-in-pune'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SecurityPolicyRouteImport } from './routes/security-policy'
 import { Route as ReportIssueRouteImport } from './routes/report-issue'
 import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
+import { Route as PilgrimageToursFromPuneRouteImport } from './routes/pilgrimage-tours-from-pune'
 import { Route as PilgrimageGuidesRouteImport } from './routes/pilgrimage-guides'
+import { Route as MaharashtraTourPackagesRouteImport } from './routes/maharashtra-tour-packages'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as KnowledgeHubRouteImport } from './routes/knowledge-hub'
 import { Route as InvoicePrintRouteImport } from './routes/invoice-print'
+import { Route as GroupToursFromPuneRouteImport } from './routes/group-tours-from-pune'
 import { Route as FeaturesRouteImport } from './routes/features'
 import { Route as FaqRouteImport } from './routes/faq'
+import { Route as FamilyToursFromPuneRouteImport } from './routes/family-tours-from-pune'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CancellationPolicyRouteImport } from './routes/cancellation-policy'
 import { Route as AuthorsRouteImport } from './routes/authors'
@@ -53,6 +61,21 @@ const WhyChooseShailrajTravelsRoute =
     path: '/why-choose-shailraj-travels',
     getParentRoute: () => rootRouteImport,
   } as any)
+const TravelAgencyInPuneRoute = TravelAgencyInPuneRouteImport.update({
+  id: '/travel-agency-in-pune',
+  path: '/travel-agency-in-pune',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TourPackagesFromPuneRoute = TourPackagesFromPuneRouteImport.update({
+  id: '/tour-packages-from-pune',
+  path: '/tour-packages-from-pune',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TourOperatorInPuneRoute = TourOperatorInPuneRouteImport.update({
+  id: '/tour-operator-in-pune',
+  path: '/tour-operator-in-pune',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
@@ -78,9 +101,19 @@ const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
   path: '/privacy-policy',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PilgrimageToursFromPuneRoute = PilgrimageToursFromPuneRouteImport.update({
+  id: '/pilgrimage-tours-from-pune',
+  path: '/pilgrimage-tours-from-pune',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PilgrimageGuidesRoute = PilgrimageGuidesRouteImport.update({
   id: '/pilgrimage-guides',
   path: '/pilgrimage-guides',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MaharashtraTourPackagesRoute = MaharashtraTourPackagesRouteImport.update({
+  id: '/maharashtra-tour-packages',
+  path: '/maharashtra-tour-packages',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -88,9 +121,19 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const KnowledgeHubRoute = KnowledgeHubRouteImport.update({
+  id: '/knowledge-hub',
+  path: '/knowledge-hub',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InvoicePrintRoute = InvoicePrintRouteImport.update({
   id: '/invoice-print',
   path: '/invoice-print',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GroupToursFromPuneRoute = GroupToursFromPuneRouteImport.update({
+  id: '/group-tours-from-pune',
+  path: '/group-tours-from-pune',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FeaturesRoute = FeaturesRouteImport.update({
@@ -101,6 +144,11 @@ const FeaturesRoute = FeaturesRouteImport.update({
 const FaqRoute = FaqRouteImport.update({
   id: '/faq',
   path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FamilyToursFromPuneRoute = FamilyToursFromPuneRouteImport.update({
+  id: '/family-tours-from-pune',
+  path: '/family-tours-from-pune',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -213,16 +261,24 @@ export interface FileRoutesByFullPath {
   '/authors': typeof AuthorsRoute
   '/cancellation-policy': typeof CancellationPolicyRoute
   '/contact': typeof ContactRoute
+  '/family-tours-from-pune': typeof FamilyToursFromPuneRoute
   '/faq': typeof FaqRoute
   '/features': typeof FeaturesRoute
+  '/group-tours-from-pune': typeof GroupToursFromPuneRoute
   '/invoice-print': typeof InvoicePrintRoute
+  '/knowledge-hub': typeof KnowledgeHubRoute
   '/login': typeof LoginRoute
+  '/maharashtra-tour-packages': typeof MaharashtraTourPackagesRoute
   '/pilgrimage-guides': typeof PilgrimageGuidesRoute
+  '/pilgrimage-tours-from-pune': typeof PilgrimageToursFromPuneRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/report-issue': typeof ReportIssueRoute
   '/security-policy': typeof SecurityPolicyRoute
   '/terms': typeof TermsRoute
+  '/tour-operator-in-pune': typeof TourOperatorInPuneRoute
+  '/tour-packages-from-pune': typeof TourPackagesFromPuneRoute
+  '/travel-agency-in-pune': typeof TravelAgencyInPuneRoute
   '/why-choose-shailraj-travels': typeof WhyChooseShailrajTravelsRoute
   '/yatri-stories': typeof YatriStoriesRoute
   '/author/$authorSlug': typeof AuthorAuthorSlugRoute
@@ -247,16 +303,24 @@ export interface FileRoutesByTo {
   '/authors': typeof AuthorsRoute
   '/cancellation-policy': typeof CancellationPolicyRoute
   '/contact': typeof ContactRoute
+  '/family-tours-from-pune': typeof FamilyToursFromPuneRoute
   '/faq': typeof FaqRoute
   '/features': typeof FeaturesRoute
+  '/group-tours-from-pune': typeof GroupToursFromPuneRoute
   '/invoice-print': typeof InvoicePrintRoute
+  '/knowledge-hub': typeof KnowledgeHubRoute
   '/login': typeof LoginRoute
+  '/maharashtra-tour-packages': typeof MaharashtraTourPackagesRoute
   '/pilgrimage-guides': typeof PilgrimageGuidesRoute
+  '/pilgrimage-tours-from-pune': typeof PilgrimageToursFromPuneRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/report-issue': typeof ReportIssueRoute
   '/security-policy': typeof SecurityPolicyRoute
   '/terms': typeof TermsRoute
+  '/tour-operator-in-pune': typeof TourOperatorInPuneRoute
+  '/tour-packages-from-pune': typeof TourPackagesFromPuneRoute
+  '/travel-agency-in-pune': typeof TravelAgencyInPuneRoute
   '/why-choose-shailraj-travels': typeof WhyChooseShailrajTravelsRoute
   '/yatri-stories': typeof YatriStoriesRoute
   '/author/$authorSlug': typeof AuthorAuthorSlugRoute
@@ -282,16 +346,24 @@ export interface FileRoutesById {
   '/authors': typeof AuthorsRoute
   '/cancellation-policy': typeof CancellationPolicyRoute
   '/contact': typeof ContactRoute
+  '/family-tours-from-pune': typeof FamilyToursFromPuneRoute
   '/faq': typeof FaqRoute
   '/features': typeof FeaturesRoute
+  '/group-tours-from-pune': typeof GroupToursFromPuneRoute
   '/invoice-print': typeof InvoicePrintRoute
+  '/knowledge-hub': typeof KnowledgeHubRoute
   '/login': typeof LoginRoute
+  '/maharashtra-tour-packages': typeof MaharashtraTourPackagesRoute
   '/pilgrimage-guides': typeof PilgrimageGuidesRoute
+  '/pilgrimage-tours-from-pune': typeof PilgrimageToursFromPuneRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/report-issue': typeof ReportIssueRoute
   '/security-policy': typeof SecurityPolicyRoute
   '/terms': typeof TermsRoute
+  '/tour-operator-in-pune': typeof TourOperatorInPuneRoute
+  '/tour-packages-from-pune': typeof TourPackagesFromPuneRoute
+  '/travel-agency-in-pune': typeof TravelAgencyInPuneRoute
   '/why-choose-shailraj-travels': typeof WhyChooseShailrajTravelsRoute
   '/yatri-stories': typeof YatriStoriesRoute
   '/author/$authorSlug': typeof AuthorAuthorSlugRoute
@@ -318,16 +390,24 @@ export interface FileRouteTypes {
     | '/authors'
     | '/cancellation-policy'
     | '/contact'
+    | '/family-tours-from-pune'
     | '/faq'
     | '/features'
+    | '/group-tours-from-pune'
     | '/invoice-print'
+    | '/knowledge-hub'
     | '/login'
+    | '/maharashtra-tour-packages'
     | '/pilgrimage-guides'
+    | '/pilgrimage-tours-from-pune'
     | '/privacy-policy'
     | '/refund-policy'
     | '/report-issue'
     | '/security-policy'
     | '/terms'
+    | '/tour-operator-in-pune'
+    | '/tour-packages-from-pune'
+    | '/travel-agency-in-pune'
     | '/why-choose-shailraj-travels'
     | '/yatri-stories'
     | '/author/$authorSlug'
@@ -352,16 +432,24 @@ export interface FileRouteTypes {
     | '/authors'
     | '/cancellation-policy'
     | '/contact'
+    | '/family-tours-from-pune'
     | '/faq'
     | '/features'
+    | '/group-tours-from-pune'
     | '/invoice-print'
+    | '/knowledge-hub'
     | '/login'
+    | '/maharashtra-tour-packages'
     | '/pilgrimage-guides'
+    | '/pilgrimage-tours-from-pune'
     | '/privacy-policy'
     | '/refund-policy'
     | '/report-issue'
     | '/security-policy'
     | '/terms'
+    | '/tour-operator-in-pune'
+    | '/tour-packages-from-pune'
+    | '/travel-agency-in-pune'
     | '/why-choose-shailraj-travels'
     | '/yatri-stories'
     | '/author/$authorSlug'
@@ -386,16 +474,24 @@ export interface FileRouteTypes {
     | '/authors'
     | '/cancellation-policy'
     | '/contact'
+    | '/family-tours-from-pune'
     | '/faq'
     | '/features'
+    | '/group-tours-from-pune'
     | '/invoice-print'
+    | '/knowledge-hub'
     | '/login'
+    | '/maharashtra-tour-packages'
     | '/pilgrimage-guides'
+    | '/pilgrimage-tours-from-pune'
     | '/privacy-policy'
     | '/refund-policy'
     | '/report-issue'
     | '/security-policy'
     | '/terms'
+    | '/tour-operator-in-pune'
+    | '/tour-packages-from-pune'
+    | '/travel-agency-in-pune'
     | '/why-choose-shailraj-travels'
     | '/yatri-stories'
     | '/author/$authorSlug'
@@ -421,16 +517,24 @@ export interface RootRouteChildren {
   AuthorsRoute: typeof AuthorsRoute
   CancellationPolicyRoute: typeof CancellationPolicyRoute
   ContactRoute: typeof ContactRoute
+  FamilyToursFromPuneRoute: typeof FamilyToursFromPuneRoute
   FaqRoute: typeof FaqRoute
   FeaturesRoute: typeof FeaturesRoute
+  GroupToursFromPuneRoute: typeof GroupToursFromPuneRoute
   InvoicePrintRoute: typeof InvoicePrintRoute
+  KnowledgeHubRoute: typeof KnowledgeHubRoute
   LoginRoute: typeof LoginRoute
+  MaharashtraTourPackagesRoute: typeof MaharashtraTourPackagesRoute
   PilgrimageGuidesRoute: typeof PilgrimageGuidesRoute
+  PilgrimageToursFromPuneRoute: typeof PilgrimageToursFromPuneRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   RefundPolicyRoute: typeof RefundPolicyRoute
   ReportIssueRoute: typeof ReportIssueRoute
   SecurityPolicyRoute: typeof SecurityPolicyRoute
   TermsRoute: typeof TermsRoute
+  TourOperatorInPuneRoute: typeof TourOperatorInPuneRoute
+  TourPackagesFromPuneRoute: typeof TourPackagesFromPuneRoute
+  TravelAgencyInPuneRoute: typeof TravelAgencyInPuneRoute
   WhyChooseShailrajTravelsRoute: typeof WhyChooseShailrajTravelsRoute
   YatriStoriesRoute: typeof YatriStoriesRoute
   AuthorAuthorSlugRoute: typeof AuthorAuthorSlugRoute
@@ -462,6 +566,27 @@ declare module '@tanstack/react-router' {
       path: '/why-choose-shailraj-travels'
       fullPath: '/why-choose-shailraj-travels'
       preLoaderRoute: typeof WhyChooseShailrajTravelsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/travel-agency-in-pune': {
+      id: '/travel-agency-in-pune'
+      path: '/travel-agency-in-pune'
+      fullPath: '/travel-agency-in-pune'
+      preLoaderRoute: typeof TravelAgencyInPuneRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tour-packages-from-pune': {
+      id: '/tour-packages-from-pune'
+      path: '/tour-packages-from-pune'
+      fullPath: '/tour-packages-from-pune'
+      preLoaderRoute: typeof TourPackagesFromPuneRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tour-operator-in-pune': {
+      id: '/tour-operator-in-pune'
+      path: '/tour-operator-in-pune'
+      fullPath: '/tour-operator-in-pune'
+      preLoaderRoute: typeof TourOperatorInPuneRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/terms': {
@@ -499,11 +624,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivacyPolicyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pilgrimage-tours-from-pune': {
+      id: '/pilgrimage-tours-from-pune'
+      path: '/pilgrimage-tours-from-pune'
+      fullPath: '/pilgrimage-tours-from-pune'
+      preLoaderRoute: typeof PilgrimageToursFromPuneRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pilgrimage-guides': {
       id: '/pilgrimage-guides'
       path: '/pilgrimage-guides'
       fullPath: '/pilgrimage-guides'
       preLoaderRoute: typeof PilgrimageGuidesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/maharashtra-tour-packages': {
+      id: '/maharashtra-tour-packages'
+      path: '/maharashtra-tour-packages'
+      fullPath: '/maharashtra-tour-packages'
+      preLoaderRoute: typeof MaharashtraTourPackagesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -513,11 +652,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/knowledge-hub': {
+      id: '/knowledge-hub'
+      path: '/knowledge-hub'
+      fullPath: '/knowledge-hub'
+      preLoaderRoute: typeof KnowledgeHubRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/invoice-print': {
       id: '/invoice-print'
       path: '/invoice-print'
       fullPath: '/invoice-print'
       preLoaderRoute: typeof InvoicePrintRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/group-tours-from-pune': {
+      id: '/group-tours-from-pune'
+      path: '/group-tours-from-pune'
+      fullPath: '/group-tours-from-pune'
+      preLoaderRoute: typeof GroupToursFromPuneRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/features': {
@@ -532,6 +685,13 @@ declare module '@tanstack/react-router' {
       path: '/faq'
       fullPath: '/faq'
       preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/family-tours-from-pune': {
+      id: '/family-tours-from-pune'
+      path: '/family-tours-from-pune'
+      fullPath: '/family-tours-from-pune'
+      preLoaderRoute: typeof FamilyToursFromPuneRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -685,16 +845,24 @@ const rootRouteChildren: RootRouteChildren = {
   AuthorsRoute: AuthorsRoute,
   CancellationPolicyRoute: CancellationPolicyRoute,
   ContactRoute: ContactRoute,
+  FamilyToursFromPuneRoute: FamilyToursFromPuneRoute,
   FaqRoute: FaqRoute,
   FeaturesRoute: FeaturesRoute,
+  GroupToursFromPuneRoute: GroupToursFromPuneRoute,
   InvoicePrintRoute: InvoicePrintRoute,
+  KnowledgeHubRoute: KnowledgeHubRoute,
   LoginRoute: LoginRoute,
+  MaharashtraTourPackagesRoute: MaharashtraTourPackagesRoute,
   PilgrimageGuidesRoute: PilgrimageGuidesRoute,
+  PilgrimageToursFromPuneRoute: PilgrimageToursFromPuneRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
   RefundPolicyRoute: RefundPolicyRoute,
   ReportIssueRoute: ReportIssueRoute,
   SecurityPolicyRoute: SecurityPolicyRoute,
   TermsRoute: TermsRoute,
+  TourOperatorInPuneRoute: TourOperatorInPuneRoute,
+  TourPackagesFromPuneRoute: TourPackagesFromPuneRoute,
+  TravelAgencyInPuneRoute: TravelAgencyInPuneRoute,
   WhyChooseShailrajTravelsRoute: WhyChooseShailrajTravelsRoute,
   YatriStoriesRoute: YatriStoriesRoute,
   AuthorAuthorSlugRoute: AuthorAuthorSlugRoute,

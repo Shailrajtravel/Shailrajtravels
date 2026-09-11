@@ -284,6 +284,49 @@ export function FooterSection({ t, lang = "en" }: { t: typeof translations.mr; l
           </div>
         </div>
 
+        {/* Core Pune Services & Knowledge Hub Internal Discovery Grid */}
+        <div className="border-t border-slate-800/80 pt-8 pb-8 mb-4">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-4">
+            <h3 className="text-[16px] font-bold text-white font-display tracking-wide flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-brand-green"></span>
+              Pune Tours & Travel Services
+            </h3>
+            <span className="text-xs text-slate-400">Doorstep & central pickup across Pune & PCMC</span>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-y-2.5 gap-x-4 text-xs md:text-sm">
+            <Link to="/travel-agency-in-pune" className="text-slate-400 hover:text-white transition-colors py-0.5">
+              Travel Agency in Pune
+            </Link>
+            <Link to="/tour-operator-in-pune" className="text-slate-400 hover:text-white transition-colors py-0.5">
+              Tour Operator in Pune
+            </Link>
+            <Link to="/tour-packages-from-pune" className="text-slate-400 hover:text-white transition-colors py-0.5">
+              Tour Packages from Pune
+            </Link>
+            <Link to="/pilgrimage-tours-from-pune" className="text-slate-400 hover:text-white transition-colors py-0.5">
+              Pilgrimage Tours from Pune
+            </Link>
+            <Link to="/family-tours-from-pune" className="text-slate-400 hover:text-white transition-colors py-0.5">
+              Family Tours from Pune
+            </Link>
+            <Link to="/group-tours-from-pune" className="text-slate-400 hover:text-white transition-colors py-0.5">
+              Group Tours from Pune
+            </Link>
+            <Link to="/maharashtra-tour-packages" className="text-slate-400 hover:text-white transition-colors py-0.5">
+              Maharashtra Tour Packages
+            </Link>
+            <Link to="/pilgrimage-guides" className="text-slate-400 hover:text-white transition-colors py-0.5">
+              Pilgrimage Knowledge Hub
+            </Link>
+            <Link to="/why-choose-shailraj-travels" className="text-slate-400 hover:text-white transition-colors py-0.5">
+              Why Choose Shailraj Travels
+            </Link>
+            <Link to={"/blog/pune-to-ujjain-tour-guide-mahakal-darshan-itinerary" as any} className="text-slate-400 hover:text-white transition-colors py-0.5">
+              Pune to Ujjain Guide
+            </Link>
+          </div>
+        </div>
+
         {/* Bottom Bar - Copyright */}
         <div className="border-t border-slate-800/80 pt-8 pb-4 flex flex-col md:flex-row items-center justify-between gap-4 text-[14px] text-slate-400 text-center md:text-left">
           <p className="font-medium tracking-wide">

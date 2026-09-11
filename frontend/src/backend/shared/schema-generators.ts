@@ -1,7 +1,7 @@
 export function generateLocalBusinessSchema() {
   return {
     "@context": "https://schema.org",
-    "@type": ["TravelAgency", "LocalBusiness", "TouristInformationCenter"],
+    "@type": ["TravelAgency", "LocalBusiness"],
     name: "Shailraj Travels",
     alternateName: ["Shailraj Travels Pune", "Shailraj Pilgrimage Tours"],
     slogan: "Best Tours and Travels in Pune for Pilgrimages, Ujjain Mahakal & Luxury Family Yatras",

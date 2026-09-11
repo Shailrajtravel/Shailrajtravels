@@ -17,6 +17,7 @@ const BookingModal = React.lazy(() => import('@/frontend/features/tours/BookingM
 
 import { getPackagesFn } from '@/backend/features/packages';
 import { HomeSkeleton } from '@/frontend/shared/ui/HomeSkeleton';
+import { generateSEO } from '@/backend/features/seo';
 
 export const Route = createFileRoute("/")({
   validateSearch: (search: Record<string, unknown>): { lang?: string } => ({
@@ -24,6 +25,15 @@ export const Route = createFileRoute("/")({
   }),
   loaderDeps: ({ search: { lang } }) => ({ lang }),
   pendingComponent: HomeSkeleton,
+  head: () => ({
+    meta: generateSEO({
+      title: "Best Travel Agency in Pune | Shailraj Travels",
+      description:
+        "Shailraj Travels is a Pune-based travel agency offering pilgrimage, family, group and customized tour packages across Maharashtra and India.",
+      canonicalUrl: "https://www.shailrajtravels.com",
+    }),
+    links: [{ rel: "canonical", href: "https://www.shailrajtravels.com" }],
+  }),
   component: HomePage,
   loader: async ({ deps: { lang } }) => {
     try {

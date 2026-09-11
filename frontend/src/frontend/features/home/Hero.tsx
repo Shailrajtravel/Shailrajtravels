@@ -239,22 +239,44 @@ export function Hero({
             <span className="h-px w-4 sm:w-6 bg-brand-green md:w-8 shrink-0" />
           </p>
 
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-green/10 text-brand-green-dark border border-brand-green/20 mb-3 text-xs md:text-sm font-semibold tracking-wide">
+            <span>{lang === "mr" ? "श्रद्धेपासून समाधानापर्यंत" : "From Devotion to Satisfaction"}</span>
+          </div>
+
           <h1
-            className="mt-4 text-[38px] sm:text-[42px] font-bold leading-[1.1] text-brand-blue-deep md:mt-4 md:text-[52px] lg:text-[56px] md:leading-[1.15]"
+            className="text-[32px] sm:text-[38px] md:text-[46px] lg:text-[52px] font-extrabold leading-[1.15] text-brand-blue-deep tracking-tight"
             style={lang === "mr" ? { fontFamily: "'Tiro Devanagari Marathi', serif" } : {}}
           >
-            <span className="whitespace-nowrap">
-              {lang === "mr" ? "श्रद्धेपासून" : "From Devotion to"}
-            </span>
-            <br />
-            <span className="text-brand-green-dark">
-              {lang === "mr" ? "समाधानापर्यंत" : "Satisfaction"}
-            </span>
+            {lang === "mr" ? (
+              <>
+                शैलराज ट्रॅव्हल्स —{" "}
+                <span className="text-brand-green-dark">पुण्यातील ट्रॅव्हल एजन्सी आणि टूर ऑपरेटर</span>
+              </>
+            ) : (
+              <>
+                Shailraj Travels —{" "}
+                <span className="text-brand-green-dark">Travel Agency & Tour Operator in Pune</span>
+              </>
+            )}
           </h1>
 
-          <p className="mt-4 max-w-[550px] text-[15px] leading-relaxed text-slate-600 md:mt-4 md:text-[16px]">
-            {highlightBrandName(t.heroDesc)}
+          <p className="mt-3.5 max-w-[620px] text-[15px] leading-relaxed text-slate-700 md:text-[16px] font-medium">
+            {lang === "mr"
+              ? "शैलराज ट्रॅव्हल्स ही पुण्यातील अग्रगण्य ट्रॅव्हल एजन्सी आणि टूर ऑपरेटर असून, महाराष्ट्रासह संपूर्ण भारतातील तीर्थयात्रा, कौटुंबिक सहली, ग्रुप टूर्स आणि सानुकूलित टूर पॅकेजेस प्रदान करते."
+              : "Shailraj Travels is a Pune-based travel agency and tour operator offering pilgrimage, family, group and customized tours across Maharashtra and India."}
           </p>
+
+          {/* Visible Crawlable AEO Direct Answer Block */}
+          <div className="mt-4 rounded-xl bg-white/90 border border-slate-200/80 p-3.5 shadow-sm max-w-[620px]">
+            <p className="text-xs md:text-[13px] leading-relaxed text-slate-700">
+              <strong className="text-brand-blue-deep font-bold">
+                {lang === "mr" ? "शैलराज ट्रॅव्हल्स काय आहे?" : "What is Shailraj Travels?"}
+              </strong>{" "}
+              {lang === "mr"
+                ? "शैलराज ट्रॅव्हल्स (हडपसर, पुणे) ही लक्झरी एसी फोर्स अर्बनिया, सत्यापित हॉटेल्स आणि अनुभवी टूर मॅनेजर्ससह ज्योतिर्लिंग, अष्टविनायक, चार धाम आणि कौटुंबिक यात्रा आयोजित करणारी अधिकृत ट्रॅव्हल एजन्सी आहे."
+                : "Shailraj Travels is a Pune-based travel agency and tour operator offering pilgrimage, family, group and customized tours across Maharashtra and India with luxury AC Force Urbania coaches, verified hotels, and experienced tour managers."}
+            </p>
+          </div>
 
           <div
             className="mt-6 md:mt-8 w-full max-w-[800px] animate-reveal rounded-2xl bg-white/75 p-4 shadow-lg backdrop-blur-md lg:p-5"
