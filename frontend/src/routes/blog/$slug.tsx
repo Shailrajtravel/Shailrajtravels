@@ -30,8 +30,31 @@ export const Route = createFileRoute("/blog/$slug")({
   loader: async ({ params }) => {
     let post = blogPosts.find((p) => p.slug === params.slug);
     if (!post) {
+      // Check alias for static blogs
+      const alias =
+        params.slug === "pune-to-ujjain-road-trip-itinerary"
+          ? "pune-to-ujjain-tour-guide-mahakal-darshan-itinerary"
+          : params.slug === "pune-to-ujjain-tour-guide-mahakal-darshan-itinerary"
+          ? "pune-to-ujjain-road-trip-itinerary"
+          : null;
+      if (alias) {
+        post = blogPosts.find((p) => p.slug === alias);
+      }
+    }
+    if (!post) {
       try {
-        const customBlog = await getCustomBlogBySlugFn({ data: { slug: params.slug } });
+        let customBlog = await getCustomBlogBySlugFn({ data: { slug: params.slug } });
+        if (!customBlog) {
+          const alias =
+            params.slug === "pune-to-ujjain-road-trip-itinerary"
+              ? "pune-to-ujjain-tour-guide-mahakal-darshan-itinerary"
+              : params.slug === "pune-to-ujjain-tour-guide-mahakal-darshan-itinerary"
+              ? "pune-to-ujjain-road-trip-itinerary"
+              : null;
+          if (alias) {
+            customBlog = await getCustomBlogBySlugFn({ data: { slug: alias } });
+          }
+        }
         if (customBlog) {
           post = customBlog;
         }

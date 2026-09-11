@@ -13,7 +13,7 @@ export class CustomBlogRepository extends BaseRepository<any> {
   
   async findBySlug(slug: string): Promise<any | null> {
     const col = await storageManager.getGlobalCollection(this.baseCollectionName);
-    return col.findOne({ slug });
+    return col.findOne({ $or: [{ slug }, { aliases: slug }] });
   }
 }
 

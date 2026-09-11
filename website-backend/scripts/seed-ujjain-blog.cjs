@@ -7,7 +7,8 @@ const uris = [
 
 const blogDoc = {
   title: 'Pune to Ujjain Road Trip: Ultimate 2-Day Itinerary via Maheshwar, Omkareshwar & Grishneshwar',
-  slug: 'pune-to-ujjain-road-trip-itinerary',
+  slug: 'pune-to-ujjain-tour-guide-mahakal-darshan-itinerary',
+  aliases: ['pune-to-ujjain-road-trip-itinerary'],
   metaTitle: 'Pune to Ujjain Road Trip Itinerary | Mahakal, Omkareshwar & Grishneshwar 2-Day Guide',
   metaDescription: 'Detailed Pune to Ujjain road trip guide: Complete 2-day itinerary covering Maheshwar, Mahakaleshwar, Omkareshwar Narmada Parikrama, Kaal Bhairav, and Grishneshwar Jyotirlinga with exact highway timings & darshan tips.',
   focusKeyword: 'pune to ujjain road trip',
@@ -177,12 +178,14 @@ async function insertIntoDb() {
       await client.connect();
       const db = client.db('shailraj');
       
-      await db.collection('custom_blogs').updateOne(
-        { slug: blogDoc.slug },
-        { $set: blogDoc },
-        { upsert: true }
-      );
-      console.log('Successfully upserted custom_blog into:', uri.substring(0, 35));
+      await db.collection('custom_blogs').deleteMany({
+        $or: [
+          { slug: blogDoc.slug },
+          { slug: 'pune-to-ujjain-road-trip-itinerary' }
+        ]
+      });
+      await db.collection('custom_blogs').insertOne(blogDoc);
+      console.log('Successfully inserted custom_blog into:', uri.substring(0, 35));
       
       const count = await db.collection('custom_blogs').countDocuments();
       console.log('Total custom_blogs now in DB:', count);
