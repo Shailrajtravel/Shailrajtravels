@@ -19,14 +19,21 @@ const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
   return text ? JSON.parse(text) : null;
 };
 
-export const getCustomBlogsFn = createServerFn({ method: "POST" }).handler(async () => {
-  try {
-    return await apiFetch('/custom-blogs');
-  } catch (error) {
-    console.error("Failed to fetch custom blogs", error);
-    return [];
-  }
-});
+export const getCustomBlogsFn = createServerFn({ method: "POST" })
+  .validator((data?: unknown) => {
+    return z.object({
+      forceFresh: z.boolean().optional(),
+    }).optional().parse(data);
+  })
+  .handler(async ({ data }) => {
+    try {
+      const cacheBust = data?.forceFresh ? `?_t=${Date.now()}` : '';
+      return await apiFetch(`/custom-blogs${cacheBust}`);
+    } catch (error) {
+      console.error("Failed to fetch custom blogs", error);
+      return [];
+    }
+  });
 
 export const getCustomBlogBySlugFn = createServerFn({ method: "POST" })
   .validator((data: unknown) => {
@@ -46,12 +53,21 @@ export const getCustomBlogBySlugFn = createServerFn({ method: "POST" })
 export const createCustomBlogFn = createServerFn({ method: "POST" })
   .validator((data: unknown) => {
     return z.object({
+      adminToken: z.string(),
       title: z.string().min(3, "Title must be at least 3 characters"),
       content: z.string().min(10, "Content must be at least 10 characters"),
       authorName: z.string().min(2, "Author name must be at least 2 characters"),
       category: z.string().min(2, "Category is required"),
-      thumbnailBase64: z.string().min(1, "Thumbnail is required"),
-      adminToken: z.string(),
+      thumbnailBase64: z.string().optional(),
+      thumbnailUrl: z.string().optional(),
+      slug: z.string().optional(),
+      excerpt: z.string().optional(),
+      metaTitle: z.string().optional(),
+      metaDescription: z.string().optional(),
+      tags: z.union([z.array(z.string()), z.string()]).optional(),
+    }).refine((val) => (val.thumbnailBase64 && val.thumbnailBase64.length > 0) || (val.thumbnailUrl && val.thumbnailUrl.length > 0), {
+      message: "A poster or thumbnail image is required (either file upload or image URL)",
+      path: ["thumbnailUrl"],
     }).parse(data);
   })
   .handler(async ({ data }) => {
@@ -98,6 +114,12 @@ export const updateCustomBlogFn = createServerFn({ method: "POST" })
       authorName: z.string().min(2),
       category: z.string().min(2),
       thumbnailBase64: z.string().optional(),
+      thumbnailUrl: z.string().optional(),
+      slug: z.string().optional(),
+      excerpt: z.string().optional(),
+      metaTitle: z.string().optional(),
+      metaDescription: z.string().optional(),
+      tags: z.union([z.array(z.string()), z.string()]).optional(),
     }).parse(data);
   })
   .handler(async ({ data }) => {

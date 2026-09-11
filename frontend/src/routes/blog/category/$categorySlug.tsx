@@ -22,7 +22,9 @@ export const Route = createFileRoute("/blog/category/$categorySlug")({
     }
 
     const visibleCustomBlogs = customBlogs.filter((b) => !b.isHidden);
-    const combined = [...visibleCustomBlogs, ...blogPosts];
+    const customSlugs = new Set(visibleCustomBlogs.map((b) => b.slug));
+    const uniqueStatic = blogPosts.filter((b) => !customSlugs.has(b.slug));
+    const combined = [...visibleCustomBlogs, ...uniqueStatic];
 
     // Find matching posts
     const posts = combined.filter((p) => p.category.toLowerCase() === decodedSlug);

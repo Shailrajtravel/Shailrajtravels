@@ -11,21 +11,25 @@ export class CustomBlogsService {
       const blogs = await customBlogRepository.findAllSorted();
       return blogs.map((b: any) => {
         const plainText = b.content ? b.content.replace(/<[^>]+>/g, '') : "";
+        const img = b.thumbnailUrl || b.featuredImage || b.posterUrl || "/images/blogs/default.jpg";
         return {
           _id: b._id.toString(),
           title: b.title,
           slug: b.slug,
           content: b.content,
-          excerpt: plainText.substring(0, 150) + (plainText.length > 150 ? "..." : ""),
-          authorName: b.authorName || "Yatri",
+          excerpt: b.excerpt || plainText.substring(0, 160) + (plainText.length > 160 ? "..." : ""),
+          authorName: b.authorName || "Shailraj Travels Editorial Team",
           category: b.category || "Travel Guides",
-          featuredImage: b.thumbnailUrl || "/images/blogs/default.jpg",
-          ogImage: b.thumbnailUrl || "/images/blogs/default.jpg",
+          featuredImage: img,
+          thumbnailUrl: img,
+          ogImage: img,
           publishedAt: b.createdAt || new Date().toISOString(),
-          updatedAt: b.createdAt || new Date().toISOString(),
+          updatedAt: b.updatedAt || b.createdAt || new Date().toISOString(),
           readingTimeMinutes: Math.max(1, Math.ceil((b.content || "").split(/\s+/).length / 200)),
-          tags: b.tags || ["Community"],
+          tags: b.tags || ["Travel Guide"],
           isHidden: b.isHidden || false,
+          metaTitle: b.metaTitle || b.title,
+          metaDescription: b.metaDescription || b.excerpt || (plainText.substring(0, 160)),
         };
       });
     } catch (error) {
@@ -39,22 +43,27 @@ export class CustomBlogsService {
       const blog = await customBlogRepository.findBySlug(slug);
       if (!blog) return null;
 
+      const plainText = blog.content ? blog.content.replace(/<[^>]+>/g, '') : "";
+      const img = blog.thumbnailUrl || blog.featuredImage || blog.posterUrl || "/images/blogs/default.jpg";
+
       return {
         _id: blog._id.toString(),
         title: blog.title,
         slug: blog.slug,
         content: blog.content,
-        authorName: blog.authorName || "Yatri",
+        excerpt: blog.excerpt || plainText.substring(0, 160) + (plainText.length > 160 ? "..." : ""),
+        authorName: blog.authorName || "Shailraj Travels Editorial Team",
         category: blog.category || "Travel Guides",
-        featuredImage: blog.thumbnailUrl || "/images/blogs/default.jpg",
-        ogImage: blog.thumbnailUrl || "/images/blogs/default.jpg",
+        featuredImage: img,
+        thumbnailUrl: img,
+        ogImage: img,
         publishedAt: blog.createdAt || new Date().toISOString(),
-        updatedAt: blog.createdAt || new Date().toISOString(),
+        updatedAt: blog.updatedAt || blog.createdAt || new Date().toISOString(),
         readingTimeMinutes: Math.max(1, Math.ceil((blog.content || "").split(/\s+/).length / 200)),
-        tags: blog.tags || ["Community"],
+        tags: blog.tags || ["Travel Guide"],
         isHidden: blog.isHidden || false,
         metaTitle: blog.metaTitle || blog.title,
-        metaDescription: blog.metaDescription,
+        metaDescription: blog.metaDescription || blog.excerpt || (plainText.substring(0, 160)),
         tableOfContents: blog.tableOfContents,
         faqs: blog.faqs,
       };
@@ -65,26 +74,52 @@ export class CustomBlogsService {
   }
 
   async createCustomBlog(data: any) {
-    const { title, content, authorName, category, thumbnailBase64 } = data;
+    const {
+      title,
+      content,
+      authorName,
+      category,
+      thumbnailBase64,
+      thumbnailUrl,
+      slug: customSlug,
+      excerpt,
+      metaTitle,
+      metaDescription,
+      tags,
+    } = data;
 
-    let thumbnailUrl = "";
-    if (thumbnailBase64 && thumbnailBase64.length > 0) {
-      thumbnailUrl = await uploadImageToCloudinary(thumbnailBase64, "blogs");
+    let finalImageUrl = thumbnailUrl || "";
+    if (thumbnailBase64 && thumbnailBase64.startsWith("data:image")) {
+      finalImageUrl = await uploadImageToCloudinary(thumbnailBase64, "blogs");
+    } else if (thumbnailBase64 && thumbnailBase64.startsWith("http")) {
+      finalImageUrl = thumbnailBase64;
     }
 
-    let slugBase = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-    if (!slugBase) slugBase = "untitled";
-    const uniqueSuffix = Date.now().toString().slice(-6);
-    const slug = `${slugBase}-${uniqueSuffix}`;
+    let slug = customSlug ? customSlug.toLowerCase().trim().replace(/[^a-z0-9-]+/g, "-").replace(/(^-|-$)/g, "") : "";
+    if (!slug) {
+      let slugBase = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+      if (!slugBase) slugBase = "untitled";
+      const uniqueSuffix = Date.now().toString().slice(-6);
+      slug = `${slugBase}-${uniqueSuffix}`;
+    }
 
+    const plainText = content ? content.replace(/<[^>]+>/g, '') : "";
     const newBlog = {
       title,
       slug,
       content,
-      authorName,
-      category,
-      thumbnailUrl,
+      excerpt: excerpt || (plainText.substring(0, 160) + (plainText.length > 160 ? "..." : "")),
+      authorName: authorName || "Shailraj Travels Editorial Team",
+      category: category || "Travel Guides",
+      thumbnailUrl: finalImageUrl || "/images/blogs/default.jpg",
+      featuredImage: finalImageUrl || "/images/blogs/default.jpg",
+      ogImage: finalImageUrl || "/images/blogs/default.jpg",
+      metaTitle: metaTitle || title,
+      metaDescription: metaDescription || excerpt || (plainText.substring(0, 160)),
+      tags: Array.isArray(tags) ? tags : (tags ? tags.split(',').map((t: string) => t.trim()).filter(Boolean) : ["Travel Guide"]),
       createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      isHidden: false,
     };
 
     const insertedId = await customBlogRepository.insertOne(newBlog);
@@ -100,8 +135,28 @@ export class CustomBlogsService {
       updatedAt: new Date().toISOString()
     };
 
-    if (data.thumbnailBase64 && data.thumbnailBase64.length > 0) {
-      updateDoc.thumbnailUrl = await uploadImageToCloudinary(data.thumbnailBase64, "blogs");
+    if (data.slug) {
+      updateDoc.slug = data.slug.toLowerCase().trim().replace(/[^a-z0-9-]+/g, "-").replace(/(^-|-$)/g, "");
+    }
+    if (data.excerpt !== undefined) updateDoc.excerpt = data.excerpt;
+    if (data.metaTitle !== undefined) updateDoc.metaTitle = data.metaTitle;
+    if (data.metaDescription !== undefined) updateDoc.metaDescription = data.metaDescription;
+    if (data.tags !== undefined) {
+      updateDoc.tags = Array.isArray(data.tags)
+        ? data.tags
+        : data.tags.split(',').map((t: string) => t.trim()).filter(Boolean);
+    }
+
+    if (data.thumbnailBase64 && data.thumbnailBase64.startsWith('data:image')) {
+      const uploadedUrl = await uploadImageToCloudinary(data.thumbnailBase64, "blogs");
+      updateDoc.thumbnailUrl = uploadedUrl;
+      updateDoc.featuredImage = uploadedUrl;
+      updateDoc.ogImage = uploadedUrl;
+    } else if (data.thumbnailUrl || (data.thumbnailBase64 && data.thumbnailBase64.startsWith('http'))) {
+      const url = data.thumbnailUrl || data.thumbnailBase64;
+      updateDoc.thumbnailUrl = url;
+      updateDoc.featuredImage = url;
+      updateDoc.ogImage = url;
     }
 
     await customBlogRepository.updateOne(id, updateDoc);

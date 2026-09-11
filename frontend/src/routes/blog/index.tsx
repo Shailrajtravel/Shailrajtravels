@@ -91,7 +91,9 @@ function BlogIndexPage() {
 
   const allPosts = useMemo(() => {
     const visibleCustomBlogs = (customBlogs || []).filter((b: any) => !b.isHidden);
-    const combined = [...visibleCustomBlogs, ...blogPosts];
+    const customSlugs = new Set(visibleCustomBlogs.map((b: any) => b.slug));
+    const uniqueStatic = blogPosts.filter((b) => !customSlugs.has(b.slug));
+    const combined = [...visibleCustomBlogs, ...uniqueStatic];
     return combined.sort((a, b) => {
       const timeA = new Date(a.publishedAt).getTime();
       const timeB = new Date(b.publishedAt).getTime();

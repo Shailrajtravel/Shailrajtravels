@@ -28,40 +28,45 @@ import { LazyImage } from '@/frontend/shared/ui/lazy-image';
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: async ({ params }) => {
-    let post = blogPosts.find((p) => p.slug === params.slug);
+    let post = null;
+
+    // 1. Check live custom blogs from database first so admin changes take immediate effect
+    try {
+      let customBlog = await getCustomBlogBySlugFn({ data: { slug: params.slug } });
+      if (!customBlog) {
+        const alias =
+          params.slug === "pune-to-ujjain-road-trip-itinerary"
+            ? "pune-to-ujjain-tour-guide-mahakal-darshan-itinerary"
+            : params.slug === "pune-to-ujjain-tour-guide-mahakal-darshan-itinerary"
+            ? "pune-to-ujjain-road-trip-itinerary"
+            : null;
+        if (alias) {
+          customBlog = await getCustomBlogBySlugFn({ data: { slug: alias } });
+        }
+      }
+      if (customBlog) {
+        post = customBlog;
+      }
+    } catch (err) {
+      console.error("Failed to fetch custom blog by slug:", err);
+    }
+
+    // 2. Fallback to static snapshot in blogs.ts if not found in database or if offline
     if (!post) {
-      // Check alias for static blogs
-      const alias =
-        params.slug === "pune-to-ujjain-road-trip-itinerary"
-          ? "pune-to-ujjain-tour-guide-mahakal-darshan-itinerary"
-          : params.slug === "pune-to-ujjain-tour-guide-mahakal-darshan-itinerary"
-          ? "pune-to-ujjain-road-trip-itinerary"
-          : null;
-      if (alias) {
-        post = blogPosts.find((p) => p.slug === alias);
+      post = blogPosts.find((p) => p.slug === params.slug);
+      if (!post) {
+        const alias =
+          params.slug === "pune-to-ujjain-road-trip-itinerary"
+            ? "pune-to-ujjain-tour-guide-mahakal-darshan-itinerary"
+            : params.slug === "pune-to-ujjain-tour-guide-mahakal-darshan-itinerary"
+            ? "pune-to-ujjain-road-trip-itinerary"
+            : null;
+        if (alias) {
+          post = blogPosts.find((p) => p.slug === alias);
+        }
       }
     }
-    if (!post) {
-      try {
-        let customBlog = await getCustomBlogBySlugFn({ data: { slug: params.slug } });
-        if (!customBlog) {
-          const alias =
-            params.slug === "pune-to-ujjain-road-trip-itinerary"
-              ? "pune-to-ujjain-tour-guide-mahakal-darshan-itinerary"
-              : params.slug === "pune-to-ujjain-tour-guide-mahakal-darshan-itinerary"
-              ? "pune-to-ujjain-road-trip-itinerary"
-              : null;
-          if (alias) {
-            customBlog = await getCustomBlogBySlugFn({ data: { slug: alias } });
-          }
-        }
-        if (customBlog) {
-          post = customBlog;
-        }
-      } catch (err) {
-        console.error("Failed to fetch custom blog by slug:", err);
-      }
-    }
+
     if (!post || post.isHidden) throw notFound();
     return { post };
   },
@@ -130,6 +135,25 @@ function BlogPostPage() {
   const relatedArticles = useMemo(() => {
     return blogPosts.filter((p) => post.relatedArticleSlugs?.includes(p.slug)).slice(0, 3);
   }, [post.relatedArticleSlugs]);
+
+  // Resolve dynamic or custom Table of Contents
+  const tocList = useMemo(() => {
+    if (post.tableOfContents && post.tableOfContents.length > 0) return post.tableOfContents;
+    if (!post.content) return [];
+    const headingRegex = /<h2[^>]*id=["']([^"']+)["'][^>]*>(.*?)<\/h2>|<h2[^>]*>(.*?)<\/h2>/gi;
+    const toc: { id: string; title: string; level: number }[] = [];
+    let match;
+    let index = 0;
+    while ((match = headingRegex.exec(post.content)) !== null) {
+      const rawTitle = match[2] || match[3] || "";
+      const title = rawTitle.replace(/<[^>]+>/g, "").trim();
+      const id = match[1] || title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || `sec-${index++}`;
+      if (title) {
+        toc.push({ id, title, level: 2 });
+      }
+    }
+    return toc;
+  }, [post.tableOfContents, post.content]);
 
   // Handle sharing
   const shareUrl = `https://www.shailrajtravels.com/blog/${post.slug}`;
@@ -322,14 +346,14 @@ function BlogPostPage() {
           {/* Sidebar */}
           <aside className="lg:col-span-4 space-y-8 sticky top-32">
             {/* Table of Contents */}
-            {post.tableOfContents && post.tableOfContents.length > 0 && (
+            {tocList && tocList.length > 0 && (
               <div className="bg-white rounded-3xl p-8 border border-slate-100 shadow-sm hidden lg:block">
                 <h3 className="text-lg font-bold text-brand-blue-deep mb-6 uppercase tracking-wider text-sm flex items-center gap-2">
                   <div className="w-1.5 h-6 bg-brand-green rounded-full"></div>
                   Table of Contents
                 </h3>
                 <nav className="space-y-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
-                  {post.tableOfContents.map((item) => (
+                  {tocList.map((item) => (
                     <a
                       key={item.id}
                       href={`#${item.id}`}

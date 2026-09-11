@@ -47,20 +47,23 @@ function PilgrimageKnowledgeHubPage() {
   const { lang } = useLanguage();
   const t = translations[lang];
 
-  // Merge static blogs and dynamic custom blogs safely
+  // Merge static blogs and dynamic custom blogs safely with database precedence
   const allPosts = useMemo(() => {
-    const combined = [...blogPosts];
-    for (const cb of customBlogs) {
-      if (!combined.some((p) => p.slug === cb.slug)) {
-        combined.push({
-          slug: cb.slug,
-          title: cb.title,
-          excerpt: cb.excerpt || cb.summary || "",
-          featuredImage: cb.featuredImage || cb.coverImage || "",
-          category: cb.category || "Travel Guides",
-          readingTimeMinutes: cb.readingTimeMinutes || 6,
-          publishDate: cb.publishDate || new Date().toISOString(),
-        });
+    const visibleCustom = (customBlogs || []).filter((b: any) => !b.isHidden);
+    const customSlugs = new Set(visibleCustom.map((b: any) => b.slug));
+    const combined: any[] = visibleCustom.map((cb: any) => ({
+      slug: cb.slug,
+      title: cb.title,
+      excerpt: cb.excerpt || cb.summary || "",
+      featuredImage: cb.featuredImage || cb.thumbnailUrl || cb.coverImage || "",
+      category: cb.category || "Travel Guides",
+      readingTimeMinutes: cb.readingTimeMinutes || 6,
+      publishDate: cb.publishedAt || cb.publishDate || new Date().toISOString(),
+    }));
+
+    for (const sp of blogPosts) {
+      if (!customSlugs.has(sp.slug)) {
+        combined.push(sp);
       }
     }
     return combined;
