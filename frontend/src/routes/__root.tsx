@@ -140,7 +140,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         { rel: "icon", type: "image/png", href: "/favicon.png" },
         { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
         { rel: "preload", as: "image", href: newhomeAvif, type: "image/avif", fetchPriority: "high", media: "(min-width: 1024px)" },
-        { rel: "preload", as: "image", href: newhomeMobileAvif, type: "image/avif", fetchPriority: "auto", media: "(max-width: 1023px)" },
+        { rel: "preload", as: "image", href: newhomeMobileAvif, type: "image/avif", fetchPriority: "high", media: "(max-width: 1023px)" },
       ],
     }) as any,
   shellComponent: RootShell,

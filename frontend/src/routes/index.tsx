@@ -1,8 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
 import { useLanguage } from '@/routes/__root';
-import { getReviewsFn } from '@/backend/features/reviews';
-
 import { translations } from '@/frontend/core/i18n';
 import { Navbar } from '@/frontend/core/Navbar';
 const Footer = React.lazy(() => import('@/frontend/core/Footer').then(m => ({ default: m.FooterSection })));
@@ -16,7 +14,6 @@ const GallerySection = React.lazy(() => import('@/frontend/features/gallery/Gall
 const BookingModal = React.lazy(() => import('@/frontend/features/tours/BookingModal').then(m => ({ default: m.BookingModal })));
 
 import { getPackagesFn } from '@/backend/features/packages';
-import { HomeSkeleton } from '@/frontend/shared/ui/HomeSkeleton';
 import { generateSEO } from '@/backend/features/seo';
 
 export const Route = createFileRoute("/")({
@@ -24,7 +21,6 @@ export const Route = createFileRoute("/")({
     lang: search.lang as string | undefined,
   }),
   loaderDeps: ({ search: { lang } }) => ({ lang }),
-  pendingComponent: HomeSkeleton,
   head: () => ({
     meta: generateSEO({
       title: "Best Travel Agency in Pune | Shailraj Travels",
@@ -37,17 +33,16 @@ export const Route = createFileRoute("/")({
   component: HomePage,
   loader: async ({ deps: { lang } }) => {
     try {
-      const [reviews, packages, tripOptions, galleryPhotos, tours] = await Promise.all([
-        getReviewsFn(),
+      const [packages, tripOptions, galleryPhotos, tours] = await Promise.all([
         getPackagesFn(),
         import('@/backend/shared/bookings').then((m) => m.getTripOptionsFn()),
         import('@/backend/shared/gallery').then((m) => m.getGalleryPhotosFn()),
         import('@/backend/features/tours').then((m) => m.getToursFn({ data: { lang: lang || "en" } })),
       ]);
-      return { reviews, packages, tripOptions, galleryPhotos, tours };
+      return { packages, tripOptions, galleryPhotos, tours };
     } catch (e) {
       console.error(e);
-      return { reviews: [], packages: [], tripOptions: [], galleryPhotos: [], tours: [] };
+      return { packages: [], tripOptions: [], galleryPhotos: [], tours: [] };
     }
   },
 });
@@ -57,7 +52,6 @@ function HomePage() {
   const t = translations[lang];
 
   const {
-    reviews: dbReviews,
     packages: dbPackages,
     tripOptions = [],
     galleryPhotos = [],

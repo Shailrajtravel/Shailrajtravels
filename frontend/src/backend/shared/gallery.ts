@@ -1,5 +1,6 @@
 import { createServerFn } from '@tanstack/react-start';
 import { getAdminToken, isValidAdminToken } from '@/backend/infrastructure/token';
+import { getCachedData, setCachedData, invalidateCache } from '@/backend/infrastructure/redis';
 
 const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
   const BACKEND_URL = import.meta.env.VITE_WEBSITE_BACKEND_URL || process.env.VITE_WEBSITE_BACKEND_URL || "https://shailrajtravels.onrender.com/api";
@@ -20,7 +21,15 @@ const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
 
 export const getGalleryPhotosFn = createServerFn({ method: "POST" }).handler(async () => {
   try {
-    return await apiFetch('/gallery');
+    const cached = await getCachedData<any[]>('gallery:all');
+    if (cached && Array.isArray(cached)) {
+      return cached;
+    }
+    const data = await apiFetch('/gallery');
+    if (data && Array.isArray(data)) {
+      await setCachedData('gallery:all', data, 600);
+    }
+    return data || [];
   } catch (error) {
     console.error("Failed to fetch gallery photos", error);
     return [];
@@ -36,17 +45,21 @@ export const addGalleryPhotoFn = createServerFn({ method: "POST" })
   .validator((data: GalleryInput) => data)
   .handler(async ({ data }) => {
     if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
-    return await apiFetch('/gallery', {
+    const result = await apiFetch('/gallery', {
       method: "POST",
       body: JSON.stringify({ imageUrl: data.imageUrl }),
     });
+    await invalidateCache('gallery:all');
+    return result;
   });
 
 export const deleteGalleryPhotoFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string; id: string }) => data)
   .handler(async ({ data }) => {
     if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
-    return await apiFetch(`/gallery/${data.id}`, {
+    const result = await apiFetch(`/gallery/${data.id}`, {
       method: "DELETE",
     });
+    await invalidateCache('gallery:all');
+    return result;
   });

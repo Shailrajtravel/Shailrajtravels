@@ -179,8 +179,8 @@ export function Hero({
             <img
               src={newhomeMobileWebp}
               alt="Shailraj Travels Pilgrimage Tour and AC Force Urbania Service"
-              className="h-full w-full object-cover object-[70%_center] animate-hero-zoom"
-              fetchPriority="auto"
+              className="h-full w-full object-cover object-[70%_center] lg:animate-hero-zoom"
+              fetchPriority="high"
               loading="eager"
               width={720}
               height={400}
@@ -210,21 +210,21 @@ export function Hero({
         <div className="absolute inset-y-0 left-0 hidden lg:block w-[55%] bg-gradient-to-r from-brand-mist via-white to-transparent" />
       </div>
 
-      {/* Floating leaves */}
+      {/* Floating leaves - enabled on tablet/desktop to preserve visual delight without mobile CPU contention */}
       <span
-        className="absolute left-[75%] top-[12%] animate-float-leaf lg:left-[42%] lg:top-[18%] opacity-80 blur-[1px]"
+        className="hidden md:block absolute left-[75%] top-[12%] animate-float-leaf lg:left-[42%] lg:top-[18%] opacity-80 blur-[1px]"
         style={{ animationDuration: "8s", animationDelay: "0s" }}
       >
         <Leaf className="h-4 w-4 text-brand-green/80 lg:h-6 lg:w-6 fill-current" />
       </span>
       <span
-        className="absolute right-[8%] top-[25%] animate-float-leaf lg:right-[12%] lg:top-[14%] opacity-60 blur-[1.5px]"
+        className="hidden md:block absolute right-[8%] top-[25%] animate-float-leaf lg:right-[12%] lg:top-[14%] opacity-60 blur-[1.5px]"
         style={{ animationDuration: "12s", animationDelay: "3s" }}
       >
         <Leaf className="h-3 w-3 text-brand-green-dark/70 lg:h-5 lg:w-5 fill-current" />
       </span>
       <span
-        className="absolute left-[15%] top-[38%] animate-float-leaf lg:left-auto lg:right-[28%] lg:top-[42%] opacity-90 blur-[0.5px]"
+        className="hidden md:block absolute left-[15%] top-[38%] animate-float-leaf lg:left-auto lg:right-[28%] lg:top-[42%] opacity-90 blur-[0.5px]"
         style={{ animationDuration: "10s", animationDelay: "1.5s" }}
       >
         <Leaf className="h-5 w-5 text-brand-green/90 lg:h-7 lg:w-7 fill-current" />
@@ -279,7 +279,7 @@ export function Hero({
           </div>
 
           <div
-            className="mt-6 md:mt-8 w-full max-w-[800px] animate-reveal rounded-2xl bg-white/75 p-4 shadow-lg backdrop-blur-md lg:p-5"
+            className="mt-6 md:mt-8 w-full max-w-[800px] lg:animate-reveal rounded-2xl bg-white/75 p-4 shadow-lg backdrop-blur-md lg:p-5"
             style={{ animationDelay: "0.2s" }}
           >
             <p className="text-[15px] font-bold text-brand-blue-deep md:text-[17px]">
@@ -321,7 +321,7 @@ export function Hero({
         className="relative z-30 mx-auto w-full max-w-[1600px] px-4 mt-5 md:px-6 lg:px-8"
       >
         <div
-          className="rounded-3xl bg-white/50 p-4 animate-reveal backdrop-blur-md"
+          className="rounded-3xl bg-white/50 p-4 lg:animate-reveal backdrop-blur-md"
           style={{ boxShadow: "var(--shadow-luxury)", animationDelay: "0.4s" }}
         >
           {success ? (

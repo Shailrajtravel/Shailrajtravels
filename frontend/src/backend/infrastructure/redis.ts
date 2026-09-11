@@ -103,8 +103,8 @@ export async function getCachedData<T>(key: string): Promise<T | null> {
 }
 
 export async function setCachedData(key: string, data: any, ex: number = 300): Promise<void> {
-  // Set in L1 Memory Cache (clamp TTL to 60s max to prevent severe cross-instance staleness)
-  memoryCache.set(key, data, Math.min(ex, 60));
+  // Set in L1 Memory Cache
+  memoryCache.set(key, data, ex);
 
   if (!redis) return;
   try {

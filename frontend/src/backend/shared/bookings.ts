@@ -2,6 +2,7 @@ import { createServerFn } from '@tanstack/react-start';
 import { getAdminToken, isValidAdminToken } from '@/backend/infrastructure/token';
 export { getAdminToken, isValidAdminToken };
 import { z } from 'zod';
+import { getCachedData, setCachedData, invalidateCache } from '@/backend/infrastructure/redis';
 
 const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
   const BACKEND_URL = import.meta.env.VITE_WEBSITE_BACKEND_URL || process.env.VITE_WEBSITE_BACKEND_URL || "https://shailrajtravels.onrender.com/api";
@@ -28,7 +29,15 @@ const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
 // ---- TRIP OPTIONS ----
 export const getTripOptionsFn = createServerFn({ method: "POST" }).handler(async () => {
   try {
-    return await apiFetch('/bookings/trip-options');
+    const cached = await getCachedData<any[]>('trip-options:all');
+    if (cached && Array.isArray(cached) && cached.length > 0) {
+      return cached;
+    }
+    const data = await apiFetch('/bookings/trip-options');
+    if (data && Array.isArray(data) && data.length > 0) {
+      await setCachedData('trip-options:all', data, 600);
+    }
+    return data || [];
   } catch (error) {
     console.error("Failed to fetch trip options", error);
     return [];
@@ -39,29 +48,35 @@ export const createTripOptionFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string; data: any }) => data)
   .handler(async ({ data }) => {
     if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
-    return await apiFetch('/bookings/trip-options', {
+    const result = await apiFetch('/bookings/trip-options', {
       method: "POST",
       body: JSON.stringify(data.data),
     });
+    await invalidateCache('trip-options:all');
+    return result;
   });
 
 export const updateTripOptionFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string; id: string; data: any }) => data)
   .handler(async ({ data }) => {
     if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
-    return await apiFetch(`/bookings/trip-options/${data.id}`, {
+    const result = await apiFetch(`/bookings/trip-options/${data.id}`, {
       method: "PUT",
       body: JSON.stringify(data.data),
     });
+    await invalidateCache('trip-options:all');
+    return result;
   });
 
 export const deleteTripOptionFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string; id: string }) => data)
   .handler(async ({ data }) => {
     if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
-    return await apiFetch(`/bookings/trip-options/${data.id}`, {
+    const result = await apiFetch(`/bookings/trip-options/${data.id}`, {
       method: "DELETE",
     });
+    await invalidateCache('trip-options:all');
+    return result;
   });
 
 // ---- BOOKINGS ----
