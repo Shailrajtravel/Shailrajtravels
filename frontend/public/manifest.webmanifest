@@ -1,66 +1,66 @@
 {
-  "id": "shailraj-travels-website-v4",
+  "id": "shailraj-travels-website-v5",
   "name": "Shailraj Travels — Pilgrimage Tours Pune",
   "short_name": "Shailraj Travels",
   "description": "Trusted Pilgrimage Tour Operator in Pune. Book Ashtavinayak, Jyotirlinga, Pandharpur, and Char Dham yatra packages.",
-  "start_url": "/?source=pwa&v=4",
+  "start_url": "/?source=pwa&v=5",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
   "theme_color": "#10A34A",
-  "background_color": "#FFFFFF",
+  "background_color": "#10A34A",
   "categories": ["travel", "lifestyle"],
   "icons": [
     {
-      "src": "/icons/icon-72x72.png?v=4",
+      "src": "/icons/web-logo-72x72.png?v=5",
       "sizes": "72x72",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/icon-96x96.png?v=4",
+      "src": "/icons/web-logo-96x96.png?v=5",
       "sizes": "96x96",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/icon-128x128.png?v=4",
+      "src": "/icons/web-logo-128x128.png?v=5",
       "sizes": "128x128",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/icon-144x144.png?v=4",
+      "src": "/icons/web-logo-144x144.png?v=5",
       "sizes": "144x144",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/icon-192x192.png?v=4",
+      "src": "/icons/web-logo-192x192.png?v=5",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/icon-384x384.png?v=4",
+      "src": "/icons/web-logo-384x384.png?v=5",
       "sizes": "384x384",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/icon-512x512.png?v=4",
+      "src": "/icons/web-logo-512x512.png?v=5",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/icon-maskable-192x192.png?v=4",
+      "src": "/icons/web-logo-maskable-192x192.png?v=5",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/icons/icon-maskable-512x512.png?v=4",
+      "src": "/icons/web-logo-maskable-512x512.png?v=5",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
