@@ -641,12 +641,12 @@ export function RecommendedVehiclesAdmin({ token }: VehiclesAdminProps) {
                     </div>
 
                     {/* Live Preview Card */}
-                    <div className="relative aspect-[16/10] w-full rounded-2xl overflow-hidden bg-slate-900 border border-slate-200 shadow-sm mb-3 group">
+                    <div className="relative aspect-[16/10] w-full rounded-2xl overflow-hidden bg-gradient-to-b from-slate-50 via-slate-100/70 to-slate-100 border border-slate-200 shadow-sm mb-3 group p-3 flex items-center justify-center">
                       {v.image ? (
                         <img
                           src={v.image}
                           alt={v.name}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105 drop-shadow-sm"
                           onError={(e) => {
                             (e.target as HTMLImageElement).src = "/images/vehicles/force-urbania-15-seater.jpg";
                           }}
@@ -658,16 +658,16 @@ export function RecommendedVehiclesAdmin({ token }: VehiclesAdminProps) {
                         </div>
                       )}
 
-                      {/* Badge Overlay */}
-                      {v.badge && (
-                        <div className="absolute top-3 left-3 bg-gray-900/90 backdrop-blur text-white text-[11px] font-black px-2.5 py-0.5 rounded-full z-10 shadow-sm">
-                          {v.badge}
+                      {/* Floating Badges Bar (Non-overlapping) */}
+                      <div className="absolute top-2.5 inset-x-2.5 flex items-center justify-between gap-2 z-10 pointer-events-none">
+                        {v.badge ? (
+                          <div className="bg-gray-900/90 backdrop-blur text-white text-[11px] font-black px-2.5 py-0.5 rounded-full shadow-sm max-w-[62%] truncate">
+                            {v.badge}
+                          </div>
+                        ) : <div />}
+                        <div className="bg-white/95 backdrop-blur text-brand-blue-deep text-[11px] font-black px-2.5 py-0.5 rounded-full shadow-sm border border-slate-200/80 shrink-0">
+                          {v.capacityStr}
                         </div>
-                      )}
-
-                      {/* Capacity Overlay */}
-                      <div className="absolute top-3 right-3 bg-white/95 backdrop-blur text-brand-blue-deep text-[11px] font-black px-2.5 py-0.5 rounded-full shadow-sm z-10">
-                        {v.capacityStr}
                       </div>
 
                       <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/70 to-transparent p-3 text-white">

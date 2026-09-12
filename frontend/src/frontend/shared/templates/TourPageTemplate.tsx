@@ -9,7 +9,8 @@ import { useLanguage } from '@/routes/__root';
 import { translations } from '@/frontend/core/i18n';
 import { createBookingFn } from '@/backend/shared/bookings';
 import { LazyImage } from '@/frontend/shared/ui/lazy-image';
-import { CheckCircle2 } from 'lucide-react';
+import { CheckCircle2, Sparkles, Users, Check, ArrowRight } from 'lucide-react';
+import { DEFAULT_RECOMMENDED_VEHICLES } from '@/backend/shared/recommended-vehicles';
 
 // RECOMMENDED_VEHICLES moved to DB
 
@@ -21,6 +22,10 @@ interface TourPageTemplateProps {
 export function TourPageTemplate({ data, recommendedVehicles = [] }: TourPageTemplateProps) {
   const { lang } = useLanguage();
   const t = translations[lang];
+
+  const activeVehicles = (recommendedVehicles && recommendedVehicles.length > 0)
+    ? recommendedVehicles
+    : DEFAULT_RECOMMENDED_VEHICLES;
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -210,7 +215,7 @@ export function TourPageTemplate({ data, recommendedVehicles = [] }: TourPageTem
                     setSelectedVehicle("");
                   } else {
                     // Find best vehicle
-                    const best = recommendedVehicles.find(v => num >= v.minCap && num <= v.maxCap) || recommendedVehicles[0];
+                    const best = activeVehicles.find(v => num >= v.minCap && num <= v.maxCap) || activeVehicles[0];
                     setSelectedVehicle(best?.name || "");
                     // Scroll slightly to let them see it
                     setTimeout(() => {
@@ -219,7 +224,7 @@ export function TourPageTemplate({ data, recommendedVehicles = [] }: TourPageTem
                   }
                 }}
               >
-                {Array.from(new Set(recommendedVehicles.map(v => `${v.minCap}-${v.maxCap}|${v.capacityStr}`))).map(opt => {
+                {Array.from(new Set(activeVehicles.map(v => `${v.minCap}-${v.maxCap}|${v.capacityStr}`))).map(opt => {
                   const [range, label] = opt.split('|');
                   const min = parseInt(range.split('-')[0]);
                   return <option key={opt} value={min}>{label}</option>;
@@ -228,69 +233,122 @@ export function TourPageTemplate({ data, recommendedVehicles = [] }: TourPageTem
               </select>
             </div>
 
-            <div className="flex overflow-x-auto pb-6 -mx-4 px-4 snap-x snap-mandatory gap-6 md:grid md:grid-cols-2 lg:grid-cols-3 md:overflow-visible md:mx-0 md:px-0 scrollbar-hide">
-              {recommendedVehicles.map((vehicle) => {
+            {/* Responsive Vehicle Cards Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-stretch">
+              {activeVehicles.map((vehicle) => {
                 const isRecommended = persons >= vehicle.minCap && persons <= vehicle.maxCap;
+                const isSelected = selectedVehicle === vehicle.name;
+
                 return (
                   <div
                     key={vehicle.id}
                     id={`vehicle-${vehicle.id}`}
-                    className="group min-w-[85vw] sm:min-w-[300px] snap-center shrink-0 md:min-w-0 md:shrink relative border rounded-2xl overflow-hidden bg-white flex flex-col transition-all duration-300 border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-brand-blue/30"
+                    className={`group relative rounded-2xl overflow-hidden bg-white flex flex-col justify-between transition-all duration-300 ${
+                      isRecommended
+                        ? 'border-2 border-brand-orange ring-4 ring-brand-orange/15 shadow-lg shadow-brand-orange/10'
+                        : isSelected
+                        ? 'border-2 border-brand-blue-deep ring-2 ring-brand-blue-deep/20 shadow-md'
+                        : 'border border-slate-200/90 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-slate-300'
+                    }`}
                   >
-                    <div className="relative h-40 w-full bg-gray-100 overflow-hidden">
+                    {/* Recommended Banner if Best Match */}
+                    {isRecommended && (
+                      <div className="bg-gradient-to-r from-brand-orange to-amber-500 text-white text-[11px] font-black uppercase tracking-wider text-center py-1.5 px-3 flex items-center justify-center gap-1.5 shadow-sm">
+                        <Sparkles className="w-3.5 h-3.5 fill-white shrink-0" />
+                        <span>Best Match for Your Group ({persons} {persons === 1 ? 'Traveler' : 'Travelers'})</span>
+                      </div>
+                    )}
+
+                    {/* Vehicle Showcase Image Container - 100% Uncropped & Responsive */}
+                    <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full bg-gradient-to-b from-slate-50 via-slate-100/70 to-slate-100 overflow-hidden flex items-center justify-center p-3 sm:p-4 border-b border-slate-100">
+                      {/* Floating Badges Bar (Non-overlapping) */}
+                      <div className="absolute top-2.5 inset-x-2.5 flex items-center justify-between gap-2 z-10 pointer-events-none">
+                        {vehicle.badge ? (
+                          <span className="px-2.5 py-1 bg-slate-900/90 backdrop-blur-sm text-white text-[10px] sm:text-[11px] font-black uppercase tracking-wider rounded-full shadow-sm max-w-[62%] truncate">
+                            {vehicle.badge}
+                          </span>
+                        ) : (
+                          <div />
+                        )}
+                        <span className="px-2.5 py-1 bg-white/95 backdrop-blur-sm text-brand-blue-deep text-[10px] sm:text-[11px] font-black rounded-full shadow-sm border border-slate-200/90 shrink-0 flex items-center gap-1">
+                          <Users className="w-3 h-3 text-brand-orange shrink-0" />
+                          <span>{vehicle.capacityStr}</span>
+                        </span>
+                      </div>
+
                       <LazyImage
                         src={vehicle.image}
                         alt={vehicle.name}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        className="w-full h-full object-contain drop-shadow-sm transition-transform duration-500 group-hover:scale-105"
+                        autoOptimizeCloudinary={false}
                       />
-                      {vehicle.badge && (
-                        <div className="absolute top-4 left-4 bg-gray-900/90 backdrop-blur text-white text-xs font-bold px-3 py-1 rounded-full z-10">
-                          {vehicle.badge}
-                        </div>
-                      )}
-                      <div className="absolute top-4 right-4 bg-white/95 backdrop-blur text-brand-blue-deep text-xs font-bold px-3 py-1 rounded-full shadow-sm z-10">
-                        {vehicle.capacityStr}
-                      </div>
                     </div>
                     
-                    <div className="p-4 flex flex-col flex-grow">
-                      <h3 className="text-xl font-bold text-gray-900 mb-1">{vehicle.name}</h3>
-                      <p className="text-gray-600 text-sm mb-4 flex-grow">{vehicle.description}</p>
+                    {/* Card Content & Features */}
+                    <div className="p-4 sm:p-5 flex flex-col flex-1">
+                      <div className="mb-2">
+                        <h3 className="text-lg sm:text-xl font-bold text-gray-900 leading-tight">
+                          {vehicle.name}
+                        </h3>
+                      </div>
+
+                      <p className="text-gray-600 text-xs sm:text-sm leading-relaxed mb-4 line-clamp-2 min-h-[36px]">
+                        {vehicle.description}
+                      </p>
                       
-                      <div className="space-y-1.5 mb-5">
+                      {/* Amenities with Checkmarks */}
+                      <div className="space-y-2 mb-5 flex-1">
                         {vehicle.amenities.map((amenity: string, i: number) => (
-                          <div key={i} className="flex items-start text-sm text-gray-700">
-                            <CheckCircle2 className="w-4 h-4 text-brand-green mr-2 mt-0.5 shrink-0" />
-                            <span>{amenity}</span>
+                          <div key={i} className="flex items-start text-xs sm:text-sm text-gray-700">
+                            <CheckCircle2 className="w-4 h-4 text-emerald-600 mr-2 mt-0.5 shrink-0" />
+                            <span className="leading-snug">{amenity}</span>
                           </div>
                         ))}
                       </div>
                       
-                      <button
-                        className={`w-full py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${
-                          selectedVehicle === vehicle.name
-                            ? 'bg-brand-blue-deep text-white shadow-md'
-                            : 'border-2 border-brand-blue-deep text-brand-blue-deep hover:bg-brand-blue-deep hover:text-white'
-                        }`}
-                        onClick={() => {
-                          setSelectedVehicle(vehicle.name);
-                          setPersons(vehicle.maxCap);
-                          window.dataLayer?.push({
-                            event: "inquire_vehicle",
-                            tour: data.title,
-                            vehicle: vehicle.name,
-                          });
-                          document
-                            .getElementById("sidebar-booking-form")
-                            ?.scrollIntoView({ behavior: "smooth" });
-                          setTimeout(() => {
-                            const input = document.getElementById("booking-name-input");
-                            if (input) (input as HTMLElement).focus();
-                          }, 500);
-                        }}
-                      >
-                        {selectedVehicle === vehicle.name ? 'Selected' : 'Choose Vehicle'}
-                      </button>
+                      {/* Pinned Bottom Action Button */}
+                      <div className="pt-4 border-t border-slate-100 mt-auto">
+                        <button
+                          type="button"
+                          className={`w-full py-2.5 sm:py-3 px-4 rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer ${
+                            isSelected
+                              ? 'bg-brand-blue-deep text-white shadow-md ring-2 ring-brand-blue-deep/30'
+                              : isRecommended
+                              ? 'bg-brand-orange text-white hover:bg-brand-orange-dark shadow-md shadow-brand-orange/20 hover:shadow-lg'
+                              : 'border-2 border-brand-blue-deep text-brand-blue-deep hover:bg-brand-blue-deep hover:text-white'
+                          }`}
+                          onClick={() => {
+                            setSelectedVehicle(vehicle.name);
+                            setPersons(vehicle.maxCap);
+                            window.dataLayer?.push({
+                              event: "inquire_vehicle",
+                              tour: data.title,
+                              vehicle: vehicle.name,
+                            });
+                            document
+                              .getElementById("sidebar-booking-form")
+                              ?.scrollIntoView({ behavior: "smooth" });
+                            setTimeout(() => {
+                              const input = document.getElementById("booking-name-input");
+                              if (input) (input as HTMLElement).focus();
+                            }, 500);
+                          }}
+                        >
+                          {isSelected ? (
+                            <>
+                              <Check className="w-4 h-4" />
+                              <span>Selected</span>
+                            </>
+                          ) : isRecommended ? (
+                            <>
+                              <span>Choose Recommended</span>
+                              <ArrowRight className="w-4 h-4" />
+                            </>
+                          ) : (
+                            <span>Choose Vehicle</span>
+                          )}
+                        </button>
+                      </div>
                     </div>
                   </div>
                 );
@@ -540,13 +598,13 @@ export function TourPageTemplate({ data, recommendedVehicles = [] }: TourPageTem
                         if (num === 17) {
                           setSelectedVehicle("");
                         } else {
-                          const best = recommendedVehicles.find(v => num >= v.minCap && num <= v.maxCap) || recommendedVehicles[0];
+                          const best = activeVehicles.find(v => num >= v.minCap && num <= v.maxCap) || activeVehicles[0];
                           setSelectedVehicle(best?.name || "");
                         }
                       }}
                       className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-brand-orange outline-none transition-shadow cursor-pointer text-slate-800"
                     >
-                      {Array.from(new Set(recommendedVehicles.map(v => `${v.minCap}-${v.maxCap}|${v.capacityStr}`))).map(opt => {
+                      {Array.from(new Set(activeVehicles.map(v => `${v.minCap}-${v.maxCap}|${v.capacityStr}`))).map(opt => {
                         const [range, label] = opt.split('|');
                         const min = parseInt(range.split('-')[0]);
                         return <option key={opt} value={min}>{label}</option>;
