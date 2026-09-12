@@ -97,7 +97,7 @@ function OfferPage() {
     <div className="font-sans text-slate-800 bg-[#FAF8F5] min-h-screen flex flex-col selection:bg-orange-100 selection:text-orange-900">
       <Navbar t={t} />
 
-      <main className="flex-1 py-8 sm:py-12">
+      <main className="flex-1 pt-28 sm:pt-32 pb-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           
           {/* Breadcrumb navigation */}
