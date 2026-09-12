@@ -130,13 +130,39 @@ export const Route = createFileRoute("/admin")({
     }
   },
   component: AdminPage,
-  errorComponent: ({ error }) => (
-    <div className="p-8 bg-white text-red-600 font-mono text-sm max-w-full overflow-auto h-screen">
-      <h1 className="text-2xl font-bold mb-4">React Error Details</h1>
-      <p className="font-bold mb-2">Message: {error?.message}</p>
-      <pre className="bg-slate-100 p-4 rounded">{error?.stack}</pre>
-    </div>
-  ),
+  errorComponent: ({ error }) => {
+    if (typeof window !== "undefined") {
+      const msg = error?.message || String(error);
+      if (
+        msg.includes("Failed to fetch dynamically imported module") ||
+        msg.includes("Importing a module script failed") ||
+        msg.includes("error loading dynamically imported module")
+      ) {
+        const lastReload = sessionStorage.getItem("chunk_reload_timestamp");
+        const now = Date.now();
+        if (!lastReload || now - parseInt(lastReload, 10) > 10000) {
+          sessionStorage.setItem("chunk_reload_timestamp", now.toString());
+          window.location.reload();
+        }
+      }
+    }
+    return (
+      <div className="p-8 bg-slate-900 text-white min-h-screen flex flex-col items-center justify-center text-center">
+        <div className="max-w-md w-full bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+          <h1 className="text-xl font-bold mb-2 text-white">Application Updated</h1>
+          <p className="text-sm text-slate-400 mb-6">
+            A new version has been deployed. Please reload the dashboard to load the latest changes.
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            className="w-full py-2.5 px-4 rounded-xl bg-brand-green font-bold text-white hover:bg-brand-green/90 transition cursor-pointer"
+          >
+            Reload Dashboard
+          </button>
+        </div>
+      </div>
+    );
+  },
 });
 
 const generateInvoicePDF = async (elementId: string): Promise<string> => {

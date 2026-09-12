@@ -72,6 +72,22 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      const msg = error?.message || String(error);
+      if (
+        msg.includes("Failed to fetch dynamically imported module") ||
+        msg.includes("Importing a module script failed") ||
+        msg.includes("error loading dynamically imported module")
+      ) {
+        const lastReload = sessionStorage.getItem("chunk_reload_timestamp");
+        const now = Date.now();
+        if (!lastReload || now - parseInt(lastReload, 10) > 10000) {
+          sessionStorage.setItem("chunk_reload_timestamp", now.toString());
+          window.location.reload();
+          return;
+        }
+      }
+    }
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
   }, [error]);
 
@@ -261,6 +277,23 @@ function RootComponent() {
     } catch {}
     navigate({ search: ((old: any) => ({ ...old, lang: newLang })) as any, replace: true });
   };
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const handlePreloadError = (event: any) => {
+      console.warn("Vite chunk preload error detected, auto-reloading to fetch latest version:", event);
+      const lastReload = sessionStorage.getItem("chunk_reload_timestamp");
+      const now = Date.now();
+      if (!lastReload || now - parseInt(lastReload, 10) > 10000) {
+        sessionStorage.setItem("chunk_reload_timestamp", now.toString());
+        window.location.reload();
+      }
+    };
+
+    window.addEventListener("vite:preloadError", handlePreloadError);
+    return () => window.removeEventListener("vite:preloadError", handlePreloadError);
+  }, []);
 
   const [showDeferred, setShowDeferred] = useState(false);
   useEffect(() => {
