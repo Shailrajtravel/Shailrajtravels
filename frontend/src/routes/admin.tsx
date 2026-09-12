@@ -112,8 +112,8 @@ import { jsPDF } from 'jspdf';
 export const Route = createFileRoute("/admin")({
   head: () => ({
     links: [
-      { rel: "manifest", href: "/admin/manifest.webmanifest" },
-      { rel: "apple-touch-icon", href: "/admin/icons/admin-apple-touch-icon.png" },
+      { rel: "manifest", href: "/admin/manifest.webmanifest?v=3" },
+      { rel: "apple-touch-icon", href: "/admin/icons/shailraj-apple-touch-icon.png?v=3" },
     ],
     meta: [
       { name: "theme-color", content: "#0F172A" },
