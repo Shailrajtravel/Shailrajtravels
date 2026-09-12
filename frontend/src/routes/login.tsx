@@ -3,7 +3,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { verifyAdminFn } from '@/backend/infrastructure/auth';
 import { Lock, Mail, Loader2, ArrowRight, ShieldCheck, Download, Smartphone } from 'lucide-react';
 // @ts-ignore
-import logo from '@/frontend/shared/assets/shailraj-travels-punelogo.png?w=300&format=webp&as=url';
+import logo from '@/frontend/shared/assets/shailraj-travels-adminlogo.png?w=300&format=webp&as=url';
 import { LoginSkeleton } from '@/frontend/shared/ui/LoginSkeleton';
 import {
   AdminPwaSetup,
@@ -17,8 +17,8 @@ import {
 export const Route = createFileRoute("/login")({
   head: () => ({
     links: [
-      { rel: "manifest", href: "/admin/manifest.webmanifest?v=4" },
-      { rel: "apple-touch-icon", href: "/admin/icons/shailraj-apple-touch-icon.png?v=4" },
+      { rel: "manifest", href: "/admin/manifest.webmanifest?v=5" },
+      { rel: "apple-touch-icon", href: "/admin/icons/admin-logo-apple-touch-icon.png?v=5" },
     ],
     meta: [
       { name: "theme-color", content: "#0F172A" },

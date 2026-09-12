@@ -22,3 +22,7 @@
 /admin/sw.js
   cache-control: public, max-age=0, must-revalidate
   service-worker-allowed: /admin/
+
+/admin/icons/*
+  cache-control: public, max-age=0, must-revalidate
+

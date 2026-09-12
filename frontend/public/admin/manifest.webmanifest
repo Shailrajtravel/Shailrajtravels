@@ -1,66 +1,66 @@
 {
-  "id": "shailraj-admin-dashboard-v4",
+  "id": "shailraj-admin-portal-v5",
   "name": "Shailraj Admin Portal",
   "short_name": "Shailraj Admin",
   "description": "Operations and management console for Shailraj Travels.",
-  "start_url": "/admin?source=pwa&v=4",
+  "start_url": "/admin?source=pwa&v=5",
   "scope": "/admin",
   "display": "standalone",
   "orientation": "any",
   "theme_color": "#0F172A",
-  "background_color": "#FFFFFF",
+  "background_color": "#0F172A",
   "categories": ["business", "productivity"],
   "icons": [
     {
-      "src": "/admin/icons/shailraj-logo-72x72.png?v=4",
+      "src": "/admin/icons/admin-logo-72x72.png?v=5",
       "sizes": "72x72",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/admin/icons/shailraj-logo-96x96.png?v=4",
+      "src": "/admin/icons/admin-logo-96x96.png?v=5",
       "sizes": "96x96",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/admin/icons/shailraj-logo-128x128.png?v=4",
+      "src": "/admin/icons/admin-logo-128x128.png?v=5",
       "sizes": "128x128",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/admin/icons/shailraj-logo-144x144.png?v=4",
+      "src": "/admin/icons/admin-logo-144x144.png?v=5",
       "sizes": "144x144",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/admin/icons/shailraj-logo-192x192.png?v=4",
+      "src": "/admin/icons/admin-logo-192x192.png?v=5",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/admin/icons/shailraj-logo-384x384.png?v=4",
+      "src": "/admin/icons/admin-logo-384x384.png?v=5",
       "sizes": "384x384",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/admin/icons/shailraj-logo-512x512.png?v=4",
+      "src": "/admin/icons/admin-logo-512x512.png?v=5",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/admin/icons/shailraj-logo-maskable-192x192.png?v=4",
+      "src": "/admin/icons/admin-logo-maskable-192x192.png?v=5",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/admin/icons/shailraj-logo-maskable-512x512.png?v=4",
+      "src": "/admin/icons/admin-logo-maskable-512x512.png?v=5",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"

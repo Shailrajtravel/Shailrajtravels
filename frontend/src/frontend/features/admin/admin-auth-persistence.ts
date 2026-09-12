@@ -197,23 +197,19 @@ export function AdminPwaSetup() {
   useEffect(() => {
     if (typeof document === 'undefined') return;
 
-    // Switch manifest link to admin manifest
-    let manifestLink = document.querySelector('link[rel="manifest"]') as HTMLLinkElement | null;
-    if (!manifestLink) {
-      manifestLink = document.createElement('link');
-      manifestLink.rel = 'manifest';
-      document.head.appendChild(manifestLink);
-    }
-    manifestLink.href = '/admin/manifest.webmanifest?v=4';
+    // Switch manifest link to admin manifest (remove any existing public manifest tags)
+    document.querySelectorAll('link[rel="manifest"]').forEach((el) => el.remove());
+    const manifestLink = document.createElement('link');
+    manifestLink.rel = 'manifest';
+    manifestLink.href = '/admin/manifest.webmanifest?v=5';
+    document.head.appendChild(manifestLink);
 
-    // Switch apple touch icon
-    let appleIcon = document.querySelector('link[rel="apple-touch-icon"]') as HTMLLinkElement | null;
-    if (!appleIcon) {
-      appleIcon = document.createElement('link');
-      appleIcon.rel = 'apple-touch-icon';
-      document.head.appendChild(appleIcon);
-    }
-    appleIcon.href = '/admin/icons/shailraj-apple-touch-icon.png?v=4';
+    // Switch apple touch icon (remove any existing public apple-touch-icon tags)
+    document.querySelectorAll('link[rel="apple-touch-icon"]').forEach((el) => el.remove());
+    const appleIcon = document.createElement('link');
+    appleIcon.rel = 'apple-touch-icon';
+    appleIcon.href = '/admin/icons/admin-logo-apple-touch-icon.png?v=5';
+    document.head.appendChild(appleIcon);
 
     // Switch theme color
     let themeMeta = document.querySelector('meta[name="theme-color"]') as HTMLMetaElement | null;
