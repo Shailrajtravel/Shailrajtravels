@@ -204,7 +204,7 @@ export function AdminPwaSetup() {
       manifestLink.rel = 'manifest';
       document.head.appendChild(manifestLink);
     }
-    manifestLink.href = '/admin/manifest.webmanifest?v=3';
+    manifestLink.href = '/admin/manifest.webmanifest?v=4';
 
     // Switch apple touch icon
     let appleIcon = document.querySelector('link[rel="apple-touch-icon"]') as HTMLLinkElement | null;
@@ -213,7 +213,7 @@ export function AdminPwaSetup() {
       appleIcon.rel = 'apple-touch-icon';
       document.head.appendChild(appleIcon);
     }
-    appleIcon.href = '/admin/icons/shailraj-apple-touch-icon.png?v=3';
+    appleIcon.href = '/admin/icons/shailraj-apple-touch-icon.png?v=4';
 
     // Switch theme color
     let themeMeta = document.querySelector('meta[name="theme-color"]') as HTMLMetaElement | null;

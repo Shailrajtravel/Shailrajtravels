@@ -1,8 +1,8 @@
-const ADMIN_CACHE_NAME = 'shailraj-admin-v3';
+const ADMIN_CACHE_NAME = 'shailraj-admin-v4';
 const ADMIN_PRECACHE = [
   '/admin',
   '/login',
-  '/admin/manifest.webmanifest?v=3'
+  '/admin/manifest.webmanifest?v=4'
 ];
 
 self.addEventListener('install', (event) => {

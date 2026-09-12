@@ -1,9 +1,9 @@
-const CACHE_NAME = 'shailraj-v1';
+const CACHE_NAME = 'shailraj-v4';
 const PRECACHE_ASSETS = [
   '/',
   '/favicon.ico',
   '/favicon.png',
-  '/manifest.webmanifest'
+  '/manifest.webmanifest?v=4'
 ];
 
 self.addEventListener('install', (event) => {

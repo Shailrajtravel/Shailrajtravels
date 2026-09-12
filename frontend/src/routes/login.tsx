@@ -17,8 +17,8 @@ import {
 export const Route = createFileRoute("/login")({
   head: () => ({
     links: [
-      { rel: "manifest", href: "/admin/manifest.webmanifest?v=3" },
-      { rel: "apple-touch-icon", href: "/admin/icons/shailraj-apple-touch-icon.png?v=3" },
+      { rel: "manifest", href: "/admin/manifest.webmanifest?v=4" },
+      { rel: "apple-touch-icon", href: "/admin/icons/shailraj-apple-touch-icon.png?v=4" },
     ],
     meta: [
       { name: "theme-color", content: "#0F172A" },
