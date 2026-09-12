@@ -44,6 +44,13 @@ import { IssuesAdmin } from '@/frontend/features/admin/IssuesAdmin';
 import { BlogsAdmin } from '@/frontend/features/admin/BlogsAdmin';
 import { OffersAdmin } from '@/frontend/features/admin/OffersAdmin';
 import {
+  AdminPwaSetup,
+  loadAdminSession,
+  saveAdminSession,
+  clearAdminSession,
+  usePwaInstallPrompt,
+} from '@/frontend/features/admin/admin-auth-persistence';
+import {
   LayoutDashboard,
   Package,
   LogOut,
@@ -103,10 +110,21 @@ import { toJpeg } from 'html-to-image';
 import { jsPDF } from 'jspdf';
 
 export const Route = createFileRoute("/admin")({
+  head: () => ({
+    links: [
+      { rel: "manifest", href: "/admin/manifest.webmanifest" },
+      { rel: "apple-touch-icon", href: "/admin/icons/admin-apple-touch-icon.png" },
+    ],
+    meta: [
+      { name: "theme-color", content: "#0F172A" },
+      { name: "apple-mobile-web-app-title", content: "Shailraj Admin" },
+    ],
+  }),
   beforeLoad: () => {
     if (typeof window !== "undefined") {
       const token = sessionStorage.getItem("adminToken");
-      if (!token) {
+      const hasSession = localStorage.getItem("__shailraj_admin_session_v1");
+      if (!token && !hasSession) {
         throw redirect({ to: "/login" });
       }
     }
@@ -146,6 +164,7 @@ const generateInvoicePDF = async (elementId: string): Promise<string> => {
 
 function AdminPage() {
   const navigate = useNavigate();
+  const { isInstallable, isInstalled, promptInstall } = usePwaInstallPrompt();
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [packages, setPackages] = useState<any[]>([]);
@@ -323,11 +342,32 @@ function AdminPage() {
   useEffect(() => {
     const t = sessionStorage.getItem("adminToken");
     if (!t) {
-      navigate({ to: "/login" });
+      // Auto-restore session from encrypted local vault (Instagram-like persistence)
+      loadAdminSession().then(async (saved) => {
+        if (saved && saved.email && saved.password) {
+          try {
+            const res = await verifyAdminFn({ data: { email: saved.email, password: saved.password } });
+            if (res?.success && res.token) {
+              sessionStorage.setItem("adminToken", res.token);
+              await saveAdminSession({ email: saved.email, password: saved.password, token: res.token });
+              setToken(res.token);
+              loadData(res.token);
+              return;
+            }
+          } catch (e) {
+            console.error("Failed to restore admin session:", e);
+          }
+        }
+        clearAdminSession();
+        navigate({ to: "/login" });
+      }).catch(() => {
+        clearAdminSession();
+        navigate({ to: "/login" });
+      });
       return;
     }
 
-    // Verify token
+    // Verify active token
     verifyAdminFn({ data: { token: t } })
       .then((res) => {
         if (res?.success && res.token) {
@@ -335,11 +375,13 @@ function AdminPage() {
           setToken(res.token);
           loadData(res.token);
         } else {
+          clearAdminSession();
           sessionStorage.removeItem("adminToken");
           navigate({ to: "/login" });
         }
       })
       .catch(() => {
+        clearAdminSession();
         sessionStorage.removeItem("adminToken");
         navigate({ to: "/login" });
       });
@@ -430,8 +472,11 @@ function AdminPage() {
   };
 
   const handleLogout = () => {
-    sessionStorage.removeItem("adminToken");
-    navigate({ to: "/login" });
+    if (window.confirm("Are you sure you want to log out? Your saved credentials will be cleared and you will need to sign in again.")) {
+      clearAdminSession();
+      sessionStorage.removeItem("adminToken");
+      navigate({ to: "/login" });
+    }
   };
 
   const handleDeletePackage = (id: string) => {
@@ -550,12 +595,14 @@ function AdminPage() {
   if (!token)
     return (
       <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
+        <AdminPwaSetup />
         <Loader2 className="w-8 h-8 animate-spin text-brand-green" />
       </div>
     );
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex">
+      <AdminPwaSetup />
       {/* Mobile Sidebar Overlay */}
       {isMobileMenuOpen && (
         <div
@@ -760,10 +807,20 @@ function AdminPage() {
             Issues
           </button>
         </div>
-        <div className="p-4 border-t border-slate-100">
+        <div className="p-4 border-t border-slate-100 flex flex-col gap-2">
+          {isInstallable && !isInstalled && (
+            <button
+              onClick={promptInstall}
+              className="flex items-center gap-3 px-4 py-3 w-full text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-xl font-bold transition-all text-sm border border-emerald-200 cursor-pointer"
+              title="Install standalone Admin App on this device"
+            >
+              <Download className="w-5 h-5 text-emerald-600 shrink-0" />
+              <span>Install Admin App</span>
+            </button>
+          )}
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 px-4 py-3 w-full text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-xl font-bold transition-all"
+            className="flex items-center gap-3 px-4 py-3 w-full text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-xl font-bold transition-all cursor-pointer"
           >
             <LogOut className="w-5 h-5" />
             Logout
@@ -817,6 +874,16 @@ function AdminPage() {
             </h1>
           </div>
           <div className="flex items-center gap-2 md:gap-4 shrink-0">
+            {isInstallable && !isInstalled && (
+              <button
+                onClick={promptInstall}
+                className="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 md:px-4 md:py-2 rounded-xl font-bold flex items-center gap-1.5 transition shadow-sm text-xs md:text-sm cursor-pointer"
+                title="Install Admin App on this device"
+              >
+                <Download className="w-4 h-4 shrink-0" />
+                <span className="hidden sm:inline">Install App</span>
+              </button>
+            )}
             {((activeTab === "tours_packages" && subTab === "packages") ||
               activeTab === "trips" ||
               activeTab === "gallery") &&

@@ -6,3 +6,19 @@
 
 /favicon.*
   cache-control: public, max-age=604800
+
+/*.webmanifest
+  cache-control: public, max-age=0, must-revalidate
+  content-type: application/manifest+json
+
+/admin/*.webmanifest
+  cache-control: public, max-age=0, must-revalidate
+  content-type: application/manifest+json
+
+/sw.js
+  cache-control: public, max-age=0, must-revalidate
+  service-worker-allowed: /
+
+/admin/sw.js
+  cache-control: public, max-age=0, must-revalidate
+  service-worker-allowed: /admin/

@@ -116,6 +116,8 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
+import { registerMainServiceWorker } from '@/frontend/features/admin/admin-auth-persistence';
+
 export type Language = "mr" | "en";
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
@@ -134,8 +136,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           canonicalUrl: "https://www.shailrajtravels.com",
         }),
         { name: "google", content: "notranslate" },
+        { name: "mobile-web-app-capable", content: "yes" },
+        { name: "apple-mobile-web-app-capable", content: "yes" },
+        { name: "apple-mobile-web-app-status-bar-style", content: "default" },
+        { name: "apple-mobile-web-app-title", content: "Shailraj Travels" },
+        { name: "theme-color", content: "#10A34A" },
       ],
       links: [
+        { rel: "manifest", href: "/manifest.webmanifest" },
+        { rel: "apple-touch-icon", href: "/icons/apple-touch-icon.png" },
         { rel: "stylesheet", href: appCss },
         { rel: "icon", type: "image/png", href: "/favicon.png" },
         { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
@@ -256,8 +265,15 @@ function RootComponent() {
   const [showDeferred, setShowDeferred] = useState(false);
   useEffect(() => {
     const timer = setTimeout(() => setShowDeferred(true), 2500);
+    if (
+      typeof window !== "undefined" &&
+      !location.pathname.startsWith("/admin") &&
+      !location.pathname.startsWith("/login")
+    ) {
+      registerMainServiceWorker();
+    }
     return () => clearTimeout(timer);
-  }, []);
+  }, [location.pathname]);
 
   return (
     <QueryClientProvider client={queryClient}>
