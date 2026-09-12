@@ -188,7 +188,7 @@ function OfferPage() {
                 <img
                   src={offer.bannerImageUrl}
                   alt={offer.title}
-                  className="w-full h-auto max-h-[520px] rounded-2xl object-cover object-center shadow-lg border border-slate-800"
+                  className="w-full h-auto block rounded-2xl object-contain shadow-lg border border-slate-800 mx-auto"
                 />
               </div>
             )}

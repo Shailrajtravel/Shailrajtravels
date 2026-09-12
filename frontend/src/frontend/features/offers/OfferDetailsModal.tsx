@@ -144,7 +144,7 @@ export function OfferDetailsModal({ offer, isOpen, onClose, onBookOnline }: Offe
               <img
                 src={offer.bannerImageUrl}
                 alt={offer.title}
-                className="w-full h-auto max-h-[360px] object-cover object-center"
+                className="w-full h-auto max-h-[450px] object-contain block mx-auto"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
               <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-white text-xs font-medium">

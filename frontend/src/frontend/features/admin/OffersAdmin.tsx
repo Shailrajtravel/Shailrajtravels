@@ -952,7 +952,7 @@ export function OffersAdmin({ token }: OffersAdminProps) {
                   <img
                     src={offer.bannerImageUrl}
                     alt="Preview"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                   />
                   <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between text-[11px] text-white">
                     <span className="bg-black/60 px-2 py-0.5 rounded-full backdrop-blur-xs font-bold">
