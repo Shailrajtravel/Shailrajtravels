@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Instagram, MapPin, Phone, Menu, X } from 'lucide-react';
 // @ts-ignore
-import logo from '@/frontend/shared/assets/shailraj-travels-punelogo.png?w=140&q=80&format=webp&as=url';
+import logo from '@/frontend/shared/assets/shailraj-travels-punelogo.png?w=240&q=85&format=webp&as=url';
 import { translations } from '@/frontend/core/i18n';
 import { Link, useRouterState } from '@tanstack/react-router';
 
@@ -42,7 +42,7 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
   return (
     <header className="fixed inset-x-0 top-0 z-50 p-2 md:p-4 transition-all">
       <div
-        className={`mx-auto flex max-w-[1600px] items-center justify-between rounded-2xl pl-1 pr-4 py-3 transition-all duration-200 md:pl-2 md:pr-6 md:py-4 ${
+        className={`mx-auto flex max-w-[1600px] items-center justify-between rounded-2xl pl-1 pr-4 py-2 transition-all duration-200 md:pl-2 md:pr-6 md:py-2.5 ${
           isScrolled
             ? "bg-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.08)] backdrop-blur-md"
             : "bg-transparent"
@@ -50,19 +50,19 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
       >
         {/* Left: Logo */}
         <div className="flex flex-1 justify-start">
-          <Link to="/" className="flex items-center gap-2.5 md:gap-3 group">
+          <Link to="/" className="flex items-center gap-2.5 md:gap-3.5 group">
             <img
               src={logo}
               alt="Shailraj Travels Logo"
-              className="h-12 w-12 md:h-14 md:w-14 object-contain transition-transform group-hover:scale-105 shrink-0"
-              width={56}
-              height={56}
+              className="h-14 w-14 md:h-[68px] md:w-[68px] object-contain transition-transform group-hover:scale-105 shrink-0"
+              width={68}
+              height={68}
             />
             <span className="leading-tight">
-              <span className="block font-display text-lg font-bold text-red-600 md:text-[22px] tracking-tight">
+              <span className="block font-display text-xl font-bold text-red-600 md:text-2xl tracking-tight">
                 Shailraj
               </span>
-              <span className="block text-[8.5px] font-bold uppercase tracking-[0.25em] text-brand-green-dark md:text-[10px]">
+              <span className="block text-[9px] font-bold uppercase tracking-[0.28em] text-brand-green-dark md:text-[11px]">
                 Travels
               </span>
             </span>
