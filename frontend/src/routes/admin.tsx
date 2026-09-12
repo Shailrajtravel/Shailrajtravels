@@ -80,6 +80,7 @@ import {
   AlertCircle,
   Bug,
   Sparkles,
+  Car,
 } from 'lucide-react';
 // @ts-ignore
 import logo from '@/frontend/shared/assets/shailraj-travels-punelogo.png?w=300&format=webp&as=url';
@@ -179,6 +180,7 @@ function AdminPage() {
     | "blogs"
     | "issues"
     | "offers"
+    | "vehicles"
   >("dashboard");
   const [subTab, setSubTab] = useState<"tours" | "packages" | "vehicles">("tours");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -734,6 +736,17 @@ function AdminPage() {
           >
             <Sparkles className="w-5 h-5 text-amber-500" />
             Special Offers
+          </button>
+          <button
+            onClick={() => {
+              setActiveTab("vehicles");
+              setIsFormOpen(false);
+              setIsMobileMenuOpen(false);
+            }}
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${activeTab === "vehicles" ? "bg-brand-blue-deep text-white shadow-md" : "text-slate-500 hover:bg-slate-50 hover:text-brand-blue-deep"}`}
+          >
+            <Car className="w-5 h-5 text-emerald-600" />
+            Vehicle Fleet
           </button>
           <button
             onClick={() => {
@@ -1890,6 +1903,8 @@ function AdminPage() {
             />
           ) : activeTab === "offers" ? (
             <OffersAdmin token={token} />
+          ) : activeTab === "vehicles" ? (
+            <RecommendedVehiclesAdmin token={token} />
           ) : activeTab === "issues" ? (
             <IssuesAdmin />
           ) : null}
