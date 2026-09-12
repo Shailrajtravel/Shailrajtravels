@@ -50,19 +50,19 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
       >
         {/* Left: Logo */}
         <div className="flex flex-1 justify-start">
-          <Link to="/" className="flex items-center gap-[4mm]">
+          <Link to="/" className="flex items-center gap-2.5 md:gap-3 group">
             <img
               src={logo}
               alt="Shailraj Travels Logo"
-              className="h-[110px] w-auto object-contain md:h-[140px] -my-10 md:-my-14 -ml-5 md:-ml-8 -mr-7 md:-mr-11"
-              width={140}
-              height={140}
+              className="h-10 w-10 md:h-12 md:w-12 object-contain transition-transform group-hover:scale-105 shrink-0"
+              width={48}
+              height={48}
             />
             <span className="leading-tight">
-              <span className="block font-display text-xl font-semibold text-red-600 md:text-2xl">
+              <span className="block font-display text-lg font-bold text-red-600 md:text-xl tracking-tight">
                 Shailraj
               </span>
-              <span className="block text-[8px] font-semibold uppercase tracking-[0.32em] text-brand-green-dark md:text-[10px]">
+              <span className="block text-[8px] font-bold uppercase tracking-[0.25em] text-brand-green-dark md:text-[9px]">
                 Travels
               </span>
             </span>

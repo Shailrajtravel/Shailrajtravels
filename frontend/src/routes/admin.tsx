@@ -617,7 +617,7 @@ function AdminPage() {
       >
         <div className="h-20 flex items-center justify-between px-6 border-b border-slate-100">
           <div className="flex items-center">
-            <img src={logo} alt="Shailraj" className="h-16 mr-3 object-contain" />
+            <img src={logo} alt="Shailraj" className="h-12 w-12 mr-3 object-contain" />
             <span className="font-display font-bold text-xl text-brand-blue-deep tracking-tight">
               Admin
             </span>

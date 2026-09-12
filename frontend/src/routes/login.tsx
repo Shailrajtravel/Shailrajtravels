@@ -143,12 +143,11 @@ function LoginPage() {
       <div className="w-full max-w-md relative z-10 animate-reveal">
         {/* Branding */}
         <div className="flex flex-col items-center mb-6">
-          <div className="w-24 h-24 rounded-3xl bg-slate-800/80 border border-slate-700/80 shadow-2xl shadow-black/40 flex items-center justify-center mb-4 overflow-hidden backdrop-blur-md">
+          <div className="w-24 h-24 rounded-3xl bg-slate-800/80 border border-slate-700/80 shadow-2xl shadow-black/40 flex items-center justify-center mb-4 overflow-hidden backdrop-blur-md p-2.5">
             <img 
               src={logo} 
               alt="Shailraj Travels Logo" 
               className="h-full w-full object-contain" 
-              style={{ transform: "scale(1.5)" }} 
             />
           </div>
           <div className="flex items-center gap-2">
