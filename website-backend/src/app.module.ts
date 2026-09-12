@@ -21,6 +21,7 @@ import { CustomBlogsModule } from './custom-blogs/custom-blogs.module';
 import { RecommendedVehiclesModule } from './recommended-vehicles/recommended-vehicles.module';
 import { WebhooksModule } from './webhooks/webhooks.module';
 import { IssuesModule } from './issues/issues.module';
+import { OffersModule } from './offers/offers.module';
 import { TraceIdMiddleware } from './shared/trace.middleware';
 
 @Module({
@@ -47,7 +48,8 @@ import { TraceIdMiddleware } from './shared/trace.middleware';
     CustomBlogsModule,
     RecommendedVehiclesModule,
     WebhooksModule,
-    IssuesModule
+    IssuesModule,
+    OffersModule,
   ],
   controllers: [AppController],
   providers: [

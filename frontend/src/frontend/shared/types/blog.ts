@@ -4,7 +4,8 @@ export type BlogCategory =
   | "Travel Guides"
   | "Temple Guides"
   | "Pilgrimage Planning"
-  | "Spiritual Tourism";
+  | "Spiritual Tourism"
+  | "Experiences";
 
 export interface TOCItem {
   id: string;

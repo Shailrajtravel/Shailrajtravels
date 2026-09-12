@@ -42,6 +42,7 @@ import { ToursAdmin } from '@/frontend/features/admin/ToursAdmin';
 import { RecommendedVehiclesAdmin } from '@/frontend/features/admin/RecommendedVehiclesAdmin';
 import { IssuesAdmin } from '@/frontend/features/admin/IssuesAdmin';
 import { BlogsAdmin } from '@/frontend/features/admin/BlogsAdmin';
+import { OffersAdmin } from '@/frontend/features/admin/OffersAdmin';
 import {
   LayoutDashboard,
   Package,
@@ -78,6 +79,7 @@ import {
   CheckCircle,
   AlertCircle,
   Bug,
+  Sparkles,
 } from 'lucide-react';
 // @ts-ignore
 import logo from '@/frontend/shared/assets/shailraj-travels-punelogo.png?w=300&format=webp&as=url';
@@ -176,6 +178,7 @@ function AdminPage() {
     | "whatsapp"
     | "blogs"
     | "issues"
+    | "offers"
   >("dashboard");
   const [subTab, setSubTab] = useState<"tours" | "packages" | "vehicles">("tours");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -720,6 +723,17 @@ function AdminPage() {
           >
             <ImageIcon className="w-5 h-5" />
             Custom Blogs
+          </button>
+          <button
+            onClick={() => {
+              setActiveTab("offers");
+              setIsFormOpen(false);
+              setIsMobileMenuOpen(false);
+            }}
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${activeTab === "offers" ? "bg-brand-blue-deep text-white shadow-md" : "text-slate-500 hover:bg-slate-50 hover:text-brand-blue-deep"}`}
+          >
+            <Sparkles className="w-5 h-5 text-amber-500" />
+            Special Offers
           </button>
           <button
             onClick={() => {
@@ -1874,6 +1888,8 @@ function AdminPage() {
               loadData={loadData}
               setDeleteConfirm={setDeleteConfirm}
             />
+          ) : activeTab === "offers" ? (
+            <OffersAdmin token={token} />
           ) : activeTab === "issues" ? (
             <IssuesAdmin />
           ) : null}

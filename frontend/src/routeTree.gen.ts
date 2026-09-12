@@ -41,6 +41,7 @@ import { Route as MrIndexRouteImport } from './routes/mr/index'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as ToursTourSlugRouteImport } from './routes/tours.$tourSlug'
 import { Route as ResourcesResourceSlugRouteImport } from './routes/resources/$resourceSlug'
+import { Route as OffersOfferSlugRouteImport } from './routes/offers.$offerSlug'
 import { Route as FactsFactSlugRouteImport } from './routes/facts/$factSlug'
 import { Route as CompareCompareSlugRouteImport } from './routes/compare/$compareSlug'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
@@ -211,6 +212,11 @@ const ResourcesResourceSlugRoute = ResourcesResourceSlugRouteImport.update({
   path: '/resources/$resourceSlug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OffersOfferSlugRoute = OffersOfferSlugRouteImport.update({
+  id: '/offers/$offerSlug',
+  path: '/offers/$offerSlug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FactsFactSlugRoute = FactsFactSlugRouteImport.update({
   id: '/facts/$factSlug',
   path: '/facts/$factSlug',
@@ -285,6 +291,7 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/compare/$compareSlug': typeof CompareCompareSlugRoute
   '/facts/$factSlug': typeof FactsFactSlugRoute
+  '/offers/$offerSlug': typeof OffersOfferSlugRoute
   '/resources/$resourceSlug': typeof ResourcesResourceSlugRoute
   '/tours/$tourSlug': typeof ToursTourSlugRoute
   '/blog/': typeof BlogIndexRoute
@@ -327,6 +334,7 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/compare/$compareSlug': typeof CompareCompareSlugRoute
   '/facts/$factSlug': typeof FactsFactSlugRoute
+  '/offers/$offerSlug': typeof OffersOfferSlugRoute
   '/resources/$resourceSlug': typeof ResourcesResourceSlugRoute
   '/tours/$tourSlug': typeof ToursTourSlugRoute
   '/blog': typeof BlogIndexRoute
@@ -370,6 +378,7 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/compare/$compareSlug': typeof CompareCompareSlugRoute
   '/facts/$factSlug': typeof FactsFactSlugRoute
+  '/offers/$offerSlug': typeof OffersOfferSlugRoute
   '/resources/$resourceSlug': typeof ResourcesResourceSlugRoute
   '/tours/$tourSlug': typeof ToursTourSlugRoute
   '/blog/': typeof BlogIndexRoute
@@ -414,6 +423,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/compare/$compareSlug'
     | '/facts/$factSlug'
+    | '/offers/$offerSlug'
     | '/resources/$resourceSlug'
     | '/tours/$tourSlug'
     | '/blog/'
@@ -456,6 +466,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/compare/$compareSlug'
     | '/facts/$factSlug'
+    | '/offers/$offerSlug'
     | '/resources/$resourceSlug'
     | '/tours/$tourSlug'
     | '/blog'
@@ -498,6 +509,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/compare/$compareSlug'
     | '/facts/$factSlug'
+    | '/offers/$offerSlug'
     | '/resources/$resourceSlug'
     | '/tours/$tourSlug'
     | '/blog/'
@@ -541,6 +553,7 @@ export interface RootRouteChildren {
   BlogSlugRoute: typeof BlogSlugRoute
   CompareCompareSlugRoute: typeof CompareCompareSlugRoute
   FactsFactSlugRoute: typeof FactsFactSlugRoute
+  OffersOfferSlugRoute: typeof OffersOfferSlugRoute
   ResourcesResourceSlugRoute: typeof ResourcesResourceSlugRoute
   ToursTourSlugRoute: typeof ToursTourSlugRoute
   BlogIndexRoute: typeof BlogIndexRoute
@@ -778,6 +791,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResourcesResourceSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/offers/$offerSlug': {
+      id: '/offers/$offerSlug'
+      path: '/offers/$offerSlug'
+      fullPath: '/offers/$offerSlug'
+      preLoaderRoute: typeof OffersOfferSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/facts/$factSlug': {
       id: '/facts/$factSlug'
       path: '/facts/$factSlug'
@@ -869,6 +889,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogSlugRoute: BlogSlugRoute,
   CompareCompareSlugRoute: CompareCompareSlugRoute,
   FactsFactSlugRoute: FactsFactSlugRoute,
+  OffersOfferSlugRoute: OffersOfferSlugRoute,
   ResourcesResourceSlugRoute: ResourcesResourceSlugRoute,
   ToursTourSlugRoute: ToursTourSlugRoute,
   BlogIndexRoute: BlogIndexRoute,

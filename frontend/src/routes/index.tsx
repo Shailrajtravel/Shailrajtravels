@@ -12,6 +12,7 @@ const FaqSection = React.lazy(() => import('@/frontend/features/faq/FaqSection')
 const ReviewsSection = React.lazy(() => import('@/frontend/features/reviews/ReviewsSection').then(m => ({ default: m.ReviewsSection })));
 const GallerySection = React.lazy(() => import('@/frontend/features/gallery/GallerySection').then(m => ({ default: m.GallerySection })));
 const BookingModal = React.lazy(() => import('@/frontend/features/tours/BookingModal').then(m => ({ default: m.BookingModal })));
+import { OfferBannerSection } from '@/frontend/features/offers/OfferBannerSection';
 
 import { getPackagesFn } from '@/backend/features/packages';
 import { generateSEO } from '@/backend/features/seo';
@@ -33,16 +34,17 @@ export const Route = createFileRoute("/")({
   component: HomePage,
   loader: async ({ deps: { lang } }) => {
     try {
-      const [packages, tripOptions, galleryPhotos, tours] = await Promise.all([
+      const [packages, tripOptions, galleryPhotos, tours, activeOffer] = await Promise.all([
         getPackagesFn(),
         import('@/backend/shared/bookings').then((m) => m.getTripOptionsFn()),
         import('@/backend/shared/gallery').then((m) => m.getGalleryPhotosFn()),
         import('@/backend/features/tours').then((m) => m.getToursFn({ data: { lang: lang || "en" } })),
+        import('@/backend/features/offers').then((m) => m.getActiveOfferFn()),
       ]);
-      return { packages, tripOptions, galleryPhotos, tours };
+      return { packages, tripOptions, galleryPhotos, tours, activeOffer };
     } catch (e) {
       console.error(e);
-      return { packages: [], tripOptions: [], galleryPhotos: [], tours: [] };
+      return { packages: [], tripOptions: [], galleryPhotos: [], tours: [], activeOffer: null };
     }
   },
 });
@@ -56,6 +58,7 @@ function HomePage() {
     tripOptions = [],
     galleryPhotos = [],
     tours = [],
+    activeOffer = null,
   } = Route.useLoaderData() as any;
 
   const [bookingTour, setBookingTour] = useState<any | null>(null);
@@ -138,6 +141,9 @@ function HomePage() {
       <Navbar t={t} />
       <main>
         <Hero lang={lang} t={t} tripOptions={tripOptions} packages={allPackages} activeTripId="" />
+        {activeOffer && activeOffer.isActive && (
+          <OfferBannerSection offer={activeOffer} onBookTour={handleBookSeat} />
+        )}
         <React.Suspense
           fallback={
             <div className="w-full max-w-7xl mx-auto py-16 px-4 md:px-8 animate-pulse space-y-12">

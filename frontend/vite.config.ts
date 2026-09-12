@@ -56,6 +56,7 @@ export default defineConfig({
           "/tours/shirdi-tour",
           "/tours/tirupati-balaji-tour",
           "/about-shailraj-travels",
+          "/offers/pune-to-lalbag-raja-darshan",
           "/contact",
           "/faq",
         ],
