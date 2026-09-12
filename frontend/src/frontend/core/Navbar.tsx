@@ -54,15 +54,15 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
             <img
               src={logo}
               alt="Shailraj Travels Logo"
-              className="h-10 w-10 md:h-12 md:w-12 object-contain transition-transform group-hover:scale-105 shrink-0"
-              width={48}
-              height={48}
+              className="h-12 w-12 md:h-14 md:w-14 object-contain transition-transform group-hover:scale-105 shrink-0"
+              width={56}
+              height={56}
             />
             <span className="leading-tight">
-              <span className="block font-display text-lg font-bold text-red-600 md:text-xl tracking-tight">
+              <span className="block font-display text-lg font-bold text-red-600 md:text-[22px] tracking-tight">
                 Shailraj
               </span>
-              <span className="block text-[8px] font-bold uppercase tracking-[0.25em] text-brand-green-dark md:text-[9px]">
+              <span className="block text-[8.5px] font-bold uppercase tracking-[0.25em] text-brand-green-dark md:text-[10px]">
                 Travels
               </span>
             </span>
