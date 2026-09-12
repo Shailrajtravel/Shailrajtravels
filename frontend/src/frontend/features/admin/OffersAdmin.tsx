@@ -45,6 +45,7 @@ export function OffersAdmin({ token }: OffersAdminProps) {
   // Form State
   const [offer, setOffer] = useState<PromotionalOffer>(DEFAULT_OFFER);
   const [imageMode, setImageMode] = useState<'url' | 'upload'>('url');
+  const [isCompressingImage, setIsCompressingImage] = useState(false);
   const [newPickupPoint, setNewPickupPoint] = useState('');
   const [newHighlight, setNewHighlight] = useState('');
   const [newInclusion, setNewInclusion] = useState('');
@@ -92,29 +93,75 @@ export function OffersAdmin({ token }: OffersAdminProps) {
       setSuccessMsg(nextStatus ? "Special Offer Banner is now LIVE on website!" : "Offer Banner is now HIDDEN from website.");
       setTimeout(() => setSuccessMsg(null), 4000);
     } catch (err: any) {
-      setErrorMsg(err.message || "Failed to toggle offer visibility.");
+      let msg = err.message || "Failed to toggle offer visibility.";
+      if (msg.toLowerCase().includes('aborted') || msg.toLowerCase().includes('timed out')) {
+        msg = "The request timed out while updating status. Please try again.";
+      }
+      setErrorMsg(msg);
     }
   };
 
-  // Handle Local Image Upload to Base64
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Helper to resize & compress uploaded images client-side to prevent network aborts / payload bloat
+  const compressImage = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (readerEvent) => {
+        const img = new Image();
+        img.onload = () => {
+          const maxDim = 1600;
+          let { width, height } = img;
+          if (width > maxDim || height > maxDim) {
+            if (width > height) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            } else {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          if (!ctx) {
+            resolve(readerEvent.target?.result as string);
+            return;
+          }
+          ctx.drawImage(img, 0, 0, width, height);
+          const compressed = canvas.toDataURL('image/jpeg', 0.85);
+          resolve(compressed);
+        };
+        img.onerror = () => reject(new Error('Failed to load image for processing'));
+        img.src = readerEvent.target?.result as string;
+      };
+      reader.onerror = () => reject(new Error('Failed to read file from disk'));
+      reader.readAsDataURL(file);
+    });
+  };
+
+  // Handle Local Image Upload to Base64 with automatic optimization
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > 8 * 1024 * 1024) {
-      setErrorMsg("Image exceeds 8MB. Please choose a smaller image file.");
+    if (file.size > 15 * 1024 * 1024) {
+      setErrorMsg("Image exceeds 15MB limit. Please choose a smaller image file.");
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      if (event.target?.result) {
-        const base64 = event.target.result as string;
-        setOffer((prev) => ({ ...prev, bannerImageUrl: base64 }));
-        setErrorMsg(null);
-      }
-    };
-    reader.readAsDataURL(file);
+    setIsCompressingImage(true);
+    setErrorMsg(null);
+    try {
+      const optimizedBase64 = await compressImage(file);
+      setOffer((prev) => ({ ...prev, bannerImageUrl: optimizedBase64 }));
+      setSuccessMsg("Poster image optimized and loaded ready to save!");
+      setTimeout(() => setSuccessMsg(null), 3500);
+    } catch (err: any) {
+      console.error("Image processing error:", err);
+      setErrorMsg(err.message || "Failed to process image file.");
+    } finally {
+      setIsCompressingImage(false);
+    }
   };
 
   // Schedule Timeline Handlers
@@ -247,7 +294,11 @@ export function OffersAdmin({ token }: OffersAdminProps) {
       setTimeout(() => setSuccessMsg(null), 5000);
     } catch (err: any) {
       console.error("Save offer error:", err);
-      setErrorMsg(err.message || "Failed to save promotional offer.");
+      let msg = err.message || "Failed to save promotional offer.";
+      if (msg.toLowerCase().includes('aborted') || msg.toLowerCase().includes('timed out')) {
+        msg = "The request timed out while saving to server. Please try again in a few moments.";
+      }
+      setErrorMsg(msg);
     } finally {
       setSaving(false);
     }
@@ -427,18 +478,73 @@ export function OffersAdmin({ token }: OffersAdminProps) {
                 </div>
               </div>
             ) : (
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
-                  Upload Image File from Device
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-600">
+                    Upload Image File from Device
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setOffer((prev) => ({
+                        ...prev,
+                        bannerImageUrl: "/images/offers/lalbag-raja-pune-offer.jpg",
+                      }))
+                    }
+                    className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold transition-colors flex items-center gap-1"
+                    title="Reset to default Lalbag Raja poster"
+                  >
+                    <RotateCcw className="w-3 h-3" />
+                    Reset to Default Poster
+                  </button>
+                </div>
+                <label className={`border-2 border-dashed rounded-2xl p-6 flex flex-col items-center justify-center gap-2 cursor-pointer transition-all group ${
+                  isCompressingImage 
+                    ? 'border-orange-400 bg-orange-50/50 cursor-wait' 
+                    : 'border-slate-300 hover:border-orange-500 bg-slate-50/50 hover:bg-orange-50/30'
+                }`}>
+                  {isCompressingImage ? (
+                    <>
+                      <Loader2 className="w-8 h-8 text-orange-600 animate-spin" />
+                      <span className="text-sm font-bold text-orange-600">
+                        Optimizing & compressing image...
+                      </span>
+                      <span className="text-xs text-slate-400">Scaling down high-resolution file</span>
+                    </>
+                  ) : (
+                    <>
+                      <UploadCloud className="w-8 h-8 text-slate-400 group-hover:text-orange-600 group-hover:scale-110 transition-all" />
+                      <span className="text-sm font-bold text-slate-700 group-hover:text-orange-600">
+                        Click to select poster image file
+                      </span>
+                      <span className="text-xs text-slate-400">JPG, PNG, WebP up to 15MB (automatically optimized)</span>
+                    </>
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileSelect}
+                    disabled={isCompressingImage}
+                    className="hidden"
+                  />
                 </label>
-                <label className="border-2 border-dashed border-slate-300 hover:border-orange-500 rounded-2xl p-6 flex flex-col items-center justify-center gap-2 cursor-pointer bg-slate-50/50 hover:bg-orange-50/30 transition-all group">
-                  <UploadCloud className="w-8 h-8 text-slate-400 group-hover:text-orange-600 group-hover:scale-110 transition-all" />
-                  <span className="text-sm font-bold text-slate-700 group-hover:text-orange-600">
-                    Click to select poster image file
-                  </span>
-                  <span className="text-xs text-slate-400">JPG, PNG, WebP up to 8MB</span>
-                  <input type="file" accept="image/*" onChange={handleFileSelect} className="hidden" />
-                </label>
+                {offer.bannerImageUrl?.startsWith('data:') && (
+                  <div className="flex items-center justify-between text-xs px-3 py-2 bg-amber-50 border border-amber-200 text-amber-800 rounded-xl">
+                    <span>Custom image loaded. Click <strong>Save All Changes</strong> above to publish.</span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setOffer((prev) => ({
+                          ...prev,
+                          bannerImageUrl: "/images/offers/lalbag-raja-pune-offer.jpg",
+                        }))
+                      }
+                      className="text-amber-900 underline font-bold hover:text-amber-700"
+                    >
+                      Cancel / Reset
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>

@@ -105,10 +105,17 @@ export const DEFAULT_OFFER: PromotionalOffer = {
   updatedAt: new Date().toISOString(),
 };
 
-const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
+const apiFetch = async (endpoint: string, options: RequestInit & { timeoutMs?: number } = {}) => {
   const BACKEND_URL = import.meta.env.VITE_WEBSITE_BACKEND_URL || process.env.VITE_WEBSITE_BACKEND_URL || "https://shailrajtravels.onrender.com/api";
+  
+  // For write operations (POST, PUT, DELETE), give generous 45s timeout to allow payload transfer and DB saves on Render
+  // For read operations (GET), give 12s timeout
+  const isWrite = options.method && ['POST', 'PUT', 'DELETE', 'PATCH'].includes(options.method.toUpperCase());
+  const defaultTimeout = isWrite ? 45000 : 12000;
+  const timeoutMs = options.timeoutMs ?? defaultTimeout;
+
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 4000); // 4s timeout to avoid SSR stalls
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
     const res = await fetch(`${BACKEND_URL}${endpoint}`, {
@@ -126,8 +133,11 @@ const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
     }
     const text = await res.text();
     return text ? JSON.parse(text) : null;
-  } catch (err) {
+  } catch (err: any) {
     clearTimeout(timeoutId);
+    if (err.name === 'AbortError' || err.message?.includes('aborted')) {
+      throw new Error(`Request timed out after ${timeoutMs / 1000}s while communicating with backend. Please try again.`);
+    }
     throw err;
   }
 };
