@@ -734,7 +734,7 @@ function AdminPage() {
             }}
             className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${activeTab === "offers" ? "bg-brand-blue-deep text-white shadow-md" : "text-slate-500 hover:bg-slate-50 hover:text-brand-blue-deep"}`}
           >
-            <Sparkles className="w-5 h-5 text-amber-500" />
+            <Sparkles className="w-5 h-5" />
             Special Offers
           </button>
           <button
@@ -745,7 +745,7 @@ function AdminPage() {
             }}
             className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${activeTab === "vehicles" ? "bg-brand-blue-deep text-white shadow-md" : "text-slate-500 hover:bg-slate-50 hover:text-brand-blue-deep"}`}
           >
-            <Car className="w-5 h-5 text-emerald-600" />
+            <Car className="w-5 h-5" />
             Vehicle Fleet
           </button>
           <button
@@ -807,9 +807,13 @@ function AdminPage() {
                                     ? "WhatsApp Engine"
                                     : activeTab === "blogs"
                                       ? "Blogs Management"
-                                      : activeTab === "issues"
-                                      ? "Issues Management"
-                                      : "Booking Management"}
+                                      : activeTab === "offers"
+                                        ? "Special Offers"
+                                        : activeTab === "vehicles"
+                                          ? "Vehicle Fleet"
+                                          : activeTab === "issues"
+                                          ? "Issues Management"
+                                          : "Booking Management"}
             </h1>
           </div>
           <div className="flex items-center gap-2 md:gap-4 shrink-0">
