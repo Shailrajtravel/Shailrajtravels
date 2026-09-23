@@ -93,6 +93,12 @@ export class PromotionalOfferRepository extends BaseRepository<PromotionalOffer>
     );
     return res.modifiedCount > 0;
   }
+
+  async deleteOffer(slug: string): Promise<boolean> {
+    const col = await storageManager.getGlobalCollection<PromotionalOffer>(this.baseCollectionName);
+    const res = await col.deleteOne({ slug });
+    return res.deletedCount > 0;
+  }
 }
 
 export const promotionalOfferRepository = new PromotionalOfferRepository();

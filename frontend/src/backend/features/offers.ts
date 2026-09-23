@@ -238,3 +238,21 @@ export const toggleOfferStatusFn = createServerFn({ method: "POST" })
       throw new Error(error.message || "Failed to toggle offer status");
     }
   });
+
+export const deleteOfferFn = createServerFn({ method: "POST" })
+  .validator((data: { adminToken: string; slug: string }) => data)
+  .handler(async ({ data }): Promise<boolean> => {
+    if (!isValidAdminToken(data?.adminToken)) {
+      throw new Error("Unauthorized");
+    }
+    try {
+      const result = await apiFetch(`/offers/${data.slug}`, {
+        method: "DELETE",
+      });
+      await invalidateCache('offers:active');
+      return result;
+    } catch (error: any) {
+      console.error("Failed to delete offer:", error);
+      throw new Error(error.message || "Failed to delete offer");
+    }
+  });

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
 import { OffersService } from './offers.service';
 
 @Controller('offers')
@@ -31,5 +31,10 @@ export class OffersController {
     @Body('isActive') isActive: boolean,
   ) {
     return this.offersService.toggleOfferStatus(slug, isActive);
+  }
+
+  @Delete(':slug')
+  async deleteOffer(@Param('slug') slug: string) {
+    return this.offersService.deleteOffer(slug);
   }
 }

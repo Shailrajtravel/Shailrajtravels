@@ -27,6 +27,7 @@ import {
   getOffersFn,
   saveOfferFn,
   toggleOfferStatusFn,
+  deleteOfferFn,
   DEFAULT_OFFER,
   type PromotionalOffer,
   type ScheduleItem,
@@ -98,6 +99,28 @@ export function OffersAdmin({ token }: OffersAdminProps) {
         msg = "The request timed out while updating status. Please try again.";
       }
       setErrorMsg(msg);
+    }
+  };
+
+  const handleDeleteOffer = async () => {
+    if (!window.confirm(`Are you sure you want to completely delete the offer "${offer.title}"?`)) {
+      return;
+    }
+    setSaving(true);
+    try {
+      await deleteOfferFn({
+        data: {
+          adminToken: token,
+          slug: offer.slug,
+        }
+      });
+      setSuccessMsg("Offer deleted successfully. Reverted to default.");
+      setTimeout(() => setSuccessMsg(null), 4000);
+      setOffer(DEFAULT_OFFER);
+    } catch (err: any) {
+      setErrorMsg(err.message || "Failed to delete offer.");
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -387,6 +410,17 @@ export function OffersAdmin({ token }: OffersAdminProps) {
                 <span>Save All Changes</span>
               </>
             )}
+          </button>
+          
+          <button
+            type="button"
+            onClick={handleDeleteOffer}
+            disabled={saving}
+            className="px-3.5 py-2.5 bg-red-50 hover:bg-red-100 text-red-600 font-bold text-xs sm:text-sm rounded-2xl transition-colors border border-red-200 flex items-center gap-1.5 disabled:opacity-50"
+            title="Delete Offer"
+          >
+            <Trash2 className="w-4 h-4" />
+            <span className="hidden sm:inline">Delete</span>
           </button>
         </div>
       </div>

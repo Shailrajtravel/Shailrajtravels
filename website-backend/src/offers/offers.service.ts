@@ -131,4 +131,13 @@ export class OffersService {
       throw error;
     }
   }
+
+  async deleteOffer(slug: string): Promise<boolean> {
+    try {
+      return await promotionalOfferRepository.deleteOffer(slug);
+    } catch (error) {
+      this.logger.error(`Failed to delete offer ${slug}`, error);
+      throw error;
+    }
+  }
 }
