@@ -33,6 +33,30 @@ export interface PromotionalOffer {
   updatedAt?: string;
 }
 
+export const EMPTY_OFFER: PromotionalOffer = {
+  slug: "",
+  isActive: false,
+  badge: "",
+  title: "",
+  subtitle: "",
+  bannerImageUrl: "",
+  offerPrice: "",
+  originalPrice: "",
+  priceUnit: "per person",
+  urgencyText: "",
+  vehicleName: "",
+  highlights: [],
+  schedule: [],
+  route: "",
+  pickupPoints: [],
+  inclusions: [],
+  exclusions: [],
+  ctaText: "Book Your Seat Now",
+  whatsappMessage: "",
+  terms: "",
+  updatedAt: new Date().toISOString(),
+};
+
 export const DEFAULT_OFFER: PromotionalOffer = {
   slug: "pune-to-lalbag-raja-darshan",
   isActive: false,
@@ -188,13 +212,13 @@ export const getOffersFn = createServerFn({ method: "POST" })
     }
     try {
       const offers = await apiFetch('/offers');
-      if (Array.isArray(offers) && offers.length > 0) {
+      if (Array.isArray(offers)) {
         return offers;
       }
-      return [{ ...DEFAULT_OFFER, isActive: false }];
+      return [];
     } catch (error) {
       console.error("Failed to fetch all offers:", error);
-      return [{ ...DEFAULT_OFFER, isActive: false }];
+      return [];
     }
   });
 

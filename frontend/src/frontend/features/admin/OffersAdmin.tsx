@@ -29,6 +29,7 @@ import {
   toggleOfferStatusFn,
   deleteOfferFn,
   DEFAULT_OFFER,
+  EMPTY_OFFER,
   type PromotionalOffer,
   type ScheduleItem,
 } from '@/backend/features/offers';
@@ -44,7 +45,7 @@ export function OffersAdmin({ token }: OffersAdminProps) {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   // Form State
-  const [offer, setOffer] = useState<PromotionalOffer>(DEFAULT_OFFER);
+  const [offer, setOffer] = useState<PromotionalOffer>(EMPTY_OFFER);
   const [imageMode, setImageMode] = useState<'url' | 'upload'>('url');
   const [isCompressingImage, setIsCompressingImage] = useState(false);
   const [newPickupPoint, setNewPickupPoint] = useState('');
@@ -58,18 +59,21 @@ export function OffersAdmin({ token }: OffersAdminProps) {
     setErrorMsg(null);
     try {
       const offers = await getOffersFn({ data: { adminToken: token } });
-      if (offers && offers.length > 0) {
-        setOffer({
-          ...DEFAULT_OFFER,
-          ...offers[0],
-        });
+      if (offers && offers.length > 0 && offers[0].title && offers[0].slug !== 'no-active-offer') {
+        if (offers[0].slug === 'pune-to-lalbag-raja-darshan' && !offers[0].isActive) {
+          setOffer(EMPTY_OFFER);
+        } else {
+          setOffer({
+            ...EMPTY_OFFER,
+            ...offers[0],
+          });
+        }
       } else {
-        setOffer(DEFAULT_OFFER);
+        setOffer(EMPTY_OFFER);
       }
     } catch (err: any) {
       console.error("Failed to load offer in admin:", err);
-      setErrorMsg("Failed to load offers from database, loaded default settings.");
-      setOffer(DEFAULT_OFFER);
+      setOffer(EMPTY_OFFER);
     } finally {
       setLoading(false);
     }
@@ -103,7 +107,13 @@ export function OffersAdmin({ token }: OffersAdminProps) {
   };
 
   const handleDeleteOffer = async () => {
-    if (!window.confirm(`Are you sure you want to completely delete the offer "${offer.title || offer.slug}" and remove it from the website?`)) {
+    if (!offer.title && !offer.slug) {
+      setOffer(EMPTY_OFFER);
+      setSuccessMsg("Form has been reset to blank.");
+      setTimeout(() => setSuccessMsg(null), 3000);
+      return;
+    }
+    if (!window.confirm(`Are you sure you want to completely delete the offer "${offer.title || offer.slug}" and reset the form to blank?`)) {
       return;
     }
     setSaving(true);
@@ -112,16 +122,25 @@ export function OffersAdmin({ token }: OffersAdminProps) {
       await deleteOfferFn({
         data: {
           adminToken: token,
-          slug: offer.slug || DEFAULT_OFFER.slug,
+          slug: offer.slug || "pune-to-lalbag-raja-darshan",
         }
       });
-      setSuccessMsg("Offer deleted successfully. Banner has been removed from the website.");
+      // Explicitly reset form to empty state
+      setOffer(EMPTY_OFFER);
+      setSuccessMsg("Offer deleted successfully. The form has been completely reset to blank.");
       setTimeout(() => setSuccessMsg(null), 4000);
-      setOffer({ ...DEFAULT_OFFER, isActive: false });
     } catch (err: any) {
       setErrorMsg(err.message || "Failed to delete offer.");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleResetForm = () => {
+    if (window.confirm("Are you sure you want to clear all form fields to start a new blank offer?")) {
+      setOffer(EMPTY_OFFER);
+      setSuccessMsg("Form has been reset to blank.");
+      setTimeout(() => setSuccessMsg(null), 3000);
     }
   };
 
@@ -299,16 +318,22 @@ export function OffersAdmin({ token }: OffersAdminProps) {
 
   // Save All Changes
   const handleSave = async () => {
+    if (!offer.title?.trim()) {
+      setErrorMsg("Please enter an Offer Title before saving.");
+      return;
+    }
     setSaving(true);
     setErrorMsg(null);
     setSuccessMsg(null);
 
     try {
+      const slugToUse = offer.slug || (offer.title ? offer.title.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') : `offer-${Date.now()}`);
       const saved = await saveOfferFn({
         data: {
           adminToken: token,
           offer: {
             ...offer,
+            slug: slugToUse,
             updatedAt: new Date().toISOString(),
           },
         },
@@ -355,7 +380,7 @@ export function OffersAdmin({ token }: OffersAdminProps) {
             </h2>
           </div>
           <p className="text-sm text-slate-500 max-w-2xl">
-            Configure the homepage spotlight banner, pricing, Force Urbania amenities, itinerary milestones, and WhatsApp booking automation for the Pune to Lalbag Raja Darshan trip.
+            Configure the homepage spotlight banner, pricing, vehicle amenities, itinerary milestones, and WhatsApp booking automation for special promotional tours.
           </p>
         </div>
 
@@ -415,10 +440,20 @@ export function OffersAdmin({ token }: OffersAdminProps) {
           
           <button
             type="button"
+            onClick={handleResetForm}
+            className="px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs sm:text-sm rounded-2xl transition-colors border border-slate-200 flex items-center gap-1.5"
+            title="Clear all fields and reset form to blank"
+          >
+            <RotateCcw className="w-4 h-4 text-slate-500" />
+            <span>Reset Form</span>
+          </button>
+
+          <button
+            type="button"
             onClick={handleDeleteOffer}
             disabled={saving}
             className="px-3.5 py-2.5 bg-red-50 hover:bg-red-100 text-red-600 font-bold text-xs sm:text-sm rounded-2xl transition-colors border border-red-200 flex items-center gap-1.5 disabled:opacity-50"
-            title="Delete Offer"
+            title="Delete Offer and reset form"
           >
             <Trash2 className="w-4 h-4" />
             <span className="hidden sm:inline">Delete</span>
@@ -493,7 +528,7 @@ export function OffersAdmin({ token }: OffersAdminProps) {
                     type="text"
                     value={offer.bannerImageUrl}
                     onChange={(e) => setOffer((prev) => ({ ...prev, bannerImageUrl: e.target.value }))}
-                    placeholder="/images/offers/lalbag-raja-pune-offer.jpg"
+                    placeholder="e.g. /images/offers/weekend-special.jpg"
                     className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 text-sm outline-none font-mono text-xs"
                   />
                   <button
@@ -501,14 +536,14 @@ export function OffersAdmin({ token }: OffersAdminProps) {
                     onClick={() =>
                       setOffer((prev) => ({
                         ...prev,
-                        bannerImageUrl: "/images/offers/lalbag-raja-pune-offer.jpg",
+                        bannerImageUrl: "",
                       }))
                     }
                     className="px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 shrink-0"
-                    title="Reset to default Lalbag Raja poster"
+                    title="Clear image URL"
                   >
-                    <RotateCcw className="w-3.5 h-3.5" />
-                    Reset
+                    <Trash2 className="w-3.5 h-3.5 text-slate-500" />
+                    Clear
                   </button>
                 </div>
               </div>
@@ -523,14 +558,14 @@ export function OffersAdmin({ token }: OffersAdminProps) {
                     onClick={() =>
                       setOffer((prev) => ({
                         ...prev,
-                        bannerImageUrl: "/images/offers/lalbag-raja-pune-offer.jpg",
+                        bannerImageUrl: "",
                       }))
                     }
                     className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold transition-colors flex items-center gap-1"
-                    title="Reset to default Lalbag Raja poster"
+                    title="Clear poster image"
                   >
-                    <RotateCcw className="w-3 h-3" />
-                    Reset to Default Poster
+                    <Trash2 className="w-3 h-3 text-slate-500" />
+                    Clear Image
                   </button>
                 </div>
                 <label className={`border-2 border-dashed rounded-2xl p-6 flex flex-col items-center justify-center gap-2 cursor-pointer transition-all group ${
@@ -571,12 +606,12 @@ export function OffersAdmin({ token }: OffersAdminProps) {
                       onClick={() =>
                         setOffer((prev) => ({
                           ...prev,
-                          bannerImageUrl: "/images/offers/lalbag-raja-pune-offer.jpg",
+                          bannerImageUrl: "",
                         }))
                       }
                       className="text-amber-900 underline font-bold hover:text-amber-700"
                     >
-                      Cancel / Reset
+                      Clear Image
                     </button>
                   </div>
                 )}
@@ -600,7 +635,7 @@ export function OffersAdmin({ token }: OffersAdminProps) {
                   type="text"
                   value={offer.title}
                   onChange={(e) => setOffer((prev) => ({ ...prev, title: e.target.value }))}
-                  placeholder="Pune to Lalbag Raja Darshan"
+                  placeholder="e.g. Special Holiday Weekend Tour"
                   className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 text-sm font-bold outline-none"
                 />
               </div>
@@ -613,7 +648,7 @@ export function OffersAdmin({ token }: OffersAdminProps) {
                   type="text"
                   value={offer.subtitle}
                   onChange={(e) => setOffer((prev) => ({ ...prev, subtitle: e.target.value }))}
-                  placeholder="Faith | Travel | Blessings - Special One Day Trip"
+                  placeholder="e.g. Special Weekend Pilgrimage Package"
                   className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 text-sm outline-none"
                 />
               </div>
@@ -626,7 +661,7 @@ export function OffersAdmin({ token }: OffersAdminProps) {
                   type="text"
                   value={offer.badge}
                   onChange={(e) => setOffer((prev) => ({ ...prev, badge: e.target.value }))}
-                  placeholder="ONE DAY TRIP"
+                  placeholder="e.g. SPECIAL OFFER / 2 DAYS"
                   className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 text-sm outline-none"
                 />
               </div>
@@ -639,7 +674,7 @@ export function OffersAdmin({ token }: OffersAdminProps) {
                   type="text"
                   value={offer.vehicleName}
                   onChange={(e) => setOffer((prev) => ({ ...prev, vehicleName: e.target.value }))}
-                  placeholder="Luxury AC Force Urbania"
+                  placeholder="e.g. Luxury AC Force Urbania / Bus"
                   className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 text-sm outline-none"
                 />
               </div>
@@ -654,7 +689,7 @@ export function OffersAdmin({ token }: OffersAdminProps) {
                     type="text"
                     value={offer.offerPrice}
                     onChange={(e) => setOffer((prev) => ({ ...prev, offerPrice: e.target.value }))}
-                    placeholder="999"
+                    placeholder="e.g. 1499"
                     className="w-full pl-8 pr-4 py-2.5 rounded-xl border border-slate-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 text-sm font-black text-slate-900 outline-none"
                   />
                 </div>
@@ -670,7 +705,7 @@ export function OffersAdmin({ token }: OffersAdminProps) {
                     type="text"
                     value={offer.originalPrice}
                     onChange={(e) => setOffer((prev) => ({ ...prev, originalPrice: e.target.value }))}
-                    placeholder="1,499"
+                    placeholder="e.g. 1999"
                     className="w-full pl-8 pr-4 py-2.5 rounded-xl border border-slate-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 text-sm outline-none text-slate-500"
                   />
                 </div>
@@ -684,7 +719,7 @@ export function OffersAdmin({ token }: OffersAdminProps) {
                   type="text"
                   value={offer.priceUnit}
                   onChange={(e) => setOffer((prev) => ({ ...prev, priceUnit: e.target.value }))}
-                  placeholder="per person"
+                  placeholder="e.g. per person / per seat"
                   className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 text-sm outline-none"
                 />
               </div>
@@ -697,7 +732,7 @@ export function OffersAdmin({ token }: OffersAdminProps) {
                   type="text"
                   value={offer.urgencyText}
                   onChange={(e) => setOffer((prev) => ({ ...prev, urgencyText: e.target.value }))}
-                  placeholder="Limited Seats in Luxury Force Urbania! 14th Sep Late Night Departure"
+                  placeholder="e.g. Limited Seats Available! Book before Friday"
                   className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 text-sm outline-none"
                 />
               </div>

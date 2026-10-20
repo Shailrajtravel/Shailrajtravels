@@ -99,13 +99,10 @@ export class OffersService {
   async getAllOffers(): Promise<Partial<PromotionalOffer>[]> {
     try {
       const offers = await promotionalOfferRepository.findAll();
-      if (!offers || offers.length === 0) {
-        return [{ ...DEFAULT_OFFER, isActive: false }];
-      }
-      return offers;
+      return offers || [];
     } catch (error) {
       this.logger.error("Failed to fetch all offers", error);
-      return [{ ...DEFAULT_OFFER, isActive: false }];
+      return [];
     }
   }
 

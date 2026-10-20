@@ -56,7 +56,7 @@ export class PromotionalOfferRepository extends BaseRepository<PromotionalOffer>
   async saveOffer(offerData: Partial<PromotionalOffer>): Promise<PromotionalOffer> {
     const col = await storageManager.getGlobalCollection<PromotionalOffer>(this.baseCollectionName);
     const now = new Date().toISOString();
-    const slug = offerData.slug || 'pune-to-lalbag-raja-darshan';
+    const slug = offerData.slug || (offerData.title ? offerData.title.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') : `offer-${Date.now()}`);
 
     const existing = await col.findOne({ slug });
     if (existing) {
@@ -96,7 +96,11 @@ export class PromotionalOfferRepository extends BaseRepository<PromotionalOffer>
 
   async deleteOffer(slug: string): Promise<boolean> {
     const col = await storageManager.getGlobalCollection<PromotionalOffer>(this.baseCollectionName);
-    await col.deleteMany({ slug });
+    if (!slug || slug === 'all' || slug === 'pune-to-lalbag-raja-darshan') {
+      await col.deleteMany({});
+    } else {
+      await col.deleteMany({ $or: [{ slug }, { slug: 'pune-to-lalbag-raja-darshan' }] });
+    }
     return true;
   }
 }
