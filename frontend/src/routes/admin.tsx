@@ -43,6 +43,7 @@ import { RecommendedVehiclesAdmin } from '@/frontend/features/admin/RecommendedV
 import { IssuesAdmin } from '@/frontend/features/admin/IssuesAdmin';
 import { BlogsAdmin } from '@/frontend/features/admin/BlogsAdmin';
 import { OffersAdmin } from '@/frontend/features/admin/OffersAdmin';
+import { LetterheadEditor } from '@/frontend/shared/components/LetterheadEditor';
 import {
   AdminPwaSetup,
   loadAdminSession,
@@ -76,6 +77,7 @@ import {
   Download,
   Activity,
   Printer,
+  FileText,
   MapPin,
   Lock,
   BadgeIndianRupee,
@@ -219,6 +221,7 @@ function AdminPage() {
     | "customers"
     | "reports"
     | "invoices"
+    | "letterhead"
     | "audit"
     | "revenue"
     | "whatsapp"
@@ -627,7 +630,7 @@ function AdminPage() {
     );
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex">
+    <div className="h-screen w-full bg-[#F8FAFC] flex overflow-hidden">
       <AdminPwaSetup />
       {/* Mobile Sidebar Overlay */}
       {isMobileMenuOpen && (
@@ -639,9 +642,9 @@ function AdminPage() {
 
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200 flex flex-col transform transition-transform duration-300 md:relative md:translate-x-0 ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200 flex flex-col h-full md:h-screen shrink-0 transform transition-transform duration-300 md:static md:translate-x-0 ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
-        <div className="h-20 flex items-center justify-between px-6 border-b border-slate-100">
+        <div className="h-20 flex items-center justify-between px-6 border-b border-slate-100 shrink-0">
           <div className="flex items-center">
             <img src={logo} alt="Shailraj" className="h-12 w-12 mr-3 object-contain" />
             <span className="font-display font-bold text-xl text-brand-blue-deep tracking-tight">
@@ -655,7 +658,7 @@ function AdminPage() {
             <X className="w-5 h-5" />
           </button>
         </div>
-        <div className="flex-1 py-6 px-4 flex flex-col gap-2 overflow-y-auto">
+        <div className="flex-1 min-h-0 py-4 px-3 flex flex-col gap-1.5 overflow-y-auto overscroll-contain custom-scrollbar">
           <button
             onClick={() => {
               setActiveTab("dashboard");
@@ -721,6 +724,17 @@ function AdminPage() {
           >
             <Printer className="w-5 h-5" />
             Invoices
+          </button>
+          <button
+            onClick={() => {
+              setActiveTab("letterhead");
+              setIsFormOpen(false);
+              setIsMobileMenuOpen(false);
+            }}
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${activeTab === "letterhead" ? "bg-brand-blue-deep text-white shadow-md" : "text-slate-500 hover:bg-slate-50 hover:text-brand-blue-deep"}`}
+          >
+            <FileText className="w-5 h-5" />
+            Letterhead
           </button>
           <button
             onClick={() => {
@@ -833,7 +847,7 @@ function AdminPage() {
             Issues
           </button>
         </div>
-        <div className="p-4 border-t border-slate-100 flex flex-col gap-2">
+        <div className="p-4 border-t border-slate-100 flex flex-col gap-2 shrink-0 bg-white">
           {isInstallable && !isInstalled && (
             <button
               onClick={promptInstall}
@@ -855,7 +869,7 @@ function AdminPage() {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col h-screen overflow-hidden">
+      <main className="flex-1 flex flex-col h-full md:h-screen min-w-0 overflow-hidden">
         {/* Header */}
         <header className="h-16 md:h-20 bg-white border-b border-slate-200 flex items-center justify-between px-4 md:px-8 shrink-0 gap-2">
           <div className="flex items-center gap-2 md:gap-3 min-w-0 flex-1">
@@ -882,7 +896,9 @@ function AdminPage() {
                             ? "Reports & Exports"
                             : activeTab === "invoices"
                               ? "Generated Invoices"
-                              : activeTab === "audit"
+                              : activeTab === "letterhead"
+                                ? "Official Letterhead Generator"
+                                : activeTab === "audit"
                                 ? "Audit Logs"
                                 : activeTab === "revenue"
                                   ? "Revenue Overview"
@@ -940,7 +956,7 @@ function AdminPage() {
         )}
 
         {/* Scrollable Area */}
-        <div className="flex-1 overflow-auto p-4 md:p-8 print:p-0 relative bg-slate-50/50">
+        <div className="flex-1 min-h-0 overflow-y-auto p-4 md:p-8 print:p-0 relative bg-slate-50/50 custom-scrollbar">
           {activeTab === "dashboard" ? (
             <DashboardOverview
               packages={packages}
@@ -1987,6 +2003,10 @@ function AdminPage() {
             <ReportsView bookings={bookings} />
           ) : activeTab === "invoices" ? (
             <InvoicesView bookings={bookings} token={token} loadData={loadData} getBookingRate={getBookingRate} />
+          ) : activeTab === "letterhead" ? (
+            <div className="w-full bg-[#eceef2] rounded-2xl p-2 sm:p-4 overflow-hidden shadow-sm border border-slate-200">
+              <LetterheadEditor onBack={() => setActiveTab("invoices")} />
+            </div>
           ) : activeTab === "revenue" ? (
             <RevenueView bookings={bookings} />
           ) : activeTab === "whatsapp" ? (
