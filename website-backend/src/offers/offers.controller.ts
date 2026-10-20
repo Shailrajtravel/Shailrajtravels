@@ -37,4 +37,9 @@ export class OffersController {
   async deleteOffer(@Param('slug') slug: string) {
     return this.offersService.deleteOffer(slug);
   }
+
+  @Post(':slug/delete')
+  async deleteOfferPost(@Param('slug') slug: string) {
+    return this.offersService.deleteOffer(slug);
+  }
 }

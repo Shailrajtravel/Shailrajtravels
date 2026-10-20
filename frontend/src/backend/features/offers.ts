@@ -35,7 +35,7 @@ export interface PromotionalOffer {
 
 export const DEFAULT_OFFER: PromotionalOffer = {
   slug: "pune-to-lalbag-raja-darshan",
-  isActive: true,
+  isActive: false,
   badge: "ONE DAY TRIP",
   title: "Pune to Lalbag Raja Darshan",
   subtitle: "Faith | Travel | Blessings - Special One Day Trip",
@@ -148,20 +148,20 @@ export const getActiveOfferFn = createServerFn({ method: "GET" })
     try {
       if (!data?.forceFresh) {
         const cached = await getCachedData<PromotionalOffer>('offers:active');
-        if (cached && typeof cached === 'object' && cached.slug) {
+        if (cached && typeof cached === 'object' && cached.slug && cached.isActive) {
           return cached;
         }
       }
 
       const liveOffer = await apiFetch('/offers/active');
-      if (liveOffer && liveOffer.slug) {
+      if (liveOffer && liveOffer.slug && liveOffer.isActive) {
         await setCachedData('offers:active', liveOffer, 300);
         return liveOffer;
       }
-      return DEFAULT_OFFER.isActive ? DEFAULT_OFFER : null;
+      return null;
     } catch (error) {
-      console.error("Failed to fetch active offer, using default fallback:", error);
-      return DEFAULT_OFFER.isActive ? DEFAULT_OFFER : null;
+      console.error("Failed to fetch active offer:", error);
+      return null;
     }
   });
 
@@ -173,13 +173,10 @@ export const getOfferBySlugFn = createServerFn({ method: "GET" })
       if (liveOffer && liveOffer.slug) {
         return liveOffer;
       }
-      if (data.slug === DEFAULT_OFFER.slug) {
-        return DEFAULT_OFFER;
-      }
       return null;
     } catch (error) {
       console.error(`Failed to fetch offer by slug ${data.slug}:`, error);
-      return data.slug === DEFAULT_OFFER.slug ? DEFAULT_OFFER : null;
+      return null;
     }
   });
 
@@ -194,10 +191,10 @@ export const getOffersFn = createServerFn({ method: "POST" })
       if (Array.isArray(offers) && offers.length > 0) {
         return offers;
       }
-      return [DEFAULT_OFFER];
+      return [{ ...DEFAULT_OFFER, isActive: false }];
     } catch (error) {
       console.error("Failed to fetch all offers:", error);
-      return [DEFAULT_OFFER];
+      return [{ ...DEFAULT_OFFER, isActive: false }];
     }
   });
 
@@ -245,14 +242,40 @@ export const deleteOfferFn = createServerFn({ method: "POST" })
     if (!isValidAdminToken(data?.adminToken)) {
       throw new Error("Unauthorized");
     }
+    const offerSlug = data?.slug || DEFAULT_OFFER.slug;
     try {
-      const result = await apiFetch(`/offers/${data.slug}`, {
+      // 1. Try standard DELETE endpoint
+      const result = await apiFetch(`/offers/${offerSlug}`, {
         method: "DELETE",
       });
       await invalidateCache('offers:active');
-      return result;
+      return result ?? true;
     } catch (error: any) {
-      console.error("Failed to delete offer:", error);
-      throw new Error(error.message || "Failed to delete offer");
+      console.warn("DELETE /offers/:slug failed, trying fallback endpoints:", error?.message);
+
+      // 2. Try POST fallback: /offers/:slug/delete
+      try {
+        const postResult = await apiFetch(`/offers/${offerSlug}/delete`, {
+          method: "POST",
+        });
+        await invalidateCache('offers:active');
+        return postResult ?? true;
+      } catch (postErr) {
+        console.warn("POST /offers/:slug/delete fallback failed:", postErr);
+      }
+
+      // 3. Fallback: Deactivate the offer via PUT /status so it is immediately hidden from the website
+      try {
+        const statusResult = await apiFetch(`/offers/${offerSlug}/status`, {
+          method: "PUT",
+          body: JSON.stringify({ isActive: false }),
+        });
+        await invalidateCache('offers:active');
+        return statusResult ?? true;
+      } catch (fallbackError: any) {
+        console.error("All offer delete / deactivate attempts failed:", fallbackError);
+        throw new Error(error.message || "Failed to delete offer");
+      }
     }
   });
+

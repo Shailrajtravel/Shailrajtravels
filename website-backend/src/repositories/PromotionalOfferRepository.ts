@@ -96,8 +96,8 @@ export class PromotionalOfferRepository extends BaseRepository<PromotionalOffer>
 
   async deleteOffer(slug: string): Promise<boolean> {
     const col = await storageManager.getGlobalCollection<PromotionalOffer>(this.baseCollectionName);
-    const res = await col.deleteOne({ slug });
-    return res.deletedCount > 0;
+    await col.deleteMany({ slug });
+    return true;
   }
 }
 

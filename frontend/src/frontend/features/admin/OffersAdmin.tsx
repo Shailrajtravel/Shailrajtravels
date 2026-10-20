@@ -103,20 +103,21 @@ export function OffersAdmin({ token }: OffersAdminProps) {
   };
 
   const handleDeleteOffer = async () => {
-    if (!window.confirm(`Are you sure you want to completely delete the offer "${offer.title}"?`)) {
+    if (!window.confirm(`Are you sure you want to completely delete the offer "${offer.title || offer.slug}" and remove it from the website?`)) {
       return;
     }
     setSaving(true);
+    setErrorMsg(null);
     try {
       await deleteOfferFn({
         data: {
           adminToken: token,
-          slug: offer.slug,
+          slug: offer.slug || DEFAULT_OFFER.slug,
         }
       });
-      setSuccessMsg("Offer deleted successfully. Reverted to default.");
+      setSuccessMsg("Offer deleted successfully. Banner has been removed from the website.");
       setTimeout(() => setSuccessMsg(null), 4000);
-      setOffer(DEFAULT_OFFER);
+      setOffer({ ...DEFAULT_OFFER, isActive: false });
     } catch (err: any) {
       setErrorMsg(err.message || "Failed to delete offer.");
     } finally {

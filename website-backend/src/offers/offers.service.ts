@@ -3,7 +3,7 @@ import { promotionalOfferRepository, PromotionalOffer } from '../repositories/Pr
 
 export const DEFAULT_OFFER: Partial<PromotionalOffer> = {
   slug: "pune-to-lalbag-raja-darshan",
-  isActive: true,
+  isActive: false,
   badge: "ONE DAY TRIP",
   title: "Pune to Lalbag Raja Darshan",
   subtitle: "Faith | Travel | Blessings - Special One Day Trip",
@@ -80,12 +80,11 @@ export class OffersService {
   async getActiveOffer(): Promise<Partial<PromotionalOffer> | null> {
     try {
       const active = await promotionalOfferRepository.findActive();
-      if (active) return active;
-      // If nothing active in DB, return null or fallback default if active
-      return DEFAULT_OFFER.isActive ? DEFAULT_OFFER : null;
+      if (active && active.isActive) return active;
+      return null;
     } catch (error) {
       this.logger.error("Failed to fetch active offer", error);
-      return DEFAULT_OFFER;
+      return null;
     }
   }
 
@@ -93,12 +92,12 @@ export class OffersService {
     try {
       const offers = await promotionalOfferRepository.findAll();
       if (!offers || offers.length === 0) {
-        return [DEFAULT_OFFER];
+        return [{ ...DEFAULT_OFFER, isActive: false }];
       }
       return offers;
     } catch (error) {
       this.logger.error("Failed to fetch all offers", error);
-      return [DEFAULT_OFFER];
+      return [{ ...DEFAULT_OFFER, isActive: false }];
     }
   }
 
@@ -106,11 +105,10 @@ export class OffersService {
     try {
       const offer = await promotionalOfferRepository.findBySlug(slug);
       if (offer) return offer;
-      if (slug === DEFAULT_OFFER.slug) return DEFAULT_OFFER;
       return null;
     } catch (error) {
       this.logger.error(`Failed to fetch offer by slug ${slug}`, error);
-      return slug === DEFAULT_OFFER.slug ? DEFAULT_OFFER : null;
+      return null;
     }
   }
 
