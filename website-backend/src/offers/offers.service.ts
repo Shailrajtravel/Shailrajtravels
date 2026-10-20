@@ -81,10 +81,18 @@ export class OffersService {
     try {
       const active = await promotionalOfferRepository.findActive();
       if (active && active.isActive) return active;
-      return null;
+      return {
+        slug: "no-active-offer",
+        isActive: false,
+        title: "",
+      };
     } catch (error) {
       this.logger.error("Failed to fetch active offer", error);
-      return null;
+      return {
+        slug: "no-active-offer",
+        isActive: false,
+        title: "",
+      };
     }
   }
 
