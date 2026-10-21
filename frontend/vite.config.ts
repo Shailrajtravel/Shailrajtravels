@@ -33,6 +33,16 @@ export default defineConfig({
   },
   vite: {
     plugins: [
+      {
+        name: "generate-sitemap-xml",
+        buildStart: async () => {
+          try {
+            await import("./scripts/generate-sitemap.mjs");
+          } catch (e: any) {
+            console.warn("Sitemap build hook error:", e?.message);
+          }
+        },
+      },
       Sitemap({
         hostname: "https://www.shailrajtravels.com",
         dynamicRoutes: [
