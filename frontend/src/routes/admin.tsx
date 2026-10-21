@@ -42,6 +42,7 @@ import { ToursAdmin } from '@/frontend/features/admin/ToursAdmin';
 import { RecommendedVehiclesAdmin } from '@/frontend/features/admin/RecommendedVehiclesAdmin';
 import { IssuesAdmin } from '@/frontend/features/admin/IssuesAdmin';
 import { BlogsAdmin } from '@/frontend/features/admin/BlogsAdmin';
+import { blogPosts, blogAuthors } from '@/frontend/shared/data/blogs';
 import { OffersAdmin } from '@/frontend/features/admin/OffersAdmin';
 import { LetterheadEditor } from '@/frontend/shared/components/LetterheadEditor';
 import {
@@ -491,7 +492,33 @@ function AdminPage() {
       setGalleryPhotos(Array.isArray(photos) ? photos : []);
       setAuditLogs(Array.isArray(logs) ? logs : []);
       setTours(Array.isArray(trs) ? trs : []);
-      setCustomBlogs(Array.isArray(dbBlogs) ? dbBlogs : []);
+      
+      const dbList = Array.isArray(dbBlogs) ? dbBlogs : [];
+      const dbSlugs = new Set(dbList.map((b: any) => b.slug));
+      const staticFallbacks = blogPosts
+        .filter((p) => !dbSlugs.has(p.slug))
+        .map((p) => ({
+          _id: `static-${p.slug}`,
+          title: p.title,
+          slug: p.slug,
+          content: p.content,
+          excerpt: p.excerpt,
+          authorName: p.authorId ? blogAuthors[p.authorId]?.name || "Shailraj Travels" : "Shailraj Travels",
+          category: p.category || "Travel Guides",
+          featuredImage: p.featuredImage || p.ogImage,
+          thumbnailUrl: p.featuredImage || p.ogImage,
+          ogImage: p.ogImage || p.featuredImage,
+          publishedAt: p.publishedAt,
+          updatedAt: p.updatedAt,
+          readingTimeMinutes: p.readingTimeMinutes,
+          tags: p.tags,
+          isHidden: false,
+          metaTitle: p.metaTitle,
+          metaDescription: p.metaDescription,
+          tableOfContents: p.tableOfContents,
+          faqs: p.faqs,
+        }));
+      setCustomBlogs([...dbList, ...staticFallbacks]);
     } catch (e: any) {
       console.error("loadData fatal error:", e);
       setErrorMsg(e.message || String(e));

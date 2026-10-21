@@ -1,17 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ArrowRight, Eye } from 'lucide-react';
+import { Link } from '@tanstack/react-router';
 import { LazyImage } from '@/frontend/shared/ui/lazy-image';
+import { GalleryLightbox } from '@/frontend/features/gallery/GalleryLightbox';
 
 export function GallerySection({ t, photos = [] }: { t: any; photos?: any[] }) {
   if (!photos || photos.length === 0) return null;
+
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "start" }, [
-    Autoplay({ delay: 3000, stopOnInteraction: false }),
+    Autoplay({ delay: 3500, stopOnInteraction: false }),
   ]);
+
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [selectedIdx, setSelectedIdx] = useState(0);
 
   const scrollPrev = () => emblaApi && emblaApi.scrollPrev();
   const scrollNext = () => emblaApi && emblaApi.scrollNext();
+
+  const handleOpenLightbox = (index: number) => {
+    setSelectedIdx(index);
+    setLightboxOpen(true);
+  };
 
   return (
     <section
@@ -19,7 +30,7 @@ export function GallerySection({ t, photos = [] }: { t: any; photos?: any[] }) {
       className="w-full bg-[#FCFCFC] py-12 lg:py-20 scroll-mt-28 md:scroll-mt-32 relative"
     >
       <div className="mx-auto max-w-[1280px] px-6">
-        <div className="flex flex-col items-center text-center mb-16 animate-reveal">
+        <div className="flex flex-col items-center text-center mb-14 animate-reveal">
           <p className="flex items-center gap-3 text-[13px] md:text-[15px] font-bold tracking-[0.2em] text-brand-green-dark mb-4 uppercase">
             <span className="h-px w-8 bg-brand-green" />
             {t.galleryTitle}
@@ -38,12 +49,22 @@ export function GallerySection({ t, photos = [] }: { t: any; photos?: any[] }) {
                   key={photo._id || idx}
                   className="flex-[0_0_100%] md:flex-[0_0_calc(50%-0.75rem)] lg:flex-[0_0_calc(33.333%-1rem)] min-w-0 flex flex-col transition-transform"
                 >
-                  <div className="relative h-[300px] md:h-[400px] w-full overflow-hidden rounded-2xl group/item border border-slate-100 shadow-sm bg-white flex items-center justify-center p-4">
+                  <div
+                    onClick={() => handleOpenLightbox(idx)}
+                    className="relative h-[300px] md:h-[400px] w-full overflow-hidden rounded-2xl group/item border border-slate-200/80 shadow-sm bg-white flex items-center justify-center p-3 cursor-pointer"
+                  >
                     <LazyImage
                       src={photo.imageUrl}
-                      alt="Gallery"
-                      className="h-full w-full object-contain transition-transform duration-700 group-hover/item:scale-110"
+                      alt={photo.title || "Gallery Photo"}
+                      className="h-full w-full object-contain transition-transform duration-700 group-hover/item:scale-105"
                     />
+
+                    {/* Hover icon */}
+                    <div className="absolute inset-0 bg-black/30 opacity-0 group-hover/item:opacity-100 transition-opacity flex items-center justify-center">
+                      <div className="w-12 h-12 rounded-full bg-white/90 text-brand-blue-deep flex items-center justify-center shadow-lg transform scale-90 group-hover/item:scale-100 transition-transform">
+                        <Eye className="w-5 h-5" />
+                      </div>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -65,7 +86,26 @@ export function GallerySection({ t, photos = [] }: { t: any; photos?: any[] }) {
             <ChevronRight className="h-6 w-6" />
           </button>
         </div>
+
+        {/* Explore Full Gallery Button */}
+        <div className="flex justify-center mt-10">
+          <Link
+            to="/gallery"
+            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-brand-blue-deep hover:bg-brand-blue text-white font-bold text-sm transition-all shadow-md hover:shadow-xl hover:-translate-y-0.5"
+          >
+            View Complete Photo Gallery ({photos.length} Photos) <ArrowRight className="w-4 h-4 text-brand-green" />
+          </Link>
+        </div>
       </div>
+
+      {/* Lightbox */}
+      <GalleryLightbox
+        photos={photos}
+        currentIndex={selectedIdx}
+        isOpen={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+        onSelectIndex={(index) => setSelectedIdx(index)}
+      />
     </section>
   );
 }

@@ -2121,4 +2121,69 @@ export const seedTours: any[] = [
   }
 ];
 
-export const seedGallery: any[] = [];
+export const seedGallery: any[] = [
+  {
+    _id: "6ad79c5a4ea9d81e412c06ce",
+    imageUrl: "https://res.cloudinary.com/dquecn5qj/image/upload/v1792515161/gallery/k9vnruiq45hbdqnfn5k8.jpg",
+    title: "BNI Agni Entrepreneur Meet 2026",
+    category: "BNI Agni Events",
+    aspect: "portrait"
+  },
+  {
+    _id: "6ad79c7d4ea9d81e412c06cf",
+    imageUrl: "https://res.cloudinary.com/dquecn5qj/image/upload/v1792515197/gallery/hkvtraktxjnbgsnebpyv.jpg",
+    title: "Rising Star Trophy & Memento",
+    category: "Awards & Recognition",
+    aspect: "portrait"
+  },
+  {
+    _id: "6ad79ca04ea9d81e412c06d0",
+    imageUrl: "https://res.cloudinary.com/dquecn5qj/image/upload/v1792515232/gallery/rlfcypocp9fnvbyvmr3a.jpg",
+    title: "Welcome to Entrepreneur Meet - Stage Honor",
+    category: "BNI Agni Events",
+    aspect: "portrait"
+  },
+  {
+    _id: "6ad79cbf4ea9d81e412c06d1",
+    imageUrl: "https://res.cloudinary.com/dquecn5qj/image/upload/v1792515263/gallery/le4k1rnlomkhjplxmyfd.jpg",
+    title: "BNI Agni Team Celebration",
+    category: "BNI Agni Events",
+    aspect: "portrait"
+  },
+  {
+    _id: "6ad79d024ea9d81e412c06d2",
+    imageUrl: "https://res.cloudinary.com/dquecn5qj/image/upload/v1792515330/gallery/wsuxrht0bnfcl9j0krat.jpg",
+    title: "Feature Presentation Speaker - Dr. Priya",
+    category: "Awards & Recognition",
+    aspect: "portrait"
+  },
+  {
+    _id: "6ad79d1d4ea9d81e412c06d3",
+    imageUrl: "https://res.cloudinary.com/dquecn5qj/image/upload/v1792515356/gallery/ntyywmbka56clc6psik8.jpg",
+    title: "Certificate Presentation Ceremony",
+    category: "Awards & Recognition",
+    aspect: "portrait"
+  },
+  {
+    _id: "6ad79d584ea9d81e412c06d4",
+    imageUrl: "https://res.cloudinary.com/dquecn5qj/image/upload/v1792515415/gallery/iqboullsmc0x6dsqjvhp.jpg",
+    title: "Executive Leadership & Members Group",
+    category: "BNI Agni Events",
+    aspect: "portrait"
+  },
+  {
+    _id: "6ad79d764ea9d81e412c06d5",
+    imageUrl: "https://res.cloudinary.com/dquecn5qj/image/upload/v1792515446/gallery/zhqdj2wzmetsojshmwbn.jpg",
+    title: "Rising Star Award Screen Presentation",
+    category: "Awards & Recognition",
+    aspect: "portrait"
+  },
+  {
+    _id: "6ad79d914ea9d81e412c06d6",
+    imageUrl: "https://res.cloudinary.com/dquecn5qj/image/upload/v1792515472/gallery/dogd5zbllpbhh2ndjqyj.jpg",
+    title: "BNI Agni Terrific Performance Certificate - Score 100/100",
+    category: "Awards & Recognition",
+    aspect: "landscape"
+  }
+];
+

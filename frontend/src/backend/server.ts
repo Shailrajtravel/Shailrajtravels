@@ -114,6 +114,31 @@ export default {
         : request.url;
       const url = new URL(urlString);
 
+      // Force 301 redirect from non-www to canonical www domain
+      if (url.hostname === "shailrajtravels.com") {
+        return Response.redirect(`https://www.shailrajtravels.com${url.pathname}${url.search}`, 301);
+      }
+
+      // 301 Permanent Redirects for legacy and moved URLs
+      const legacyRedirects: Record<string, string> = {
+        "/mr/blog": "/blog",
+        "/tours/ashtavinayak-yatra": "/tours/pune-to-ashtavinayak-darshan",
+        "/tours/tirupati-balaji-tour": "/tours/pune-to-tirupati-balaji-darshan-tour",
+        "/tours/jyotirlinga-darshan": "/tours/pune-mumbai-to-3-jyotirlinga-darshan",
+        "/tours/pandharpur-wari": "/tours/pune-to-shakti-peeth-yatra",
+        "/tours/char-dham-yatra": "/pilgrimage-tours-from-pune",
+        "/tours/shirdi-tour": "/tours",
+        "/about": "/about-shailraj-travels",
+        "/features": "/why-choose-shailraj-travels",
+        "/knowledge-hub": "/blog",
+      };
+
+      const normalizedPath = url.pathname.replace(/\/$/, "");
+      if (legacyRedirects[url.pathname] || (normalizedPath && legacyRedirects[normalizedPath])) {
+        const target = legacyRedirects[url.pathname] || legacyRedirects[normalizedPath];
+        return Response.redirect(`https://www.shailrajtravels.com${target}${url.search}`, 301);
+      }
+
       // Intercept /api/contact
       if (request.method === "POST" && url.pathname === "/api/contact") {
         const ip = request.headers.get("x-forwarded-for") || "unknown";

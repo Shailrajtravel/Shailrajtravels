@@ -1,33 +1,74 @@
 import React from 'react';
-import { createFileRoute, notFound } from '@tanstack/react-router';
+import { createFileRoute, notFound, redirect } from '@tanstack/react-router';
 import { getTourBySlugFn } from '@/backend/features/tours';
 import { getRecommendedVehiclesFn } from '@/backend/shared/recommended-vehicles';
 import { TourPageTemplate } from '@/frontend/shared/templates/TourPageTemplate';
 import { generateSEO } from '@/backend/features/seo';
-import { generateProductSchema } from '@/backend/shared/schema-generators';
+import { generateProductSchema, generateBreadcrumbSchema, generateFAQSchema } from '@/backend/shared/schema-generators';
 import { useLanguage } from '@/routes/__root';
 import { translations } from '@/frontend/core/i18n';
+
+const LEGACY_TOUR_REDIRECTS: Record<string, string> = {
+  "tirupati-balaji-tour": "/tours/pune-to-tirupati-balaji-darshan-tour",
+  "ashtavinayak-yatra": "/tours/pune-to-ashtavinayak-darshan",
+  "jyotirlinga-darshan": "/tours/pune-mumbai-to-3-jyotirlinga-darshan",
+  "pandharpur-wari": "/tours/pune-to-shakti-peeth-yatra",
+  "char-dham-yatra": "/pilgrimage-tours-from-pune",
+  "shirdi-tour": "/tours",
+};
+
 export const Route = createFileRoute("/tours/$tourSlug")({
   validateSearch: (search: Record<string, unknown>): { lang?: string } => ({
     lang: search.lang as string | undefined,
   }),
   loaderDeps: ({ search: { lang } }) => ({ lang }),
   loader: async ({ params, deps: { lang } }) => {
+    if (LEGACY_TOUR_REDIRECTS[params.tourSlug]) {
+      throw redirect({
+        to: LEGACY_TOUR_REDIRECTS[params.tourSlug] as any,
+        statusCode: 301,
+      });
+    }
+
     const tour = await getTourBySlugFn({ data: { slug: params.tourSlug, lang: lang || "en" } });
     if (!tour) {
       throw notFound();
     }
     const recommendedVehicles = await getRecommendedVehiclesFn();
 
-    // Dynamically generate schema since it's no longer stored in DB
-    (tour as any).schemaData = generateProductSchema({
-      name: tour.title,
-      description: tour.metaDescription || tour.heroContent?.description,
-      image: `https://www.shailrajtravels.com${tour.heroContent?.image || ""}`,
-      price: tour.packages?.[0]?.price || "0",
-      ratingValue: 4.8,
-      reviewCount: 150,
-    });
+    const rawImage = tour.heroContent?.image || "";
+    const imageUrl = rawImage.startsWith("http")
+      ? rawImage
+      : rawImage
+        ? `https://www.shailrajtravels.com${rawImage.startsWith('/') ? '' : '/'}${rawImage}`
+        : "https://www.shailrajtravels.com/og-image.jpg";
+
+    const tourCanonical = tour.canonicalUrl || `https://www.shailrajtravels.com/tours/${params.tourSlug}`;
+    const rawPrice = tour.packages?.[0]?.price || "3111";
+
+    const schemas: any[] = [
+      generateProductSchema({
+        name: tour.title,
+        description: tour.metaDescription || tour.heroContent?.description || tour.overview,
+        image: imageUrl,
+        price: rawPrice,
+        ratingValue: 4.9,
+        reviewCount: 180,
+        url: tourCanonical,
+        sku: `SRT-${params.tourSlug}`,
+      }),
+      generateBreadcrumbSchema([
+        { name: "Home", url: "https://www.shailrajtravels.com" },
+        { name: "Tours", url: "https://www.shailrajtravels.com/tours" },
+        { name: tour.title, url: tourCanonical },
+      ]),
+    ];
+
+    if (Array.isArray(tour.faq) && tour.faq.length > 0) {
+      schemas.push(generateFAQSchema(tour.faq));
+    }
+
+    (tour as any).schemaData = schemas;
 
     return { tour: tour as any, recommendedVehicles };
   },
@@ -38,15 +79,27 @@ export const Route = createFileRoute("/tours/$tourSlug")({
       };
     }
 
+    const rawImage = loaderData.tour?.heroContent?.image || "";
+    const ogImageUrl = rawImage.startsWith("http")
+      ? rawImage
+      : rawImage
+        ? `https://www.shailrajtravels.com${rawImage.startsWith('/') ? '' : '/'}${rawImage}`
+        : "https://www.shailrajtravels.com/og-image.jpg";
+
+    const canonical = loaderData.tour.canonicalUrl || `https://www.shailrajtravels.com/tours/${loaderData.tour.slug}`;
+
     return {
       meta: generateSEO({
-        title: loaderData.tour.metaTitle,
-        description: loaderData.tour.metaDescription,
-        canonicalUrl: loaderData.tour.canonicalUrl,
-        ogImage: `https://www.shailrajtravels.com${loaderData.tour.heroContent.image}`,
+        title: loaderData.tour.metaTitle || `${loaderData.tour.title} | Shailraj Travels`,
+        description:
+          loaderData.tour.metaDescription ||
+          loaderData.tour.heroContent?.description ||
+          "Book your pilgrimage tour with Shailraj Travels Pune. AC Force Urbania, guided darshan.",
+        canonicalUrl: canonical,
+        ogImage: ogImageUrl,
         type: "website",
       }),
-      links: [{ rel: "canonical", href: loaderData.tour.canonicalUrl }],
+      links: [{ rel: "canonical", href: canonical }],
     };
   },
   component: TourPageComponent,

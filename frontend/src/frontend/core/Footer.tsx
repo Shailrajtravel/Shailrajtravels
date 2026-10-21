@@ -1,20 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { getToursFn } from '@/backend/features/tours';
+import { seedTours } from '@/backend/shared/seed-data';
 import { Phone, Mail, MapPin, Instagram, Facebook, Youtube, ArrowRight } from 'lucide-react';
 import { translations } from '@/frontend/core/i18n';
 import { Link } from '@tanstack/react-router';
 
+const defaultTours = (seedTours || []).slice(0, 8).map((t: any) => ({
+  label: t.title,
+  href: `/tours/${t.slug}`,
+}));
+
 export function FooterSection({ t, lang = "en" }: { t: typeof translations.mr; lang?: string }) {
-  const [popularTours, setPopularTours] = useState<{ label: string; href: string }[]>([]);
+  const [popularTours, setPopularTours] = useState<{ label: string; href: string }[]>(defaultTours);
 
   useEffect(() => {
     getToursFn({ data: { lang } })
       .then((tours: any[]) => {
-        if (tours) {
+        if (tours && Array.isArray(tours) && tours.length > 0) {
           setPopularTours(
             tours
-              .reverse()
-              .slice(0, 6)
+              .slice(0, 8)
               .map((t) => ({
                 label: t.title,
                 href: `/tours/${t.slug}`,
@@ -23,7 +28,7 @@ export function FooterSection({ t, lang = "en" }: { t: typeof translations.mr; l
         }
       })
       .catch(console.error);
-  }, []);
+  }, [lang]);
 
   return (
     <footer
@@ -107,36 +112,24 @@ export function FooterSection({ t, lang = "en" }: { t: typeof translations.mr; l
             <ul className="flex flex-col gap-3.5">
               {[
                 { label: t.navHome || "Home", href: "/" },
-                { label: t.navAbout || "About", href: "/#about" },
-                { label: t.navPilgrimage || "Packages", href: "/tours" },
-                { label: t.navGallery || "Gallery", href: "/#gallery" },
-                { label: t.navReviews || "Reviews", href: "/#reviews" },
-                { label: t.navBlog || "Blog", href: "/blog" },
-                { label: t.navContact || "Contact", href: "/contact" },
+                { label: t.navAbout || "About Us", href: "/about-shailraj-travels" },
+                { label: t.navPilgrimage || "Tour Packages", href: "/tours" },
+                { label: t.navGallery || "Gallery", href: "/gallery" },
+                { label: "Yatri Stories", href: "/yatri-stories" },
+                { label: t.navBlog || "Spiritual Blog", href: "/blog" },
+                { label: "FAQs", href: "/faq" },
+                { label: t.navContact || "Contact Us", href: "/contact" },
               ].map((link) => (
                 <li key={link.label}>
-                  {link.href.startsWith("/#") ? (
-                    <Link
-                      to="/"
-                      hash={link.href.replace("/#", "")}
-                      className="group inline-flex items-center text-[15px] text-slate-400 hover:text-white transition-colors py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green rounded-sm"
-                    >
-                      <ArrowRight className="w-3.5 h-3.5 mr-2 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 text-brand-green transition-all duration-300" />
-                      <span className="group-hover:translate-x-1 transition-transform duration-300">
-                        {link.label}
-                      </span>
-                    </Link>
-                  ) : (
-                    <Link
-                      to={link.href as any}
-                      className="group inline-flex items-center text-[15px] text-slate-400 hover:text-white transition-colors py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green rounded-sm"
-                    >
-                      <ArrowRight className="w-3.5 h-3.5 mr-2 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 text-brand-green transition-all duration-300" />
-                      <span className="group-hover:translate-x-1 transition-transform duration-300">
-                        {link.label}
-                      </span>
-                    </Link>
-                  )}
+                  <Link
+                    to={link.href as any}
+                    className="group inline-flex items-center text-[15px] text-slate-400 hover:text-white transition-colors py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green rounded-sm"
+                  >
+                    <ArrowRight className="w-3.5 h-3.5 mr-2 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 text-brand-green transition-all duration-300" />
+                    <span className="group-hover:translate-x-1 transition-transform duration-300">
+                      {link.label}
+                    </span>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -316,13 +309,43 @@ export function FooterSection({ t, lang = "en" }: { t: typeof translations.mr; l
               Maharashtra Tour Packages
             </Link>
             <Link to="/pilgrimage-guides" className="text-slate-400 hover:text-white transition-colors py-0.5">
-              Pilgrimage Knowledge Hub
+              Pilgrimage Guides
             </Link>
             <Link to="/why-choose-shailraj-travels" className="text-slate-400 hover:text-white transition-colors py-0.5">
-              Why Choose Shailraj Travels
+              Why Choose Shailraj
+            </Link>
+            <Link to="/about-shailraj-travels" className="text-slate-400 hover:text-white transition-colors py-0.5">
+              About Shailraj Travels
+            </Link>
+            <Link to="/faq" className="text-slate-400 hover:text-white transition-colors py-0.5">
+              FAQs & Help
+            </Link>
+            <Link to={"/offers/pune-to-lalbag-raja-darshan" as any} className="text-slate-400 hover:text-white transition-colors py-0.5">
+              Lalbaug Raja Darshan Offer
             </Link>
             <Link to={"/blog/pune-to-ujjain-tour-guide-mahakal-darshan-itinerary" as any} className="text-slate-400 hover:text-white transition-colors py-0.5">
               Pune to Ujjain Guide
+            </Link>
+            <Link to={"/blog/pune-to-ujjain-road-trip-itinerary" as any} className="text-slate-400 hover:text-white transition-colors py-0.5">
+              Ujjain Road Trip Itinerary
+            </Link>
+            <Link to={"/blog/pune-to-ashtavinayak-tour-guide-route-map-itinerary" as any} className="text-slate-400 hover:text-white transition-colors py-0.5">
+              Ashtavinayak Route Guide
+            </Link>
+            <Link to={"/tours/pune-to-ashtavinayak-darshan" as any} className="text-slate-400 hover:text-white transition-colors py-0.5">
+              Ashtavinayak Darshan Tour
+            </Link>
+            <Link to={"/tours/ujjain-omkareshwar-Ghrishneshwar-maheshwar-tour" as any} className="text-slate-400 hover:text-white transition-colors py-0.5">
+              Ujjain Mahakal Tour
+            </Link>
+            <Link to={"/tours/pune-mumbai-to-3-jyotirlinga-darshan" as any} className="text-slate-400 hover:text-white transition-colors py-0.5">
+              3 Jyotirlinga Darshan
+            </Link>
+            <Link to={"/tours/pune-to-girnar-spiritual-tour" as any} className="text-slate-400 hover:text-white transition-colors py-0.5">
+              Girnar Spiritual Tour
+            </Link>
+            <Link to={"/tours/pune-to-tirupati-balaji-darshan-tour" as any} className="text-slate-400 hover:text-white transition-colors py-0.5">
+              Tirupati Balaji Tour
             </Link>
           </div>
         </div>

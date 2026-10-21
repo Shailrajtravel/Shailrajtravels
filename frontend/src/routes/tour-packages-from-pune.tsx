@@ -26,10 +26,18 @@ import {
 export const Route = createFileRoute("/tour-packages-from-pune")({
   head: () => ({
     meta: generateSEO({
-      title: "Tour Packages from Pune | Shailraj Travels",
+      title: "Tour Packages from Pune | 2026 Pilgrimage & Family Trips | Shailraj",
       description:
-        "Browse curated tour packages departing from Pune. Spiritual yatras, Jyotirlinga darshan, Ashtavinayak, Konkan, and customized holiday packages in luxury AC coaches.",
+        "Explore best tour packages from Pune. Ujjain Mahakal, Ashtavinayak, Jyotirlinga, Gujarat & Konkan tours with luxury AC Urbania travel. Call 9764413556!",
       canonicalUrl: "https://www.shailrajtravels.com/tour-packages-from-pune",
+      keywords: [
+        "tour packages from pune",
+        "best tour packages from pune",
+        "holiday packages from pune",
+        "family tour packages from pune",
+        "weekend tour packages from pune",
+        "shailraj travels pune",
+      ],
     }),
     links: [{ rel: "canonical", href: "https://www.shailrajtravels.com/tour-packages-from-pune" }],
   }),
@@ -67,7 +75,7 @@ function TourPackagesFromPunePage() {
       circuit: "Bhimashankar → Trimbakeshwar → Grishneshwar → Aundha Nagnath → Parli Vaijnath",
       vehicle: "AC Force Urbania / Innova Crysta",
       highlights: ["All 5 Maharashtra Jyotirlingas", "Ellora Caves Visit", "Comfortable Hotel Stays", "Pune Pickup"],
-      link: "/tours/jyotirlinga-darshan",
+      link: "/tours/pune-mumbai-to-3-jyotirlinga-darshan",
     },
     {
       title: "Pune to Pandharpur & Tuljapur Spiritual Tour",
@@ -76,7 +84,7 @@ function TourPackagesFromPunePage() {
       circuit: "Pune → Pandharpur (Vithoba) → Tuljapur (Bhavani Mata) → Akkalkot → Pune",
       vehicle: "AC Coach / Force Urbania",
       highlights: ["Vitthal Rukmini VIP Darshan", "Tulja Bhavani Darshan", "Swami Samarth Math", "Hygienic Halts"],
-      link: "/tours/pandharpur-wari",
+      link: "/tours/pune-to-shakti-peeth-yatra",
     },
     {
       title: "Char Dham Yatra from Pune (Himalayan Pilgrimage)",
@@ -85,7 +93,7 @@ function TourPackagesFromPunePage() {
       circuit: "Yamunotri → Gangotri → Kedarnath → Badrinath",
       vehicle: "Flight to Delhi/Dehradun + Luxury Hill Coach",
       highlights: ["Priority Medical Screening", "Helicopter / Pony Booking", "Oxygen Cylinders on Board", "Verified Stays"],
-      link: "/tours/char-dham-yatra",
+      link: "/pilgrimage-tours-from-pune",
     },
     {
       title: "Tirupati Balaji VIP Darshan Tour from Pune",
@@ -94,7 +102,7 @@ function TourPackagesFromPunePage() {
       circuit: "Pune → Tirupati → Tirumala → Padmavathi Temple → Pune",
       vehicle: "Luxury AC Sleeper Coach / Flight Option",
       highlights: ["Confirmed ₹300 Special Entry Darshan", "Laddu Prasadam Included", "Experienced Guide", "Direct Return"],
-      link: "/tours/tirupati-balaji-tour",
+      link: "/tours/pune-to-tirupati-balaji-darshan-tour",
     },
   ];
 

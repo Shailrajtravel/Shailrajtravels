@@ -7,7 +7,25 @@ import { Navbar } from '@/frontend/core/Navbar';
 import { FooterSection as Footer } from '@/frontend/core/Footer';
 import { Star, User, Calendar } from 'lucide-react';
 
+import { generateSEO } from '@/backend/features/seo';
+
 export const Route = createFileRoute("/yatri-stories")({
+  head: () => ({
+    meta: generateSEO({
+      title: "Yatri Stories & Pilgrim Testimonials | Shailraj Travels Pune",
+      description:
+        "Real experiences and verified reviews from devotees and families who traveled with Shailraj Travels on Ashtavinayak, Ujjain Mahakal, and Jyotirlinga yatras.",
+      canonicalUrl: "https://www.shailrajtravels.com/yatri-stories",
+      keywords: [
+        "shailraj travels reviews",
+        "yatri stories pune",
+        "pilgrim testimonials pune",
+        "shailraj travels feedback",
+        "customer reviews ujjain tour",
+      ],
+    }),
+    links: [{ rel: "canonical", href: "https://www.shailrajtravels.com/yatri-stories" }],
+  }),
   component: BlogPage,
   pendingComponent: YatriStoriesSkeleton,
   loader: async () => {

@@ -24,10 +24,20 @@ export const Route = createFileRoute("/")({
   loaderDeps: ({ search: { lang } }) => ({ lang }),
   head: () => ({
     meta: generateSEO({
-      title: "Best Travel Agency in Pune | Shailraj Travels",
+      title: "Best Tours & Travels in Pune | Pilgrimage & Car Rental | Shailraj Travels",
       description:
-        "Shailraj Travels is a Pune-based travel agency offering pilgrimage, family, group and customized tour packages across Maharashtra and India.",
+        "Top-rated tours and travels in Pune. Book Ashtavinayak, Ujjain Mahakal, Jyotirlinga & luxury AC Force Urbania rentals. 15+ years exp, 4.9★ rated. Instant booking!",
       canonicalUrl: "https://www.shailrajtravels.com",
+      keywords: [
+        "best tours and travels in pune",
+        "tour operator in pune",
+        "travel agency in hadapsar pune",
+        "pune to ujjain tour package",
+        "pune to ashtavinayak darshan cab",
+        "force urbania on rent pune",
+        "jyotirlinga yatra from pune",
+        "shailraj travels",
+      ],
     }),
     links: [{ rel: "canonical", href: "https://www.shailrajtravels.com" }],
   }),

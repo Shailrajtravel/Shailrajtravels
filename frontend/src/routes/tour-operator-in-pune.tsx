@@ -24,10 +24,18 @@ import {
 export const Route = createFileRoute("/tour-operator-in-pune")({
   head: () => ({
     meta: generateSEO({
-      title: "Tour Operator in Pune | Shailraj Travels",
+      title: "Best Tour Operator in Pune | Pilgrimage & Group Yatra | Shailraj Travels",
       description:
-        "Leading tour operator in Pune specializing in fully guided pilgrimages, AC coach tours, darshan pass facilitation, and custom yatra logistics across India.",
+        "Pune's leading pilgrimage tour operator. Guided Ashtavinayak, Ujjain, Jyotirlinga & family tours in luxury AC Urbania. 15+ yrs experience. Book your yatra today!",
       canonicalUrl: "https://www.shailrajtravels.com/tour-operator-in-pune",
+      keywords: [
+        "tour operator in pune",
+        "best tour operators in pune",
+        "pilgrimage tour operator pune",
+        "group tour operator pune",
+        "maharashtra tour operator",
+        "shailraj travels",
+      ],
     }),
     links: [{ rel: "canonical", href: "https://www.shailrajtravels.com/tour-operator-in-pune" }],
   }),

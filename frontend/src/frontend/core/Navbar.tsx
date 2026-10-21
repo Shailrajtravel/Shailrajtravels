@@ -85,41 +85,55 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
             let isActive = false;
             if (isHome) isActive = currentPath === "/" && !currentHash;
             else if (isBlog) isActive = currentPath.startsWith("/blog");
+            else if (isGallery) isActive = currentPath.startsWith("/gallery");
             else if (isAllTours) isActive = currentPath.startsWith("/tours");
             else if (isContact) isActive = currentPath.startsWith("/contact") || currentHash === "contact";
             else if (isAbout) isActive = currentPath === "/" && currentHash === "about";
             else if (isFeatures) isActive = currentPath === "/" && currentHash === "features";
             else if (isPackages) isActive = currentPath === "/" && currentHash === "tours";
             else if (isReviews) isActive = currentPath === "/" && currentHash === "reviews";
-            else if (isGallery) isActive = currentPath === "/" && currentHash === "gallery";
 
             const className = `whitespace-nowrap text-[13px] xl:text-[14px] font-medium transition ${
               isActive ? "text-brand-blue-deep font-bold" : "text-slate-700 hover:text-brand-blue"
             }`;
 
-            if (
-              isAbout ||
-              isHome ||
-              isFeatures ||
-              isPackages ||
-              isReviews ||
-              isGallery ||
-              isContact
-            ) {
-              if (isHome) {
-                return (
-                  <Link key={key} to="/" className={className}>
-                    {t[key]}
-                  </Link>
-                );
-              }
+            if (isAbout) {
+              return (
+                <Link key={key} to="/about-shailraj-travels" className={className}>
+                  {t[key]}
+                </Link>
+              );
+            }
+
+            if (isContact) {
+              return (
+                <Link key={key} to="/contact" className={className}>
+                  {t[key]}
+                </Link>
+              );
+            }
+
+            if (isGallery) {
+              return (
+                <Link key={key} to="/gallery" className={className}>
+                  {t[key]}
+                </Link>
+              );
+            }
+
+            if (isHome) {
+              return (
+                <Link key={key} to="/" className={className}>
+                  {t[key]}
+                </Link>
+              );
+            }
+
+            if (isFeatures || isPackages || isReviews) {
               const hashMap: Record<string, string> = {
-                navAbout: "about",
                 navTours: "features",
                 navPilgrimage: "tours",
                 navReviews: "reviews",
-                navGallery: "gallery",
-                navContact: "contact",
               };
               return (
                 <Link key={key} to="/" hash={hashMap[key]} className={className}>
@@ -127,6 +141,7 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
                 </Link>
               );
             }
+
             if (isBlog || isAllTours) {
               return (
                 <Link key={key} to={isBlog ? "/blog" : "/tours"} className={className}>
@@ -194,46 +209,75 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
               let isActive = false;
               if (isHome) isActive = currentPath === "/" && !currentHash;
               else if (isBlog) isActive = currentPath.startsWith("/blog");
+              else if (isGallery) isActive = currentPath.startsWith("/gallery");
               else if (isAllTours) isActive = currentPath.startsWith("/tours");
               else if (isContact) isActive = currentPath.startsWith("/contact") || currentHash === "contact";
               else if (isAbout) isActive = currentPath === "/" && currentHash === "about";
               else if (isFeatures) isActive = currentPath === "/" && currentHash === "features";
               else if (isPackages) isActive = currentPath === "/" && currentHash === "tours";
               else if (isReviews) isActive = currentPath === "/" && currentHash === "reviews";
-              else if (isGallery) isActive = currentPath === "/" && currentHash === "gallery";
 
               const className = `text-[16px] font-bold transition ${
                 isActive ? "text-brand-green" : "text-brand-blue-deep hover:text-brand-green"
               }`;
 
-              if (
-                isAbout ||
-                isHome ||
-                isFeatures ||
-                isPackages ||
-                isReviews ||
-                isGallery ||
-                isContact
-              ) {
-                if (isHome) {
-                  return (
-                    <Link
-                      key={key}
-                      to="/"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className={className}
-                    >
-                      {t[key]}
-                    </Link>
-                  );
-                }
+              if (isAbout) {
+                return (
+                  <Link
+                    key={key}
+                    to="/about-shailraj-travels"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={className}
+                  >
+                    {t[key]}
+                  </Link>
+                );
+              }
+
+              if (isContact) {
+                return (
+                  <Link
+                    key={key}
+                    to="/contact"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={className}
+                  >
+                    {t[key]}
+                  </Link>
+                );
+              }
+
+              if (isGallery) {
+                return (
+                  <Link
+                    key={key}
+                    to="/gallery"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={className}
+                  >
+                    {t[key]}
+                  </Link>
+                );
+              }
+
+              if (isHome) {
+                return (
+                  <Link
+                    key={key}
+                    to="/"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={className}
+                  >
+                    {t[key]}
+                  </Link>
+                );
+              }
+
+              if (isFeatures || isPackages || isReviews) {
                 const hashMap: Record<string, string> = {
-                  navAbout: "about",
                   navTours: "features",
                   navPilgrimage: "tours",
                   navReviews: "reviews",
-                  navGallery: "gallery",
-                  navContact: "contact",
                 };
                 return (
                   <Link
@@ -247,6 +291,7 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
                   </Link>
                 );
               }
+
               if (isBlog || isAllTours) {
                 return (
                   <Link

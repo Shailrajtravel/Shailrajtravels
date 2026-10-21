@@ -27,10 +27,18 @@ import {
 export const Route = createFileRoute("/pilgrimage-tours-from-pune")({
   head: () => ({
     meta: generateSEO({
-      title: "Pilgrimage Tours from Pune | Shailraj Travels",
+      title: "Pilgrimage Tours from Pune | Ashtavinayak & Jyotirlinga | Shailraj",
       description:
-        "Dedicated spiritual pilgrimages departing from Pune. Jyotirlinga yatras, Ashtavinayak Darshan, Char Dham, and Tirupati Balaji with senior-citizen assistance and pure veg meals.",
+        "Book sacred pilgrimage tours from Pune. Ashtavinayak, Ujjain, 5 Jyotirlinga & Tirupati packages. AC Force Urbania, senior care, pure veg food. Call 9764413556!",
       canonicalUrl: "https://www.shailrajtravels.com/pilgrimage-tours-from-pune",
+      keywords: [
+        "pilgrimage tours from pune",
+        "religious tours from pune",
+        "jyotirlinga yatra from pune",
+        "ashtavinayak tour from pune",
+        "ujjain tour package from pune",
+        "senior citizen pilgrimage pune",
+      ],
     }),
     links: [{ rel: "canonical", href: "https://www.shailrajtravels.com/pilgrimage-tours-from-pune" }],
   }),
@@ -65,7 +73,7 @@ function PilgrimageToursFromPunePage() {
       circuit: "Bhimashankar, Trimbakeshwar, Grishneshwar, Aundha Nagnath, Parli Vaijnath",
       duration: "5 Days / 4 Nights",
       features: "All 5 Maharashtra Jyotirlingas, Ellora temple visit, comfortable AC stays, experienced yatra guide.",
-      link: "/tours/jyotirlinga-darshan",
+      link: "/tours/pune-mumbai-to-3-jyotirlinga-darshan",
     },
     {
       name: "Pandharpur, Tuljapur & Akkalkot Yatra",
@@ -73,7 +81,7 @@ function PilgrimageToursFromPunePage() {
       circuit: "Vitthal Rukmini Mandir, Tulja Bhavani Mata, Swami Samarth Math Akkalkot",
       duration: "2 Days / 1 Night",
       features: "VIP Darshan pass guidance, hygienic dining, door-to-door Pune transit, zero rush pacing.",
-      link: "/tours/pandharpur-wari",
+      link: "/tours/pune-to-shakti-peeth-yatra",
     },
     {
       name: "Char Dham Yatra from Pune (Uttarakhand)",
@@ -81,7 +89,7 @@ function PilgrimageToursFromPunePage() {
       circuit: "Yamunotri, Gangotri, Kedarnath, Badrinath",
       duration: "10 to 12 Days",
       features: "Flight connections, luxury mountain coaches, oxygen support on-board, priority medical verification.",
-      link: "/tours/char-dham-yatra",
+      link: "/tours",
     },
     {
       name: "Tirupati Balaji VIP Darshan Tour",
@@ -89,7 +97,7 @@ function PilgrimageToursFromPunePage() {
       circuit: "Tirumala Balaji, Padmavathi Ammavari Temple",
       duration: "3 Days / 2 Nights",
       features: "Confirmed ₹300 Special Entry Darshan pass, 2 free Tirupati laddus, comfortable accommodation.",
-      link: "/tours/tirupati-balaji-tour",
+      link: "/tours/pune-to-tirupati-balaji-darshan-tour",
     },
   ];
 

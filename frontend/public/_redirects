@@ -1,0 +1,11 @@
+# 301 Permanent Redirects for legacy and non-existent URLs
+/mr/blog /blog 301
+/tours/ashtavinayak-yatra /tours/pune-to-ashtavinayak-darshan 301
+/tours/tirupati-balaji-tour /tours/pune-to-tirupati-balaji-darshan-tour 301
+/tours/jyotirlinga-darshan /tours/pune-mumbai-to-3-jyotirlinga-darshan 301
+/tours/pandharpur-wari /tours/pune-to-shakti-peeth-yatra 301
+/tours/char-dham-yatra /pilgrimage-tours-from-pune 301
+/tours/shirdi-tour /tours 301
+/about /about-shailraj-travels 301
+/features /why-choose-shailraj-travels 301
+/knowledge-hub /blog 301

@@ -26,10 +26,18 @@ import {
 export const Route = createFileRoute("/travel-agency-in-pune")({
   head: () => ({
     meta: generateSEO({
-      title: "Travel Agency in Pune | Shailraj Travels",
+      title: "Best Travel Agency in Pune | 15+ Yrs Exp, 4.9★ | Shailraj Travels",
       description:
-        "Looking for a reliable travel agency in Pune? Shailraj Travels offers pilgrimage tours, family vacations, group travel, and luxury AC Force Urbania packages across India.",
+        "Top-rated travel agency in Hadapsar, Pune. Pilgrimage yatras, Ashtavinayak, Ujjain packages & AC Force Urbania rental. 580+ 5-star reviews. Call +91 9764413556!",
       canonicalUrl: "https://www.shailrajtravels.com/travel-agency-in-pune",
+      keywords: [
+        "travel agency in pune",
+        "best travel agency in hadapsar",
+        "tour and travels pune",
+        "travel agents near me pune",
+        "pilgrimage travel agency pune",
+        "shailraj travels pune",
+      ],
     }),
     links: [{ rel: "canonical", href: "https://www.shailrajtravels.com/travel-agency-in-pune" }],
   }),

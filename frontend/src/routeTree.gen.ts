@@ -23,9 +23,11 @@ import { Route as PilgrimageToursFromPuneRouteImport } from './routes/pilgrimage
 import { Route as PilgrimageGuidesRouteImport } from './routes/pilgrimage-guides'
 import { Route as MaharashtraTourPackagesRouteImport } from './routes/maharashtra-tour-packages'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as LetterheadRouteImport } from './routes/letterhead'
 import { Route as KnowledgeHubRouteImport } from './routes/knowledge-hub'
 import { Route as InvoicePrintRouteImport } from './routes/invoice-print'
 import { Route as GroupToursFromPuneRouteImport } from './routes/group-tours-from-pune'
+import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as FeaturesRouteImport } from './routes/features'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as FamilyToursFromPuneRouteImport } from './routes/family-tours-from-pune'
@@ -42,6 +44,7 @@ import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as ToursTourSlugRouteImport } from './routes/tours.$tourSlug'
 import { Route as ResourcesResourceSlugRouteImport } from './routes/resources/$resourceSlug'
 import { Route as OffersOfferSlugRouteImport } from './routes/offers.$offerSlug'
+import { Route as MrBlogRouteImport } from './routes/mr/blog'
 import { Route as FactsFactSlugRouteImport } from './routes/facts/$factSlug'
 import { Route as CompareCompareSlugRouteImport } from './routes/compare/$compareSlug'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
@@ -122,6 +125,11 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LetterheadRoute = LetterheadRouteImport.update({
+  id: '/letterhead',
+  path: '/letterhead',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const KnowledgeHubRoute = KnowledgeHubRouteImport.update({
   id: '/knowledge-hub',
   path: '/knowledge-hub',
@@ -135,6 +143,11 @@ const InvoicePrintRoute = InvoicePrintRouteImport.update({
 const GroupToursFromPuneRoute = GroupToursFromPuneRouteImport.update({
   id: '/group-tours-from-pune',
   path: '/group-tours-from-pune',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GalleryRoute = GalleryRouteImport.update({
+  id: '/gallery',
+  path: '/gallery',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FeaturesRoute = FeaturesRouteImport.update({
@@ -217,6 +230,11 @@ const OffersOfferSlugRoute = OffersOfferSlugRouteImport.update({
   path: '/offers/$offerSlug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MrBlogRoute = MrBlogRouteImport.update({
+  id: '/mr/blog',
+  path: '/mr/blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FactsFactSlugRoute = FactsFactSlugRouteImport.update({
   id: '/facts/$factSlug',
   path: '/facts/$factSlug',
@@ -270,9 +288,11 @@ export interface FileRoutesByFullPath {
   '/family-tours-from-pune': typeof FamilyToursFromPuneRoute
   '/faq': typeof FaqRoute
   '/features': typeof FeaturesRoute
+  '/gallery': typeof GalleryRoute
   '/group-tours-from-pune': typeof GroupToursFromPuneRoute
   '/invoice-print': typeof InvoicePrintRoute
   '/knowledge-hub': typeof KnowledgeHubRoute
+  '/letterhead': typeof LetterheadRoute
   '/login': typeof LoginRoute
   '/maharashtra-tour-packages': typeof MaharashtraTourPackagesRoute
   '/pilgrimage-guides': typeof PilgrimageGuidesRoute
@@ -291,6 +311,7 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/compare/$compareSlug': typeof CompareCompareSlugRoute
   '/facts/$factSlug': typeof FactsFactSlugRoute
+  '/mr/blog': typeof MrBlogRoute
   '/offers/$offerSlug': typeof OffersOfferSlugRoute
   '/resources/$resourceSlug': typeof ResourcesResourceSlugRoute
   '/tours/$tourSlug': typeof ToursTourSlugRoute
@@ -313,9 +334,11 @@ export interface FileRoutesByTo {
   '/family-tours-from-pune': typeof FamilyToursFromPuneRoute
   '/faq': typeof FaqRoute
   '/features': typeof FeaturesRoute
+  '/gallery': typeof GalleryRoute
   '/group-tours-from-pune': typeof GroupToursFromPuneRoute
   '/invoice-print': typeof InvoicePrintRoute
   '/knowledge-hub': typeof KnowledgeHubRoute
+  '/letterhead': typeof LetterheadRoute
   '/login': typeof LoginRoute
   '/maharashtra-tour-packages': typeof MaharashtraTourPackagesRoute
   '/pilgrimage-guides': typeof PilgrimageGuidesRoute
@@ -334,6 +357,7 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/compare/$compareSlug': typeof CompareCompareSlugRoute
   '/facts/$factSlug': typeof FactsFactSlugRoute
+  '/mr/blog': typeof MrBlogRoute
   '/offers/$offerSlug': typeof OffersOfferSlugRoute
   '/resources/$resourceSlug': typeof ResourcesResourceSlugRoute
   '/tours/$tourSlug': typeof ToursTourSlugRoute
@@ -357,9 +381,11 @@ export interface FileRoutesById {
   '/family-tours-from-pune': typeof FamilyToursFromPuneRoute
   '/faq': typeof FaqRoute
   '/features': typeof FeaturesRoute
+  '/gallery': typeof GalleryRoute
   '/group-tours-from-pune': typeof GroupToursFromPuneRoute
   '/invoice-print': typeof InvoicePrintRoute
   '/knowledge-hub': typeof KnowledgeHubRoute
+  '/letterhead': typeof LetterheadRoute
   '/login': typeof LoginRoute
   '/maharashtra-tour-packages': typeof MaharashtraTourPackagesRoute
   '/pilgrimage-guides': typeof PilgrimageGuidesRoute
@@ -378,6 +404,7 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/compare/$compareSlug': typeof CompareCompareSlugRoute
   '/facts/$factSlug': typeof FactsFactSlugRoute
+  '/mr/blog': typeof MrBlogRoute
   '/offers/$offerSlug': typeof OffersOfferSlugRoute
   '/resources/$resourceSlug': typeof ResourcesResourceSlugRoute
   '/tours/$tourSlug': typeof ToursTourSlugRoute
@@ -402,9 +429,11 @@ export interface FileRouteTypes {
     | '/family-tours-from-pune'
     | '/faq'
     | '/features'
+    | '/gallery'
     | '/group-tours-from-pune'
     | '/invoice-print'
     | '/knowledge-hub'
+    | '/letterhead'
     | '/login'
     | '/maharashtra-tour-packages'
     | '/pilgrimage-guides'
@@ -423,6 +452,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/compare/$compareSlug'
     | '/facts/$factSlug'
+    | '/mr/blog'
     | '/offers/$offerSlug'
     | '/resources/$resourceSlug'
     | '/tours/$tourSlug'
@@ -445,9 +475,11 @@ export interface FileRouteTypes {
     | '/family-tours-from-pune'
     | '/faq'
     | '/features'
+    | '/gallery'
     | '/group-tours-from-pune'
     | '/invoice-print'
     | '/knowledge-hub'
+    | '/letterhead'
     | '/login'
     | '/maharashtra-tour-packages'
     | '/pilgrimage-guides'
@@ -466,6 +498,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/compare/$compareSlug'
     | '/facts/$factSlug'
+    | '/mr/blog'
     | '/offers/$offerSlug'
     | '/resources/$resourceSlug'
     | '/tours/$tourSlug'
@@ -488,9 +521,11 @@ export interface FileRouteTypes {
     | '/family-tours-from-pune'
     | '/faq'
     | '/features'
+    | '/gallery'
     | '/group-tours-from-pune'
     | '/invoice-print'
     | '/knowledge-hub'
+    | '/letterhead'
     | '/login'
     | '/maharashtra-tour-packages'
     | '/pilgrimage-guides'
@@ -509,6 +544,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/compare/$compareSlug'
     | '/facts/$factSlug'
+    | '/mr/blog'
     | '/offers/$offerSlug'
     | '/resources/$resourceSlug'
     | '/tours/$tourSlug'
@@ -532,9 +568,11 @@ export interface RootRouteChildren {
   FamilyToursFromPuneRoute: typeof FamilyToursFromPuneRoute
   FaqRoute: typeof FaqRoute
   FeaturesRoute: typeof FeaturesRoute
+  GalleryRoute: typeof GalleryRoute
   GroupToursFromPuneRoute: typeof GroupToursFromPuneRoute
   InvoicePrintRoute: typeof InvoicePrintRoute
   KnowledgeHubRoute: typeof KnowledgeHubRoute
+  LetterheadRoute: typeof LetterheadRoute
   LoginRoute: typeof LoginRoute
   MaharashtraTourPackagesRoute: typeof MaharashtraTourPackagesRoute
   PilgrimageGuidesRoute: typeof PilgrimageGuidesRoute
@@ -553,6 +591,7 @@ export interface RootRouteChildren {
   BlogSlugRoute: typeof BlogSlugRoute
   CompareCompareSlugRoute: typeof CompareCompareSlugRoute
   FactsFactSlugRoute: typeof FactsFactSlugRoute
+  MrBlogRoute: typeof MrBlogRoute
   OffersOfferSlugRoute: typeof OffersOfferSlugRoute
   ResourcesResourceSlugRoute: typeof ResourcesResourceSlugRoute
   ToursTourSlugRoute: typeof ToursTourSlugRoute
@@ -665,6 +704,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/letterhead': {
+      id: '/letterhead'
+      path: '/letterhead'
+      fullPath: '/letterhead'
+      preLoaderRoute: typeof LetterheadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/knowledge-hub': {
       id: '/knowledge-hub'
       path: '/knowledge-hub'
@@ -684,6 +730,13 @@ declare module '@tanstack/react-router' {
       path: '/group-tours-from-pune'
       fullPath: '/group-tours-from-pune'
       preLoaderRoute: typeof GroupToursFromPuneRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gallery': {
+      id: '/gallery'
+      path: '/gallery'
+      fullPath: '/gallery'
+      preLoaderRoute: typeof GalleryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/features': {
@@ -798,6 +851,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OffersOfferSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/mr/blog': {
+      id: '/mr/blog'
+      path: '/mr/blog'
+      fullPath: '/mr/blog'
+      preLoaderRoute: typeof MrBlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/facts/$factSlug': {
       id: '/facts/$factSlug'
       path: '/facts/$factSlug'
@@ -868,9 +928,11 @@ const rootRouteChildren: RootRouteChildren = {
   FamilyToursFromPuneRoute: FamilyToursFromPuneRoute,
   FaqRoute: FaqRoute,
   FeaturesRoute: FeaturesRoute,
+  GalleryRoute: GalleryRoute,
   GroupToursFromPuneRoute: GroupToursFromPuneRoute,
   InvoicePrintRoute: InvoicePrintRoute,
   KnowledgeHubRoute: KnowledgeHubRoute,
+  LetterheadRoute: LetterheadRoute,
   LoginRoute: LoginRoute,
   MaharashtraTourPackagesRoute: MaharashtraTourPackagesRoute,
   PilgrimageGuidesRoute: PilgrimageGuidesRoute,
@@ -889,6 +951,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogSlugRoute: BlogSlugRoute,
   CompareCompareSlugRoute: CompareCompareSlugRoute,
   FactsFactSlugRoute: FactsFactSlugRoute,
+  MrBlogRoute: MrBlogRoute,
   OffersOfferSlugRoute: OffersOfferSlugRoute,
   ResourcesResourceSlugRoute: ResourcesResourceSlugRoute,
   ToursTourSlugRoute: ToursTourSlugRoute,

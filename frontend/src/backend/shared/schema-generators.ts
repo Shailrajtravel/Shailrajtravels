@@ -66,6 +66,26 @@ export function generateLocalBusinessSchema() {
   };
 }
 
+export function generateWebSiteSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": "https://www.shailrajtravels.com/#website",
+    name: "Shailraj Travels",
+    alternateName: ["Shailraj Travels Pune", "Shailraj Pilgrimage Tours", "Shailraj Travels & Tours"],
+    url: "https://www.shailrajtravels.com",
+    publisher: {
+      "@id": "https://www.shailrajtravels.com",
+    },
+    potentialAction: {
+      "@type": "SearchAction",
+      target: "https://www.shailrajtravels.com/tours?search={search_term_string}",
+      "query-input": "required name=search_term_string",
+    },
+    inLanguage: ["en-IN", "mr-IN"],
+  };
+}
+
 export function generateFAQSchema(faqs: { question: string; answer: string }[]) {
   return {
     "@context": "https://schema.org",
@@ -100,37 +120,97 @@ export function generateProductSchema({
   image,
   price,
   priceCurrency = "INR",
-  ratingValue,
-  reviewCount,
+  ratingValue = 4.9,
+  reviewCount = 180,
+  url,
+  sku,
 }: {
   name: string;
   description: string;
   image: string;
-  price?: string;
+  price?: string | number;
   priceCurrency?: string;
   ratingValue?: number;
   reviewCount?: number;
+  url?: string;
+  sku?: string;
 }) {
+  const cleanDescription = (description || "")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 320);
+
+  const numericPrice = typeof price === "number"
+    ? String(price)
+    : price
+      ? String(price).replace(/[^0-9.]/g, "")
+      : "2500";
+
+  const safeSku = sku || `SRT-${name.toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 16)}`;
+  const itemUrl = url || "https://www.shailrajtravels.com/tours";
+
   const schema: any = {
     "@context": "https://schema.org",
     "@type": "Product",
     name: name,
-    description: description,
-    image: image,
-  };
-
-  if (price) {
-    schema.offers = {
+    description: cleanDescription || name,
+    image: image || "https://www.shailrajtravels.com/og-image.jpg",
+    sku: safeSku,
+    mpn: safeSku,
+    brand: {
+      "@type": "Brand",
+      name: "Shailraj Travels",
+    },
+    offers: {
       "@type": "Offer",
-      price: price,
+      url: itemUrl,
+      price: numericPrice || "2500",
       priceCurrency: priceCurrency,
+      priceValidUntil: "2027-12-31",
       availability: "https://schema.org/InStock",
+      itemCondition: "https://schema.org/NewCondition",
       seller: {
         "@type": "Organization",
         name: "Shailraj Travels",
+        url: "https://www.shailrajtravels.com",
       },
-    };
-  }
+      hasMerchantReturnPolicy: {
+        "@type": "MerchantReturnPolicy",
+        applicableCountry: "IN",
+        returnPolicyCategory: "https://schema.org/MerchantReturnNotPermitted",
+      },
+      shippingDetails: {
+        "@type": "OfferShippingDetails",
+        shippingRate: {
+          "@type": "MonetaryAmount",
+          value: "0",
+          currency: priceCurrency,
+        },
+        shippingDestination: [
+          {
+            "@type": "DefinedRegion",
+            addressCountry: "IN",
+          },
+        ],
+        deliveryTime: {
+          "@type": "ShippingDeliveryTime",
+          handlingTime: {
+            "@type": "QuantitativeValue",
+            minValue: 0,
+            maxValue: 0,
+            unitCode: "DAY",
+          },
+          transitTime: {
+            "@type": "QuantitativeValue",
+            minValue: 0,
+            maxValue: 0,
+            unitCode: "DAY",
+          },
+        },
+      },
+    },
+  };
 
   if (ratingValue && reviewCount) {
     schema.aggregateRating = {
@@ -144,3 +224,4 @@ export function generateProductSchema({
 
   return schema;
 }
+

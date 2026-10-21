@@ -41,7 +41,7 @@ import newhomeAvif from '@/frontend/shared/assets/newhome.avif';
 import { reportLovableError } from '@/backend/shared/lovable-error-reporting';
 import { generateSEO } from '@/backend/features/seo';
 import { AnalyticsScripts } from '@/frontend/shared/components/AnalyticsScripts';
-import { generateLocalBusinessSchema } from '@/backend/shared/schema-generators';
+import { generateLocalBusinessSchema, generateWebSiteSchema } from '@/backend/shared/schema-generators';
 import { Toaster } from '@/frontend/shared/ui/sonner';
 
 function NotFoundComponent() {
@@ -146,9 +146,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         { charSet: "utf-8" },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
         ...generateSEO({
-          title: "Shailraj Travels | Pilgrimage Tour Operator Pune",
+          title: "Shailraj Travels | Best Tours & Travels in Pune | 4.9★ Pilgrimage & Car Rental",
           description:
-            "Trusted Pilgrimage Tour Operator in Pune. Book Ashtavinayak, Jyotirlinga, Pandharpur, and Char Dham yatra packages with AC travel and guided darshan.",
+            "Pune's #1 trusted pilgrimage tour operator and travel agency with 15+ years experience. Book Ashtavinayak, Ujjain Mahakal, Jyotirlinga, and luxury AC Force Urbania rentals. 4.9★ rating.",
           canonicalUrl: "https://www.shailrajtravels.com",
         }),
         { name: "google", content: "notranslate" },
@@ -159,6 +159,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         { name: "theme-color", content: "#10A34A" },
       ],
       links: [
+        { rel: "canonical", href: "https://www.shailrajtravels.com" },
         { rel: "manifest", href: "/manifest.webmanifest?v=5" },
         { rel: "apple-touch-icon", href: "/icons/web-logo-apple-touch-icon.png?v=5" },
         { rel: "stylesheet", href: appCss },
@@ -181,6 +182,7 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
         <AnalyticsScripts />
         <SchemaMarkup schema={generateLocalBusinessSchema()} />
+        <SchemaMarkup schema={generateWebSiteSchema()} />
       </head>
       <body>
         {children}
