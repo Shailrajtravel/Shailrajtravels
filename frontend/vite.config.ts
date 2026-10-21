@@ -37,6 +37,7 @@ export default defineConfig({
         name: "generate-sitemap-xml",
         buildStart: async () => {
           try {
+            // @ts-ignore
             await import("./scripts/generate-sitemap.mjs");
           } catch (e: any) {
             console.warn("Sitemap build hook error:", e?.message);
