@@ -15,6 +15,7 @@ export function ReviewsSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
   const [isRefining, setIsRefining] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isQrOpen, setIsQrOpen] = useState(false);
+  const [qrTab, setQrTab] = useState<'google' | 'website'>('google');
   const [isMounted, setIsMounted] = useState(false);
 
   // Lazy-load SociableKit iframe to prevent blocking main thread
@@ -29,7 +30,7 @@ export function ReviewsSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
     source: "business_default",
     lastSynced: new Date().toISOString(),
     writeReviewUrl: "https://search.google.com/local/writereview?placeid=ChIJXRgrL53DwjsRs0FidQRovF0",
-    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Shailraj%20Travels&query_place_id=ChIJXRgrL53DwjsRs0FidQRovF0",
+    googleMapsUrl: "https://www.google.com/maps/place/Shailraj+Travels/@18.5116495,73.9655755,17z/data=!4m8!3m7!1s0x3bc2c39d2f2b185d:0x5dbc6804756241b3!8m2!3d18.5116495!4d73.9655755!9m1!1b1!16s%2Fg%2F11zd36ljtd?entry=ttu",
   });
 
   useEffect(() => {
@@ -119,10 +120,7 @@ export function ReviewsSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
       }
 
       setTimeout(() => {
-        window.open(
-          "https://www.google.com/maps/place/Shailraj+Travels/data=!4m2!3m1!1s0x0:0x5dbc6804756241b3?sa=X&ved=1t:2428&ictx=111",
-          "_blank",
-        );
+        window.open(reviewStats.writeReviewUrl, "_blank");
         setName("");
         setReview("");
         setRating(5);
@@ -441,7 +439,7 @@ export function ReviewsSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
       {/* QR Code Modal */}
       {isQrOpen && isMounted && createPortal(
         <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 overflow-y-auto">
-          <div className="bg-white rounded-3xl w-full max-w-[420px] shadow-2xl border border-slate-100 flex flex-col items-center p-6 text-center animate-reveal relative">
+          <div className="bg-white rounded-3xl w-full max-w-[440px] shadow-2xl border border-slate-100 flex flex-col items-center p-6 text-center animate-reveal relative">
             <button
               onClick={() => setIsQrOpen(false)}
               className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 transition-colors cursor-pointer"
@@ -449,27 +447,69 @@ export function ReviewsSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
               <X className="w-4 h-4" />
             </button>
 
-            <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-3 mt-1">
+            {/* Header Icon & Title */}
+            <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-2.5 mt-1">
               <QrCode className="w-6 h-6" />
             </div>
 
             <h3 className="text-xl font-display font-bold text-slate-900">
-              {lang === "mr" ? "गुगल अभिप्राय QR कोड" : "Google Review QR Code"}
+              {lang === "mr" ? "अधिकृत QR कोड" : "Official Shailraj QR Codes"}
             </h3>
-            <p className="text-xs text-slate-500 mt-1 mb-4 max-w-xs leading-relaxed">
-              {lang === "mr" 
-                ? "मोबाईल कॅमेरा किंवा गुगल लेन्सने स्कॅन करून थेट तुमचा ५★ अभिप्राय नोंदवा" 
-                : "Scan with your smartphone camera to open our direct 5★ Google Review page"}
+
+            {/* Segmented Switcher */}
+            <div className="flex p-1 bg-slate-100 rounded-xl my-3 w-full border border-slate-200/70">
+              <button
+                type="button"
+                onClick={() => setQrTab('google')}
+                className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+                  qrTab === 'google'
+                    ? 'bg-white text-brand-blue-deep shadow-sm'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                ⭐ {lang === "mr" ? "गुगल ५★ अभिप्राय" : "Google 5★ Review"}
+              </button>
+              <button
+                type="button"
+                onClick={() => setQrTab('website')}
+                className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+                  qrTab === 'website'
+                    ? 'bg-white text-emerald-700 shadow-sm'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                🌐 {lang === "mr" ? "अधिकृत वेबसाइट" : "Official Website"}
+              </button>
+            </div>
+
+            <p className="text-xs text-slate-500 mb-3 max-w-xs leading-relaxed">
+              {qrTab === 'google'
+                ? (lang === "mr"
+                    ? "मोबाईल कॅमेरा किंवा गुगल लेन्सने स्कॅन करून थेट तुमचा ५★ अभिप्राय नोंदवा"
+                    : "Scan to open our direct 5★ Google Review form & share your travel experience")
+                : (lang === "mr"
+                    ? "शैलराज ट्रॅव्हल्सची अधिकृत वेबसाइट, टूर पॅकेजेस व माहिती पाहण्यासाठी स्कॅन करा"
+                    : "Scan to visit shailrajtravels.com to view pilgrimage packages, vehicles & book tours")}
             </p>
 
-            <div className="p-3 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 mb-4">
+            {/* QR Code Container with Center Logo Badge */}
+            <div className="p-3.5 bg-slate-50/80 rounded-2xl border-2 border-dashed border-slate-200 mb-4 relative group">
               <img
-                src="/images/shailraj-google-review-qr.png"
-                alt="Shailraj Travels Google Review QR"
-                className="w-56 h-56 rounded-xl object-contain"
+                src={
+                  qrTab === 'google'
+                    ? "/images/shailraj-google-review-qr.png"
+                    : "/images/shailraj-website-qr.png"
+                }
+                alt={
+                  qrTab === 'google'
+                    ? "Shailraj Travels Google Review QR with Center Logo"
+                    : "Shailraj Travels Website QR with Center Logo"
+                }
+                className="w-60 h-60 rounded-xl object-contain shadow-sm bg-white"
               />
             </div>
 
+            {/* Actions */}
             <div className="flex gap-2 w-full pt-1">
               <a
                 href="/review-qr.html"
@@ -480,11 +520,35 @@ export function ReviewsSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
                 <span>Print Standee</span>
               </a>
               <a
-                href="/images/shailraj-google-review-qr.png"
-                download="shailraj-google-review-qr.png"
+                href={
+                  qrTab === 'google'
+                    ? "/images/shailraj-google-review-qr.png"
+                    : "/images/shailraj-website-qr.png"
+                }
+                download={
+                  qrTab === 'google'
+                    ? "shailraj-google-review-qr.png"
+                    : "shailraj-website-qr.png"
+                }
                 className="flex-1 py-3 px-3 bg-brand-green-dark hover:bg-brand-green-dark/90 text-white rounded-xl text-xs font-bold transition-colors no-underline flex items-center justify-center gap-1.5"
               >
-                <span>Download QR</span>
+                <span>Download PNG</span>
+              </a>
+              <a
+                href={
+                  qrTab === 'google'
+                    ? "/images/shailraj-google-review-qr.svg"
+                    : "/images/shailraj-website-qr.svg"
+                }
+                download={
+                  qrTab === 'google'
+                    ? "shailraj-google-review-qr.svg"
+                    : "shailraj-website-qr.svg"
+                }
+                className="py-3 px-3 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-xl text-xs font-bold transition-colors no-underline flex items-center justify-center"
+                title="Download Vector SVG"
+              >
+                <span>SVG</span>
               </a>
             </div>
           </div>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shailraj Travels - Google Review QR Code & Standee</title>
+  <title>Shailraj Travels - Official QR Codes & Standee Generator</title>
   <link rel="icon" type="image/png" href="/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,7 +30,7 @@
 
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background: #0f172a;
+      background: #0b1329;
       color: #334155;
       min-height: 100vh;
       padding: 30px 16px;
@@ -52,7 +52,7 @@
       justify-content: space-between;
       align-items: center;
       gap: 12px;
-      margin-bottom: 28px;
+      margin-bottom: 24px;
     }
 
     .toolbar-title {
@@ -104,6 +104,38 @@
       transform: translateY(-1px);
     }
 
+    /* Tab Switcher */
+    .tab-switcher {
+      display: flex;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 4px;
+      border-radius: 14px;
+      gap: 6px;
+      margin-bottom: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: #cbd5e1;
+      padding: 10px 22px;
+      font-weight: 700;
+      font-size: 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tab-btn.active {
+      background: #ffffff;
+      color: #0a192f;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
     .main-container {
       display: flex;
       flex-direction: column;
@@ -140,7 +172,7 @@
     }
 
     .brand-header {
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
     .brand-title {
@@ -183,7 +215,7 @@
       border: 1.5px solid #e2e8f0;
       padding: 6px 14px;
       border-radius: 999px;
-      margin-top: 14px;
+      margin-top: 10px;
       font-size: 13px;
       font-weight: 700;
       color: #334155;
@@ -194,7 +226,7 @@
       gap: 4px;
       color: #f59e0b;
       font-size: 24px;
-      margin: 12px 0 6px;
+      margin: 10px 0 4px;
     }
 
     .review-callout {
@@ -209,8 +241,9 @@
       font-size: 13px;
       color: #64748b;
       font-weight: 500;
-      max-width: 300px;
-      margin-bottom: 20px;
+      max-width: 320px;
+      margin-bottom: 18px;
+      line-height: 1.4;
     }
 
     .qr-frame {
@@ -220,14 +253,16 @@
       border: 2px dashed #cbd5e1;
       position: relative;
       display: inline-block;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
     .qr-image {
-      width: 220px;
-      height: 220px;
+      width: 230px;
+      height: 230px;
       display: block;
       border-radius: 12px;
+      object-fit: contain;
+      background: #ffffff;
     }
 
     .qr-instruction {
@@ -240,7 +275,7 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .footer-info {
@@ -272,14 +307,14 @@
     .details-box h3 {
       color: #fff;
       font-size: 18px;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
       font-weight: 700;
     }
 
     .link-row {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
       margin-bottom: 14px;
     }
 
@@ -302,7 +337,7 @@
       background: #3b82f6;
       color: white;
       border: none;
-      padding: 5px 10px;
+      padding: 5px 12px;
       border-radius: 6px;
       font-size: 11px;
       font-weight: 700;
@@ -321,7 +356,7 @@
         color: #000 !important;
       }
 
-      .toolbar, .details-box, .no-print {
+      .toolbar, .tab-switcher, .details-box, .no-print {
         display: none !important;
       }
 
@@ -345,22 +380,32 @@
   <div class="toolbar no-print">
     <div class="toolbar-title">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect width="10" height="10" x="7" y="7" rx="1"/></svg>
-      <span>Shailraj Travels Official Review QR</span>
+      <span>Shailraj Travels Official QR Suite</span>
     </div>
     <div class="toolbar-actions">
       <button class="btn btn-primary" onclick="window.print()">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
         Print Standee / Card
       </button>
-      <a href="/images/shailraj-google-review-qr.png" download="shailraj-google-review-qr.png" class="btn btn-outline">
+      <a id="downloadPngLink" href="/images/shailraj-google-review-qr.png" download="shailraj-google-review-qr.png" class="btn btn-outline">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
         Download PNG
       </a>
-      <a href="/images/shailraj-google-review-qr.svg" download="shailraj-google-review-qr.svg" class="btn btn-outline">
+      <a id="downloadSvgLink" href="/images/shailraj-google-review-qr.svg" download="shailraj-google-review-qr.svg" class="btn btn-outline">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m10 15 5-3-5-3v6Z"/></svg>
         Download SVG
       </a>
     </div>
+  </div>
+
+  <!-- Tab Switcher -->
+  <div class="tab-switcher no-print">
+    <button class="tab-btn active" id="tabGoogle" onclick="switchTab('google')">
+      ⭐ Google 5★ Review QR
+    </button>
+    <button class="tab-btn" id="tabWebsite" onclick="switchTab('website')">
+      🌐 Official Website QR
+    </button>
   </div>
 
   <div class="main-container">
@@ -371,10 +416,10 @@
           <span class="red">Shailraj</span> <span class="green">Travels</span>
         </div>
         <div class="brand-tagline">Pune's Trusted Pilgrimage & Tour Specialist</div>
-        <div class="marathi-tagline">आमच्या सेवेचा अनुभव कसा वाटला? नक्की सांगा!</div>
+        <div class="marathi-tagline" id="cardMarathiTagline">आमच्या सेवेचा अनुभव कसा वाटला? नक्की सांगा!</div>
       </div>
 
-      <div class="badge-google">
+      <div class="badge-google" id="cardBadge">
         <svg width="16" height="16" viewBox="0 0 24 24">
           <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
           <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -384,22 +429,22 @@
         <span>Google Verified Business</span>
       </div>
 
-      <div class="stars-row">
+      <div class="stars-row" id="cardStars">
         ★★★★★
       </div>
 
-      <div class="review-callout">Review Us on Google</div>
-      <div class="review-subcallout">
+      <div class="review-callout" id="cardTitle">Review Us on Google</div>
+      <div class="review-subcallout" id="cardSubtitle">
         Please take a moment to rate our Force Urbania, pilgrimage tour service, and tour captains.
       </div>
 
       <div class="qr-frame">
-        <img src="/images/shailraj-google-review-qr.png" alt="Scan to Review Shailraj Travels on Google" class="qr-image">
+        <img id="qrImageElement" src="/images/shailraj-google-review-qr.png" alt="Shailraj Travels QR with Center Logo" class="qr-image">
       </div>
 
-      <div class="qr-instruction">
+      <div class="qr-instruction" id="cardInstruction">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
-        Point your camera or Google Lens to scan
+        Point your phone camera to scan
       </div>
 
       <div class="footer-info">
@@ -410,10 +455,10 @@
 
     <!-- Details Box for business usage -->
     <div class="details-box no-print">
-      <h3>Direct Review Links</h3>
+      <h3>Active QR Destination Details</h3>
       
       <div class="link-row">
-        <label style="font-size: 12px; font-weight: 700; color: #94a3b8;">1. Direct Google Review Form URL (Encoded in QR Code):</label>
+        <label style="font-size: 12px; font-weight: 700; color: #94a3b8;">1. Direct Google Write Review URL (Encoded in QR):</label>
         <div class="link-box">
           <span id="googleUrl">https://search.google.com/local/writereview?placeid=ChIJXRgrL53DwjsRs0FidQRovF0</span>
           <button class="copy-btn" onclick="copyText('googleUrl')">Copy</button>
@@ -421,35 +466,101 @@
       </div>
 
       <div class="link-row">
-        <label style="font-size: 12px; font-weight: 700; color: #94a3b8;">2. Google Maps Profile Page:</label>
+        <label style="font-size: 12px; font-weight: 700; color: #94a3b8;">2. Official Google Maps Profile & Reviews Page:</label>
         <div class="link-box">
-          <span id="cidUrl">https://www.google.com/maps/search/?api=1&query=Shailraj%20Travels&query_place_id=ChIJXRgrL53DwjsRs0FidQRovF0</span>
-          <button class="copy-btn" onclick="copyText('cidUrl')">Copy</button>
+          <span id="mapsProfileUrl">https://www.google.com/maps/place/Shailraj+Travels/@18.5116495,73.9655755,17z/data=!4m8!3m7!1s0x3bc2c39d2f2b185d:0x5dbc6804756241b3!8m2!3d18.5116495!4d73.9655755!9m1!1b1!16s%2Fg%2F11zd36ljtd?entry=ttu</span>
+          <button class="copy-btn" onclick="copyText('mapsProfileUrl')">Copy</button>
         </div>
       </div>
 
       <div class="link-row">
-        <label style="font-size: 12px; font-weight: 700; color: #94a3b8;">3. Official Website Reviews Section:</label>
+        <label style="font-size: 12px; font-weight: 700; color: #94a3b8;">3. Official Website URL:</label>
         <div class="link-box">
-          <span id="siteUrl">https://www.shailrajtravels.com/#reviews</span>
+          <span id="siteUrl">https://www.shailrajtravels.com</span>
           <button class="copy-btn" onclick="copyText('siteUrl')">Copy</button>
         </div>
       </div>
 
+      <div class="link-row">
+        <label style="font-size: 12px; font-weight: 700; color: #94a3b8;">4. Website Reviews Section URL:</label>
+        <div class="link-box">
+          <span id="siteReviewsUrl">https://www.shailrajtravels.com/#reviews</span>
+          <button class="copy-btn" onclick="copyText('siteReviewsUrl')">Copy</button>
+        </div>
+      </div>
+
       <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 13px; color: #94a3b8; line-height: 1.6;">
-        💡 <strong>How to use this standee:</strong><br>
-        1. Click <strong>Print Standee / Card</strong> to print on glossy paper or sticker sheet.<br>
-        2. Place inside your Force Urbania coaches (behind headrests or on dashboard) so yatris can scan after their trip.<br>
-        3. Share the high-res PNG image via WhatsApp to customers along with their thank-you message!
+        💡 <strong>Design Features:</strong><br>
+        • High-precision QR code with <strong>Shailraj Travels Official Emblem Logo in the center</strong>.<br>
+        • Error Correction Level 'H' ensures 100% fast, reliable scanning even when printed.<br>
+        • Perfect for printing stickers for Force Urbania coaches, tour flyers, or hotel reception counters.
       </div>
     </div>
   </div>
 
   <script>
+    let currentTab = 'google';
+
+    function switchTab(tab) {
+      currentTab = tab;
+      const tabGoogle = document.getElementById('tabGoogle');
+      const tabWebsite = document.getElementById('tabWebsite');
+      const qrImg = document.getElementById('qrImageElement');
+      const downloadPng = document.getElementById('downloadPngLink');
+      const downloadSvg = document.getElementById('downloadSvgLink');
+
+      const cardMarathi = document.getElementById('cardMarathiTagline');
+      const cardBadge = document.getElementById('cardBadge');
+      const cardStars = document.getElementById('cardStars');
+      const cardTitle = document.getElementById('cardTitle');
+      const cardSubtitle = document.getElementById('cardSubtitle');
+
+      if (tab === 'google') {
+        tabGoogle.classList.add('active');
+        tabWebsite.classList.remove('active');
+        qrImg.src = '/images/shailraj-google-review-qr.png';
+        downloadPng.href = '/images/shailraj-google-review-qr.png';
+        downloadPng.download = 'shailraj-google-review-qr.png';
+        downloadSvg.href = '/images/shailraj-google-review-qr.svg';
+        downloadSvg.download = 'shailraj-google-review-qr.svg';
+
+        cardMarathi.innerText = 'आमच्या सेवेचा अनुभव कसा वाटला? नक्की सांगा!';
+        cardBadge.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+          </svg>
+          <span>Google Verified Business</span>
+        `;
+        cardStars.style.display = 'flex';
+        cardTitle.innerText = 'Review Us on Google';
+        cardSubtitle.innerText = 'Please take a moment to rate our Force Urbania, pilgrimage tour service, and tour captains.';
+      } else {
+        tabWebsite.classList.add('active');
+        tabGoogle.classList.remove('active');
+        qrImg.src = '/images/shailraj-website-qr.png';
+        downloadPng.href = '/images/shailraj-website-qr.png';
+        downloadPng.download = 'shailraj-website-qr.png';
+        downloadSvg.href = '/images/shailraj-website-qr.svg';
+        downloadSvg.download = 'shailraj-website-qr.svg';
+
+        cardMarathi.innerText = 'सर्व तीर्थक्षेत्रे आणि टूर पॅकेजेस एक्सप्लोर करा';
+        cardBadge.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+          <span style="color: #10a34a;">Official Website Portal</span>
+        `;
+        cardStars.style.display = 'none';
+        cardTitle.innerText = 'Visit Our Official Website';
+        cardSubtitle.innerText = 'Scan to explore Ashtavinayak, Ujjain Mahakal, Jyotirlinga packages & book luxury Force Urbania.';
+      }
+    }
+
     function copyText(id) {
       const text = document.getElementById(id).innerText;
       navigator.clipboard.writeText(text).then(() => {
-        alert("Link copied to clipboard: " + text);
+        alert("Link copied: " + text);
       }).catch(err => {
         console.error("Copy failed", err);
       });
