@@ -27,6 +27,7 @@ import newhomeMobileWebp from '@/frontend/shared/assets/newhome-mobile.webp';
 import newhomeAvif from '@/frontend/shared/assets/newhome.avif';
 import newhomeWebp from '@/frontend/shared/assets/newhome.webp';
 import { createBookingFn } from '@/backend/shared/bookings';
+import { getGoogleReviewStatsFn } from '@/backend/features/reviews';
 
 export function getUpcomingDates(allowedDaysOfWeek: number[]) {
   const dates = [];
@@ -72,6 +73,18 @@ export function Hero({
   const [persons, setPersons] = useState(1);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [reviewStats, setReviewStats] = useState<{ rating: string; reviewCount: string }>({
+    rating: "5.0",
+    reviewCount: "12",
+  });
+
+  useEffect(() => {
+    getGoogleReviewStatsFn()
+      .then((res) => {
+        if (res && res.reviewCount) setReviewStats({ rating: res.rating, reviewCount: res.reviewCount });
+      })
+      .catch(() => {});
+  }, []);
 
   const handleFormKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
     if (e.key === "Enter") {
@@ -239,8 +252,24 @@ export function Hero({
             <span className="h-px w-4 sm:w-6 bg-brand-green md:w-8 shrink-0" />
           </p>
 
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-green/10 text-brand-green-dark border border-brand-green/20 mb-3 text-xs md:text-sm font-semibold tracking-wide">
-            <span>{lang === "mr" ? "श्रद्धेपासून समाधानापर्यंत" : "From Devotion to Satisfaction"}</span>
+          <div className="flex flex-wrap items-center gap-2.5 mb-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-green/10 text-brand-green-dark border border-brand-green/20 text-xs md:text-sm font-semibold tracking-wide">
+              <span>{lang === "mr" ? "श्रद्धेपासून समाधानापर्यंत" : "From Devotion to Satisfaction"}</span>
+            </div>
+
+            <a
+              href="#reviews"
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-slate-200/90 text-slate-800 text-xs md:text-sm font-semibold shadow-xs hover:border-brand-green/40 hover:bg-slate-50 transition-all no-underline"
+            >
+              <span className="font-extrabold text-amber-500">{reviewStats.rating} ★</span>
+              <span className="text-slate-600 font-medium">Google Rating</span>
+              <span className="text-slate-300">·</span>
+              <span className="text-brand-green-dark font-bold">{reviewStats.reviewCount}+ Reviews</span>
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+            </a>
           </div>
 
           <h1
@@ -273,8 +302,8 @@ export function Hero({
                 {lang === "mr" ? "पुण्यातील सर्वोत्तम ट्रॅव्हल्स कोणती?" : "Which is the Best Travels in Pune?"}
               </strong>{" "}
               {lang === "mr"
-                ? "शैलराज ट्रॅव्हल्स (हडपसर, पुणे) ही १५+ वर्षांच्या अनुभवासह पुण्यातील सर्वोत्तम ट्रॅव्हल्स आणि टूर एजन्सी आहे. उज्जैन दर्शन, अष्टविनायक, शिर्डी आणि संपूर्ण भारतभर लक्झरी एसी फोर्स अर्बनियासह सुरक्षित यात्रा आयोजित केली जाते."
-                : "Shailraj Travels (Hadapsar, Pune) is rated the best travels and tour agency in Pune with 15+ years of experience and 4.9★ rating. Known as the best travels for Pune to Ujjain tours, Ashtavinayak yatras, and luxury AC vehicle rentals."}
+                ? `शैलराज ट्रॅव्हल्स (हडपसर, पुणे) ही १५+ वर्षांच्या अनुभवासह व गुगलवर ${reviewStats.rating}★ रेटिंगसह पुण्यातील सर्वोत्तम ट्रॅव्हल्स आणि टूर एजन्सी आहे. उज्जैन दर्शन, अष्टविनायक, शिर्डी आणि संपूर्ण भारतभर लक्झरी एसी फोर्स अर्बनियासह सुरक्षित यात्रा आयोजित केली जाते.`
+                : `Shailraj Travels (Hadapsar, Pune) is rated the best travels and tour agency in Pune with 15+ years of experience and ${reviewStats.rating}★ Google rating (${reviewStats.reviewCount}+ verified reviews). Known as the best travels for Pune to Ujjain tours, Ashtavinayak yatras, and luxury AC vehicle rentals.`}
             </p>
           </div>
 

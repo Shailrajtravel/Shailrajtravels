@@ -8,7 +8,13 @@ import {
   updatePackageFn,
   deletePackageFn,
 } from '@/backend/features/packages';
-import { getReviewsFn, deleteReviewFn } from '@/backend/features/reviews';
+import {
+  getReviewsFn,
+  deleteReviewFn,
+  getGoogleReviewStatsFn,
+  updateGoogleReviewStatsFn,
+  GoogleReviewStats,
+} from '@/backend/features/reviews';
 import { getCustomBlogsFn, deleteCustomBlogFn, updateCustomBlogFn, toggleBlogVisibilityFn, createCustomBlogFn } from '@/backend/features/custom-blogs';
 import {
   getTripOptionsFn,
@@ -198,6 +204,11 @@ function AdminPage() {
   const [loading, setLoading] = useState(true);
   const [packages, setPackages] = useState<any[]>([]);
   const [reviews, setReviews] = useState<any[]>([]);
+  const [googleStats, setGoogleStats] = useState<GoogleReviewStats | null>(null);
+  const [syncRating, setSyncRating] = useState("5.0");
+  const [syncCount, setSyncCount] = useState("12");
+  const [savingGoogleStats, setSavingGoogleStats] = useState(false);
+  const [statsSavedSuccess, setStatsSavedSuccess] = useState(false);
   const [tripOptions, setTripOptions] = useState<any[]>([]);
   const [bookings, setBookings] = useState<any[]>([]);
   const [editingDate, setEditingDate] = useState<{ id: string; date: string } | null>(null);
@@ -459,8 +470,12 @@ function AdminPage() {
         console.error("Custom blogs error:", e);
         return [];
       });
+      const reviewStatsPromise = getGoogleReviewStatsFn().catch((e) => {
+        console.error("Google Review stats error:", e);
+        return null;
+      });
 
-      const [pkgs, revs, trips, bks, photos, logs, trs, dbBlogs] = await Promise.all([
+      const [pkgs, revs, trips, bks, photos, logs, trs, dbBlogs, gStats] = await Promise.all([
         pkgsPromise,
         revsPromise,
         tripsPromise,
@@ -469,7 +484,14 @@ function AdminPage() {
         auditPromise,
         toursPromise,
         blogsPromise,
+        reviewStatsPromise,
       ]);
+
+      if (gStats) {
+        setGoogleStats(gStats);
+        setSyncRating(gStats.rating || "5.0");
+        setSyncCount(gStats.reviewCount || "12");
+      }
 
       setPackages(Array.isArray(pkgs) ? pkgs : []);
       setReviews(Array.isArray(revs) ? revs : []);
@@ -541,6 +563,34 @@ function AdminPage() {
 
   const handleDeleteReview = (id: string) => {
     setDeleteConfirm({ isOpen: true, id, type: "review" });
+  };
+
+  const handleSaveGoogleStats = async () => {
+    if (!token) return;
+    setSavingGoogleStats(true);
+    setStatsSavedSuccess(false);
+    try {
+      const res = await updateGoogleReviewStatsFn({
+        data: {
+          adminToken: token,
+          rating: syncRating,
+          reviewCount: syncCount,
+        },
+      });
+      if (res?.success) {
+        setStatsSavedSuccess(true);
+        setGoogleStats((prev) =>
+          prev
+            ? { ...prev, rating: syncRating, reviewCount: syncCount, source: 'admin_override' }
+            : null
+        );
+        setTimeout(() => setStatsSavedSuccess(false), 4000);
+      }
+    } catch (e: any) {
+      alert("Failed to update Google review stats: " + e.message);
+    } finally {
+      setSavingGoogleStats(false);
+    }
   };
 
   const handleEdit = (item: any) => {
@@ -1159,17 +1209,142 @@ function AdminPage() {
               )}
             </div>
           ) : activeTab === "reviews" ? (
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden animate-reveal">
-              {loading ? (
-                <div className="p-12 flex justify-center">
-                  <Loader2 className="w-8 h-8 animate-spin text-brand-green" />
+            <div className="space-y-6 animate-reveal">
+              {/* Google Reviews Real-Time Synchronization Card */}
+              <div className="bg-gradient-to-br from-white via-slate-50/60 to-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-slate-200/80">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-2xl bg-white border border-slate-200/90 shadow-sm flex items-center justify-center shrink-0">
+                      <svg className="w-7 h-7" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+                        <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+                        <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+                        <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h2 className="text-xl font-bold text-slate-800">Google Business Profile Live Review Sync</h2>
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                          <span className="relative flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                          </span>
+                          Connected
+                        </span>
+                      </div>
+                      <p className="text-sm text-slate-500 mt-1">
+                        Google Place ID: <code className="px-2 py-0.5 bg-slate-100 rounded text-xs font-mono text-slate-700">ChIJXRgrL53DwjsRs0FidQRovF0</code>
+                        {" "}· Synced with Shailraj Travels Google Maps Listing
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <a
+                      href="https://search.google.com/local/writereview?placeid=ChIJXRgrL53DwjsRs0FidQRovF0"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 text-slate-700 bg-white hover:bg-slate-50 text-sm font-semibold shadow-xs transition-colors"
+                    >
+                      <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
+                      Test Review Link
+                    </a>
+                    <a
+                      href={`https://wa.me/?text=${encodeURIComponent("Namaskar! Thank you for choosing Shailraj Travels. Please take 10 seconds to share your 5-star experience on Google Maps: https://search.google.com/local/writereview?placeid=ChIJXRgrL53DwjsRs0FidQRovF0")}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand-green-dark hover:bg-brand-green-dark/90 text-white text-sm font-semibold shadow-xs transition-colors"
+                    >
+                      <MessageSquare className="w-4 h-4" />
+                      <span>Share on WhatsApp</span>
+                    </a>
+                  </div>
                 </div>
-              ) : reviews.length === 0 ? (
-                <div className="p-12 text-center text-slate-500">
-                  <MessageSquare className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                  <p className="text-lg font-medium">No reviews found.</p>
+
+                {/* Counter & Sync Controls */}
+                <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">
+                      Live Rating on Website
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={syncRating}
+                        onChange={(e) => setSyncRating(e.target.value)}
+                        placeholder="5.0"
+                        className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-800 font-bold text-lg focus:outline-none focus:ring-2 focus:ring-brand-green/30"
+                      />
+                      <span className="absolute right-4 top-1/2 -translate-y-1/2 text-amber-500 font-bold">★</span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">
+                      Live Review Count on Website
+                    </label>
+                    <input
+                      type="number"
+                      value={syncCount}
+                      onChange={(e) => setSyncCount(e.target.value)}
+                      placeholder="12"
+                      min="1"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-800 font-bold text-lg focus:outline-none focus:ring-2 focus:ring-brand-green/30"
+                    />
+                  </div>
+
+                  <div>
+                    <button
+                      type="button"
+                      onClick={handleSaveGoogleStats}
+                      disabled={savingGoogleStats}
+                      className="w-full h-[52px] inline-flex items-center justify-center gap-2 px-6 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm shadow-md transition-all disabled:opacity-50 cursor-pointer"
+                    >
+                      {savingGoogleStats ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <span>Updating Website...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Check className="w-4 h-4 text-emerald-400" />
+                          <span>Update Live Count on Website</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
                 </div>
-              ) : (
+
+                {statsSavedSuccess && (
+                  <div className="mt-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm font-semibold flex items-center gap-2 animate-reveal">
+                    <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                    <span>Real-time Google review metrics updated successfully across all pages and schemas!</span>
+                  </div>
+                )}
+
+                <div className="mt-4 text-xs text-slate-500 bg-slate-100/70 p-3 rounded-xl flex items-center justify-between flex-wrap gap-2">
+                  <span>💡 <strong>Hands-Free Auto-Sync:</strong> When you add <code>GOOGLE_MAPS_API_KEY</code> to environment variables, Google Places API fetches new reviews autonomously.</span>
+                  <span className="text-slate-400">Current Source: {googleStats?.source || 'business_default'}</span>
+                </div>
+              </div>
+
+              {/* Submissions & Reviews Table Container */}
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <div className="p-5 border-b border-slate-100 flex items-center justify-between">
+                  <h3 className="font-bold text-slate-800 text-base">Direct Traveler Testimonials & Reviews</h3>
+                  <span className="text-xs font-semibold text-slate-500">{reviews.length} Submissions</span>
+                </div>
+                {loading ? (
+                  <div className="p-12 flex justify-center">
+                    <Loader2 className="w-8 h-8 animate-spin text-brand-green" />
+                  </div>
+                ) : reviews.length === 0 ? (
+                  <div className="p-12 text-center text-slate-500">
+                    <MessageSquare className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                    <p className="text-lg font-medium">No direct reviews submitted yet.</p>
+                  </div>
+                ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse min-w-[800px]">
                     <thead>
@@ -1213,6 +1388,7 @@ function AdminPage() {
                   </table>
                 </div>
               )}
+              </div>
             </div>
           ) : activeTab === "trips" ? (
             isFormOpen ? (

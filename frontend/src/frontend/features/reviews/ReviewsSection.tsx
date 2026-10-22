@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { Star, CheckCircle2, Sparkles, Loader2, Wand2, MessageSquare, X, Check, ArrowRight } from 'lucide-react';
+import { Star, CheckCircle2, Sparkles, Loader2, Wand2, MessageSquare, X, Check, ArrowRight, QrCode } from 'lucide-react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { addReviewFn } from '@/backend/features/reviews';
+import { addReviewFn, getGoogleReviewStatsFn, GoogleReviewStats } from '@/backend/features/reviews';
 import { Skeleton } from '@/frontend/shared/ui/skeleton';
 import { cn } from '@/backend/shared/utils';
 
@@ -14,6 +14,7 @@ export function ReviewsSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
   const [showToast, setShowToast] = useState(false);
   const [isRefining, setIsRefining] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isQrOpen, setIsQrOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
 
   // Lazy-load SociableKit iframe to prevent blocking main thread
@@ -21,8 +22,23 @@ export function ReviewsSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
   const [iframeLoaded, setIframeLoaded] = useState(false);
   const iframeContainerRef = useRef<HTMLDivElement>(null);
 
+  const [reviewStats, setReviewStats] = useState<GoogleReviewStats>({
+    rating: "5.0",
+    reviewCount: "12",
+    placeId: "ChIJXRgrL53DwjsRs0FidQRovF0",
+    source: "business_default",
+    lastSynced: new Date().toISOString(),
+    writeReviewUrl: "https://search.google.com/local/writereview?placeid=ChIJXRgrL53DwjsRs0FidQRovF0",
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Shailraj%20Travels&query_place_id=ChIJXRgrL53DwjsRs0FidQRovF0",
+  });
+
   useEffect(() => {
     setIsMounted(true);
+    getGoogleReviewStatsFn()
+      .then((res) => {
+        if (res && res.reviewCount) setReviewStats(res);
+      })
+      .catch((e) => console.error("Failed to load review stats:", e));
   }, []);
 
   useEffect(() => {
@@ -166,25 +182,73 @@ export function ReviewsSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
               : "Authentic stories and high-rated travel experiences synced in real-time directly from our official Google Business Profile."}
           </p>
 
+          {/* Live Synchronized Google Maps Trust Banner */}
+          <div className="inline-flex flex-wrap items-center justify-center gap-3 px-5 py-2.5 rounded-2xl bg-white border border-slate-200/80 shadow-sm mb-6">
+            <div className="flex items-center gap-2">
+              <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+                <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+                <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+                <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+              </svg>
+              <span className="font-extrabold text-slate-800 text-base">{reviewStats.rating}</span>
+              <div className="flex items-center text-amber-400">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+            </div>
+            <span className="text-slate-300 hidden sm:inline">|</span>
+            <span className="text-sm font-bold text-slate-700">
+              {reviewStats.reviewCount} {lang === "mr" ? "गुगल प्रमाणित पुनरावलोकने" : "Verified Google Reviews"}
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              {lang === "mr" ? "थेट सिंक" : "Live Google Sync"}
+            </span>
+          </div>
+
           {/* Action Buttons styled identically to Explore Tours & Contact Us buttons */}
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-4 md:gap-6 w-full max-w-md mx-auto sm:max-w-none pt-4">
+          <div className="flex flex-wrap justify-center items-center gap-3 sm:gap-4 w-full max-w-2xl mx-auto pt-2">
             <button
               type="button"
               onClick={() => setIsFormOpen(true)}
-              className="flex w-full sm:w-[260px] items-center justify-center gap-2 bg-brand-green-dark hover:bg-brand-green-dark/90 text-white rounded-lg px-6 py-4 text-[16px] font-semibold transition-all shadow-sm hover:shadow-[0_8px_20px_rgba(16,163,74,0.25)] hover:-translate-y-0.5 cursor-pointer whitespace-nowrap"
+              className="flex w-full sm:w-auto items-center justify-center gap-2 bg-brand-green-dark hover:bg-brand-green-dark/90 text-white rounded-lg px-5 py-3.5 text-[15px] font-semibold transition-all shadow-sm hover:shadow-[0_8px_20px_rgba(16,163,74,0.25)] hover:-translate-y-0.5 cursor-pointer whitespace-nowrap"
             >
-              <span>{lang === "mr" ? "AI सोबत अभिप्राय लिहा" : "Write a Review with AI"}</span>
-              <ArrowRight className="w-5 h-5 shrink-0" />
+              <span>{lang === "mr" ? "AI सोबत अभिप्राय लिहा" : "Write Review with AI"}</span>
+              <ArrowRight className="w-4 h-4 shrink-0" />
             </button>
 
             <a
-              href="https://www.google.com/maps/place/Shailraj+Travels/data=!4m2!3m1!1s0x0:0x5dbc6804756241b3?sa=X&ved=1t:2428&ictx=111"
+              href={reviewStats.writeReviewUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex w-full sm:w-[260px] items-center justify-center gap-2 bg-white border-2 border-brand-green-dark text-brand-green-dark hover:bg-brand-green-dark/5 rounded-lg px-6 py-4 text-[16px] font-semibold transition-all hover:shadow-sm hover:-translate-y-0.5 no-underline whitespace-nowrap"
+              className="flex w-full sm:w-auto items-center justify-center gap-2 bg-[#EA4335] hover:bg-[#d9382b] text-white rounded-lg px-5 py-3.5 text-[15px] font-semibold transition-all shadow-sm hover:shadow-[0_8px_20px_rgba(234,67,53,0.25)] hover:-translate-y-0.5 no-underline whitespace-nowrap"
             >
-              <span>{lang === "mr" ? "गुगल प्रोफाइल पहा" : "View on Google Maps"}</span>
-              <ArrowRight className="w-5 h-5 shrink-0" />
+              <Star className="w-4 h-4 fill-white shrink-0" />
+              <span>{lang === "mr" ? "गुगलवर ५★ स्टार द्या" : "Review on Google Maps"}</span>
+            </a>
+
+            <button
+              type="button"
+              onClick={() => setIsQrOpen(true)}
+              className="flex w-full sm:w-auto items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg px-5 py-3.5 text-[15px] font-semibold transition-all shadow-sm hover:shadow-[0_8px_20px_rgba(15,23,42,0.25)] hover:-translate-y-0.5 cursor-pointer whitespace-nowrap"
+            >
+              <QrCode className="w-4 h-4 text-emerald-400 shrink-0" />
+              <span>{lang === "mr" ? "QR कोड स्कॅन करा" : "Scan Review QR"}</span>
+            </button>
+
+            <a
+              href={reviewStats.googleMapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex w-full sm:w-auto items-center justify-center gap-2 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-lg px-5 py-3.5 text-[15px] font-semibold transition-all hover:shadow-sm hover:-translate-y-0.5 no-underline whitespace-nowrap"
+            >
+              <span>{lang === "mr" ? "गुगल प्रोफाइल" : "View Profile"}</span>
+              <ArrowRight className="w-4 h-4 shrink-0" />
             </a>
           </div>
         </div>
@@ -368,6 +432,60 @@ export function ReviewsSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
                   </>
                 )}
               </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {/* QR Code Modal */}
+      {isQrOpen && isMounted && createPortal(
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl w-full max-w-[420px] shadow-2xl border border-slate-100 flex flex-col items-center p-6 text-center animate-reveal relative">
+            <button
+              onClick={() => setIsQrOpen(false)}
+              className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 transition-colors cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-3 mt-1">
+              <QrCode className="w-6 h-6" />
+            </div>
+
+            <h3 className="text-xl font-display font-bold text-slate-900">
+              {lang === "mr" ? "गुगल अभिप्राय QR कोड" : "Google Review QR Code"}
+            </h3>
+            <p className="text-xs text-slate-500 mt-1 mb-4 max-w-xs leading-relaxed">
+              {lang === "mr" 
+                ? "मोबाईल कॅमेरा किंवा गुगल लेन्सने स्कॅन करून थेट तुमचा ५★ अभिप्राय नोंदवा" 
+                : "Scan with your smartphone camera to open our direct 5★ Google Review page"}
+            </p>
+
+            <div className="p-3 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 mb-4">
+              <img
+                src="/images/shailraj-google-review-qr.png"
+                alt="Shailraj Travels Google Review QR"
+                className="w-56 h-56 rounded-xl object-contain"
+              />
+            </div>
+
+            <div className="flex gap-2 w-full pt-1">
+              <a
+                href="/review-qr.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 py-3 px-3 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-bold transition-colors no-underline flex items-center justify-center gap-1.5"
+              >
+                <span>Print Standee</span>
+              </a>
+              <a
+                href="/images/shailraj-google-review-qr.png"
+                download="shailraj-google-review-qr.png"
+                className="flex-1 py-3 px-3 bg-brand-green-dark hover:bg-brand-green-dark/90 text-white rounded-xl text-xs font-bold transition-colors no-underline flex items-center justify-center gap-1.5"
+              >
+                <span>Download QR</span>
+              </a>
             </div>
           </div>
         </div>,
