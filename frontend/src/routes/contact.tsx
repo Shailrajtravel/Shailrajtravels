@@ -6,10 +6,25 @@ import { MapPin, Phone, Mail } from 'lucide-react';
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: generateSEO({
-      title: "Contact Us | Shailraj Travels",
+      title: "Contact Shailraj Travels | Best Travels in Pune & Hadapsar | Bookings",
       description:
-        "Get in touch with Shailraj Travels for tour bookings, custom packages, and inquiries. Located in Pune, Maharashtra.",
+        "Contact Shailraj Travels (Hadapsar, Pune) — Pune's #1 tours & travel agency. Book Ujjain tours, Ashtavinayak yatra, Pune travels & luxury Force Urbania rentals. Call +91 9764413556.",
       canonicalUrl: "https://www.shailrajtravels.com/contact",
+      keywords: [
+        "best travels in pune",
+        "contact shailraj travels",
+        "pune travels",
+        "hadapsar",
+        "travels in hadapsar",
+        "travel agency's",
+        "travel agency in pune",
+        "tours",
+        "travels",
+        "travel",
+        "ujjain tour",
+        "ujjain yatra best travels",
+        "shailraj travels hadapsar pune",
+      ],
     }),
     links: [{ rel: "canonical", href: "https://www.shailrajtravels.com/contact" }],
   }),

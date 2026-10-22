@@ -98,6 +98,7 @@ export const Route = createFileRoute("/tours/$tourSlug")({
         canonicalUrl: canonical,
         ogImage: ogImageUrl,
         type: "website",
+        keywords: loaderData.tour.keywords,
       }),
       links: [{ rel: "canonical", href: canonical }],
     };

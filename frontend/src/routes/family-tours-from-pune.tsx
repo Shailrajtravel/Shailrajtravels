@@ -27,10 +27,19 @@ import {
 export const Route = createFileRoute("/family-tours-from-pune")({
   head: () => ({
     meta: generateSEO({
-      title: "Family Tour Packages from Pune | Shailraj Travels",
+      title: "Family Tour Packages from Pune | Mahabaleshwar, Ujjain & Innova Rentals | Shailraj Travels",
       description:
-        "Comfortable, family-friendly tour packages departing from Pune. Multi-generational pilgrimages, scenic hill stations, and private AC Force Urbania road trips.",
+        "Comfortable family tour packages from Pune. Multi-generational pilgrimages, Mahabaleshwar packages for 2-3 days, and Toyota Innova Crysta / AC Force Urbania road trips. 4.9★ rated.",
       canonicalUrl: "https://www.shailrajtravels.com/family-tours-from-pune",
+      keywords: [
+        "family tour packages from pune",
+        "pune to mahabaleshwar package for family",
+        "pune to mahabaleshwar package for 2 days",
+        "innova crysta on rent in pune",
+        "pune to ujjain tour package for family",
+        "ashtavinayak darshan tour package from pune",
+        "shailraj travels pune"
+      ],
     }),
     links: [{ rel: "canonical", href: "https://www.shailrajtravels.com/family-tours-from-pune" }],
   }),
@@ -48,7 +57,7 @@ function FamilyToursFromPunePage() {
       idealFor: "Multi-generational Families (Kids + Elders)",
       description: "A relaxed, sacred tour covering all 8 Vinayakas with comfortable halts, child-friendly food options, and gentle driving.",
       vehicle: "AC Force Urbania (12/17 seater) or Innova Crysta",
-      link: "/tours/ashtavinayak-yatra",
+      link: "/tours/pune-to-ashtavinayak-darshan",
     },
     {
       title: "Pune to Ujjain & Omkareshwar Family Circuit",
@@ -120,8 +129,8 @@ function FamilyToursFromPunePage() {
     },
     aggregateRating: {
       "@type": "AggregateRating",
-      ratingValue: businessConfig.reviewRating || "4.9",
-      reviewCount: businessConfig.reviewCount || "580",
+      ratingValue: businessConfig.reviewRating || "5.0",
+      reviewCount: businessConfig.reviewCount || "12",
     },
   };
 

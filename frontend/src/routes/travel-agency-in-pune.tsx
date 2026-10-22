@@ -26,16 +26,25 @@ import {
 export const Route = createFileRoute("/travel-agency-in-pune")({
   head: () => ({
     meta: generateSEO({
-      title: "Best Travel Agency in Pune | 15+ Yrs Exp, 4.9★ | Shailraj Travels",
+      title: "Best Travel Agency in Pune (Hadapsar) | Tours & Travels | Shailraj",
       description:
-        "Top-rated travel agency in Hadapsar, Pune. Pilgrimage yatras, Ashtavinayak, Ujjain packages & AC Force Urbania rental. 580+ 5-star reviews. Call +91 9764413556!",
+        "Looking for the best travels in Pune? Shailraj Travels is a top-rated travel agency in Hadapsar. Book Ujjain tours, Ashtavinayak, Pune travels & luxury car/van rentals. Call +91 9764413556!",
       canonicalUrl: "https://www.shailrajtravels.com/travel-agency-in-pune",
       keywords: [
+        "best travels in pune",
         "travel agency in pune",
-        "best travel agency in hadapsar",
+        "travel agency in hadapsar",
+        "travels in hadapsar",
+        "pune travels",
+        "travels",
+        "tours",
+        "travel agency",
         "tour and travels pune",
+        "travel agencies in pune",
         "travel agents near me pune",
-        "pilgrimage travel agency pune",
+        "ujjain tour",
+        "ujjain yatra best travels",
+        "hadapsar travels",
         "shailraj travels pune",
       ],
     }),
@@ -52,7 +61,7 @@ function TravelAgencyInPunePage() {
     {
       question: "What is Shailraj Travels and where is it located in Pune?",
       answer:
-        "Shailraj Travels is a premier travel agency and tour operator headquartered at Hadapsar, Pune (PIN: 412307). With 15+ years of experience and 580+ 5-star traveler reviews, Shailraj Travels specializes in pilgrimage yatras, family tours, group charters, and customized packages across Maharashtra and India.",
+        "Shailraj Travels is a premier travel agency and tour operator headquartered at Hadapsar, Pune (PIN: 412307). With 15+ years of experience and 100% 5-star Google Maps traveler reviews, Shailraj Travels specializes in pilgrimage yatras, family tours, group charters, and customized packages across Maharashtra and India.",
     },
     {
       question: "Which areas in Pune does Shailraj Travels offer pickup from?",
@@ -119,8 +128,8 @@ function TravelAgencyInPunePage() {
     ],
     aggregateRating: {
       "@type": "AggregateRating",
-      ratingValue: businessConfig.reviewRating || "4.9",
-      reviewCount: businessConfig.reviewCount || "580",
+      ratingValue: businessConfig.reviewRating || "5.0",
+      reviewCount: businessConfig.reviewCount || "12",
     },
     areaServed: [
       { "@type": "City", name: "Pune" },
@@ -207,7 +216,7 @@ function TravelAgencyInPunePage() {
                 What is Shailraj Travels?
               </h2>
               <p className="text-sm md:text-base text-slate-700 leading-relaxed">
-                <strong>Shailraj Travels</strong> is a Pune-based travel agency and tour operator offering pilgrimage, family, group and customized tours across Maharashtra and India. Headquartered in Hadapsar, Pune, the company operates a private fleet of luxury AC Force Urbania and Innova Crysta vehicles, providing end-to-end travel coordination with 580+ 5-star customer ratings.
+                <strong>Shailraj Travels</strong> is a Pune-based travel agency and tour operator offering pilgrimage, family, group and customized tours across Maharashtra and India. Headquartered in Hadapsar, Pune, the company operates a private fleet of luxury AC Force Urbania and Innova Crysta vehicles, providing end-to-end travel coordination with 100% 5-star customer ratings on Google.
               </p>
             </div>
 

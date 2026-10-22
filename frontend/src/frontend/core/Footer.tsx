@@ -350,6 +350,35 @@ export function FooterSection({ t, lang = "en" }: { t: typeof translations.mr; l
           </div>
         </div>
 
+        {/* Popular Searches & Everyday Keywords SEO Discovery Strip */}
+        <div className="border-t border-slate-800/80 pt-6 pb-6 text-xs text-slate-400">
+          <p className="font-semibold text-slate-300 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-brand-green"></span>
+            Popular Searches
+          </p>
+          <div className="flex flex-wrap gap-x-3 gap-y-1.5 leading-relaxed">
+            <Link to="/" className="hover:text-white transition-colors">Best Travels in Pune</Link>
+            <span className="text-slate-700">•</span>
+            <Link to="/travel-agency-in-pune" className="hover:text-white transition-colors">Travels in Hadapsar</Link>
+            <span className="text-slate-700">•</span>
+            <Link to="/travel-agency-in-pune" className="hover:text-white transition-colors">Travel Agency in Pune</Link>
+            <span className="text-slate-700">•</span>
+            <Link to={"/tours" as any} className="hover:text-white transition-colors">Pune Travels</Link>
+            <span className="text-slate-700">•</span>
+            <Link to={"/tours/ujjain-omkareshwar-Ghrishneshwar-maheshwar-tour" as any} className="hover:text-white transition-colors">Ujjain Tour</Link>
+            <span className="text-slate-700">•</span>
+            <Link to={"/tours/ujjain-omkareshwar-Ghrishneshwar-maheshwar-tour" as any} className="hover:text-white transition-colors">Ujjain Yatra Best Travels</Link>
+            <span className="text-slate-700">•</span>
+            <Link to="/tour-packages-from-pune" className="hover:text-white transition-colors">Pune to Ujjain Tour Package</Link>
+            <span className="text-slate-700">•</span>
+            <Link to={"/tours/pune-to-ashtavinayak-darshan" as any} className="hover:text-white transition-colors">Ashtavinayak Yatra</Link>
+            <span className="text-slate-700">•</span>
+            <Link to={"/tours" as any} className="hover:text-white transition-colors">Tours & Travels</Link>
+            <span className="text-slate-700">•</span>
+            <Link to="/why-choose-shailraj-travels" className="hover:text-white transition-colors">Best Travels</Link>
+          </div>
+        </div>
+
         {/* Bottom Bar - Copyright */}
         <div className="border-t border-slate-800/80 pt-8 pb-4 flex flex-col md:flex-row items-center justify-between gap-4 text-[14px] text-slate-400 text-center md:text-left">
           <p className="font-medium tracking-wide">

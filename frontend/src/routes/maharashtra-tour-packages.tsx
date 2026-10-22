@@ -26,10 +26,19 @@ import {
 export const Route = createFileRoute("/maharashtra-tour-packages")({
   head: () => ({
     meta: generateSEO({
-      title: "Maharashtra Tour Packages from Pune | Shailraj Travels",
+      title: "5 & 3 Jyotirlinga Tour Packages from Pune | Maharashtra Tours | Shailraj Travels",
       description:
-        "Explore Maharashtra with Shailraj Travels. 5 Jyotirlingas, Ashtavinayak, Konkan coastal tours, Shirdi, Pandharpur, and Western Ghats holidays from Pune.",
+        "Book 5 Jyotirlinga & 3 Jyotirlinga in Maharashtra tour packages from Pune. Complete Ashtavinayak, Shirdi, Pandharpur & Western Ghats tours in AC Force Urbania. 4.9★ rated.",
       canonicalUrl: "https://www.shailrajtravels.com/maharashtra-tour-packages",
+      keywords: [
+        "5 jyotirlinga in maharashtra tour package from pune",
+        "3 jyotirlinga tour package from pune",
+        "maharashtra 3 jyotirlinga tour package from pune price",
+        "5 jyotirlinga in maharashtra itinerary",
+        "5 jyotirlinga in maharashtra route map",
+        "maharashtra tour packages from pune",
+        "shailraj travels pune"
+      ],
     }),
     links: [{ rel: "canonical", href: "https://www.shailrajtravels.com/maharashtra-tour-packages" }],
   }),
@@ -47,39 +56,39 @@ function MaharashtraTourPackagesPage() {
       duration: "2 or 3 Days",
       type: "Spiritual Pilgrimage",
       highlights: "Scripted traditional darshan order, senior citizen step assistance, verified vegetarian hotels.",
-      link: "/tours/ashtavinayak-yatra",
+      link: "/tours/pune-to-ashtavinayak-darshan",
     },
     {
-      title: "5 Jyotirlinga of Maharashtra Circuit",
-      circuit: "Bhimashankar • Trimbakeshwar • Grishneshwar • Aundha Nagnath • Parli Vaijnath",
-      duration: "5 Days / 4 Nights",
-      type: "Sacred Jyotirlinga",
-      highlights: "Covers all 5 Maharashtra Shiva shrines plus Ellora Caves with luxury AC Force Urbania travel.",
-      link: "/tours/jyotirlinga-darshan",
-    },
-    {
-      title: "Shirdi, Shani Shingnapur & Nashik",
-      circuit: "Pune → Shirdi Sai Baba → Shani Shingnapur → Trimbakeshwar / Nashik → Pune",
-      duration: "2 Days / 1 Night",
-      type: "Spiritual Darshan",
-      highlights: "VIP Aarti assistance, comfortable overnight hotel in Shirdi, doorstep Pune pickup.",
-      link: "/tours/shirdi-tour",
-    },
-    {
-      title: "Pandharpur, Tuljapur & Akkalkot",
-      circuit: "Pune → Pandharpur (Vithoba) → Tuljapur (Bhavani Mata) → Akkalkot (Swami Samarth) → Pune",
-      duration: "2 Days / 1 Night",
-      type: "Bhakti Circuit",
-      highlights: "Vitthal Rukmini darshan, Tulja Bhavani blessings, peaceful darshan flow, pure veg dining.",
-      link: "/tours/pandharpur-wari",
-    },
-    {
-      title: "Konkan Coast & Ganpatipule Beach Tour",
-      circuit: "Pune → Ganpatipule (Swayambhu Ganesh) → Ratnagiri → Guhagar → Pune",
+      title: "Maharashtra 3 Jyotirlinga Darshan",
+      circuit: "Trimbakeshwar (Nashik) • Grishneshwar (Ellora) • Bhimashankar (Khed)",
       duration: "3 Days / 2 Nights",
-      type: "Temple & Coastal Leisure",
-      highlights: "Sea-facing temples, pristine Konkan beaches, scenic coastal roads, local Maharashtrian hospitality.",
-      link: "/tour-packages-from-pune",
+      type: "Sacred Jyotirlinga",
+      highlights: "Covers the 3 sacred Western Maharashtra Shiva shrines plus Ellora Caves with luxury AC Force Urbania travel.",
+      link: "/tours/pune-mumbai-to-3-jyotirlinga-darshan",
+    },
+    {
+      title: "Ujjain, Omkareshwar & Grishneshwar Jyotirlinga",
+      circuit: "Pune → Maheshwar → Omkareshwar → Ujjain Mahakal → Grishneshwar → Pune",
+      duration: "3 Days / 2 Nights",
+      type: "Tri-Jyotirlinga Yatra",
+      highlights: "Bhasma Aarti guidance, Narmada boat parikrama, verified highway hotels, doorstep Pune pickup.",
+      link: "/tours/ujjain-omkareshwar-Ghrishneshwar-maheshwar-tour",
+    },
+    {
+      title: "Shakti Peeth Yatra from Pune",
+      circuit: "Pune → Kolhapur Mahalakshmi → Tuljapur Bhavani → Mahur Renuka → Saptashrungi Vani",
+      duration: "4 Days / 3 Nights",
+      type: "Devi Shaktipeeth",
+      highlights: "Complete divine blessings of Maharashtra's 3.5 Shakti Peethas with senior citizen care.",
+      link: "/tours/pune-to-shakti-peeth-yatra",
+    },
+    {
+      title: "Konkan Coast, Lonavala & Western Ghats",
+      circuit: "Pune → Lonavala • Khandala • Mahabaleshwar • Panchgani • Konkan",
+      duration: "1 to 3 Days",
+      type: "Hill Station & Coastal Leisure",
+      highlights: "Scenic ghat routes, waterfall viewpoints, strawberry farms, sanitized luxury vehicle charters.",
+      link: "/tours/pune-to-lonavala-one-day-trip",
     },
   ];
 
@@ -126,8 +135,8 @@ function MaharashtraTourPackagesPage() {
     },
     aggregateRating: {
       "@type": "AggregateRating",
-      ratingValue: businessConfig.reviewRating || "4.9",
-      reviewCount: businessConfig.reviewCount || "580",
+      ratingValue: businessConfig.reviewRating || "5.0",
+      reviewCount: businessConfig.reviewCount || "12",
     },
   };
 

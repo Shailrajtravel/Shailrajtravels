@@ -15,27 +15,27 @@ export const comparisons: Comparison[] = [
     metaTitle: "Ujjain vs Kashi Vishwanath Jyotirlinga Tour Comparison | Shailraj Travels",
     metaDescription:
       "Comparing the Ujjain Mahakaleshwar Jyotirlinga experience with Kashi Vishwanath. Which spiritual journey from Pune should you choose first?",
-    toursCompared: ["ujjain-mahakaleshwar-omkareshwar-tour", "jagannath-puri-tour"], // Using a fallback tour for B if Kashi is missing, but let's assume we can map it to our 5 tours. Actually, let's keep it strictly between the 5 tours if possible, or use the 5 tours vs existing tours. Let's compare Ujjain vs Dwarka Somnath.
+    toursCompared: ["ujjain-omkareshwar-Ghrishneshwar-maheshwar-tour", "pune-mumbai-to-3-jyotirlinga-darshan"],
     keyDifferences: [
       {
         aspect: "Primary Deity",
         optionA: "Lord Shiva (Mahakal)",
-        optionB: "Lord Krishna (Dwarkadhish) & Lord Shiva (Somnath)",
+        optionB: "Lord Shiva (Maharashtra Tri-Jyotirlinga)",
       },
-      { aspect: "Tour Duration", optionA: "3 Days / 2 Nights", optionB: "5 Days / 4 Nights" },
+      { aspect: "Tour Duration", optionA: "3 Days / 2 Nights", optionB: "3 Days / 2 Nights" },
       {
         aspect: "Key Rituals",
         optionA: "Bhasma Aarti (Ujjain)",
-        optionB: "Evening Sea-facing Aarti (Somnath)",
+        optionB: "Abhishek at Trimbakeshwar & Bhimashankar",
       },
       {
         aspect: "Travel Fatigue",
-        optionA: "Low (Direct flight/train to Indore)",
-        optionB: "Moderate (Long driving distances in Gujarat)",
+        optionA: "Low-Moderate (AC Force Urbania via Nashik/Sendhwa)",
+        optionB: "Low (Western Maharashtra scenic routes)",
       },
     ],
     verdict:
-      "If you want a quick, intense, and deeply spiritual 3-day trip focused purely on Lord Shiva, choose Ujjain. If you have 5 days and want a scenic coastal pilgrimage covering both Krishna and Shiva, choose the Dwarka Somnath tour.",
+      "If your priority is experiencing the divine Bhasma Aarti at Mahakaleshwar along with Omkareshwar and Grishneshwar, choose the Ujjain tour. If you wish to complete the sacred Maharashtra Jyotirlingas closer to home without crossing state borders, choose the 3 Jyotirlinga Darshan.",
   },
   {
     slug: "ashtavinayak-vs-saptashrungi",
@@ -43,27 +43,27 @@ export const comparisons: Comparison[] = [
     metaTitle: "Ashtavinayak vs Saptashrungi Weekend Tour Comparison | Shailraj Travels",
     metaDescription:
       "Comparing the 2-day Ashtavinayak Yatra with the Saptashrungi Devi weekend tour from Pune. Which is better for family?",
-    toursCompared: ["ashtavinayak-yatra", "saptashrungi-tour"],
+    toursCompared: ["pune-to-ashtavinayak-darshan", "pune-to-shakti-peeth-yatra"],
     keyDifferences: [
       {
         aspect: "Focus",
         optionA: "8 Ganesha Temples",
-        optionB: "1 Shakti Peetha Devi Temple (+ Trimbakeshwar)",
+        optionB: "Shakti Peetha Devi Temples",
       },
       {
         aspect: "Pacing",
         optionA: "Fast (Covering 8 temples in 2 days)",
-        optionB: "Relaxed (1 or 2 temples in 2 days)",
+        optionB: "Relaxed spiritual pace",
       },
-      { aspect: "Travel Medium", optionA: "Group AC Bus", optionB: "Private Car / Small Group" },
+      { aspect: "Travel Medium", optionA: "AC Force Urbania / Bus", optionB: "Private AC Car / Urbania" },
       {
         aspect: "Physical Strain",
-        optionA: "Moderate (Getting in and out of bus frequently)",
-        optionB: "Low (Ropeway available at Saptashrungi)",
+        optionA: "Moderate (Lenyadri 283 steps)",
+        optionB: "Low (Ropeway / elevator facilities available)",
       },
     ],
     verdict:
-      "For a spiritually exhaustive traditional pilgrimage with family, the Ashtavinayak Yatra is unparalleled. For a highly relaxed, low-strain weekend getaway with senior citizens, the Saptashrungi tour is the better choice.",
+      "For a spiritually exhaustive traditional pilgrimage with family, the Ashtavinayak Yatra is unparalleled. For a highly relaxed, low-strain weekend getaway with senior citizens, the Shakti Peeth / Saptashrungi tour is the better choice.",
   },
   {
     slug: "dwarka-somnath-vs-jagannath-puri",
@@ -71,7 +71,7 @@ export const comparisons: Comparison[] = [
     metaTitle: "Dwarka Somnath vs Jagannath Puri Tour Comparison | Shailraj Travels",
     metaDescription:
       "Compare the western Dham (Dwarka) with the eastern Dham (Jagannath Puri). Travel logistics from Pune, Darshan experiences, and costs.",
-    toursCompared: ["dwarka-somnath-girnar-tour", "jagannath-puri-tour"],
+    toursCompared: ["pune-to-girnar-spiritual-tour", "pune-to-tirupati-balaji-darshan-tour"],
     keyDifferences: [
       {
         aspect: "Location",

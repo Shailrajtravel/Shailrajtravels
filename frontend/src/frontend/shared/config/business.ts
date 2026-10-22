@@ -9,7 +9,7 @@ export const businessConfig = {
   supportPhone: "+91 97644 13556",
   supportEmail: "info@shailrajtravels.com",
   headOffice: "Gopal Patti, Manjri Budruk, Hadapsar, Pune, Maharashtra 412307",
-  // Centralized review stats corresponding to verified customer feedback
-  reviewRating: "4.9",
-  reviewCount: "580",
+  // Centralized review stats corresponding to real Google Maps verified reviews
+  reviewRating: "5.0",
+  reviewCount: "12",
 };

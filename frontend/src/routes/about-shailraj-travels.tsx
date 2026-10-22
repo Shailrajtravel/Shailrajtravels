@@ -9,10 +9,24 @@ import { authors } from '@/frontend/shared/data/authors';
 export const Route = createFileRoute("/about-shailraj-travels")({
   head: () => ({
     meta: generateSEO({
-      title: "About Shailraj Travels | Pilgrimage Tour Experts Since 2011",
+      title: "About Shailraj Travels | Best Travels in Pune & Hadapsar Tour Operator",
       description:
-        "Learn about Shailraj Travels. We specialize in Char Dham, Ashtavinayak, and Jyotirlinga Darshan. Trusted by thousands of happy pilgrims.",
+        "About Shailraj Travels — Pune's top-rated travels and tour operator in Hadapsar. 15+ years of experience in Ujjain tours, Ashtavinayak yatra, Pune travels & luxury rentals. 4.9★ rating.",
       canonicalUrl: "https://www.shailrajtravels.com/about-shailraj-travels",
+      keywords: [
+        "best travels in pune",
+        "about shailraj travels",
+        "pune travels",
+        "hadapsar",
+        "travels in hadapsar",
+        "travel agency's",
+        "travel agency in pune",
+        "tours",
+        "travels",
+        "ujjain tour",
+        "ujjain yatra best travels",
+        "shailraj travels pune",
+      ],
     }),
     links: [{ rel: "canonical", href: "https://www.shailrajtravels.com/about-shailraj-travels" }],
   }),

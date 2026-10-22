@@ -35,7 +35,7 @@ export const resources: Resource[] = [
           "Yes, a ₹250 VIP Darshan pass is available from the temple counters which significantly reduces waiting time.",
       },
     ],
-    relatedTours: ["ujjain-mahakaleshwar-omkareshwar-tour"],
+    relatedTours: ["ujjain-omkareshwar-Ghrishneshwar-maheshwar-tour"],
   },
   {
     slug: "dwarka-somnath-travel-checklist",
@@ -62,7 +62,7 @@ export const resources: Resource[] = [
           "Yes, the Dwarkadhish temple involves walking up 56 steps (Swarg Dwar) and walking around the temple complex.",
       },
     ],
-    relatedTours: ["dwarka-somnath-girnar-tour"],
+    relatedTours: ["pune-to-girnar-spiritual-tour"],
   },
   {
     slug: "saptashrungi-vani-ropeway-guide",
@@ -92,7 +92,7 @@ export const resources: Resource[] = [
           "Yes, there is a large parking area near the base station of the funicular trolley.",
       },
     ],
-    relatedTours: ["saptashrungi-tour"],
+    relatedTours: ["pune-to-shakti-peeth-yatra"],
   },
   {
     slug: "jagannath-puri-temple-rules",
@@ -118,7 +118,7 @@ export const resources: Resource[] = [
         answer: "No, leather belts, wallets, and bags are prohibited inside the temple.",
       },
     ],
-    relatedTours: ["jagannath-puri-tour"],
+    relatedTours: ["pune-to-tirupati-balaji-darshan-tour"],
   },
   {
     slug: "ashtavinayak-yatra-packing-list",
@@ -149,6 +149,6 @@ export const resources: Resource[] = [
           "Yes, carrying dry snacks is perfectly fine for the bus journey, though all main meals are provided in our package.",
       },
     ],
-    relatedTours: ["ashtavinayak-yatra"],
+    relatedTours: ["pune-to-ashtavinayak-darshan"],
   },
 ];

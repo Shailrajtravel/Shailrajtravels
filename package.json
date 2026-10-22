@@ -12,7 +12,9 @@
     "preview": "npm run preview --prefix frontend",
     "lint": "npm run lint --prefix frontend && npm run lint --prefix backend",
     "format": "npm run format --prefix frontend && npm run format --prefix backend",
-    "test:openwa": "npm run test:openwa --prefix frontend"
+    "test:openwa": "npm run test:openwa --prefix frontend",
+    "seo:sitemap": "npm run seo:sitemap --prefix frontend",
+    "seo:keywords": "npm run seo:keywords --prefix frontend --"
   },
   "devDependencies": {
     "concurrently": "^10.0.3",

@@ -33,11 +33,12 @@ export const Route = createFileRoute("/pilgrimage-tours-from-pune")({
       canonicalUrl: "https://www.shailrajtravels.com/pilgrimage-tours-from-pune",
       keywords: [
         "pilgrimage tours from pune",
-        "religious tours from pune",
-        "jyotirlinga yatra from pune",
-        "ashtavinayak tour from pune",
-        "ujjain tour package from pune",
+        "5 jyotirlinga in maharashtra tour package from pune",
+        "3 jyotirlinga tour package from pune",
+        "ashtavinayak darshan tour package from pune",
+        "pune to ujjain tour package for family",
         "senior citizen pilgrimage pune",
+        "shailraj travels pune",
       ],
     }),
     links: [{ rel: "canonical", href: "https://www.shailrajtravels.com/pilgrimage-tours-from-pune" }],
@@ -56,8 +57,8 @@ function PilgrimageToursFromPunePage() {
       circuit: "Ujjain Mahakaleshwar, Omkareshwar Jyotirlinga, Maheshwar, Grishneshwar",
       duration: "3 Days / 2 Nights",
       features: "Bhasma Aarti guidance, ₹250 Sheegra Darshan help, luxury AC Force Urbania, verified 3-star AC hotel.",
-      link: "/blog/pune-to-ujjain-tour-guide-mahakal-darshan-itinerary",
-      isGuide: true,
+      link: "/tours/ujjain-omkareshwar-Ghrishneshwar-maheshwar-tour",
+      isGuide: false,
     },
     {
       name: "Complete Ashtavinayak Yatra from Pune",
@@ -65,7 +66,7 @@ function PilgrimageToursFromPunePage() {
       circuit: "Morgaon, Siddhatek, Theur, Lenyadri, Ozar, Ranjangaon, Mahad, Pali",
       duration: "2 or 3 Days",
       features: "Scripted traditional order, senior citizen step assistance, pure vegetarian dining, doorstep Pune pickup.",
-      link: "/tours/ashtavinayak-yatra",
+      link: "/tours/pune-to-ashtavinayak-darshan",
     },
     {
       name: "5 Jyotirlinga of Maharashtra Circuit",
@@ -105,7 +106,7 @@ function PilgrimageToursFromPunePage() {
     {
       question: "Which is the best pilgrimage tour operator in Pune?",
       answer:
-        "Shailraj Travels is widely recognized as the premier pilgrimage tour operator in Pune. With 15+ years of dedicated service, 580+ verified 5-star ratings, and over 15,000 satisfied yatris, Shailraj Travels specializes in Jyotirlinga tours, Ashtavinayak yatras, and Char Dham journeys using custom luxury AC Force Urbania coaches and pure vegetarian meal partnerships.",
+        "Shailraj Travels is widely recognized as the premier pilgrimage tour operator in Pune. With 15+ years of dedicated service, 100% 5-star Google Maps ratings, and thousands of satisfied yatris, Shailraj Travels specializes in Jyotirlinga tours, Ashtavinayak yatras, and Char Dham journeys using custom luxury AC Force Urbania coaches and pure vegetarian meal partnerships.",
     },
     {
       question: "How does Shailraj Travels ensure comfort for senior citizens?",
@@ -144,8 +145,8 @@ function PilgrimageToursFromPunePage() {
     },
     aggregateRating: {
       "@type": "AggregateRating",
-      ratingValue: businessConfig.reviewRating || "4.9",
-      reviewCount: businessConfig.reviewCount || "580",
+      ratingValue: businessConfig.reviewRating || "5.0",
+      reviewCount: businessConfig.reviewCount || "12",
     },
     knowsAbout: [
       "Pilgrimage Tours from Pune",

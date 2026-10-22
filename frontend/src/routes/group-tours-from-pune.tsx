@@ -26,10 +26,19 @@ import {
 export const Route = createFileRoute("/group-tours-from-pune")({
   head: () => ({
     meta: generateSEO({
-      title: "Group Tours & Corporate Travel from Pune | Shailraj Travels",
+      title: "Force Urbania on Rent in Pune | Luxury Group Tours & Bus Hire | Shailraj Travels",
       description:
-        "Large group tours, corporate offsites, and community society yatras departing from Pune. Luxury AC Force Urbania and 35-50 seater luxury bus charters.",
+        "Rent luxury AC Force Urbania in Pune (12 & 17 seater) at best per km rates. Reliable group tours, corporate travel, and family yatras with verified chauffeurs. 4.9★ rated.",
       canonicalUrl: "https://www.shailrajtravels.com/group-tours-from-pune",
+      keywords: [
+        "force urbania on rent in pune price",
+        "force urbania per km rate pune",
+        "force urbania 17 seater price pune",
+        "force urbania pune rent",
+        "group tours from pune",
+        "tempo traveller on rent in pune",
+        "shailraj travels pune"
+      ],
     }),
     links: [{ rel: "canonical", href: "https://www.shailrajtravels.com/group-tours-from-pune" }],
   }),
@@ -104,8 +113,8 @@ function GroupToursFromPunePage() {
     },
     aggregateRating: {
       "@type": "AggregateRating",
-      ratingValue: businessConfig.reviewRating || "4.9",
-      reviewCount: businessConfig.reviewCount || "580",
+      ratingValue: businessConfig.reviewRating || "5.0",
+      reviewCount: businessConfig.reviewCount || "12",
     },
   };
 

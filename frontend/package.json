@@ -14,7 +14,9 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "test:openwa": "tsx scripts/test_openwa.ts"
+    "test:openwa": "tsx scripts/test_openwa.ts",
+    "seo:sitemap": "node scripts/seo-tools.mjs sitemap",
+    "seo:keywords": "node scripts/seo-tools.mjs keywords"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1069.0",
@@ -107,6 +109,7 @@
     "nitro": "3.0.260603-beta",
     "prettier": "^3.7.3",
     "rollup-plugin-visualizer": "^7.0.1",
+    "serpapi": "^2.2.1",
     "tsx": "^4.22.4",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.56.1",

@@ -8,27 +8,28 @@ import { resources } from '@/frontend/shared/data/resources';
 import { getToursFn } from '@/backend/features/tours';
 
 export const Route = createFileRoute("/resources/$resourceSlug")({
-  loader: ({ params }) => {
+  loader: async ({ params }) => {
     const resource = resources.find((r) => r.slug === params.resourceSlug);
     if (!resource) throw notFound();
-    return resource;
+    const tours = await getToursFn();
+    return { resource, tours: tours || [] };
   },
   head: ({ loaderData }) => ({
     meta: generateSEO({
-      title: loaderData.metaTitle,
-      description: loaderData.metaDescription,
-      canonicalUrl: `https://www.shailrajtravels.com/resources/${loaderData.slug}`,
+      title: loaderData.resource.metaTitle,
+      description: loaderData.resource.metaDescription,
+      canonicalUrl: `https://www.shailrajtravels.com/resources/${loaderData.resource.slug}`,
     }),
     links: [
-      { rel: "canonical", href: `https://www.shailrajtravels.com/resources/${loaderData.slug}` },
+      { rel: "canonical", href: `https://www.shailrajtravels.com/resources/${loaderData.resource.slug}` },
     ],
   }),
   component: ResourcePageTemplate,
 });
 
 function ResourcePageTemplate() {
-  const resource = Route.useLoaderData();
-  const linkedTours = tours.filter((t) => resource.relatedTours.includes(t.slug));
+  const { resource, tours } = Route.useLoaderData();
+  const linkedTours = (tours || []).filter((t: any) => resource.relatedTours?.includes(t.slug));
 
   const faqSchema = {
     "@context": "https://schema.org",

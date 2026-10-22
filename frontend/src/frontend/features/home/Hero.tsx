@@ -250,32 +250,54 @@ export function Hero({
             {lang === "mr" ? (
               <>
                 शैलराज ट्रॅव्हल्स —{" "}
-                <span className="text-brand-green-dark">पुण्यातील ट्रॅव्हल एजन्सी आणि टूर ऑपरेटर</span>
+                <span className="text-brand-green-dark">पुण्यातील सर्वोत्तम टूर्स आणि ट्रॅव्हल्स (हडपसर)</span>
               </>
             ) : (
               <>
                 Shailraj Travels —{" "}
-                <span className="text-brand-green-dark">Travel Agency & Tour Operator in Pune</span>
+                <span className="text-brand-green-dark">Best Travels in Pune & Hadapsar</span>
               </>
             )}
           </h1>
 
           <p className="mt-3.5 max-w-[620px] text-[15px] leading-relaxed text-slate-700 md:text-[16px] font-medium">
             {lang === "mr"
-              ? "शैलराज ट्रॅव्हल्स ही पुण्यातील अग्रगण्य ट्रॅव्हल एजन्सी आणि टूर ऑपरेटर असून, महाराष्ट्रासह संपूर्ण भारतातील तीर्थयात्रा, कौटुंबिक सहली, ग्रुप टूर्स आणि सानुकूलित टूर पॅकेजेस प्रदान करते."
-              : "Shailraj Travels is a Pune-based travel agency and tour operator offering pilgrimage, family, group and customized tours across Maharashtra and India."}
+              ? "हडपसर, पुण्यातील अग्रगण्य ट्रॅव्हल एजन्सी आणि टूर्स. उज्जैन यात्रा, अष्टविनायक दर्शन, ज्योतिर्लिंग टूर्स आणि लक्झरी एसी वाहनांसह संपूर्ण भारतातील सर्वोत्तम ट्रॅव्हल्स सेवा."
+              : "Pune's #1 trusted travel agency and tour operator in Hadapsar. Offering Pune travels, Ujjain tours, Ashtavinayak Darshan, 5 Jyotirlingas, and luxury AC vehicle rentals across Maharashtra and India."}
           </p>
 
           {/* Visible Crawlable AEO Direct Answer Block */}
           <div className="mt-4 rounded-xl bg-white/90 border border-slate-200/80 p-3.5 shadow-sm max-w-[620px]">
             <p className="text-xs md:text-[13px] leading-relaxed text-slate-700">
               <strong className="text-brand-blue-deep font-bold">
-                {lang === "mr" ? "शैलराज ट्रॅव्हल्स काय आहे?" : "What is Shailraj Travels?"}
+                {lang === "mr" ? "पुण्यातील सर्वोत्तम ट्रॅव्हल्स कोणती?" : "Which is the Best Travels in Pune?"}
               </strong>{" "}
               {lang === "mr"
-                ? "शैलराज ट्रॅव्हल्स (हडपसर, पुणे) ही लक्झरी एसी फोर्स अर्बनिया, सत्यापित हॉटेल्स आणि अनुभवी टूर मॅनेजर्ससह ज्योतिर्लिंग, अष्टविनायक, चार धाम आणि कौटुंबिक यात्रा आयोजित करणारी अधिकृत ट्रॅव्हल एजन्सी आहे."
-                : "Shailraj Travels is a Pune-based travel agency and tour operator offering pilgrimage, family, group and customized tours across Maharashtra and India with luxury AC Force Urbania coaches, verified hotels, and experienced tour managers."}
+                ? "शैलराज ट्रॅव्हल्स (हडपसर, पुणे) ही १५+ वर्षांच्या अनुभवासह पुण्यातील सर्वोत्तम ट्रॅव्हल्स आणि टूर एजन्सी आहे. उज्जैन दर्शन, अष्टविनायक, शिर्डी आणि संपूर्ण भारतभर लक्झरी एसी फोर्स अर्बनियासह सुरक्षित यात्रा आयोजित केली जाते."
+                : "Shailraj Travels (Hadapsar, Pune) is rated the best travels and tour agency in Pune with 15+ years of experience and 4.9★ rating. Known as the best travels for Pune to Ujjain tours, Ashtavinayak yatras, and luxury AC vehicle rentals."}
             </p>
+          </div>
+
+          {/* Popular User Searches / Normal Search Keywords Bar */}
+          <div className="mt-3 flex flex-wrap items-center gap-1.5 max-w-[620px] text-xs">
+            <span className="font-semibold text-slate-500 mr-1 text-[11px] uppercase tracking-wider">
+              {lang === "mr" ? "लोकप्रिय शोध:" : "Popular Searches:"}
+            </span>
+            {[
+              { label: "Best Travels in Pune", href: "/" },
+              { label: "Travels in Hadapsar", href: "/travel-agency-in-pune" },
+              { label: "Travel Agency Pune", href: "/travel-agency-in-pune" },
+              { label: "Ujjain Tour & Yatra", href: "/tours/ujjain-omkareshwar-Ghrishneshwar-maheshwar-tour" },
+              { label: "Pune Travels & Tours", href: "/tours" },
+            ].map((chip) => (
+              <a
+                key={chip.label}
+                href={chip.href}
+                className="inline-flex items-center px-2.5 py-1 rounded-full bg-white/80 hover:bg-white border border-slate-200 text-slate-700 font-medium text-[11px] md:text-xs hover:border-brand-green hover:text-brand-green-dark transition-all shadow-xs"
+              >
+                {chip.label}
+              </a>
+            ))}
           </div>
 
           <div

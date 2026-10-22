@@ -31,6 +31,17 @@ export const Route = createFileRoute("/tour-operator-in-pune")({
       keywords: [
         "tour operator in pune",
         "best tour operators in pune",
+        "best travels in pune",
+        "pune travels",
+        "hadapsar",
+        "travels in hadapsar",
+        "travel agency's",
+        "travel agency in pune",
+        "tours",
+        "travels",
+        "travel",
+        "ujjain tour",
+        "ujjain yatra best travels",
         "pilgrimage tour operator pune",
         "group tour operator pune",
         "maharashtra tour operator",
@@ -90,8 +101,8 @@ function TourOperatorInPunePage() {
     },
     aggregateRating: {
       "@type": "AggregateRating",
-      ratingValue: businessConfig.reviewRating || "4.9",
-      reviewCount: businessConfig.reviewCount || "580",
+      ratingValue: businessConfig.reviewRating || "5.0",
+      reviewCount: businessConfig.reviewCount || "12",
     },
     areaServed: [
       { "@type": "City", name: "Pune" },

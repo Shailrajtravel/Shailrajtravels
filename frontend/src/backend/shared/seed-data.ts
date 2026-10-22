@@ -1251,8 +1251,8 @@ export const seedTours: any[] = [
     "slug": "pune-to-ashtavinayak-darshan",
     "lang": "en",
     "title": "Pune to Ashtavinayak Darshan",
-    "metaTitle": "Pune to Ashtavinayak Darshan | Shailraj Travels",
-    "metaDescription": "Book Pune to Ashtavinayak Darshan. Complete One-Day Ganpati Temple Tour. Comfortable AC Force Urbania travel, guided darshan, affordable pricing at ₹3,111.",
+    "metaTitle": "Pune to Ashtavinayak Darshan Tour Package | 1 & 2 Day Yatra | Shailraj Travels",
+    "metaDescription": "Book Ashtavinayak yatra tour package from Pune. Complete 8 Ganpati temple darshan as per shastra in luxury AC Force Urbania. 1-day & 2-day options, best pricing at ₹3,111.",
     "canonicalUrl": "https://www.shailrajtravels.com/tours/pune-to-ashtavinayak-darshan",
     "heroContent": {
       "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1789109017/tours/m3ubfq1crce6ere3pge8.webp",
@@ -1657,8 +1657,8 @@ export const seedTours: any[] = [
     "slug": "pune-mumbai-to-3-jyotirlinga-darshan",
     "lang": "en",
     "title": "Pune / Mumbai to 3 Jyotirlinga Darshan",
-    "metaTitle": "Pune / Mumbai to 3 Jyotirlinga Darshan | Shailraj Travels",
-    "metaDescription": "Book Pune / Mumbai to 3 Jyotirlinga Darshan. Bhima Shankar – Trimbakeshwar – Dhoomeshwar. Comfortable AC Force Urbania travel, guided darshan, affordable pricing at ₹3,999.",
+    "metaTitle": "3 Jyotirlinga Tour Package from Pune (3D/2N) | Maharashtra Yatra | Shailraj Travels",
+    "metaDescription": "Book 3 Jyotirlinga in Maharashtra tour package from Pune. Covers Bhimashankar, Trimbakeshwar & Grishneshwar in luxury AC Force Urbania. Complete yatra from ₹3,999.",
     "canonicalUrl": "https://www.shailrajtravels.com/tours/pune-mumbai-to-3-jyotirlinga-darshan",
     "heroContent": {
       "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1789109610/tours/pengmunspfgizjtt5tr5.webp",
@@ -2053,14 +2053,28 @@ export const seedTours: any[] = [
     "slug": "ujjain-omkareshwar-Ghrishneshwar-maheshwar-tour",
     "lang": "en",
     "title": "Ujjain – Omkareshwar – Ghrishneshwar – Maheshwar Tour",
-    "metaTitle": "Ujjain – Omkareshwar –Ghrishneshwar – Maheshwar Tour | Shailraj Travels",
-    "metaDescription": "Book Ujjain – Omkareshwar – Ghrishneshwar – Maheshwar Tour. 2 Nights / 3 Days Jyotirlinga & Temple Tour. Comfortable AC Force Urbania travel, guided darshan, affordable pricing at ₹6,999.",
+    "metaTitle": "Ujjain Tour Package from Pune | Best Travels for Ujjain Yatra | Shailraj Travels",
+    "metaDescription": "Looking for the best travels for Ujjain tour? Shailraj Travels (Hadapsar, Pune) provides premier Pune to Ujjain yatra tour packages with Mahakaleshwar Bhasma Aarti, Omkareshwar & luxury AC Force Urbania.",
+    "keywords": [
+      "ujjain tour",
+      "ujjain yatra best travels",
+      "pune to ujjain tour package",
+      "best travels in pune",
+      "pune travels",
+      "travels in hadapsar",
+      "hadapsar",
+      "travel agency's",
+      "travel agency in pune",
+      "tours and travels",
+      "travels",
+      "tours"
+    ],
     "canonicalUrl": "https://www.shailrajtravels.com/tours/ujjain-omkareshwar-Ghrishneshwar-maheshwar-tour",
     "heroContent": {
       "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1789110978/tours/rpir5cxo58n4lcti44hv.webp",
       "description": "2 Nights / 3 Days Jyotirlinga & Temple Tour - Experienced drivers, verified hotels, and seamless temple darshan with Shailraj Travels Pune."
     },
-    "overview": "<p>Join Shailraj Travels on the memorable <strong>Ujjain – Omkareshwar – Ghrishneshwar – Maheshwar Tour</strong> (2 Nights / 3 Days Jyotirlinga & Temple Tour). Experience luxurious travel with AC Force Urbania, dedicated tour assistance, and hassle-free darshan across Ujjain, Omkareshwar, Ghrishneshwar, Maheshwar.</p>",
+    "overview": "<p>Rated the <strong>best travels for Ujjain tour and yatra</strong> from Pune, Shailraj Travels brings you the sacred <strong>Ujjain – Omkareshwar – Ghrishneshwar – Maheshwar Tour</strong> (2 Nights / 3 Days Jyotirlinga & Temple Tour). As Pune and Hadapsar's trusted travel agency, we offer luxury AC Force Urbania travel, VIP temple darshan assistance for Mahakaleshwar Bhasma Aarti, verified 3-star AC hotels, and pure vegetarian dining.</p>",
     "highlights": [
       "AC Force Urbania Luxury Travel",
       "Confirmed Temple Darshan Assistance",

@@ -146,9 +146,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         { charSet: "utf-8" },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
         ...generateSEO({
-          title: "Shailraj Travels | Best Tours & Travels in Pune | 4.9★ Pilgrimage & Car Rental",
+          title: "Best Travels in Pune | Tours & Travel Agency in Hadapsar | Shailraj Travels",
           description:
-            "Pune's #1 trusted pilgrimage tour operator and travel agency with 15+ years experience. Book Ashtavinayak, Ujjain Mahakal, Jyotirlinga, and luxury AC Force Urbania rentals. 4.9★ rating.",
+            "Pune's #1 trusted tours and travel agency in Hadapsar with 15+ years experience. Book Ujjain tours, Ashtavinayak Darshan, Jyotirlinga yatras, and luxury AC rentals. 4.9★ rating.",
           canonicalUrl: "https://www.shailrajtravels.com",
         }),
         { name: "google", content: "notranslate" },

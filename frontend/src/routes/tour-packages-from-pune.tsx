@@ -31,8 +31,20 @@ export const Route = createFileRoute("/tour-packages-from-pune")({
         "Explore best tour packages from Pune. Ujjain Mahakal, Ashtavinayak, Jyotirlinga, Gujarat & Konkan tours with luxury AC Urbania travel. Call 9764413556!",
       canonicalUrl: "https://www.shailrajtravels.com/tour-packages-from-pune",
       keywords: [
+        "best travels in pune",
         "tour packages from pune",
         "best tour packages from pune",
+        "pune travels",
+        "hadapsar",
+        "travels in hadapsar",
+        "travel agency in pune",
+        "travel agency's",
+        "tours",
+        "travels",
+        "travel",
+        "ujjain tour",
+        "ujjain yatra best travels",
+        "pune to ujjain tour package",
         "holiday packages from pune",
         "family tour packages from pune",
         "weekend tour packages from pune",
@@ -149,8 +161,8 @@ function TourPackagesFromPunePage() {
     },
     aggregateRating: {
       "@type": "AggregateRating",
-      ratingValue: businessConfig.reviewRating || "4.9",
-      reviewCount: businessConfig.reviewCount || "580",
+      ratingValue: businessConfig.reviewRating || "5.0",
+      reviewCount: businessConfig.reviewCount || "12",
     },
   };
 
