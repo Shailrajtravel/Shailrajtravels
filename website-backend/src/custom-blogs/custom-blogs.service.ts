@@ -1,4 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { ObjectId } from 'mongodb';
 import { customBlogRepository } from '../repositories/CustomBlogRepository';
 import { uploadImageToCloudinary } from '../shared/cloudinary';
 
@@ -103,6 +104,16 @@ export class CustomBlogsService {
       slug = `${slugBase}-${uniqueSuffix}`;
     }
 
+    // Check if a blog with this slug already exists in DB -> update it instead of erroring
+    const existing = await customBlogRepository.findBySlug(slug);
+    if (existing) {
+      await this.updateCustomBlog(existing._id.toString(), {
+        ...data,
+        slug,
+      });
+      return { success: true, blogId: existing._id.toString(), slug };
+    }
+
     const plainText = content ? content.replace(/<[^>]+>/g, '') : "";
     const newBlog = {
       title,
@@ -127,6 +138,16 @@ export class CustomBlogsService {
   }
 
   async updateCustomBlog(id: string, data: any) {
+    // If id is a static fallback or non-ObjectId, find by slug or create it
+    if (id.startsWith('static-') || !ObjectId.isValid(id)) {
+      const slug = data.slug || id.replace(/^static-/, '');
+      const existing = await customBlogRepository.findBySlug(slug);
+      if (existing) {
+        return this.updateCustomBlog(existing._id.toString(), { ...data, slug });
+      }
+      return this.createCustomBlog({ ...data, slug });
+    }
+
     const updateDoc: any = {
       title: data.title,
       content: data.content,
@@ -164,11 +185,27 @@ export class CustomBlogsService {
   }
 
   async deleteCustomBlog(id: string) {
+    if (id.startsWith('static-') || !ObjectId.isValid(id)) {
+      const slug = id.replace(/^static-/, '');
+      const existing = await customBlogRepository.findBySlug(slug);
+      if (existing) {
+        await customBlogRepository.deleteOne(existing._id.toString());
+      }
+      return { success: true };
+    }
     await customBlogRepository.deleteOne(id);
     return { success: true };
   }
 
   async toggleBlogVisibility(id: string, isHidden: boolean) {
+    if (id.startsWith('static-') || !ObjectId.isValid(id)) {
+      const slug = id.replace(/^static-/, '');
+      const existing = await customBlogRepository.findBySlug(slug);
+      if (existing) {
+        await customBlogRepository.updateOne(existing._id.toString(), { isHidden });
+      }
+      return { success: true };
+    }
     await customBlogRepository.updateOne(id, { isHidden });
     return { success: true };
   }

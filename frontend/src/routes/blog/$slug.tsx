@@ -87,13 +87,13 @@ export const Route = createFileRoute("/blog/$slug")({
               { name: "Home", url: "/" },
               { name: "Blog", url: "/blog" },
               { name: post.title, url: `/blog/${post.slug}` },
-            ]),
+            ], post.slug),
           ),
         },
         post.faqs && post.faqs.length > 0
           ? {
               type: "application/ld+json",
-              children: JSON.stringify(generateFAQSchema(post.faqs)),
+              children: JSON.stringify(generateFAQSchema(post.faqs, post.slug)),
             }
           : undefined,
       ].filter(Boolean) as any[],

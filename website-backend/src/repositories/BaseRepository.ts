@@ -28,7 +28,8 @@ export abstract class BaseRepository<T extends Document> {
 
   async findById(id: string): Promise<T | null> {
     const col = await this.getCollectionForRead(id);
-    return col.findOne({ _id: new ObjectId(id) } as any) as unknown as Promise<T | null>;
+    const filter = ObjectId.isValid(id) ? { _id: new ObjectId(id) } : { _id: id };
+    return col.findOne(filter as any) as unknown as Promise<T | null>;
   }
 
   async insertOne(doc: any, id?: string): Promise<string> {
@@ -38,7 +39,7 @@ export abstract class BaseRepository<T extends Document> {
     // Ensure _id is an ObjectId & initialize optimistic locking version
     const insertDoc = { ...doc };
     if (insertDoc.__v === undefined) insertDoc.__v = 1;
-    if (!insertDoc._id) insertDoc._id = new ObjectId(docId);
+    if (!insertDoc._id) insertDoc._id = ObjectId.isValid(docId) ? new ObjectId(docId) : docId;
     
     await col.insertOne(insertDoc);
     return docId;
@@ -46,7 +47,7 @@ export abstract class BaseRepository<T extends Document> {
 
   async updateOne(id: string, updateData: any, expectedVersion?: number): Promise<void> {
     const col = await this.getCollectionForRead(id);
-    const filter: any = { _id: new ObjectId(id) };
+    const filter: any = ObjectId.isValid(id) ? { _id: new ObjectId(id) } : { _id: id };
     if (expectedVersion !== undefined) {
       filter.__v = expectedVersion;
     }
@@ -63,6 +64,7 @@ export abstract class BaseRepository<T extends Document> {
 
   async deleteOne(id: string): Promise<void> {
     const col = await this.getCollectionForRead(id);
-    await col.deleteOne({ _id: new ObjectId(id) } as any);
+    const filter: any = ObjectId.isValid(id) ? { _id: new ObjectId(id) } : { _id: id };
+    await col.deleteOne(filter);
   }
 }

@@ -110,6 +110,23 @@ export function BlogsAdmin({ token, blogs, loadData, setDeleteConfirm }: BlogsAd
   const handleToggleVisibility = async (blog: BlogItem) => {
     try {
       setTogglingId(blog._id);
+      if (blog._id.startsWith('static-')) {
+        await createCustomBlogFn({
+          data: {
+            adminToken: token,
+            title: blog.title,
+            slug: blog.slug,
+            content: blog.content,
+            authorName: blog.authorName || "Shailraj Travels Editorial Team",
+            category: blog.category || "Travel Guides",
+            thumbnailUrl: blog.thumbnailUrl || blog.featuredImage,
+            excerpt: blog.excerpt,
+            metaTitle: blog.metaTitle,
+            metaDescription: blog.metaDescription,
+            tags: blog.tags,
+          },
+        });
+      }
       await toggleBlogVisibilityFn({
         data: {
           adminToken: token,
@@ -542,13 +559,16 @@ function BlogEditorForm({ token, initialData, onClose, onSuccess }: BlogEditorFo
       .filter(Boolean);
 
     try {
-      if (isEditing && initialData) {
+      const isStaticFallback = isEditing && initialData?._id?.startsWith('static-');
+      const targetSlug = slug.trim() || (isStaticFallback ? initialData.slug : undefined);
+
+      if (isEditing && initialData && !isStaticFallback) {
         await updateCustomBlogFn({
           data: {
             adminToken: token,
             id: initialData._id,
             title: title.trim(),
-            slug: slug.trim() || undefined,
+            slug: targetSlug,
             content: content.trim(),
             authorName: authorName.trim(),
             category: finalCategory,
@@ -565,7 +585,7 @@ function BlogEditorForm({ token, initialData, onClose, onSuccess }: BlogEditorFo
           data: {
             adminToken: token,
             title: title.trim(),
-            slug: slug.trim() || undefined,
+            slug: targetSlug,
             content: content.trim(),
             authorName: authorName.trim(),
             category: finalCategory,
