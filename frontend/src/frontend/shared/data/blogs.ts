@@ -7,9 +7,20 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "pune-to-ujjain-tour-guide-mahakal-darshan-itinerary",
     title: "Pune to Ujjain Tours and Travels: Best Tour Packages, Cab Booking & Mahakal Darshan Guide",
-    metaTitle: "Pune to Ujjain Tours and Travels | Best Travels & Tour Packages | Shailraj",
-    metaDescription: "Looking for the best travels from Pune to Ujjain? Complete travel guide: Road distance (~640 km), highway routes, AC Force Urbania cab booking, Bhasma Aarti rules & 3-day tour package.",
+    metaTitle: "Pune to Ujjain Tours & Travels | Best Packages & Cabs",
+    metaDescription: "Looking for the best travels from Pune to Ujjain? Complete travel guide: Road route, AC Force Urbania cab booking, Bhasma Aarti rules & 3-day tour package.",
     focusKeyword: "pune to ujjain tours and travels",
+    keywords: [
+      "pune to ujjain tours and travels",
+      "best travels in pune to ujjain",
+      "pune to ujjain bus travels",
+      "pune to ujjain tour package",
+      "mahakal darshan guide",
+      "bhasma aarti booking pune",
+      "pune to omkareshwar travel",
+      "force urbania ujjain tour"
+    ],
+    ogImageAlt: "Pune to Ujjain Tours and Travels - Shailraj Travels",
     excerpt: "Comprehensive Pune to Ujjain Travel Guide: Complete road distance, highway routes, cab booking options, Bhasma Aarti rules, top temples, and 2-3 day itineraries from Pune.",
     category: "Travel Guides",
     tags: ["Pune to Ujjain", "Mahakaleshwar", "Omkareshwar", "Travel Guide", "Cab Booking", "Jyotirlinga Tour", "Ujjain Itinerary"],
@@ -342,9 +353,18 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "pune-to-ujjain-road-trip-itinerary",
     title: "Pune to Ujjain Road Trip & Tour: Best Travels 2-Day Tri-Jyotirlinga Itinerary",
-    metaTitle: "Pune to Ujjain Best Travels & Road Trip Guide | Shailraj Travels",
+    metaTitle: "Pune to Ujjain Road Trip Guide & Best Travels | Shailraj",
     metaDescription: "Complete 2-day Pune to Ujjain tour and travels road trip guide: Cover Mahakaleshwar, Omkareshwar & Grishneshwar Jyotirlingas with Shailraj Travels AC Force Urbania.",
     focusKeyword: "pune to ujjain best travels",
+    keywords: [
+      "pune to ujjain road trip",
+      "pune to ujjain route map",
+      "pune to ujjain driving distance",
+      "tri jyotirlinga road trip pune",
+      "pune to ujjain car rental",
+      "pune to mahakaleshwar road guide"
+    ],
+    ogImageAlt: "Pune to Ujjain Road Trip Guide - Shailraj Travels",
     excerpt: "Embark on a sacred 2-day Tri-Jyotirlinga road odyssey from Pune to Ujjain covering Mahakaleshwar, Omkareshwar, Grishneshwar, Maheshwar Ghats, and Kaal Bhairav with detailed stops and timings.",
     category: "Experiences",
     tags: ["Pune to Ujjain", "Road Trip", "Mahakaleshwar", "Omkareshwar", "Grishneshwar", "Experiences", "Road Odyssey"],
@@ -510,9 +530,22 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "pune-to-ashtavinayak-tour-guide-route-map-itinerary",
     title: "Pune to Ashtavinayak Tour Guide: Route Map, Correct Temple Order, Distance & Cab Booking",
-    metaTitle: "Pune to Ashtavinayak Tour Guide | Route Map, Order, Distance & Cabs",
+    metaTitle: "Pune to Ashtavinayak Tour Guide | Route Map & Cabs",
     metaDescription: "Complete Pune to Ashtavinayak Darshan guide: Correct 8-temple sequence, route map (~650 km), 2-3 day itineraries, temple timings, cab fares & tips for seniors.",
     focusKeyword: "pune to ashtavinayak tour guide",
+    keywords: [
+      "pune to ashtavinayak tour guide",
+      "ashtavinayak route map",
+      "ashtavinayak darshan sequence",
+      "ashtavinayak yatra from pune",
+      "ashtavinayak cab booking pune",
+      "8 ganpati darshan sequence",
+      "pune to ashtavinayak distance",
+      "ashtavinayak 2 day itinerary",
+      "lenyadri steps tips",
+      "shailraj travels ashtavinayak"
+    ],
+    ogImageAlt: "Pune to Ashtavinayak Tour Guide - Shailraj Travels",
     excerpt: "Authoritative Pune to Ashtavinayak Tour Guide: Discover the sacred traditional sequence, 650 km highway route map, 2-day vs 3-day itineraries, temple darshan timings, Lenyadri step tips, and luxury cab booking from Pune.",
     category: "Travel Guides",
     tags: [
@@ -922,9 +955,18 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "best-travels-in-pune-reddit-reviews",
     title: "Best Travels in Pune: What Reddit & Real Travelers Say (2026 Community Review Guide)",
-    metaTitle: "Best Travels in Pune (Reddit Review Guide & Recommendations 2026)",
-    metaDescription: "Unbiased community review guide: What Pune locals & Reddit discussions highlight when booking travel agencies, common bus aggregator traps, and why Shailraj Travels ranks #1.",
+    metaTitle: "Best Travels in Pune: Reddit Review Guide (2026)",
+    metaDescription: "Unbiased Pune travel review guide: What Reddit locals highlight on travel agencies, bus aggregator traps, and why Shailraj Travels ranks #1 in Hadapsar.",
     focusKeyword: "best travels in pune reddit",
+    keywords: [
+      "best travels in pune",
+      "best tours and travels in pune",
+      "pune travels reddit review",
+      "travels in hadapsar",
+      "reliable tour operator pune",
+      "shailraj travels reviews"
+    ],
+    ogImageAlt: "Best Travels in Pune Reddit Review Guide - Shailraj Travels",
     excerpt: "A transparent community review guide analyzing frequent questions on Pune travel forums, comparing common aggregator pitfalls against direct operators, and why Shailraj Travels is Pune's top-rated pilgrimage choice.",
     category: "Travel Guides",
     tags: [

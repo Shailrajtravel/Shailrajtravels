@@ -326,7 +326,7 @@ export function BlogsAdmin({ token, blogs, loadData, setDeleteConfirm }: BlogsAd
                     <a
                       href={`/blog/${blog.slug}`}
                       target="_blank"
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
                       className="p-2 rounded-xl text-slate-500 hover:text-brand-blue hover:bg-slate-100 transition-colors flex items-center gap-1 text-xs font-medium"
                       title="View Live Guide"
                     >

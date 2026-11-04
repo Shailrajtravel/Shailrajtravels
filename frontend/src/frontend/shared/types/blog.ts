@@ -30,6 +30,8 @@ export interface BlogPost {
   metaTitle: string;
   metaDescription: string;
   focusKeyword: string;
+  keywords?: string[];
+  ogImageAlt?: string;
 
   // Content
   excerpt: string;

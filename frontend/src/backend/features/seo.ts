@@ -5,6 +5,8 @@ export interface SEOProps {
   description: string;
   canonicalUrl?: string;
   ogImage?: string;
+  image?: string;
+  ogImageAlt?: string;
   type?: "website" | "article";
   lang?: string;
   keywords?: string[];
@@ -17,7 +19,9 @@ export function generateSEO({
   title,
   description,
   canonicalUrl,
-  ogImage = "https://www.shailrajtravels.com/og-image.jpg",
+  ogImage: passedOgImage,
+  image,
+  ogImageAlt,
   type = "website",
   lang = "en",
   keywords,
@@ -25,6 +29,7 @@ export function generateSEO({
   author = "Shailraj Travels",
   publisher = "Shailraj Travels",
 }: SEOProps): any {
+  const ogImage = passedOgImage || image || "https://www.shailrajtravels.com/og-image.jpg";
   const defaultKeywords = [
     "best travels in pune",
     "best tours and travels in pune",
@@ -82,7 +87,7 @@ export function generateSEO({
     { property: "og:image", content: ogImage },
     { property: "og:image:width", content: "1200" },
     { property: "og:image:height", content: "630" },
-    { property: "og:image:alt", content: title },
+    { property: "og:image:alt", content: ogImageAlt || title },
     { property: "og:locale", content: lang === "mr" ? "mr_IN" : "en_IN" },
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },

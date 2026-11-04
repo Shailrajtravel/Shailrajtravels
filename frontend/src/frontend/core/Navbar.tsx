@@ -162,7 +162,7 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
           <a
             href="https://www.instagram.com/wings_of_mayur_9999/"
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             className="flex h-10 w-10 items-center justify-center gap-2 rounded-xl bg-pink-50 text-[13px] font-semibold text-pink-600 transition hover:bg-pink-100 md:h-11 md:w-auto md:px-4"
             title="Instagram"
           >

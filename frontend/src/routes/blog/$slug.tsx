@@ -31,21 +31,42 @@ export const Route = createFileRoute("/blog/$slug")({
     if (!params.slug || params.slug === 'undefined' || params.slug === 'null') {
       throw redirect({ to: '/blog', statusCode: 301 });
     }
-    let post = null;
+    let customBlog = null;
 
     // 1. Check live custom blogs from database first so admin changes take immediate effect
     try {
-      const customBlog = await getCustomBlogBySlugFn({ data: { slug: params.slug } });
-      if (customBlog) {
-        post = customBlog;
-      }
+      customBlog = await getCustomBlogBySlugFn({ data: { slug: params.slug } });
     } catch (err) {
       console.error("Failed to fetch custom blog by slug:", err);
     }
 
-    // 2. Fallback to static snapshot in blogs.ts if not found in database or if offline
-    if (!post) {
-      post = blogPosts.find((p) => p.slug === params.slug);
+    // 2. Resolve static snapshot in blogs.ts
+    const staticPost = blogPosts.find((p) => p.slug === params.slug);
+
+    let post = null;
+    if (customBlog && staticPost) {
+      post = {
+        ...staticPost,
+        ...customBlog,
+        // Ensure optimized meta if customBlog in database has older unoptimized long titles
+        metaTitle:
+          customBlog.metaTitle && customBlog.metaTitle.length <= 60
+            ? customBlog.metaTitle
+            : (staticPost.metaTitle || customBlog.metaTitle),
+        metaDescription:
+          customBlog.metaDescription && customBlog.metaDescription.length <= 160
+            ? customBlog.metaDescription
+            : (staticPost.metaDescription || customBlog.metaDescription),
+        keywords:
+          customBlog.keywords && customBlog.keywords.length > 0
+            ? customBlog.keywords
+            : staticPost.keywords,
+        ogImageAlt: customBlog.ogImageAlt || staticPost.ogImageAlt,
+      };
+    } else if (customBlog) {
+      post = customBlog;
+    } else if (staticPost) {
+      post = staticPost;
     }
 
     if (!post || post.isHidden) throw notFound();
@@ -63,7 +84,11 @@ export const Route = createFileRoute("/blog/$slug")({
         description: post.metaDescription || post.excerpt || post.title,
         canonicalUrl: `https://www.shailrajtravels.com/blog/${post.slug}`,
         type: "article",
-        image: post.ogImage || post.featuredImage,
+        ogImage: post.ogImage || post.featuredImage,
+        ogImageAlt: post.ogImageAlt || post.metaTitle || post.title,
+        keywords: post.keywords && post.keywords.length > 0
+          ? post.keywords
+          : (post.tags && post.tags.length > 0 ? [post.focusKeyword, ...post.tags].filter(Boolean) as string[] : undefined),
       }),
       links: [
         { rel: "canonical", href: `https://www.shailrajtravels.com/blog/${post.slug}` },
@@ -284,7 +309,7 @@ function BlogPostPage() {
                 <a
                   href="https://www.instagram.com/wings_of_mayur_9999/"
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   aria-label="Instagram"
                   className="w-10 h-10 rounded-full bg-[#E1306C]/10 flex items-center justify-center text-[#E1306C] hover:bg-[#E1306C] hover:text-white transition-all duration-300 shadow-sm hover:scale-110"
                 >
@@ -293,7 +318,7 @@ function BlogPostPage() {
                 <a
                   href="https://www.facebook.com/share/1E2RUhpSAf/?mibextid=wwXIfr"
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   aria-label="Facebook"
                   className="w-10 h-10 rounded-full bg-[#3B5998]/10 flex items-center justify-center text-[#3B5998] hover:bg-[#3B5998] hover:text-white transition-all duration-300 shadow-sm hover:scale-110"
                 >
@@ -302,7 +327,7 @@ function BlogPostPage() {
                 <a
                   href="https://www.youtube.com/@ShailrajTravels"
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   aria-label="YouTube"
                   className="w-10 h-10 rounded-full bg-[#FF0000]/10 flex items-center justify-center text-[#FF0000] hover:bg-[#FF0000] hover:text-white transition-all duration-300 shadow-sm hover:scale-110"
                 >
