@@ -45,6 +45,7 @@ export default defineConfig({
       },
       Sitemap({
         hostname: "https://www.shailrajtravels.com",
+        generateRobotsTxt: false,
         dynamicRoutes: [
           "/travel-agency-in-pune",
           "/tour-operator-in-pune",

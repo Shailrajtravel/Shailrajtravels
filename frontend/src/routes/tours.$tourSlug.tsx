@@ -24,6 +24,7 @@ const LEGACY_TOUR_REDIRECTS: Record<string, string> = {
   "pune-to-ujjain-travels": "/tours/pune-to-ujjain-tour-package",
   "pune-to-ujjain-tour-and-travels": "/tours/pune-to-ujjain-tour-package",
   "pune-to-ujjain-bus-travels": "/pune-to-ujjain-bus-travels",
+  "pune-to-ujjain-tour": "/pune-to-ujjain-bus-travels",
   "pune-to-ujjain-bus": "/pune-to-ujjain-bus-travels",
   "pune-to-ujjain-bus-booking": "/pune-to-ujjain-bus-travels",
   "pune-to-ujjain-sleeper-bus": "/pune-to-ujjain-bus-travels",
