@@ -200,7 +200,7 @@ User's draft: "${review}"`;
             <button
               type="button"
               onClick={() => setIsFormOpen(true)}
-              className="flex w-full sm:w-auto items-center justify-center gap-2 bg-brand-green-dark hover:bg-brand-green-dark/90 text-white rounded-lg px-5 py-3.5 text-[15px] font-semibold transition-all shadow-sm hover:shadow-[0_8px_20px_rgba(16,163,74,0.25)] hover:-translate-y-0.5 cursor-pointer whitespace-nowrap"
+              className="flex w-full sm:w-auto items-center justify-center gap-2.5 bg-brand-blue-deep hover:bg-brand-blue text-white rounded-xl px-6 py-3.5 text-[15px] font-bold transition-all shadow-md hover:shadow-blue-900/20 hover:-translate-y-0.5 cursor-pointer whitespace-nowrap"
             >
               <Sparkles className="w-4 h-4 shrink-0 text-amber-300" />
               <span>{lang === "mr" ? "AI सोबत अभिप्राय लिहा" : "Write Review with AI"}</span>
@@ -210,20 +210,10 @@ User's draft: "${review}"`;
               href={reviewStats.writeReviewUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex w-full sm:w-auto items-center justify-center gap-2 bg-[#EA4335] hover:bg-[#d9382b] text-white rounded-lg px-5 py-3.5 text-[15px] font-semibold transition-all shadow-sm hover:shadow-[0_8px_20px_rgba(234,67,53,0.25)] hover:-translate-y-0.5 no-underline whitespace-nowrap"
+              className="flex w-full sm:w-auto items-center justify-center gap-2.5 bg-brand-orange hover:bg-brand-orange-dark text-white rounded-xl px-6 py-3.5 text-[15px] font-bold transition-all shadow-md hover:shadow-orange-500/25 hover:-translate-y-0.5 no-underline whitespace-nowrap"
             >
               <Star className="w-4 h-4 fill-white shrink-0" />
               <span>{lang === "mr" ? "गुगलवर ५★ स्टार द्या" : "Write a Google Review"}</span>
-            </a>
-
-            <a
-              href={reviewStats.googleMapsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex w-full sm:w-auto items-center justify-center gap-2 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-lg px-5 py-3.5 text-[15px] font-semibold transition-all hover:shadow-sm hover:-translate-y-0.5 no-underline whitespace-nowrap"
-            >
-              <span>{lang === "mr" ? "गुगल प्रोफाइल" : "View Profile"}</span>
-              <ArrowRight className="w-4 h-4 shrink-0" />
             </a>
           </div>
         </div>
@@ -295,7 +285,7 @@ User's draft: "${review}"`;
                 rel="noopener noreferrer"
                 className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-colors no-underline flex items-center gap-1 whitespace-nowrap"
               >
-                <span>{lang === "mr" ? "सर्व पहा" : "View All"}</span>
+                <span>{lang === "mr" ? "गुगल प्रोफाइल" : "View Profile"}</span>
                 <ExternalLink className="w-3 h-3" />
               </a>
             </div>
