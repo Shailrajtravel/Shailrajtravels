@@ -123,9 +123,9 @@ const tourPackages = [
     price: "₹6,116",
     schedule: "Every Friday & Weekend Departures",
     frequency: "Weekly",
-    image: "https://images.unsplash.com/photo-1698223126743-3b10b78df025?auto=format&fit=crop&w=1200&q=80",
+    image: "https://res.cloudinary.com/dquecn5qj/image/upload/v1789154040/blogs/spy42xnlvgry5xoznqzn.png",
     images: [
-      "https://images.unsplash.com/photo-1698223126743-3b10b78df025?auto=format&fit=crop&w=1200&q=80"
+      "https://res.cloudinary.com/dquecn5qj/image/upload/v1789154040/blogs/spy42xnlvgry5xoznqzn.png"
     ],
     route: ["Pune", "Ujjain", "Omkareshwar", "Dhoomeshwar", "Pune"],
     tags: ["Jyotirlinga", "Temple Tour", "Spiritual Tour", "3 Days", "AC Travel"],
@@ -240,9 +240,9 @@ const tourPackages = [
     price: "₹6,999",
     schedule: "Weekly Departures",
     frequency: "Weekly",
-    image: "https://images.unsplash.com/photo-1698223126743-3b10b78df025?auto=format&fit=crop&w=1200&q=80",
+    image: "https://res.cloudinary.com/dquecn5qj/image/upload/v1789154040/blogs/spy42xnlvgry5xoznqzn.png",
     images: [
-      "https://images.unsplash.com/photo-1698223126743-3b10b78df025?auto=format&fit=crop&w=1200&q=80"
+      "https://res.cloudinary.com/dquecn5qj/image/upload/v1789154040/blogs/spy42xnlvgry5xoznqzn.png"
     ],
     route: ["Mumbai (Lalbaug)", "Ujjain", "Omkareshwar", "Dhoomeshwar", "Mumbai"],
     tags: ["Jyotirlinga", "Temple Tour", "Mumbai", "Ujjain", "Spiritual Tour"],
@@ -425,9 +425,9 @@ const tourPackages = [
     price: "₹5,000",
     schedule: "Weekly Departures",
     frequency: "Weekly",
-    image: "https://images.unsplash.com/photo-1698223126743-3b10b78df025?auto=format&fit=crop&w=1200&q=80",
+    image: "https://res.cloudinary.com/dquecn5qj/image/upload/v1789154040/blogs/spy42xnlvgry5xoznqzn.png",
     images: [
-      "https://images.unsplash.com/photo-1698223126743-3b10b78df025?auto=format&fit=crop&w=1200&q=80"
+      "https://res.cloudinary.com/dquecn5qj/image/upload/v1789154040/blogs/spy42xnlvgry5xoznqzn.png"
     ],
     route: ["Satana (Baglan)", "Ujjain", "Omkareshwar", "Dhoomeshwar", "Satana"],
     tags: ["Ujjain", "Jyotirlinga", "Temple Tour", "Spiritual Tour", "3 Days"],
@@ -602,9 +602,9 @@ const tourPackages = [
     price: "₹3,111",
     schedule: "Daily & Weekend Departures",
     frequency: "Daily",
-    image: "https://images.unsplash.com/photo-1567591414240-e2b2f6b8a8b8?auto=format&fit=crop&w=1200&q=80",
+    image: "https://res.cloudinary.com/dquecn5qj/image/upload/v1792764848/blogs/avej2lsveggdqan1spor.png",
     images: [
-      "https://images.unsplash.com/photo-1567591414240-e2b2f6b8a8b8?auto=format&fit=crop&w=1200&q=80"
+      "https://res.cloudinary.com/dquecn5qj/image/upload/v1792764848/blogs/avej2lsveggdqan1spor.png"
     ],
     route: ["Pune", "Morgaon", "Siddhatek", "Pali", "Mahad", "Theur", "Lenyadri", "Ozar", "Ranjangaon", "Pune"],
     tags: ["Ashtavinayak", "Ganpati Darshan", "Temple Tour", "One Day Trip", "Spiritual Tour"],

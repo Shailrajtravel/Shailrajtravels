@@ -40,7 +40,7 @@ export const Route = createFileRoute("/reviews")({
 
 function ReviewsPage() {
   const { lang } = useLanguage();
-  const t = translations[lang];
+  const t = (lang && translations[lang]) || translations.en;
 
   const reviewSchema = {
     "@context": "https://schema.org",

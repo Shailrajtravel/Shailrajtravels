@@ -7,12 +7,12 @@ import { Link } from '@tanstack/react-router';
 
 const defaultTours = (seedTours || []).slice(0, 8).map((t: any) => ({
   label: t.title,
-  href: `/tours/${t.slug}`,
+  href: `/tours/${t?.slug}`,
 }));
 
 export function FooterSection({ t: propT, lang = "en" }: { t?: typeof translations.mr; lang?: string }) {
   const safeLang = (lang === "mr" ? "mr" : "en") as "mr" | "en";
-  const t = propT || translations[safeLang] || translations.en;
+  const t = propT || translations?.[safeLang] || translations?.en || ({} as any);
   const [popularTours, setPopularTours] = useState<{ label: string; href: string }[]>(defaultTours);
 
   useEffect(() => {
@@ -24,7 +24,7 @@ export function FooterSection({ t: propT, lang = "en" }: { t?: typeof translatio
               .slice(0, 8)
               .map((t) => ({
                 label: t.title,
-                href: `/tours/${t.slug}`,
+                href: `/tours/${t?.slug}`,
               })),
           );
         }
@@ -59,13 +59,13 @@ export function FooterSection({ t: propT, lang = "en" }: { t?: typeof translatio
               </span>
             </div>
             <p className="text-slate-400 text-[15px] leading-relaxed max-w-sm md:max-w-none">
-              {t.footerAbout}
+              {t?.footerAbout || "Shailraj Travels is Pune's premier tour and travel agency specializing in sacred pilgrimage journeys, Ashtavinayak Darshan, and luxury AC vehicle rentals across India."}
             </p>
 
             {/* Follow Us */}
             <div className="mt-2 flex flex-col items-center md:items-start gap-4">
               <span className="text-[13px] font-bold text-white tracking-wider uppercase opacity-90">
-                {t.footerFollowUs || "Follow Us"}
+                {t?.footerFollowUs || "Follow Us"}
               </span>
               <div className="flex items-center gap-4">
                 {/* Facebook */}
@@ -108,19 +108,19 @@ export function FooterSection({ t: propT, lang = "en" }: { t?: typeof translatio
           {/* 2. Quick Links */}
           <div className="col-span-1 md:col-span-2 xl:col-span-1 flex flex-col gap-6">
             <h3 className="text-[17px] font-bold text-white font-display tracking-wide relative inline-block pb-2 self-start">
-              {t.footerQuickLinks || "Quick Links"}
+              {t?.footerQuickLinks || "Quick Links"}
               <span className="absolute bottom-0 left-0 w-8 h-[2px] bg-brand-green rounded-full"></span>
             </h3>
             <ul className="flex flex-col gap-3.5">
               {[
-                { label: t.navHome || "Home", href: "/" },
-                { label: t.navAbout || "About Us", href: "/about-shailraj-travels" },
-                { label: t.navPilgrimage || "Tour Packages", href: "/tours" },
-                { label: t.navGallery || "Gallery", href: "/gallery" },
+                { label: t?.navHome || "Home", href: "/" },
+                { label: t?.navAbout || "About Us", href: "/about-shailraj-travels" },
+                { label: t?.navPilgrimage || "Tour Packages", href: "/tours" },
+                { label: t?.navGallery || "Gallery", href: "/gallery" },
                 { label: "Yatri Stories", href: "/yatri-stories" },
-                { label: t.navBlog || "Spiritual Blog", href: "/blog" },
+                { label: t?.navBlog || "Spiritual Blog", href: "/blog" },
                 { label: "FAQs", href: "/faq" },
-                { label: t.navContact || "Contact Us", href: "/contact" },
+                { label: t?.navContact || "Contact Us", href: "/contact" },
               ].map((link) => (
                 <li key={link.label}>
                   <Link
@@ -140,7 +140,7 @@ export function FooterSection({ t: propT, lang = "en" }: { t?: typeof translatio
           {/* 3. Popular Tours */}
           <div className="col-span-1 md:col-span-2 xl:col-span-1 flex flex-col gap-6">
             <h3 className="text-[17px] font-bold text-white font-display tracking-wide relative inline-block pb-2 self-start">
-              {t.footerPopularTours || "Popular Tours"}
+              {t?.footerPopularTours || "Popular Tours"}
               <span className="absolute bottom-0 left-0 w-8 h-[2px] bg-brand-green rounded-full"></span>
             </h3>
             <ul className="flex flex-col gap-3.5">
@@ -167,7 +167,7 @@ export function FooterSection({ t: propT, lang = "en" }: { t?: typeof translatio
           {/* 4. Contact Us */}
           <div className="col-span-1 md:col-span-3 xl:col-span-1 flex flex-col gap-6">
             <h3 className="text-[17px] font-bold text-white font-display tracking-wide relative inline-block pb-2 self-start">
-              {t.footerContact || "Contact Us"}
+              {t?.footerContact || "Contact Us"}
               <span className="absolute bottom-0 left-0 w-8 h-[2px] bg-brand-green rounded-full"></span>
             </h3>
             <ul className="flex flex-col gap-5 text-[15px] text-slate-400">
@@ -175,7 +175,7 @@ export function FooterSection({ t: propT, lang = "en" }: { t?: typeof translatio
                 <div className="w-8 h-8 rounded-full bg-slate-800/50 flex items-center justify-center shrink-0 group-hover:bg-brand-green/20 transition-colors">
                   <MapPin className="w-4 h-4 text-brand-green" />
                 </div>
-                <span className="mt-1 leading-relaxed">{t.footerAddress}</span>
+                <span className="mt-1 leading-relaxed">{t?.footerAddress || "Vaibhav super market near akshada medical Gopal Patti Manjri budruk, Hadapsar, Pune, Maharashtra 412307, India"}</span>
               </li>
               <li className="flex items-center gap-3.5 group">
                 <div className="w-8 h-8 rounded-full bg-slate-800/50 flex items-center justify-center shrink-0 group-hover:bg-brand-green/20 transition-colors">
@@ -220,15 +220,15 @@ export function FooterSection({ t: propT, lang = "en" }: { t?: typeof translatio
             {/* Legal */}
             <div className="flex flex-col gap-6">
               <h3 className="text-[17px] font-bold text-white font-display tracking-wide relative inline-block pb-2 self-start">
-                {t.footerLegal || "Legal"}
+                {t?.footerLegal || "Legal"}
                 <span className="absolute bottom-0 left-0 w-8 h-[2px] bg-brand-green rounded-full"></span>
               </h3>
               <ul className="flex flex-col gap-3.5">
                 {[
-                  { label: t.footerPrivacy || "Privacy Policy", href: "/privacy-policy" },
-                  { label: t.footerTerms || "Terms & Conditions", href: "/terms" },
-                  { label: t.footerRefund || "Refund Policy", href: "/refund-policy" },
-                  { label: t.footerCancel || "Cancellation Policy", href: "/cancellation-policy" },
+                  { label: t?.footerPrivacy || "Privacy Policy", href: "/privacy-policy" },
+                  { label: t?.footerTerms || "Terms & Conditions", href: "/terms" },
+                  { label: t?.footerRefund || "Refund Policy", href: "/refund-policy" },
+                  { label: t?.footerCancel || "Cancellation Policy", href: "/cancellation-policy" },
                 ].map((link) => (
                   <li key={link.label}>
                     <Link
@@ -248,7 +248,7 @@ export function FooterSection({ t: propT, lang = "en" }: { t?: typeof translatio
             {/* Security */}
             <div className="flex flex-col gap-6">
               <h3 className="text-[17px] font-bold text-white font-display tracking-wide relative inline-block pb-2 self-start">
-                {t.footerSecurity || "Security"}
+                {t?.footerSecurity || "Security"}
                 <span className="absolute bottom-0 left-0 w-8 h-[2px] bg-brand-green rounded-full"></span>
               </h3>
               <ul className="flex flex-col gap-3.5">
@@ -259,7 +259,7 @@ export function FooterSection({ t: propT, lang = "en" }: { t?: typeof translatio
                   >
                     <ArrowRight className="w-3.5 h-3.5 mr-2 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 text-brand-green transition-all duration-300 shrink-0" />
                     <span className="group-hover:translate-x-1 transition-transform duration-300">
-                      {t.footerSecurityPolicy || "Security Policy"}
+                      {t?.footerSecurityPolicy || "Security Policy"}
                     </span>
                   </Link>
                 </li>
@@ -270,7 +270,7 @@ export function FooterSection({ t: propT, lang = "en" }: { t?: typeof translatio
                   >
                     <ArrowRight className="w-3.5 h-3.5 mr-2 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 text-brand-green transition-all duration-300 shrink-0" />
                     <span className="group-hover:translate-x-1 transition-transform duration-300">
-                      {t.footerReportIssue || "Report Issue"}
+                      {t?.footerReportIssue || "Report Issue"}
                     </span>
                   </Link>
                 </li>
@@ -387,10 +387,10 @@ export function FooterSection({ t: propT, lang = "en" }: { t?: typeof translatio
         <div className="border-t border-slate-800/80 pt-8 pb-4 flex flex-col md:flex-row items-center justify-between gap-4 text-[14px] text-slate-400 text-center md:text-left">
           <p className="font-medium tracking-wide">
             © {new Date().getFullYear()} <span className="font-display font-bold text-[#FF5C5C]">Shailraj</span> <span className="text-brand-green">Travels</span>.{" "}
-            {t.footerRights || "All Rights Reserved."}
+            {t?.footerRights || "All Rights Reserved."}
           </p>
           <p className="flex items-center gap-1.5">
-            {t.footerDesignedBy || "Designed & Developed by"}{" "}
+            {t?.footerDesignedBy || "Designed & Developed by"}{" "}
             <a
               href="https://www.instagram.com/axenor_studio/"
               target="_blank"

@@ -15,6 +15,7 @@ export function optimizeCloudinaryUrl(url?: string, maxWidth = 800): string | un
 interface LazyImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   containerClassName?: string;
   skeletonClassName?: string;
+  fallbackSrc?: string;
   autoOptimizeCloudinary?: boolean;
   optimizedWidth?: number;
 }
@@ -25,6 +26,7 @@ export function LazyImage({
   className,
   containerClassName,
   skeletonClassName,
+  fallbackSrc = "/images/jyotirlinga.jpg",
   autoOptimizeCloudinary = true,
   optimizedWidth = 800,
   decoding = "async",
@@ -32,43 +34,56 @@ export function LazyImage({
   ...props
 }: LazyImageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [error, setError] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const [currentSrc, setCurrentSrc] = useState<string | undefined>(src);
   const imgRef = useRef<HTMLImageElement>(null);
 
-  const resolvedSrc = autoOptimizeCloudinary && typeof src === 'string'
-    ? optimizeCloudinaryUrl(src, optimizedWidth)
-    : src;
+  useEffect(() => {
+    setCurrentSrc(src);
+    setIsLoaded(false);
+    setHasError(false);
+  }, [src]);
+
+  const resolvedSrc = autoOptimizeCloudinary && typeof currentSrc === 'string'
+    ? optimizeCloudinaryUrl(currentSrc, optimizedWidth)
+    : currentSrc;
 
   useEffect(() => {
-    // If the image is cached, it might have loaded before React attaches the onLoad listener
-    if (imgRef.current?.complete) {
+    if (imgRef.current?.complete && (imgRef.current?.naturalWidth ?? 0) > 0) {
       setIsLoaded(true);
-    } else {
-      setIsLoaded(false);
-      setError(false);
     }
   }, [resolvedSrc]);
 
+  const handleImageError = () => {
+    if (currentSrc !== fallbackSrc && fallbackSrc) {
+      setCurrentSrc(fallbackSrc);
+      setHasError(false);
+    } else {
+      setHasError(true);
+      setIsLoaded(true);
+    }
+  };
+
   return (
-    <div className={cn("relative w-full h-full overflow-hidden", containerClassName)}>
-      {!isLoaded && !error && (
+    <div className={cn("relative w-full h-full overflow-hidden bg-slate-100", containerClassName)}>
+      {!isLoaded && !hasError && (
         <Skeleton
           className={cn("absolute inset-0 w-full h-full rounded-none bg-slate-200/70 dark:bg-slate-800/60 animate-pulse", skeletonClassName)}
         />
       )}
       <img
         ref={imgRef}
-        src={resolvedSrc}
+        src={resolvedSrc || fallbackSrc}
         alt={alt}
         decoding={decoding}
         loading={loading}
         className={cn(
-          "w-full h-full transition-opacity duration-500 ease-in-out",
+          "w-full h-full transition-opacity duration-300 ease-in-out",
           isLoaded ? "opacity-100" : "opacity-0",
           className
         )}
         onLoad={() => setIsLoaded(true)}
-        onError={() => setError(true)}
+        onError={handleImageError}
         {...props}
       />
     </div>

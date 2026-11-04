@@ -10,6 +10,19 @@ export interface RelatedBlogsProps {
   tourTitle?: string;
 }
 
+const DEFAULT_BLOG_THUMBNAIL = 'https://res.cloudinary.com/dquecn5qj/image/upload/v1789154040/blogs/spy42xnlvgry5xoznqzn.png';
+
+function sanitizeBlogImage(url?: string): string {
+  if (!url) return DEFAULT_BLOG_THUMBNAIL;
+  if (url.includes('photo-1698223126743-3b10b78df025')) {
+    return 'https://res.cloudinary.com/dquecn5qj/image/upload/v1789154040/blogs/spy42xnlvgry5xoznqzn.png';
+  }
+  if (url.includes('photo-1567591414240-e2b2f6b8a8b8')) {
+    return 'https://res.cloudinary.com/dquecn5qj/image/upload/v1792764848/blogs/avej2lsveggdqan1spor.png';
+  }
+  return url;
+}
+
 export function RelatedBlogs({ blogs, tourSlug, tourTitle }: RelatedBlogsProps) {
   const resolvedBlogs = useMemo(() => {
     const list: Array<{
@@ -23,7 +36,7 @@ export function RelatedBlogs({ blogs, tourSlug, tourTitle }: RelatedBlogsProps) 
     const seenSlugs = new Set<string>();
 
     const addBlog = (
-      slug: string,
+      slug?: string,
       title?: string,
       image?: string,
       excerpt?: string,
@@ -36,9 +49,9 @@ export function RelatedBlogs({ blogs, tourSlug, tourTitle }: RelatedBlogsProps) 
       }
       seenSlugs.add(cleanSlug);
       list.push({
-        slug: slug.trim(),
+        slug: slug!.trim(),
         title: title || 'Helpful Travel Guide',
-        image: image || 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=1469&auto=format&fit=crop',
+        image: sanitizeBlogImage(image),
         excerpt,
         category: category || 'Travel Guide',
         readingTimeMinutes,
@@ -65,18 +78,26 @@ export function RelatedBlogs({ blogs, tourSlug, tourTitle }: RelatedBlogsProps) 
               match.readingTimeMinutes
             );
           }
-        } else if (typeof item === 'object' && item.slug && item.slug !== 'undefined' && item.slug !== 'null') {
-          const match = blogPosts.find(
-            (b) => b.slug.toLowerCase() === item.slug.toLowerCase()
-          );
-          addBlog(
-            item.slug,
-            item.title || match?.title,
-            item.image || match?.featuredImage || match?.ogImage,
-            item.description || match?.excerpt,
-            match?.category,
-            match?.readingTimeMinutes
-          );
+        } else if (typeof item === 'object') {
+          const candidateSlug =
+            item.slug ||
+            (item as any).blogSlug ||
+            ((item as any).url && (item as any).url.replace(/^\/blog\//, '')) ||
+            ((item as any).link && (item as any).link.replace(/^\/blog\//, ''));
+
+          if (candidateSlug && candidateSlug !== 'undefined' && candidateSlug !== 'null') {
+            const match = blogPosts.find(
+              (b) => b.slug.toLowerCase() === candidateSlug.toLowerCase()
+            );
+            addBlog(
+              candidateSlug,
+              item.title || match?.title,
+              item.image || match?.featuredImage || match?.ogImage,
+              item.description || match?.excerpt,
+              match?.category,
+              match?.readingTimeMinutes
+            );
+          }
         }
       }
     }
@@ -117,8 +138,29 @@ export function RelatedBlogs({ blogs, tourSlug, tourTitle }: RelatedBlogsProps) 
       }
     }
 
+    // 3. Fallback for Ujjain tour pages: if it is an Ujjain tour and no blogs matched yet, auto-populate Ujjain guides
+    const isUjjainTour =
+      (tourSlug && tourSlug.toLowerCase().includes('ujjain')) ||
+      (tourTitle && tourTitle.toLowerCase().includes('ujjain'));
+
+    if (list.length === 0 && isUjjainTour) {
+      const ujjainPosts = blogPosts.filter(
+        (b) => b.slug.toLowerCase().includes('ujjain') || b.title.toLowerCase().includes('ujjain')
+      );
+      for (const post of ujjainPosts) {
+        addBlog(
+          post.slug,
+          post.title,
+          post.featuredImage || post.ogImage,
+          post.excerpt,
+          post.category,
+          post.readingTimeMinutes
+        );
+      }
+    }
+
     return list;
-  }, [blogs, tourSlug]);
+  }, [blogs, tourSlug, tourTitle]);
 
   // If no related blogs exist for this tour, DO NOT render this section at all
   if (!resolvedBlogs || resolvedBlogs.length === 0) {
@@ -151,6 +193,7 @@ export function RelatedBlogs({ blogs, tourSlug, tourTitle }: RelatedBlogsProps) 
             <div className="sm:w-36 h-36 sm:h-auto shrink-0 relative overflow-hidden bg-gray-100">
               <LazyImage
                 src={blog.image}
+                fallbackSrc="/images/jyotirlinga.jpg"
                 alt={blog.title}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               />

@@ -14,9 +14,9 @@ const ashtavinayakBlogDoc = {
   focusKeyword: 'pune to ashtavinayak tour guide',
   authorName: 'Shailesh Raj',
   category: 'Travel Guides',
-  thumbnailUrl: 'https://images.unsplash.com/photo-1567591414240-e2b2f6b8a8b8?q=80&w=1200&auto=format&fit=crop',
-  featuredImage: 'https://images.unsplash.com/photo-1567591414240-e2b2f6b8a8b8?q=80&w=1200&auto=format&fit=crop',
-  ogImage: 'https://images.unsplash.com/photo-1567591414240-e2b2f6b8a8b8?q=80&w=1200&auto=format&fit=crop',
+  thumbnailUrl: 'https://res.cloudinary.com/dquecn5qj/image/upload/v1792764848/blogs/avej2lsveggdqan1spor.png',
+  featuredImage: 'https://res.cloudinary.com/dquecn5qj/image/upload/v1792764848/blogs/avej2lsveggdqan1spor.png',
+  ogImage: 'https://res.cloudinary.com/dquecn5qj/image/upload/v1792764848/blogs/avej2lsveggdqan1spor.png',
   tags: [
     'Pune to Ashtavinayak',
     'Ashtavinayak Yatra',
