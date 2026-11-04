@@ -229,11 +229,11 @@ User's draft: "${review}"`;
         </div>
 
         {/* Unified Native Review Widget Container with Curved Corners throughout */}
-        <div className="w-full max-w-6xl mx-auto rounded-[28px] overflow-hidden border border-slate-200/80 shadow-lg shadow-slate-200/50 bg-white">
+        <div className="w-full max-w-6xl mx-auto">
           {/* Header Bar */}
-          <div className="border-b border-slate-100 p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 bg-white">
+          <div className="pb-5 sm:pb-6 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center shadow-inner shrink-0">
+              <div className="w-11 h-11 rounded-2xl bg-white border border-slate-200/80 flex items-center justify-center shadow-xs shrink-0">
                 <svg className="w-6 h-6" viewBox="0 0 24 24">
                   <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
                   <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
@@ -302,7 +302,7 @@ User's draft: "${review}"`;
           </div>
 
           {/* One-Line Auto Side Scroll Track (Embla Carousel) */}
-          <div className="bg-slate-50/70 p-5 md:p-6 overflow-hidden select-none" ref={emblaRef}>
+          <div className="overflow-hidden select-none py-2" ref={emblaRef}>
             <div className="flex gap-5">
               {displayReviews.map((rev, index) => (
                 <div
@@ -380,7 +380,7 @@ User's draft: "${review}"`;
           </div>
 
           {/* Footer Bar with Google Attribution & View All Button */}
-          <div className="border-t border-slate-100 p-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-semibold text-slate-600 bg-white">
+          <div className="pt-6 mt-2 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-semibold text-slate-600">
             <div className="flex items-center gap-2">
               <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
