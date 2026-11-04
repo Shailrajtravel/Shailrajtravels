@@ -220,15 +220,6 @@ function PuneToUjjainBusTravelsPage() {
     },
   ];
 
-  const boardingPoints = [
-    { point: "Hadapsar (Shailraj Travels Office, Gadital)", timeEvening: "07:30 PM" },
-    { point: "Swargate (Laxmi Narayan Cinema / ST Stand)", timeEvening: "08:15 PM" },
-    { point: "Pune Railway Station (Opp. Inox / Central)", timeEvening: "08:45 PM" },
-    { point: "Viman Nagar / Kharadi Bypass", timeEvening: "09:15 PM" },
-    { point: "Bhosari / Nashik Phata / Chakan", timeEvening: "09:45 PM" },
-    { point: "Wakad / Hinjewadi Bridge", timeEvening: "10:15 PM" },
-    { point: "Doorstep Home Pickup (For Private Urbania Groups)", timeEvening: "As Scheduled" },
-  ];
 
   const faqs = [
     {
@@ -967,40 +958,6 @@ function PuneToUjjainBusTravelsPage() {
         </div>
       </section>
 
-      {/* Boarding Points & Timetable Table */}
-      <section className="py-16 bg-slate-50 border-t border-slate-200/80">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <div className="max-w-3xl mx-auto mb-12">
-            <span className="text-xs font-bold text-brand-green-dark uppercase tracking-wider">Convenient Boarding</span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold font-display text-brand-blue-deep mt-2 mb-4">
-              Pune Boarding Points & Friday Schedule
-            </h2>
-            <p className="text-slate-600 text-base">
-              Convenient departure points across Pune city and PCMC highway exits.
-            </p>
-          </div>
-
-          <div className="max-w-4xl mx-auto bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
-            <div className="grid grid-cols-12 bg-brand-blue-deep text-white font-bold text-xs sm:text-sm p-4">
-              <div className="col-span-8 sm:col-span-8 text-left">Boarding Location in Pune</div>
-              <div className="col-span-4 sm:col-span-4 text-center">Friday Evening Time</div>
-            </div>
-            <div className="divide-y divide-slate-100 text-xs sm:text-sm text-left">
-              {boardingPoints.map((b, i) => (
-                <div key={i} className="grid grid-cols-12 p-4 items-center hover:bg-slate-50/80">
-                  <div className="col-span-8 sm:col-span-8 font-semibold text-slate-800 flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-brand-blue shrink-0" />
-                    <span>{b.point}</span>
-                  </div>
-                  <div className="col-span-4 sm:col-span-4 text-center font-bold text-brand-green-dark">
-                    {b.timeEvening}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* FAQs Accordion */}
       <section className="py-16 lg:py-24 bg-white border-t border-slate-100">
