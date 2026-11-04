@@ -1,10 +1,148 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { reviewRepository } from '../repositories/ReviewRepository';
+import { storageManager } from '../database/StorageManager';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
 @Injectable()
-export class ReviewsService {
+export class ReviewsService implements OnModuleInit {
   private readonly logger = new Logger(ReviewsService.name);
+  private readonly placeId = process.env.GOOGLE_PLACE_ID || "ChIJXRgrL53DwjsRs0FidQRovF0";
+
+  onModuleInit() {
+    // Initial sync check 5 seconds after startup
+    setTimeout(() => {
+      this.getGoogleReviews(false).catch((e) =>
+        this.logger.warn("Initial Google Places reviews sync skipped:", e?.message || e),
+      );
+    }, 5000);
+
+    // Daily background refresh (24 hours = 86,400,000 ms)
+    // ~30 requests/month (well within India free tier of 7,000 Enterprise + Atmosphere requests)
+    setInterval(() => {
+      this.syncGoogleReviews().catch((e) =>
+        this.logger.error("Daily Google Places reviews sync failed:", e?.message || e),
+      );
+    }, 24 * 60 * 60 * 1000);
+  }
+
+  private getDefaultGoogleStats() {
+    return {
+      rating: "5.0",
+      reviewCount: "23",
+      placeId: this.placeId,
+      source: "business_default",
+      lastSynced: new Date().toISOString(),
+      writeReviewUrl: `https://search.google.com/local/writereview?placeid=${this.placeId}`,
+      googleMapsUrl: `https://www.google.com/maps/place/Shailraj+Travels/@18.5116495,73.9655755,17z/data=!4m8!3m7!1s0x3bc2c39d2f2b185d:0x5dbc6804756241b3!8m2!3d18.5116495!4d73.9655755!9m1!1b1!16s%2Fg%2F11zd36ljtd?entry=ttu`,
+      reviews: [],
+    };
+  }
+
+  async syncGoogleReviews() {
+    const apiKey =
+      process.env.GOOGLE_MAPS_API_KEY ||
+      process.env.GOOGLE_PLACES_API_KEY ||
+      process.env.VITE_GOOGLE_MAPS_API_KEY;
+
+    if (!apiKey) {
+      this.logger.warn(
+        "GOOGLE_MAPS_API_KEY is not set in backend environment. Automatic Google Places sync cannot contact Google.",
+      );
+      return null;
+    }
+
+    try {
+      this.logger.log(`Calling Google Places API (New) for Place ID: ${this.placeId}...`);
+      const url = `https://places.googleapis.com/v1/places/${this.placeId}`;
+      const res = await fetch(url, {
+        headers: {
+          "Content-Type": "application/json",
+          "X-Goog-Api-Key": apiKey,
+          "X-Goog-FieldMask": "id,displayName,rating,userRatingCount,reviews",
+        },
+      });
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        this.logger.error(`Google Places API returned ${res.status}: ${errorText}`);
+        return null;
+      }
+
+      const json = await res.json();
+      const rawReviews = Array.isArray(json.reviews) ? json.reviews : [];
+
+      const reviews = rawReviews.map((r: any, idx: number) => ({
+        id: r.name || `g-rev-${idx}`,
+        name: r.authorAttribution?.displayName || "Google Reviewer",
+        rating: r.rating || 5,
+        text: r.text?.text || r.originalText?.text || "",
+        relativeTime: r.relativePublishTimeDescription || "Recently",
+        authorPhotoUrl: r.authorAttribution?.photoUri,
+        publishTime: r.publishTime,
+        timestamp: r.publishTime ? Date.parse(r.publishTime) : Date.now() - idx * 86400000,
+      }));
+
+      // Sort newest / latest reviews first
+      reviews.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+      const stats = {
+        rating: String(json.rating || "5.0"),
+        reviewCount: String(json.userRatingCount || "23"),
+        placeId: this.placeId,
+        source: "google_places_api_v1",
+        lastSynced: new Date().toISOString(),
+        writeReviewUrl: `https://search.google.com/local/writereview?placeid=${this.placeId}`,
+        googleMapsUrl: `https://www.google.com/maps/place/Shailraj+Travels/@18.5116495,73.9655755,17z/data=!4m8!3m7!1s0x3bc2c39d2f2b185d:0x5dbc6804756241b3!8m2!3d18.5116495!4d73.9655755!9m1!1b1!16s%2Fg%2F11zd36ljtd?entry=ttu`,
+        reviews,
+      };
+
+      // Persist to MongoDB collection
+      const col = await storageManager.getGlobalCollection("google_reviews_cache");
+      await col.updateOne(
+        { key: "shailraj_google_reviews" },
+        { $set: { key: "shailraj_google_reviews", data: stats, lastSynced: new Date() } },
+        { upsert: true },
+      );
+
+      this.logger.log(
+        `Google Places sync complete: ${reviews.length} reviews fetched. Rating: ${stats.rating} (${stats.reviewCount} total).`,
+      );
+      return stats;
+    } catch (err: any) {
+      this.logger.error("Failed to sync Google reviews:", err?.message || err);
+      return null;
+    }
+  }
+
+  async getGoogleReviews(forceRefresh = false) {
+    try {
+      const col = await storageManager.getGlobalCollection("google_reviews_cache");
+      const cached = await col.findOne({ key: "shailraj_google_reviews" });
+
+      const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
+      const isFresh =
+        cached &&
+        cached.lastSynced &&
+        Date.now() - new Date(cached.lastSynced).getTime() < CACHE_TTL_MS;
+
+      if (isFresh && !forceRefresh && cached?.data) {
+        return cached.data;
+      }
+
+      // If stale or forceRefresh, try to sync
+      const synced = await this.syncGoogleReviews();
+      if (synced) return synced;
+
+      if (cached && cached.data) {
+        return cached.data;
+      }
+
+      return this.getDefaultGoogleStats();
+    } catch (e: any) {
+      this.logger.error("Error retrieving Google reviews:", e?.message || e);
+      return this.getDefaultGoogleStats();
+    }
+  }
 
   async getReviews() {
     try {

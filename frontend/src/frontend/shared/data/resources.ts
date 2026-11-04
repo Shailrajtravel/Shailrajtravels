@@ -35,7 +35,7 @@ export const resources: Resource[] = [
           "Yes, a ₹250 VIP Darshan pass is available from the temple counters which significantly reduces waiting time.",
       },
     ],
-    relatedTours: ["ujjain-omkareshwar-Ghrishneshwar-maheshwar-tour"],
+    relatedTours: ["pune-to-ujjain-tour-package"],
   },
   {
     slug: "dwarka-somnath-travel-checklist",

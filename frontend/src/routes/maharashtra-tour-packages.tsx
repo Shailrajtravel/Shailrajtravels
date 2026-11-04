@@ -72,7 +72,7 @@ function MaharashtraTourPackagesPage() {
       duration: "3 Days / 2 Nights",
       type: "Tri-Jyotirlinga Yatra",
       highlights: "Bhasma Aarti guidance, Narmada boat parikrama, verified highway hotels, doorstep Pune pickup.",
-      link: "/tours/ujjain-omkareshwar-Ghrishneshwar-maheshwar-tour",
+      link: "/tours/pune-to-ujjain-tour-package",
     },
     {
       title: "Shakti Peeth Yatra from Pune",

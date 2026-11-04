@@ -15,6 +15,18 @@ const LEGACY_TOUR_REDIRECTS: Record<string, string> = {
   "pandharpur-wari": "/tours/pune-to-shakti-peeth-yatra",
   "char-dham-yatra": "/pilgrimage-tours-from-pune",
   "shirdi-tour": "/tours",
+  "ujjain-omkareshwar-Ghrishneshwar-maheshwar-tour": "/tours/pune-to-ujjain-tour-package",
+  "ujjain-omkareshwar-ghrishneshwar-maheshwar-tour": "/tours/pune-to-ujjain-tour-package",
+  "ujjain-omkareshwar-dhoomeshwar-jyotirlinga-tour": "/tours/pune-to-ujjain-tour-package",
+  "ujjain-omkareshwar-dhoomeshwar-maheshwar-tour": "/tours/pune-to-ujjain-tour-package",
+  "pune-to-ujjain-omkareshwar-tour": "/tours/pune-to-ujjain-tour-package",
+  "ujjain-tour": "/tours/pune-to-ujjain-tour-package",
+  "pune-to-ujjain-travels": "/tours/pune-to-ujjain-tour-package",
+  "pune-to-ujjain-tour-and-travels": "/tours/pune-to-ujjain-tour-package",
+  "pune-to-ujjain-bus-travels": "/pune-to-ujjain-bus-travels",
+  "pune-to-ujjain-bus": "/pune-to-ujjain-bus-travels",
+  "pune-to-ujjain-bus-booking": "/pune-to-ujjain-bus-travels",
+  "pune-to-ujjain-sleeper-bus": "/pune-to-ujjain-bus-travels",
 };
 
 export const Route = createFileRoute("/tours/$tourSlug")({

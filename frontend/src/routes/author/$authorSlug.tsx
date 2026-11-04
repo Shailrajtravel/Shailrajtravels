@@ -9,7 +9,7 @@ import { BookOpen, MapPin, Award } from 'lucide-react';
 
 export const Route = createFileRoute("/author/$authorSlug")({
   loader: ({ params }) => {
-    const author = authors[params.authorSlug];
+    const author = authors[params.authorSlug] || (params.authorSlug === "shailesh-raj" ? authors["mayur-patil"] : authors["mayur-patil"]);
     if (!author) throw notFound();
     return author;
   },
@@ -50,11 +50,11 @@ function AuthorProfilePage() {
       <div className="max-w-5xl mx-auto space-y-12">
         {/* Profile Header */}
         <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-8 md:p-12 flex flex-col md:flex-row gap-10 items-center md:items-start">
-          <div className="w-48 h-48 rounded-2xl overflow-hidden shadow-lg shrink-0">
+          <div className="w-48 h-48 rounded-2xl overflow-hidden shadow-lg shrink-0 bg-white border-4 border-brand-orange/20">
             <img
               src={author.avatarUrl}
               alt={author.name}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover object-top"
               onError={(e) => {
                 e.currentTarget.src =
                   "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjY2JkNWUxIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTIwIDIxdi0yYTRgNCAwIDAgMC00LTRoLThhNCA0IDAgMCAwLTQgNHYyIi8+PGNpcmNsZSBjeD0iMTIiIGN5PSI3IiByPSI0Ii8+PC9zdmc+";

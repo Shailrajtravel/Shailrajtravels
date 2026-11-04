@@ -96,6 +96,10 @@ function AboutEntityPage() {
               <strong className="text-brand-blue-deep">Founder:</strong>{" "}
               {businessConfig.founderName}
             </li>
+            <li>
+              <strong className="text-brand-blue-deep">Co-Founder:</strong>{" "}
+              {businessConfig.coFounderName}
+            </li>
           </ul>
         </div>
 
@@ -107,7 +111,7 @@ function AboutEntityPage() {
           <section>
             <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">Our Company Story</h2>
             <p>
-              Founded in {businessConfig.establishedYear} by {businessConfig.founderName}, Shailraj
+              Founded in {businessConfig.establishedYear} by {businessConfig.founderName} and Co-Founder {businessConfig.coFounderName}, Shailraj
               Travels began with a simple vision: to make sacred Hindu pilgrimages accessible,
               comfortable, and deeply spiritual for every family. We recognized that organizing
               tours like the Ashtavinayak Yatra or Char Dham requires meticulous logistical planning
@@ -138,6 +142,9 @@ function AboutEntityPage() {
             </p>
             <ul>
               <li>
+                <strong>Ujjain Darshan Tour:</strong> Sacred Mahakaleshwar Bhasma Aarti, Kaal Bhairav, and Omkareshwar Jyotirlinga pilgrimage circuits from Pune with luxury AC Force Urbania travel.
+              </li>
+              <li>
                 <strong>Ashtavinayak Yatra:</strong> Masterfully routed 2-day itineraries covering
                 all 8 Ganesha temples.
               </li>
@@ -157,17 +164,28 @@ function AboutEntityPage() {
           <section>
             <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">Our Core Team</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
-              {Object.values(authors).map((author) => (
+              {[authors["mayur-patil"], authors["shaila-mayur-patil"]].map((author) => (
                 <div
                   key={author.id}
-                  className="border border-slate-200 rounded-xl p-6 bg-slate-50 flex flex-col items-center text-center"
+                  className="border border-slate-200 rounded-2xl p-6 bg-white shadow-sm hover:shadow-md transition-shadow flex flex-col items-center text-center"
                 >
-                  <h3 className="font-bold text-lg text-brand-blue-deep">{author.name}</h3>
-                  <p className="text-sm font-medium text-brand-orange mb-3">{author.role}</p>
-                  <p className="text-sm text-slate-600 line-clamp-3">{author.bio}</p>
+                  <div className="w-28 h-28 rounded-full overflow-hidden mb-4 border-4 border-brand-orange/20 shadow-md bg-white shrink-0">
+                    <img
+                      src={author.avatarUrl}
+                      alt={author.name}
+                      className="w-full h-full object-cover object-top"
+                      onError={(e) => {
+                        e.currentTarget.src =
+                          "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjY2JkNWUxIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTIwIDIxdi0yYTRgNCAwIDAgMC00LTRoLThhNCA0IDAgMCAwLTQgNHYyIi8+PGNpcmNsZSBjeD0iMTIiIGN5PSI3IiByPSI0Ii8+PC9zdmc+";
+                      }}
+                    />
+                  </div>
+                  <h3 className="font-bold text-xl text-brand-blue-deep">{author.name}</h3>
+                  <p className="text-sm font-semibold text-brand-orange mb-3">{author.role}</p>
+                  <p className="text-sm text-slate-600 line-clamp-3 mb-4 leading-relaxed">{author.bio}</p>
                   <Link
                     to={`/author/${author.id}`}
-                    className="mt-4 text-sm font-semibold text-brand-blue-deep hover:text-brand-orange transition-colors"
+                    className="mt-auto text-sm font-bold text-brand-blue-deep hover:text-brand-orange transition-colors"
                   >
                     View Profile &rarr;
                   </Link>

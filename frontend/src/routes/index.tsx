@@ -124,7 +124,7 @@ function HomePage() {
         tourMap.get(String(pkg._id));
 
       if (!match && norm(pkg.title).includes('ujjain') && norm(pkg.title).includes('omkareshwar')) {
-        match = (tours || []).find((t: any) => t.slug === 'ujjain-omkareshwar-Ghrishneshwar-maheshwar-tour');
+        match = (tours || []).find((t: any) => t.slug === 'pune-to-ujjain-tour-package' || t.slug === 'ujjain-omkareshwar-Ghrishneshwar-maheshwar-tour');
       }
 
       const tourDates = match && Array.isArray(match.dates) && match.dates.length > 0 ? match.dates : null;

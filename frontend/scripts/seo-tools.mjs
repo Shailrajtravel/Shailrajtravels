@@ -110,6 +110,7 @@ export function buildEnhancedSitemap() {
   console.log('\n🗺️  Building comprehensive sitemap.xml...');
 
   const coreRoutes = [
+    { url: '/pune-to-ujjain-bus-travels', priority: '1.0', changefreq: 'daily', mr: true },
     { url: '/', priority: '1.0', changefreq: 'daily', mr: true },
     { url: '/travel-agency-in-pune', priority: '0.95', changefreq: 'weekly' },
     { url: '/tour-operator-in-pune', priority: '0.95', changefreq: 'weekly' },

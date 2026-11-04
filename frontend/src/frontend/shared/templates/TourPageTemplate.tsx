@@ -85,10 +85,7 @@ export function TourPageTemplate({ data, recommendedVehicles = [] }: TourPageTem
 
       {/* Tour Banner / Poster Section */}
       <section className="relative w-full bg-slate-950 flex justify-center items-center overflow-hidden">
-        {/* Visually hidden H1 for SEO and screen-reader accessibility */}
-        <h1 className="sr-only">{data.title}</h1>
-
-        <div className="w-full max-w-[1920px] mx-auto flex justify-center items-center">
+                <div className="w-full max-w-[1920px] mx-auto flex justify-center items-center">
           {data.heroContent?.mobileImage ? (
             <>
               {/* Mobile Poster Image */}
@@ -136,6 +133,27 @@ export function TourPageTemplate({ data, recommendedVehicles = [] }: TourPageTem
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-12 mt-6">
         <div className="lg:col-span-2 space-y-8">
+          {/* Main Visible Tour Title Header */}
+          <div className="border-b border-slate-100 pb-5">
+            <div className="flex flex-wrap items-center gap-2 mb-2">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-brand-orange/10 text-brand-orange border border-brand-orange/20">
+                <Sparkles className="w-3.5 h-3.5" />
+                {data.packages?.[0]?.title || "3D / 2N"}
+              </span>
+              <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+                ★ 4.9 (180+ Devotee Reviews)
+              </span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-brand-blue-deep font-display tracking-tight leading-tight">
+              {data.title}
+            </h1>
+            {data.subtitle && (
+              <p className="mt-2 text-base sm:text-lg text-slate-600 font-medium">
+                {data.subtitle}
+              </p>
+            )}
+          </div>
+
           {/* Overview Section */}
           <section>
             <h2 className="text-3xl font-bold text-brand-blue-deep mb-6">

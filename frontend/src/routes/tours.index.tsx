@@ -124,14 +124,45 @@ function ToursListingPage() {
 
       const fullSearchText = clean([
         tour.title,
+        tour.subtitle,
+        tour.slug,
+        ...(tour.keywords || []),
         tour.heroContent?.description,
         ...(tour.destinations || []),
         ...(tour.highlights || []),
+        tour.metaTitle,
         tour.metaDescription,
         tour.overview,
       ].filter(Boolean).join(' '));
 
-      return searchTokens.every((tok) => fullSearchText.includes(tok));
+      // 1. Direct exact keyword or substring match in keywords array
+      const lowerQuery = clean(searchTerm).trim();
+      if (Array.isArray(tour.keywords)) {
+        const matchesDirectKeyword = tour.keywords.some((k: string) => {
+          const lk = clean(k);
+          return lk.includes(lowerQuery) || lowerQuery.includes(lk);
+        });
+        if (matchesDirectKeyword) return true;
+      }
+
+      // 2. Transport & Bus intent expansion
+      // If user typed "bus", "travels", "sleeper", etc., match tours that provide luxury AC vehicle transport (Urbania, coaches, tempo)
+      const TRANSPORT_TOKENS = new Set(['bus', 'travels', 'urbania', 'coach', 'sleeper', 'traveller', 'tempo', 'minibus', 'tour', 'package', 'yatra', 'ac']);
+
+      const matchesAllTokens = searchTokens.every((tok) => {
+        if (fullSearchText.includes(tok)) return true;
+        if (TRANSPORT_TOKENS.has(tok)) {
+          return fullSearchText.includes('urbania') || 
+                 fullSearchText.includes('tempo') || 
+                 fullSearchText.includes('coach') || 
+                 fullSearchText.includes('travels') || 
+                 fullSearchText.includes('bus') || 
+                 fullSearchText.includes('ac');
+        }
+        return false;
+      });
+
+      return matchesAllTokens;
     });
   }, [tours, searchTerm, selectedDestination]);
 

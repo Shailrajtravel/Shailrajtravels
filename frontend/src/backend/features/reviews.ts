@@ -57,15 +57,14 @@ export const deleteReviewFn = createServerFn({ method: "POST" })
     });
   });
 
-export interface GoogleReviewStats {
-  rating: string;
-  reviewCount: string;
-  placeId: string;
-  source: 'google_places_api' | 'admin_override' | 'business_default';
-  lastSynced: string;
-  writeReviewUrl: string;
-  googleMapsUrl: string;
-}
+export * from '@/backend/shared/reviews-data';
+import {
+  GoogleReviewItem,
+  GoogleReviewStats,
+  parseRelativeTimeToTimestamp,
+  sortReviewsByLatest,
+  fallbackGoogleReviews
+} from '@/backend/shared/reviews-data';
 
 export const getGoogleReviewStatsFn = createServerFn({ method: "GET" }).handler(async (): Promise<GoogleReviewStats> => {
   const { businessConfig } = await import('@/frontend/shared/config/business');
@@ -75,89 +74,154 @@ export const getGoogleReviewStatsFn = createServerFn({ method: "GET" }).handler(
   const placeId = "ChIJXRgrL53DwjsRs0FidQRovF0";
   const defaultStats: GoogleReviewStats = {
     rating: businessConfig.reviewRating || "5.0",
-    reviewCount: businessConfig.reviewCount || "12",
+    reviewCount: businessConfig.reviewCount || "23",
     placeId,
     source: "business_default",
     lastSynced: new Date().toISOString(),
     writeReviewUrl: `https://search.google.com/local/writereview?placeid=${placeId}`,
-    googleMapsUrl: `https://www.google.com/maps/search/?api=1&query=Shailraj%20Travels&query_place_id=${placeId}`,
+    googleMapsUrl: `https://www.google.com/maps/place/Shailraj+Travels/@18.5116495,73.9655755,17z/data=!4m8!3m7!1s0x3bc2c39d2f2b185d:0x5dbc6804756241b3!8m2!3d18.5116495!4d73.9655755!9m1!1b1!16s%2Fg%2F11zd36ljtd?entry=ttu`,
+    reviews: fallbackGoogleReviews,
+  };
+
+  const isStaleOrInvalid = (stats: any): boolean => {
+    if (!stats) return true;
+    if (stats.reviewCount === "25") return true;
+    if (Array.isArray(stats.reviews)) {
+      const hasFake = stats.reviews.some((r: any) =>
+        r?.name?.includes("Dattatray") ||
+        r?.name?.includes("Pravin") ||
+        r?.text?.includes("Very trustworthy travel company for senior citizen")
+      );
+      if (hasFake) return true;
+    }
+    return false;
   };
 
   try {
-    // 1. Check in-memory cache first
+    // 1. Invalidate any stale in-memory cache
     const memCached = memoryCache.get<GoogleReviewStats>("shailraj_google_review_stats");
-    if (memCached) return memCached;
+    if (memCached) {
+      if (isStaleOrInvalid(memCached)) {
+        memoryCache.delete("shailraj_google_review_stats");
+      } else {
+        if (Array.isArray(memCached.reviews)) {
+          memCached.reviews = sortReviewsByLatest(memCached.reviews);
+        }
+        return memCached;
+      }
+    }
 
     // 2. Check Redis cache
     if (redis) {
       try {
         const cached = await redis.get<GoogleReviewStats>("shailraj_google_review_stats");
         if (cached) {
-          memoryCache.set("shailraj_google_review_stats", cached, 300);
-          return cached;
+          if (isStaleOrInvalid(cached)) {
+            await redis.del("shailraj_google_review_stats");
+          } else {
+            if (Array.isArray(cached.reviews)) {
+              cached.reviews = sortReviewsByLatest(cached.reviews);
+            }
+            memoryCache.set("shailraj_google_review_stats", cached, 21600);
+            return cached;
+          }
         }
       } catch (err) {
         console.error("Redis get stats error:", err);
       }
     }
 
-    // 3. Check for Google Places API key (automated live sync)
-    const apiKey = process.env.GOOGLE_MAPS_API_KEY || process.env.VITE_GOOGLE_MAPS_API_KEY;
+    // 3. Automated Google Places API (New) live sync
+    const apiKey =
+      process.env.GOOGLE_MAPS_API_KEY ||
+      process.env.VITE_GOOGLE_MAPS_API_KEY ||
+      (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_GOOGLE_MAPS_API_KEY) ||
+      "AIzaSyAup4bEJ4P18AlYRXOvVRjxLhpO9XYfSgc";
+
     if (apiKey) {
       try {
-        const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=rating,user_ratings_total&key=${apiKey}`;
-        const res = await fetch(url);
+        const newUrl = `https://places.googleapis.com/v1/places/${placeId}`;
+        const res = await fetch(newUrl, {
+          headers: {
+            "Content-Type": "application/json",
+            "X-Goog-Api-Key": apiKey,
+            "X-Goog-FieldMask": "id,displayName,rating,userRatingCount,reviews",
+          },
+        });
+
         if (res.ok) {
           const json = await res.json();
-          if (json.result && json.result.user_ratings_total) {
-            const stats: GoogleReviewStats = {
-              rating: String(json.result.rating || defaultStats.rating),
-              reviewCount: String(json.result.user_ratings_total || defaultStats.reviewCount),
-              placeId,
-              source: 'google_places_api',
-              lastSynced: new Date().toISOString(),
-              writeReviewUrl: defaultStats.writeReviewUrl,
-              googleMapsUrl: defaultStats.googleMapsUrl,
-            };
-            memoryCache.set("shailraj_google_review_stats", stats, 3600);
-            if (redis) {
-              await redis.set("shailraj_google_review_stats", stats, { ex: 3600 });
-            }
-            return stats;
+          const apiReviews: GoogleReviewItem[] = (json.reviews || []).map((r: any, idx: number) => ({
+            id: r.name || `rev-${idx}`,
+            name: r.authorAttribution?.displayName || "Google Reviewer",
+            rating: r.rating || 5,
+            text: r.text?.text || r.originalText?.text || "",
+            relativeTime: r.relativePublishTimeDescription || "Recently",
+            authorPhotoUrl: r.authorAttribution?.photoUri,
+            publishTime: r.publishTime,
+            timestamp: r.publishTime ? Date.parse(r.publishTime) : undefined,
+          }));
+
+          // Merge live Places API reviews with our verified reviews list (deduplicating by author name)
+          const mergedReviewsMap = new Map<string, GoogleReviewItem>();
+          // Add fallback reviews first
+          for (const rev of fallbackGoogleReviews) {
+            mergedReviewsMap.set(rev.name.toLowerCase().trim(), rev);
           }
+          // Overlay fresh Google Places API reviews
+          for (const rev of apiReviews) {
+            const key = rev.name.toLowerCase().trim();
+            const existing = mergedReviewsMap.get(key);
+            mergedReviewsMap.set(key, {
+              ...existing,
+              ...rev,
+              textMr: existing?.textMr, // preserve Marathi translation if present
+            });
+          }
+
+          const allUniqueReviews = Array.from(mergedReviewsMap.values());
+          const sortedReviews = sortReviewsByLatest(allUniqueReviews);
+
+          const stats: GoogleReviewStats = {
+            rating: String(json.rating || defaultStats.rating),
+            reviewCount: String(json.userRatingCount || defaultStats.reviewCount),
+            placeId,
+            source: 'google_places_api_v1',
+            lastSynced: new Date().toISOString(),
+            writeReviewUrl: defaultStats.writeReviewUrl,
+            googleMapsUrl: defaultStats.googleMapsUrl,
+            reviews: sortedReviews.length > 0 ? sortedReviews : fallbackGoogleReviews,
+          };
+
+          // Cache for 6 hours (21600s)
+          memoryCache.set("shailraj_google_review_stats", stats, 21600);
+          if (redis) {
+            await redis.set("shailraj_google_review_stats", stats, { ex: 21600 });
+          }
+          return stats;
         }
       } catch (apiErr) {
-        console.error("Google Places API live fetch error:", apiErr);
+        console.warn("Places API (New) fetch error:", apiErr);
       }
     }
 
-    // 4. Check for admin override in Redis or memory
-    if (redis) {
-      try {
-        const override = await redis.get<Partial<GoogleReviewStats>>("shailraj_google_review_override");
-        if (override) {
-          const merged: GoogleReviewStats = {
-            ...defaultStats,
-            ...override,
-            source: 'admin_override',
-          };
-          memoryCache.set("shailraj_google_review_stats", merged, 600);
-          return merged;
-        }
-      } catch (err) {
-        console.error("Redis get override error:", err);
-      }
-    }
-
+    // 4. Check for admin override (if valid and not stale)
     const memOverride = memoryCache.get<Partial<GoogleReviewStats>>("shailraj_google_review_override");
     if (memOverride) {
-      return {
-        ...defaultStats,
-        ...memOverride,
-        source: 'admin_override',
-      };
+      if (isStaleOrInvalid(memOverride)) {
+        memoryCache.delete("shailraj_google_review_override");
+      } else {
+        return {
+          ...defaultStats,
+          ...memOverride,
+          source: 'admin_override',
+          reviews: Array.isArray(memOverride.reviews) ? sortReviewsByLatest(memOverride.reviews) : defaultStats.reviews,
+        };
+      }
     }
 
+    // Cache fallback for 6 hours
+    memoryCache.set("shailraj_google_review_stats", defaultStats, 21600);
     return defaultStats;
   } catch (error) {
     console.error("Failed to get Google review stats", error);
@@ -176,7 +240,7 @@ export const updateGoogleReviewStatsFn = createServerFn({ method: "POST" })
     const placeId = "ChIJXRgrL53DwjsRs0FidQRovF0";
     const updateData: Partial<GoogleReviewStats> = {
       rating: data.rating?.trim() || "5.0",
-      reviewCount: data.reviewCount?.trim() || "12",
+      reviewCount: data.reviewCount?.trim() || "23",
       placeId,
       lastSynced: new Date().toISOString(),
     };
@@ -195,4 +259,3 @@ export const updateGoogleReviewStatsFn = createServerFn({ method: "POST" })
 
     return { success: true, stats: updateData };
   });
-

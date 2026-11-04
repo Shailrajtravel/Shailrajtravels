@@ -68,8 +68,8 @@ function TourPackagesFromPunePage() {
       circuit: "Pune → Maheshwar → Omkareshwar → Ujjain → Grishneshwar → Pune",
       vehicle: "Luxury AC Force Urbania",
       highlights: ["Mahakal Bhasma Aarti guidance", "Narmada Boat Parikrama", "Verified 3-Star AC Hotel", "Pure Veg Sattvic Food"],
-      link: "/blog/pune-to-ujjain-tour-guide-mahakal-darshan-itinerary",
-      isBlogGuide: true,
+      link: "/tours/pune-to-ujjain-tour-package",
+      isBlogGuide: false,
     },
     {
       title: "Complete Ashtavinayak Yatra from Pune",

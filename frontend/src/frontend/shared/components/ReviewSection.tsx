@@ -14,10 +14,11 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
   title = "What Our Pilgrims Say",
   subtitle = "Read real experiences from thousands of happy Yatris who traveled with us.",
 }) => {
-  // Filter reviews
-  const reviewsToShow = tourSlug
+  // Filter reviews and sort by newest / latest first
+  const reviewsToShow = (tourSlug
     ? customerReviews.filter((r) => r.tourSlug === tourSlug)
-    : customerReviews.filter((r) => r.featured);
+    : customerReviews.filter((r) => r.featured)
+  ).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   if (reviewsToShow.length === 0) return null;
 

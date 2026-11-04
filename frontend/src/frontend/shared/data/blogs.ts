@@ -6,16 +6,16 @@ export { blogAuthors };
 export const blogPosts: BlogPost[] = [
   {
     slug: "pune-to-ujjain-tour-guide-mahakal-darshan-itinerary",
-    title: "Pune to Ujjain Travel Guide: Distance, Best Route, Cab Booking & Mahakal Darshan",
-    metaTitle: "Pune to Ujjain Travel Guide | Route, Distance, Cabs & Mahakal Darshan",
-    metaDescription: "Authoritative Pune to Ujjain Travel Guide: Complete road distance (~640 km), highway routes via Nashik/Indore, taxi fares, Bhasma Aarti rules, top temples & 2-3 day itineraries.",
-    focusKeyword: "pune to ujjain travel guide",
+    title: "Pune to Ujjain Tours and Travels: Best Tour Packages, Cab Booking & Mahakal Darshan Guide",
+    metaTitle: "Pune to Ujjain Tours and Travels | Best Travels & Tour Packages | Shailraj",
+    metaDescription: "Looking for the best travels from Pune to Ujjain? Complete travel guide: Road distance (~640 km), highway routes, AC Force Urbania cab booking, Bhasma Aarti rules & 3-day tour package.",
+    focusKeyword: "pune to ujjain tours and travels",
     excerpt: "Comprehensive Pune to Ujjain Travel Guide: Complete road distance, highway routes, cab booking options, Bhasma Aarti rules, top temples, and 2-3 day itineraries from Pune.",
     category: "Travel Guides",
     tags: ["Pune to Ujjain", "Mahakaleshwar", "Omkareshwar", "Travel Guide", "Cab Booking", "Jyotirlinga Tour", "Ujjain Itinerary"],
-    authorId: "shailesh-raj",
-    reviewerId: "priya-deshmukh",
-    relatedTourSlugs: ["pune-to-ujjain-omkareshwar-tour", "5-jyotirlinga-maharashtra-tour"],
+    authorId: "mayur-patil",
+    reviewerId: "shaila-mayur-patil",
+    relatedTourSlugs: ["pune-to-ujjain-tour-package", "5-jyotirlinga-maharashtra-tour"],
     relatedArticleSlugs: ["pune-to-ujjain-road-trip-itinerary", "pune-to-ashtavinayak-tour-guide-route-map-itinerary"],
     featuredImage: "https://images.unsplash.com/photo-1698223126743-3b10b78df025?q=80&w=1470&auto=format&fit=crop",
     ogImage: "https://images.unsplash.com/photo-1698223126743-3b10b78df025?q=80&w=1470&auto=format&fit=crop",
@@ -341,16 +341,16 @@ export const blogPosts: BlogPost[] = [
   },
   {
     slug: "pune-to-ujjain-road-trip-itinerary",
-    title: "Pune to Ujjain Road Trip: 2-Day Sacred Tri-Jyotirlinga Itinerary & Route Guide",
-    metaTitle: "Pune to Ujjain Road Trip | 2-Day Tri-Jyotirlinga Itinerary & Highway Guide",
-    metaDescription: "Complete 2-day Pune to Ujjain road trip guide: Cover Mahakaleshwar, Omkareshwar & Grishneshwar Jyotirlingas, Maheshwar Ghats, Harsiddhi Mata, Kaal Bhairav, and highway stops.",
-    focusKeyword: "pune to ujjain road trip",
+    title: "Pune to Ujjain Road Trip & Tour: Best Travels 2-Day Tri-Jyotirlinga Itinerary",
+    metaTitle: "Pune to Ujjain Best Travels & Road Trip Guide | Shailraj Travels",
+    metaDescription: "Complete 2-day Pune to Ujjain tour and travels road trip guide: Cover Mahakaleshwar, Omkareshwar & Grishneshwar Jyotirlingas with Shailraj Travels AC Force Urbania.",
+    focusKeyword: "pune to ujjain best travels",
     excerpt: "Embark on a sacred 2-day Tri-Jyotirlinga road odyssey from Pune to Ujjain covering Mahakaleshwar, Omkareshwar, Grishneshwar, Maheshwar Ghats, and Kaal Bhairav with detailed stops and timings.",
     category: "Experiences",
     tags: ["Pune to Ujjain", "Road Trip", "Mahakaleshwar", "Omkareshwar", "Grishneshwar", "Experiences", "Road Odyssey"],
-    authorId: "shailesh-raj",
-    reviewerId: "priya-deshmukh",
-    relatedTourSlugs: ["pune-to-ujjain-omkareshwar-tour", "5-jyotirlinga-maharashtra-tour"],
+    authorId: "mayur-patil",
+    reviewerId: "shaila-mayur-patil",
+    relatedTourSlugs: ["pune-to-ujjain-tour-package", "5-jyotirlinga-maharashtra-tour"],
     relatedArticleSlugs: ["pune-to-ujjain-tour-guide-mahakal-darshan-itinerary"],
     featuredImage: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=1469&auto=format&fit=crop",
     ogImage: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=1469&auto=format&fit=crop",
@@ -525,8 +525,8 @@ export const blogPosts: BlogPost[] = [
       "Innova Crysta",
       "AC Force Urbania"
     ],
-    authorId: "shailesh-raj",
-    reviewerId: "priya-deshmukh",
+    authorId: "mayur-patil",
+    reviewerId: "shaila-mayur-patil",
     relatedTourSlugs: ["pune-to-ashtavinayak-darshan", "pune-mumbai-to-3-jyotirlinga-darshan"],
     relatedArticleSlugs: ["pune-to-ujjain-tour-guide-mahakal-darshan-itinerary"],
     featuredImage: "https://images.unsplash.com/photo-1567591414240-e2b2f6b8a8b8?q=80&w=1200&auto=format&fit=crop",
@@ -935,11 +935,11 @@ export const blogPosts: BlogPost[] = [
       "top travel agency in pune",
       "shailraj travels reviews"
     ],
-    authorId: "shailesh-raj",
-    reviewerId: "priya-deshmukh",
+    authorId: "mayur-patil",
+    reviewerId: "shaila-mayur-patil",
     relatedTourSlugs: [
       "pune-to-ashtavinayak-darshan",
-      "ujjain-omkareshwar-Ghrishneshwar-maheshwar-tour"
+      "pune-to-ujjain-tour-package"
     ],
     relatedArticleSlugs: [
       "pune-to-ujjain-tour-guide-mahakal-darshan-itinerary",
@@ -1067,7 +1067,7 @@ export const blogPosts: BlogPost[] = [
 
 <p>Local forum consensus favors private outstation vehicles for families. Driving early morning from Pune via the National Highway 52 corridor allows groups to manage Bhasma Aarti timings at Mahakaleshwar, perform the Narmada river parikrama at Omkareshwar, and return through Grishneshwar without transferring luggage between multiple vehicles.</p>
 
-<p>Explore the complete itinerary: <a href="/tours/ujjain-omkareshwar-Ghrishneshwar-maheshwar-tour"><strong>Pune to Ujjain, Omkareshwar, Grishneshwar and Maheshwar tour package</strong></a>.</p>
+<p>Explore the complete itinerary: <a href="/tours/pune-to-ujjain-tour-package"><strong>Pune to Ujjain, Omkareshwar, Grishneshwar and Maheshwar tour package</strong></a>.</p>
 
 <h3>Pune to Ashtavinayak Yatra</h3>
 <p>A common question on Maharashtra travel forums is whether the eight Ashtavinayak temples can be completed in a single 24-hour drive. Devotees who have done the circuit advise against one-day trips, particularly when traveling with senior citizens. The complete circuit covers more than 650 kilometers across varying road conditions.</p>

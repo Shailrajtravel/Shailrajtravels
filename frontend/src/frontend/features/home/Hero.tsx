@@ -75,7 +75,7 @@ export function Hero({
   const [success, setSuccess] = useState(false);
   const [reviewStats, setReviewStats] = useState<{ rating: string; reviewCount: string }>({
     rating: "5.0",
-    reviewCount: "12",
+    reviewCount: "25",
   });
 
   useEffect(() => {

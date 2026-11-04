@@ -57,7 +57,7 @@ function PilgrimageToursFromPunePage() {
       circuit: "Ujjain Mahakaleshwar, Omkareshwar Jyotirlinga, Maheshwar, Grishneshwar",
       duration: "3 Days / 2 Nights",
       features: "Bhasma Aarti guidance, ₹250 Sheegra Darshan help, luxury AC Force Urbania, verified 3-star AC hotel.",
-      link: "/tours/ujjain-omkareshwar-Ghrishneshwar-maheshwar-tour",
+      link: "/tours/pune-to-ujjain-tour-package",
       isGuide: false,
     },
     {

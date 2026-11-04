@@ -15,7 +15,7 @@ export const comparisons: Comparison[] = [
     metaTitle: "Ujjain vs Kashi Vishwanath Jyotirlinga Tour Comparison | Shailraj Travels",
     metaDescription:
       "Comparing the Ujjain Mahakaleshwar Jyotirlinga experience with Kashi Vishwanath. Which spiritual journey from Pune should you choose first?",
-    toursCompared: ["ujjain-omkareshwar-Ghrishneshwar-maheshwar-tour", "pune-mumbai-to-3-jyotirlinga-darshan"],
+    toursCompared: ["pune-to-ujjain-tour-package", "pune-mumbai-to-3-jyotirlinga-darshan"],
     keyDifferences: [
       {
         aspect: "Primary Deity",

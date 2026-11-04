@@ -15,6 +15,15 @@ export function generateLocalBusinessSchema() {
       "Travel Agency in Pune",
       "Best Travels for Ujjain Yatra",
       "Ujjain Yatra Best Travels",
+      "Pune to Ujjain Best Travels",
+      "Pune to Ujjain Bus Travels",
+      "Pune to Ujjain Bus",
+      "Pune to Ujjain Sleeper Bus Travels",
+      "Pune to Ujjain Bus Booking",
+      "Pune to Ujjain Luxury Bus Travels",
+      "Ujjain Bus Travels",
+      "Pune to Ujjain Tour and Travels",
+      "Pune to Ujjain Tours and Travels",
       "Shailraj Travels & Tours"
     ],
     slogan: "Best Travels in Pune & Hadapsar for Tours, Ujjain Yatra & Luxury Rentals",
@@ -70,6 +79,15 @@ export function generateLocalBusinessSchema() {
       "Ujjain Tour",
       "Ujjain Yatra Best Travels",
       "Best Travels for Ujjain Yatra",
+      "Pune to Ujjain Best Travels",
+      "Pune to Ujjain Bus Travels",
+      "Pune to Ujjain Bus",
+      "Pune to Ujjain Sleeper Bus Travels",
+      "Pune to Ujjain Bus Booking",
+      "Pune to Ujjain Luxury Bus Travels",
+      "Ujjain Bus Travels",
+      "Pune to Ujjain Tour and Travels",
+      "Pune to Ujjain Tours and Travels",
       "Pune to Ujjain Tour Package",
       "Pune to Ujjain Travels",
       "Pune to Ujjain Road Trip",
@@ -254,3 +272,51 @@ export function generateProductSchema({
   return schema;
 }
 
+
+export function generateBusTripSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BusTrip",
+    name: "Pune to Ujjain Bus Travels (Mahakaleshwar & Omkareshwar Jyotirlinga)",
+    description: "Daily and weekend luxury bus travels from Pune to Ujjain. 10/13/17-seater AC Force Urbania and luxury sleeper bus options with direct Mahakaleshwar temple doorstep drop.",
+    busName: "Shailraj Luxury AC Force Urbania & AC Sleeper Coach",
+    busNumber: "SRT-PUN-UJJ",
+    departureStation: {
+      "@type": "BusStation",
+      name: "Pune Boarding Points (Hadapsar, Swargate, Pune Station, Wakad, Bhosari)",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Pune",
+        addressRegion: "Maharashtra",
+        postalCode: "412307",
+        addressCountry: "IN"
+      }
+    },
+    arrivalStation: {
+      "@type": "BusStation",
+      name: "Ujjain Mahakaleshwar Temple Parisar & Nanakheda",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Ujjain",
+        addressRegion: "Madhya Pradesh",
+        postalCode: "456001",
+        addressCountry: "IN"
+      }
+    },
+    provider: {
+      "@type": "TravelAgency",
+      name: "Shailraj Travels",
+      url: "https://www.shailrajtravels.com",
+      telephone: "+919764413556"
+    },
+    departureTime: "20:00:00+05:30",
+    arrivalTime: "10:30:00+05:30",
+    offers: {
+      "@type": "Offer",
+      price: "1499",
+      priceCurrency: "INR",
+      availability: "https://schema.org/InStock",
+      url: "https://www.shailrajtravels.com/pune-to-ujjain-bus-travels"
+    }
+  };
+}

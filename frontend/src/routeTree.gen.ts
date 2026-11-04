@@ -18,6 +18,7 @@ import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SecurityPolicyRouteImport } from './routes/security-policy'
 import { Route as ReportIssueRouteImport } from './routes/report-issue'
 import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
+import { Route as PuneToUjjainBusTravelsRouteImport } from './routes/pune-to-ujjain-bus-travels'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as PilgrimageToursFromPuneRouteImport } from './routes/pilgrimage-tours-from-pune'
 import { Route as PilgrimageGuidesRouteImport } from './routes/pilgrimage-guides'
@@ -98,6 +99,11 @@ const ReportIssueRoute = ReportIssueRouteImport.update({
 const RefundPolicyRoute = RefundPolicyRouteImport.update({
   id: '/refund-policy',
   path: '/refund-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PuneToUjjainBusTravelsRoute = PuneToUjjainBusTravelsRouteImport.update({
+  id: '/pune-to-ujjain-bus-travels',
+  path: '/pune-to-ujjain-bus-travels',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
@@ -298,6 +304,7 @@ export interface FileRoutesByFullPath {
   '/pilgrimage-guides': typeof PilgrimageGuidesRoute
   '/pilgrimage-tours-from-pune': typeof PilgrimageToursFromPuneRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
+  '/pune-to-ujjain-bus-travels': typeof PuneToUjjainBusTravelsRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/report-issue': typeof ReportIssueRoute
   '/security-policy': typeof SecurityPolicyRoute
@@ -344,6 +351,7 @@ export interface FileRoutesByTo {
   '/pilgrimage-guides': typeof PilgrimageGuidesRoute
   '/pilgrimage-tours-from-pune': typeof PilgrimageToursFromPuneRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
+  '/pune-to-ujjain-bus-travels': typeof PuneToUjjainBusTravelsRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/report-issue': typeof ReportIssueRoute
   '/security-policy': typeof SecurityPolicyRoute
@@ -391,6 +399,7 @@ export interface FileRoutesById {
   '/pilgrimage-guides': typeof PilgrimageGuidesRoute
   '/pilgrimage-tours-from-pune': typeof PilgrimageToursFromPuneRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
+  '/pune-to-ujjain-bus-travels': typeof PuneToUjjainBusTravelsRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/report-issue': typeof ReportIssueRoute
   '/security-policy': typeof SecurityPolicyRoute
@@ -439,6 +448,7 @@ export interface FileRouteTypes {
     | '/pilgrimage-guides'
     | '/pilgrimage-tours-from-pune'
     | '/privacy-policy'
+    | '/pune-to-ujjain-bus-travels'
     | '/refund-policy'
     | '/report-issue'
     | '/security-policy'
@@ -485,6 +495,7 @@ export interface FileRouteTypes {
     | '/pilgrimage-guides'
     | '/pilgrimage-tours-from-pune'
     | '/privacy-policy'
+    | '/pune-to-ujjain-bus-travels'
     | '/refund-policy'
     | '/report-issue'
     | '/security-policy'
@@ -531,6 +542,7 @@ export interface FileRouteTypes {
     | '/pilgrimage-guides'
     | '/pilgrimage-tours-from-pune'
     | '/privacy-policy'
+    | '/pune-to-ujjain-bus-travels'
     | '/refund-policy'
     | '/report-issue'
     | '/security-policy'
@@ -578,6 +590,7 @@ export interface RootRouteChildren {
   PilgrimageGuidesRoute: typeof PilgrimageGuidesRoute
   PilgrimageToursFromPuneRoute: typeof PilgrimageToursFromPuneRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
+  PuneToUjjainBusTravelsRoute: typeof PuneToUjjainBusTravelsRoute
   RefundPolicyRoute: typeof RefundPolicyRoute
   ReportIssueRoute: typeof ReportIssueRoute
   SecurityPolicyRoute: typeof SecurityPolicyRoute
@@ -667,6 +680,13 @@ declare module '@tanstack/react-router' {
       path: '/refund-policy'
       fullPath: '/refund-policy'
       preLoaderRoute: typeof RefundPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pune-to-ujjain-bus-travels': {
+      id: '/pune-to-ujjain-bus-travels'
+      path: '/pune-to-ujjain-bus-travels'
+      fullPath: '/pune-to-ujjain-bus-travels'
+      preLoaderRoute: typeof PuneToUjjainBusTravelsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy-policy': {
@@ -938,6 +958,7 @@ const rootRouteChildren: RootRouteChildren = {
   PilgrimageGuidesRoute: PilgrimageGuidesRoute,
   PilgrimageToursFromPuneRoute: PilgrimageToursFromPuneRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
+  PuneToUjjainBusTravelsRoute: PuneToUjjainBusTravelsRoute,
   RefundPolicyRoute: RefundPolicyRoute,
   ReportIssueRoute: ReportIssueRoute,
   SecurityPolicyRoute: SecurityPolicyRoute,

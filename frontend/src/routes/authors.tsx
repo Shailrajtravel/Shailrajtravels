@@ -32,16 +32,16 @@ function AuthorsIndexPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {Object.values(authors).map((author) => (
+          {[authors["mayur-patil"], authors["shaila-mayur-patil"]].map((author) => (
             <div
               key={author.id}
               className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 flex flex-col items-center text-center"
             >
-              <div className="w-32 h-32 rounded-full overflow-hidden mb-6 border-4 border-slate-50">
+              <div className="w-32 h-32 rounded-full overflow-hidden mb-6 border-4 border-brand-orange/20 shadow-md bg-white shrink-0">
                 <img
                   src={author.avatarUrl}
                   alt={author.name}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover object-top"
                   onError={(e) => {
                     e.currentTarget.src =
                       "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjY2JkNWUxIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTIwIDIxdi0yYTRgNCAwIDAgMC00LTRoLThhNCA0IDAgMCAwLTQgNHYyIi8+PGNpcmNsZSBjeD0iMTIiIGN5PSI3IiByPSI0Ii8+PC9zdmc+";

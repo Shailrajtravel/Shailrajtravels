@@ -335,7 +335,7 @@ export function FooterSection({ t, lang = "en" }: { t: typeof translations.mr; l
             <Link to={"/tours/pune-to-ashtavinayak-darshan" as any} className="text-slate-400 hover:text-white transition-colors py-0.5">
               Ashtavinayak Darshan Tour
             </Link>
-            <Link to={"/tours/ujjain-omkareshwar-Ghrishneshwar-maheshwar-tour" as any} className="text-slate-400 hover:text-white transition-colors py-0.5">
+            <Link to={"/tours/pune-to-ujjain-tour-package" as any} className="text-slate-400 hover:text-white transition-colors py-0.5">
               Ujjain Mahakal Tour
             </Link>
             <Link to={"/tours/pune-mumbai-to-3-jyotirlinga-darshan" as any} className="text-slate-400 hover:text-white transition-colors py-0.5">
@@ -365,11 +365,12 @@ export function FooterSection({ t, lang = "en" }: { t: typeof translations.mr; l
             <span className="text-slate-700">•</span>
             <Link to={"/tours" as any} className="hover:text-white transition-colors">Pune Travels</Link>
             <span className="text-slate-700">•</span>
-            <Link to={"/tours/ujjain-omkareshwar-Ghrishneshwar-maheshwar-tour" as any} className="hover:text-white transition-colors">Ujjain Tour</Link>
+            <Link to={"/pune-to-ujjain-bus-travels" as any} className="hover:text-white transition-colors">Pune to Ujjain Bus Travels</Link>
+            <Link to={"/tours/pune-to-ujjain-tour-package" as any} className="hover:text-white transition-colors">Pune to Ujjain Best Travels</Link>
             <span className="text-slate-700">•</span>
-            <Link to={"/tours/ujjain-omkareshwar-Ghrishneshwar-maheshwar-tour" as any} className="hover:text-white transition-colors">Ujjain Yatra Best Travels</Link>
+            <Link to={"/tours/pune-to-ujjain-tour-package" as any} className="hover:text-white transition-colors">Pune to Ujjain Tour and Travels</Link>
             <span className="text-slate-700">•</span>
-            <Link to="/tour-packages-from-pune" className="hover:text-white transition-colors">Pune to Ujjain Tour Package</Link>
+            <Link to={"/tours/pune-to-ujjain-tour-package" as any} className="hover:text-white transition-colors">Pune to Ujjain Tour Package</Link>
             <span className="text-slate-700">•</span>
             <Link to={"/tours/pune-to-ashtavinayak-darshan" as any} className="hover:text-white transition-colors">Ashtavinayak Yatra</Link>
             <span className="text-slate-700">•</span>

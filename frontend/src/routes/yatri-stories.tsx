@@ -30,7 +30,14 @@ export const Route = createFileRoute("/yatri-stories")({
   pendingComponent: YatriStoriesSkeleton,
   loader: async () => {
     try {
-      const reviews = await getReviewsFn();
+      const rawReviews = await getReviewsFn();
+      const reviews = Array.isArray(rawReviews)
+        ? [...rawReviews].sort(
+            (a: any, b: any) =>
+              new Date(b.createdAt || b.date || 0).getTime() -
+              new Date(a.createdAt || a.date || 0).getTime()
+          )
+        : [];
       return { reviews };
     } catch (e) {
       console.error(e);

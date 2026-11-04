@@ -49,19 +49,31 @@ export const getToursFn = createServerFn({ method: "POST" })
 export const getTourBySlugFn = createServerFn({ method: "POST" })
   .validator((data: { slug: string; lang?: string }) => data)
   .handler(async ({ data }) => {
-    const cacheKey = `tour:slug:${data.slug}:${data.lang || "en"}`;
+    const slugKey = data.slug.toLowerCase().trim();
+    const cacheKey = `tour:slug:${slugKey}:${data.lang || "en"}`;
     try {
       const cached = await getCachedData<any>(cacheKey);
       if (cached) return cached;
       const qs = data.lang ? `?lang=${data.lang}` : "";
-      const result = await apiFetch(`/tours/slug/${data.slug}${qs}`);
+      const result = await apiFetch(`/tours/slug/${slugKey}${qs}`);
       if (result) {
         await setCachedData(cacheKey, result, 600);
+        return result;
       }
-      return result;
+      // Fallback to static seed data if not found in database API
+      const seedMatch = seedTours.find((t: any) => 
+        (t.slug && t.slug.toLowerCase() === slugKey) ||
+        (slugKey.includes("ujjain") && t.slug === "pune-to-ujjain-tour-package")
+      );
+      if (seedMatch) return seedMatch;
+      return null;
     } catch (error) {
       console.error("Failed to fetch tour by slug", error);
-      return null;
+      const seedMatch = seedTours.find((t: any) => 
+        (t.slug && t.slug.toLowerCase() === slugKey) ||
+        (slugKey.includes("ujjain") && t.slug === "pune-to-ujjain-tour-package")
+      );
+      return seedMatch || null;
     }
   });
 
