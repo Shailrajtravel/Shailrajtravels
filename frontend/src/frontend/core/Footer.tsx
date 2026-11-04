@@ -314,6 +314,7 @@ export function FooterSection({ t, lang = "en" }: { t: typeof translations.mr; l
             <Link to="/why-choose-shailraj-travels" className="text-slate-400 hover:text-white transition-colors py-0.5">
               Why Choose Shailraj
             </Link>
+            <Link to="/reviews" className="text-slate-400 hover:text-white transition-colors py-0.5">Customer Reviews (5.0★)</Link>
             <Link to="/about-shailraj-travels" className="text-slate-400 hover:text-white transition-colors py-0.5">
               About Shailraj Travels
             </Link>

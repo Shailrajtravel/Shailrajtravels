@@ -16,6 +16,7 @@ import { Route as TourPackagesFromPuneRouteImport } from './routes/tour-packages
 import { Route as TourOperatorInPuneRouteImport } from './routes/tour-operator-in-pune'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SecurityPolicyRouteImport } from './routes/security-policy'
+import { Route as ReviewsRouteImport } from './routes/reviews'
 import { Route as ReportIssueRouteImport } from './routes/report-issue'
 import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as PuneToUjjainBusTravelsRouteImport } from './routes/pune-to-ujjain-bus-travels'
@@ -89,6 +90,11 @@ const TermsRoute = TermsRouteImport.update({
 const SecurityPolicyRoute = SecurityPolicyRouteImport.update({
   id: '/security-policy',
   path: '/security-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReviewsRoute = ReviewsRouteImport.update({
+  id: '/reviews',
+  path: '/reviews',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReportIssueRoute = ReportIssueRouteImport.update({
@@ -307,6 +313,7 @@ export interface FileRoutesByFullPath {
   '/pune-to-ujjain-bus-travels': typeof PuneToUjjainBusTravelsRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/report-issue': typeof ReportIssueRoute
+  '/reviews': typeof ReviewsRoute
   '/security-policy': typeof SecurityPolicyRoute
   '/terms': typeof TermsRoute
   '/tour-operator-in-pune': typeof TourOperatorInPuneRoute
@@ -354,6 +361,7 @@ export interface FileRoutesByTo {
   '/pune-to-ujjain-bus-travels': typeof PuneToUjjainBusTravelsRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/report-issue': typeof ReportIssueRoute
+  '/reviews': typeof ReviewsRoute
   '/security-policy': typeof SecurityPolicyRoute
   '/terms': typeof TermsRoute
   '/tour-operator-in-pune': typeof TourOperatorInPuneRoute
@@ -402,6 +410,7 @@ export interface FileRoutesById {
   '/pune-to-ujjain-bus-travels': typeof PuneToUjjainBusTravelsRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/report-issue': typeof ReportIssueRoute
+  '/reviews': typeof ReviewsRoute
   '/security-policy': typeof SecurityPolicyRoute
   '/terms': typeof TermsRoute
   '/tour-operator-in-pune': typeof TourOperatorInPuneRoute
@@ -451,6 +460,7 @@ export interface FileRouteTypes {
     | '/pune-to-ujjain-bus-travels'
     | '/refund-policy'
     | '/report-issue'
+    | '/reviews'
     | '/security-policy'
     | '/terms'
     | '/tour-operator-in-pune'
@@ -498,6 +508,7 @@ export interface FileRouteTypes {
     | '/pune-to-ujjain-bus-travels'
     | '/refund-policy'
     | '/report-issue'
+    | '/reviews'
     | '/security-policy'
     | '/terms'
     | '/tour-operator-in-pune'
@@ -545,6 +556,7 @@ export interface FileRouteTypes {
     | '/pune-to-ujjain-bus-travels'
     | '/refund-policy'
     | '/report-issue'
+    | '/reviews'
     | '/security-policy'
     | '/terms'
     | '/tour-operator-in-pune'
@@ -593,6 +605,7 @@ export interface RootRouteChildren {
   PuneToUjjainBusTravelsRoute: typeof PuneToUjjainBusTravelsRoute
   RefundPolicyRoute: typeof RefundPolicyRoute
   ReportIssueRoute: typeof ReportIssueRoute
+  ReviewsRoute: typeof ReviewsRoute
   SecurityPolicyRoute: typeof SecurityPolicyRoute
   TermsRoute: typeof TermsRoute
   TourOperatorInPuneRoute: typeof TourOperatorInPuneRoute
@@ -666,6 +679,13 @@ declare module '@tanstack/react-router' {
       path: '/security-policy'
       fullPath: '/security-policy'
       preLoaderRoute: typeof SecurityPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reviews': {
+      id: '/reviews'
+      path: '/reviews'
+      fullPath: '/reviews'
+      preLoaderRoute: typeof ReviewsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/report-issue': {
@@ -961,6 +981,7 @@ const rootRouteChildren: RootRouteChildren = {
   PuneToUjjainBusTravelsRoute: PuneToUjjainBusTravelsRoute,
   RefundPolicyRoute: RefundPolicyRoute,
   ReportIssueRoute: ReportIssueRoute,
+  ReviewsRoute: ReviewsRoute,
   SecurityPolicyRoute: SecurityPolicyRoute,
   TermsRoute: TermsRoute,
   TourOperatorInPuneRoute: TourOperatorInPuneRoute,

@@ -124,6 +124,7 @@ export function buildEnhancedSitemap() {
     { url: '/why-choose-shailraj-travels', priority: '0.80', changefreq: 'weekly' },
     { url: '/about-shailraj-travels', priority: '0.80', changefreq: 'monthly' },
     { url: '/gallery', priority: '0.75', changefreq: 'weekly' },
+    { url: '/reviews', priority: '0.90', changefreq: 'daily' },
     { url: '/yatri-stories', priority: '0.75', changefreq: 'weekly' },
     { url: '/faq', priority: '0.80', changefreq: 'monthly' },
     { url: '/contact', priority: '0.80', changefreq: 'monthly' },

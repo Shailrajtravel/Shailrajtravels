@@ -10,8 +10,7 @@ export const Route = createFileRoute("/about-shailraj-travels")({
   head: () => ({
     meta: generateSEO({
       title: "About Shailraj Travels | Best Travels in Pune & Hadapsar Tour Operator",
-      description:
-        "About Shailraj Travels — Pune's top-rated travels and tour operator in Hadapsar. 15+ years of experience in Ujjain tours, Ashtavinayak yatra, Pune travels & luxury rentals. 4.9★ rating.",
+      description: "About Shailraj Travels — Founded in 2021 by Mayur Patil and Shaila Mayur Patil in Hadapsar, Pune. Specialized pilgrimage tour operator for Ujjain Darshan, Ashtavinayak Yatra & luxury AC Force Urbania. 5.0★ Google Rating.",
       canonicalUrl: "https://www.shailrajtravels.com/about-shailraj-travels",
       keywords: [
         "best travels in pune",
@@ -42,10 +41,25 @@ function AboutEntityPage() {
     logo: "https://www.shailrajtravels.com/logo.png",
     description:
       "Specialized pilgrimage tour operator in Maharashtra focusing on Ashtavinayak, Jyotirlinga, Char Dham, and Tirupati tours.",
-    foundingDate: "2011",
+    foundingDate: "2021",
     founder: {
       "@type": "Person",
-      name: businessConfig.founderName,
+      name: "Mayur Patil",
+      jobTitle: "Founder & Chief Pilgrimage Guide",
+      image: "https://www.shailrajtravels.com/images/authors/mayur-patil.jpg",
+      sameAs: "https://www.instagram.com/wings_of_mayur_9999/",
+    },
+    coFounder: {
+      "@type": "Person",
+      name: "Shaila Mayur Patil",
+      jobTitle: "Co-Founder & Operations Director",
+    },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: "5.0",
+      reviewCount: "25",
+      bestRating: "5",
+      worstRating: "1",
     },
     address: {
       "@type": "PostalAddress",
