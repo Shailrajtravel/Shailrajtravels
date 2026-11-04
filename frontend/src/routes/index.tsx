@@ -24,9 +24,9 @@ export const Route = createFileRoute("/")({
   loaderDeps: ({ search: { lang } }) => ({ lang }),
   head: () => ({
     meta: generateSEO({
-      title: "Best Travels in Pune | Tours & Travel Agency in Hadapsar | Shailraj Travels",
+      title: "Best Travels in Pune | Tours & Travels – Shailraj Travels",
       description:
-        "Looking for the best travels in Pune? Shailraj Travels is Pune's #1 top-rated tour and travels agency in Hadapsar. Book Ujjain tours, Ashtavinayak yatra, Pune travels & luxury rentals. 4.9★ rated.",
+        "Looking for the best travels in Pune? Shailraj Travels offers Ujjain tours, Ashtavinayak yatra, and luxury AC vehicle rentals in Hadapsar. 4.9★ rated.",
       canonicalUrl: "https://www.shailrajtravels.com",
       keywords: [
         "best travels in pune",

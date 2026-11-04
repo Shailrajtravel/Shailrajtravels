@@ -146,9 +146,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         { charSet: "utf-8" },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
         ...generateSEO({
-          title: "Best Travels in Pune | Tours & Travel Agency in Hadapsar | Shailraj Travels",
+          title: "Best Travels in Pune | Tours & Travels – Shailraj Travels",
           description:
-            "Pune's #1 trusted tours and travel agency in Hadapsar with 15+ years experience. Book Ujjain tours, Ashtavinayak Darshan, Jyotirlinga yatras, and luxury AC rentals. 4.9★ rating.",
+            "Looking for the best travels in Pune? Shailraj Travels offers Ujjain tours, Ashtavinayak yatra, and luxury AC vehicle rentals in Hadapsar. 4.9★ rated.",
           canonicalUrl: "https://www.shailrajtravels.com",
         }),
         { name: "google", content: "notranslate" },
@@ -156,6 +156,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         { name: "apple-mobile-web-app-capable", content: "yes" },
         { name: "apple-mobile-web-app-status-bar-style", content: "default" },
         { name: "apple-mobile-web-app-title", content: "Shailraj Travels" },
+        { name: "author", content: "Shailraj Travels" },
+        { name: "publisher", content: "Shailraj Travels" },
         { name: "theme-color", content: "#10A34A" },
       ],
       links: [
