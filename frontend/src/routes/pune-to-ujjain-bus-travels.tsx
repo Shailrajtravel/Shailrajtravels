@@ -273,7 +273,7 @@ function PuneToUjjainBusTravelsPage() {
   ];
 
   return (
-    <div className="font-sans text-slate-800 bg-white selection:bg-brand-orange/20 selection:text-brand-blue-deep overflow-x-hidden">
+    <div className="font-sans text-slate-800 bg-white selection:bg-brand-blue/10 selection:text-brand-blue-deep overflow-x-hidden">
       {/* Structured Schema Markup */}
       <SchemaMarkup
         schema={[
@@ -345,7 +345,7 @@ function PuneToUjjainBusTravelsPage() {
             <div className="lg:col-span-7 text-left">
               {/* Trust Pill */}
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-green/10 text-brand-green-dark border border-brand-green/20 mb-5 text-xs sm:text-sm font-bold tracking-wide">
-                <Calendar className="w-4 h-4 text-brand-orange" />
+                <Calendar className="w-4 h-4 text-brand-green-dark" />
                 <span>DEPARTURE: EVERY FRIDAY</span>
                 <span className="w-1.5 h-1.5 rounded-full bg-brand-green" />
                 <span className="text-slate-700 font-medium">5.0 ★ Google Rating (Verified Yatris)</span>
@@ -354,7 +354,7 @@ function PuneToUjjainBusTravelsPage() {
               {/* H1 Heading */}
               <h1 className="text-3xl sm:text-5xl lg:text-[54px] font-extrabold font-display leading-[1.15] text-brand-blue-deep tracking-tight mb-4">
                 Pune to Ujjain <br className="hidden sm:inline" />
-                <span className="text-brand-orange">
+                <span className="text-brand-green-dark">
                   Mahakal Darshan Tour
                 </span>
               </h1>
@@ -367,19 +367,19 @@ function PuneToUjjainBusTravelsPage() {
               {/* Quick Route Summary Badges */}
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 mb-7 text-xs font-semibold text-slate-800">
                 <div className="flex items-center gap-2 bg-white/90 backdrop-blur-sm px-3 py-2.5 rounded-xl border border-slate-200/90 shadow-xs">
-                  <Calendar className="w-4 h-4 text-brand-orange shrink-0" />
+                  <Calendar className="w-4 h-4 text-brand-blue shrink-0" />
                   <span>Every Friday Batch</span>
                 </div>
                 <div className="flex items-center gap-2 bg-white/90 backdrop-blur-sm px-3 py-2.5 rounded-xl border border-slate-200/90 shadow-xs">
-                  <Clock className="w-4 h-4 text-brand-orange shrink-0" />
+                  <Clock className="w-4 h-4 text-brand-blue shrink-0" />
                   <span>2 Days / 1 Night</span>
                 </div>
                 <div className="flex items-center gap-2 bg-white/90 backdrop-blur-sm px-3 py-2.5 rounded-xl border border-slate-200/90 shadow-xs">
-                  <Bus className="w-4 h-4 text-brand-orange shrink-0" />
+                  <Bus className="w-4 h-4 text-brand-blue shrink-0" />
                   <span>AC Luxury Urbania</span>
                 </div>
                 <div className="flex items-center gap-2 bg-white/90 backdrop-blur-sm px-3 py-2.5 rounded-xl border border-slate-200/90 shadow-xs">
-                  <Navigation className="w-4 h-4 text-brand-orange shrink-0" />
+                  <Navigation className="w-4 h-4 text-brand-blue shrink-0" />
                   <span>Pune – Mumbai – Ujjain</span>
                 </div>
                 <div className="flex items-center gap-2 bg-white/90 backdrop-blur-sm px-3 py-2.5 rounded-xl border border-slate-200/90 shadow-xs">
@@ -387,23 +387,23 @@ function PuneToUjjainBusTravelsPage() {
                   <span>Guided Darshan</span>
                 </div>
                 <div className="flex items-center gap-2 bg-white/90 backdrop-blur-sm px-3 py-2.5 rounded-xl border border-slate-200/90 shadow-xs">
-                  <Sparkles className="w-4 h-4 text-brand-orange shrink-0" />
+                  <Sparkles className="w-4 h-4 text-brand-blue shrink-0" />
                   <span>Doorstep Temple Drop</span>
                 </div>
               </div>
 
               {/* Dynamic Pricing Callout Banner */}
-              <div className="bg-amber-50/95 border border-amber-300 rounded-2xl p-4 mb-7 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="bg-brand-green/5 border border-brand-green/20 rounded-2xl p-4 mb-7 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                  <div className="text-xs uppercase tracking-wider font-extrabold text-amber-800 flex items-center gap-1.5">
-                    <Tag className="w-3.5 h-3.5 text-amber-700" />
+                  <div className="text-xs uppercase tracking-wider font-extrabold text-brand-green-dark flex items-center gap-1.5">
+                    <Tag className="w-3.5 h-3.5 text-brand-green-dark" />
                     Transparent Dynamic Pricing
                   </div>
-                  <div className="text-base sm:text-lg font-bold text-slate-900 mt-0.5">
+                  <div className="text-base sm:text-lg font-bold text-brand-blue-deep mt-0.5">
                     Contact Us for Current Package Offers
                   </div>
                 </div>
-                <span className="text-xs text-amber-900/80 sm:text-right font-medium">
+                <span className="text-xs text-slate-600 sm:text-right font-medium">
                   Seasonal & group deals available • No hidden fees
                 </span>
               </div>
@@ -412,7 +412,7 @@ function PuneToUjjainBusTravelsPage() {
               <div className="flex flex-wrap items-center gap-3.5">
                 <a
                   href="#booking-section"
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-brand-orange hover:bg-brand-orange-dark text-white font-bold text-sm sm:text-base transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 no-underline"
+                  className="btn-cta inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-white font-bold text-sm sm:text-base shadow-md hover:shadow-lg hover:-translate-y-0.5 no-underline transition-all"
                 >
                   <Tag className="w-4 h-4" />
                   <span>Check Current Offers</span>
@@ -420,9 +420,9 @@ function PuneToUjjainBusTravelsPage() {
 
                 <a
                   href={`tel:${businessConfig.supportPhone}`}
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-900 font-bold text-sm sm:text-base border border-slate-300 transition-all shadow-xs hover:-translate-y-0.5 no-underline"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-brand-blue-deep font-bold text-sm sm:text-base border border-slate-200 shadow-xs hover:shadow-sm hover:-translate-y-0.5 no-underline transition-all"
                 >
-                  <Phone className="w-4 h-4 text-brand-orange" />
+                  <Phone className="w-4 h-4 text-brand-blue" />
                   <span>Book Your Seat</span>
                 </a>
 
@@ -430,7 +430,7 @@ function PuneToUjjainBusTravelsPage() {
                   href="https://wa.me/919764413556?text=Hi%20Shailraj%20Travels,%20please%20share%20the%20current%20package%20offers%20and%20seat%20availability%20for%20the%20Pune%20to%20Ujjain%20Friday%20Mahakal%20Darshan%20Tour."
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm sm:text-base transition-all shadow-md hover:-translate-y-0.5 no-underline"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-sm sm:text-base transition-all shadow-md hover:-translate-y-0.5 no-underline"
                 >
                   <MessageSquare className="w-4 h-4" />
                   <span>WhatsApp for Details</span>
@@ -443,7 +443,7 @@ function PuneToUjjainBusTravelsPage() {
               <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-100 text-slate-800 relative">
                 <div className="text-left mb-6">
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs font-bold text-brand-orange uppercase tracking-wider">
+                    <span className="text-xs font-bold text-brand-green-dark uppercase tracking-wider">
                       Friday Batch Booking
                     </span>
                     <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
@@ -484,7 +484,7 @@ function PuneToUjjainBusTravelsPage() {
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         placeholder="e.g. Mayur Patil"
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-orange text-sm font-medium"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-brand-blue text-sm font-medium"
                       />
                     </div>
 
@@ -497,7 +497,7 @@ function PuneToUjjainBusTravelsPage() {
                           value={formData.phone}
                           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                           placeholder="e.g. 9764413556"
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-orange text-sm font-medium"
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-brand-blue text-sm font-medium"
                         />
                       </div>
                       <div>
@@ -506,7 +506,7 @@ function PuneToUjjainBusTravelsPage() {
                           type="date"
                           value={formData.travelDate}
                           onChange={(e) => setFormData({ ...formData, travelDate: e.target.value })}
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-orange text-sm font-medium"
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-brand-blue text-sm font-medium"
                         />
                       </div>
                     </div>
@@ -517,7 +517,7 @@ function PuneToUjjainBusTravelsPage() {
                         <select
                           value={formData.passengers}
                           onChange={(e) => setFormData({ ...formData, passengers: e.target.value })}
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-orange text-sm font-medium bg-white"
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-brand-blue text-sm font-medium bg-white"
                         >
                           <option value="1">1 Person</option>
                           <option value="2">2 Persons</option>
@@ -531,7 +531,7 @@ function PuneToUjjainBusTravelsPage() {
                         <select
                           value={formData.boardingPoint}
                           onChange={(e) => setFormData({ ...formData, boardingPoint: e.target.value })}
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-orange text-sm font-medium bg-white"
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-brand-blue text-sm font-medium bg-white"
                         >
                           <option value="Hadapsar">Hadapsar (Head Office)</option>
                           <option value="Swargate">Swargate ST Stand</option>
@@ -549,7 +549,7 @@ function PuneToUjjainBusTravelsPage() {
                       <select
                         value={formData.busType}
                         onChange={(e) => setFormData({ ...formData, busType: e.target.value })}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-orange text-sm font-medium bg-white"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-brand-blue text-sm font-medium bg-white"
                       >
                         <option value="AC Force Urbania (10/13/17 Seater)">AC Luxury Force Urbania (10/13/17 Seater)</option>
                         <option value="Multi-Axle AC Sleeper Bus">Multi-Axle AC Sleeper Coach Bus</option>
@@ -561,7 +561,7 @@ function PuneToUjjainBusTravelsPage() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full mt-2 py-3.5 rounded-xl bg-brand-orange hover:bg-brand-orange-dark text-white font-bold text-sm transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                      className="btn-cta w-full mt-2 py-3.5 rounded-xl text-white font-bold text-sm transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
                     >
                       {isSubmitting ? (
                         <>
@@ -592,8 +592,8 @@ function PuneToUjjainBusTravelsPage() {
           <div className="bg-slate-50 border border-slate-200/80 rounded-3xl p-6 sm:p-8 shadow-sm">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-6 border-b border-slate-200">
               <div className="text-left">
-                <span className="text-xs font-bold text-brand-orange uppercase tracking-wider flex items-center gap-1.5 mb-1">
-                  <Sparkles className="w-4 h-4 text-brand-orange" />
+                <span className="text-xs font-bold text-brand-green-dark uppercase tracking-wider flex items-center gap-1.5 mb-1">
+                  <Sparkles className="w-4 h-4 text-brand-green-dark" />
                   Official Tour Specifications
                 </span>
                 <h2 className="text-2xl sm:text-3xl font-extrabold font-display text-brand-blue-deep">
@@ -602,7 +602,7 @@ function PuneToUjjainBusTravelsPage() {
               </div>
               <div className="flex items-center gap-2 self-start sm:self-auto">
                 <span className="text-xs font-semibold text-slate-500">Departure Schedule:</span>
-                <span className="px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-300">
+                <span className="px-3 py-1 rounded-full text-xs font-bold bg-brand-green/10 text-brand-green-dark border border-brand-green/20">
                   Every Friday Guaranteed
                 </span>
               </div>
@@ -617,15 +617,15 @@ function PuneToUjjainBusTravelsPage() {
                     key={idx}
                     className={`rounded-2xl p-4 border shadow-sm flex items-start gap-3.5 transition-all ${
                       item.highlight
-                        ? "bg-amber-50/80 border-amber-300/80 ring-1 ring-amber-300/40"
+                        ? "bg-brand-green/5 border-brand-green/30 ring-1 ring-brand-green/20"
                         : "bg-white border-slate-200/60"
                     }`}
                   >
                     <div
                       className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
                         item.highlight
-                          ? "bg-amber-500 text-white"
-                          : "bg-orange-50 border border-orange-100 text-brand-orange"
+                          ? "bg-brand-green-dark text-white"
+                          : "bg-brand-mist border border-brand-blue/10 text-brand-blue"
                       }`}
                     >
                       <IconComponent className="w-5 h-5" />
@@ -636,7 +636,7 @@ function PuneToUjjainBusTravelsPage() {
                       </div>
                       <div
                         className={`text-sm sm:text-base font-extrabold mt-0.5 ${
-                          item.highlight ? "text-amber-900" : "text-slate-900"
+                          item.highlight ? "text-brand-green-dark" : "text-brand-blue-deep"
                         }`}
                       >
                         {item.value}
@@ -654,7 +654,7 @@ function PuneToUjjainBusTravelsPage() {
       <section className="py-16 lg:py-24 bg-slate-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-14">
-            <span className="text-xs font-bold text-brand-orange uppercase tracking-wider">
+            <span className="text-xs font-bold text-brand-green-dark uppercase tracking-wider">
               Pilgrimage Schedule
             </span>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-display text-brand-blue-deep mt-2 mb-4">
@@ -672,7 +672,7 @@ function PuneToUjjainBusTravelsPage() {
                 className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm hover:shadow-md transition-shadow text-left"
               >
                 <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-extrabold bg-brand-orange/10 text-brand-orange border border-brand-orange/20">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-extrabold bg-brand-green/10 text-brand-green-dark border border-brand-green/20">
                     {step.badge}
                   </span>
                   <span className="text-xs font-bold text-slate-400">{step.day}</span>
@@ -693,7 +693,7 @@ function PuneToUjjainBusTravelsPage() {
               href="https://wa.me/919764413556?text=Hi%20Shailraj%20Travels,%20please%20send%20me%20the%20detailed%20Pune%20to%20Ujjain%202-Day%20Itinerary%20PDF%20and%20current%20offers."
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md hover:-translate-y-0.5 transition-all no-underline"
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-sm shadow-md hover:-translate-y-0.5 transition-all no-underline"
             >
               <MessageSquare className="w-4 h-4" />
               <span>WhatsApp for Details & PDF Itinerary</span>
@@ -706,7 +706,7 @@ function PuneToUjjainBusTravelsPage() {
       <section className="py-16 bg-white border-t border-slate-100">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-14">
-            <span className="text-xs font-bold text-brand-orange uppercase tracking-wider">
+            <span className="text-xs font-bold text-brand-green-dark uppercase tracking-wider">
               Sacred Circuit
             </span>
             <h2 className="text-3xl sm:text-4xl font-extrabold font-display text-brand-blue-deep mt-2 mb-4">
@@ -723,12 +723,12 @@ function PuneToUjjainBusTravelsPage() {
               return (
                 <div
                   key={i}
-                  className="bg-slate-50 rounded-2xl p-6 border border-slate-200/80 hover:border-brand-orange/40 hover:bg-white hover:shadow-md transition-all group"
+                  className="bg-slate-50 rounded-2xl p-6 border border-slate-200/80 hover:border-brand-blue/30 hover:bg-white hover:shadow-md transition-all group"
                 >
-                  <div className="w-12 h-12 rounded-xl bg-orange-100 text-brand-orange flex items-center justify-center font-bold mb-4 group-hover:scale-110 transition-transform">
+                  <div className="w-12 h-12 rounded-xl bg-brand-mist border border-brand-blue/10 text-brand-blue flex items-center justify-center font-bold mb-4 group-hover:scale-110 transition-transform">
                     <IconComp className="w-6 h-6" />
                   </div>
-                  <h3 className="text-lg font-bold text-slate-900 group-hover:text-brand-orange transition-colors mb-2">
+                  <h3 className="text-lg font-bold text-slate-900 group-hover:text-brand-blue transition-colors mb-2">
                     {dest.name}
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
@@ -745,7 +745,7 @@ function PuneToUjjainBusTravelsPage() {
       <section className="py-16 lg:py-24 bg-slate-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-14">
-            <span className="text-xs font-bold text-brand-orange uppercase tracking-wider">
+            <span className="text-xs font-bold text-brand-green-dark uppercase tracking-wider">
               Fleet & Facilities
             </span>
             <h2 className="text-3xl sm:text-4xl font-extrabold font-display text-brand-blue-deep mt-2 mb-4">
@@ -777,16 +777,16 @@ function PuneToUjjainBusTravelsPage() {
           {/* Vehicle Fleet Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
             {/* Card 1: Force Urbania */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 border-2 border-brand-orange/40 shadow-lg hover:shadow-xl transition-all flex flex-col justify-between relative">
-              <div className="absolute -top-3.5 right-6 bg-brand-orange text-white text-[11px] font-extrabold uppercase px-3.5 py-1 rounded-full shadow-sm">
+            <div className="bg-white rounded-3xl p-6 sm:p-8 border-2 border-brand-blue/30 shadow-lg hover:shadow-xl transition-all flex flex-col justify-between relative">
+              <div className="absolute -top-3.5 right-6 bg-brand-blue-deep text-white text-[11px] font-extrabold uppercase px-3.5 py-1 rounded-full shadow-sm">
                 Preferred for Friday Tours
               </div>
               <div>
-                <div className="w-12 h-12 rounded-2xl bg-orange-100 text-brand-orange flex items-center justify-center font-bold text-lg mb-4">
+                <div className="w-12 h-12 rounded-2xl bg-brand-mist border border-brand-blue/10 text-brand-blue flex items-center justify-center font-bold text-lg mb-4">
                   <Bus className="w-6 h-6" />
                 </div>
                 <h3 className="text-xl font-bold text-slate-900 mb-1">AC Luxury Force Urbania</h3>
-                <p className="text-xs text-brand-orange font-bold mb-4">10 / 13 / 17 Seater Configurations</p>
+                <p className="text-xs text-brand-green-dark font-bold mb-4">10 / 13 / 17 Seater Configurations</p>
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6">
                   Plush Italian recliners, independent overhead AC blowers, panoramic viewing windows, and soft air suspension designed specifically for highway comfort.
                 </p>
@@ -805,7 +805,7 @@ function PuneToUjjainBusTravelsPage() {
                 <div className="grid grid-cols-2 gap-2">
                   <a
                     href="#booking-section"
-                    className="py-2.5 rounded-xl bg-brand-orange hover:bg-brand-orange-dark text-white font-bold text-xs text-center transition-colors no-underline block"
+                    className="btn-cta py-2.5 rounded-xl text-white font-bold text-xs text-center transition-all shadow-xs hover:shadow-sm no-underline block"
                   >
                     Check Offers
                   </a>
@@ -813,7 +813,7 @@ function PuneToUjjainBusTravelsPage() {
                     href="https://wa.me/919764413556?text=Hi%20Shailraj%20Travels,%20please%20share%20current%20offers%20for%20AC%20Force%20Urbania%20Pune%20to%20Ujjain%20Tour."
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs text-center transition-colors no-underline block"
+                    className="py-2.5 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-xs text-center transition-colors no-underline block shadow-xs"
                   >
                     WhatsApp
                   </a>
@@ -824,11 +824,11 @@ function PuneToUjjainBusTravelsPage() {
             {/* Card 2: Multi-Axle AC Sleeper Bus */}
             <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
               <div>
-                <div className="w-12 h-12 rounded-2xl bg-orange-100 text-brand-orange flex items-center justify-center font-bold text-lg mb-4">
+                <div className="w-12 h-12 rounded-2xl bg-brand-mist border border-brand-blue/10 text-brand-blue flex items-center justify-center font-bold text-lg mb-4">
                   <Users className="w-6 h-6" />
                 </div>
                 <h3 className="text-xl font-bold text-slate-900 mb-1">Multi-Axle AC Sleeper Bus</h3>
-                <p className="text-xs text-brand-orange font-bold mb-4">Double & Single Sleeper Berths</p>
+                <p className="text-xs text-brand-green-dark font-bold mb-4">Double & Single Sleeper Berths</p>
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6">
                   Spacious sleeper coaches ideal for family mandals and group yatras. Includes sanitized clean bedding, privacy curtains, and dual high-capacity AC.
                 </p>
@@ -847,7 +847,7 @@ function PuneToUjjainBusTravelsPage() {
                 <div className="grid grid-cols-2 gap-2">
                   <a
                     href="#booking-section"
-                    className="py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs text-center transition-colors no-underline block"
+                    className="py-2.5 rounded-xl bg-brand-blue-deep hover:bg-brand-blue text-white font-bold text-xs text-center transition-colors no-underline block shadow-xs"
                   >
                     Check Offers
                   </a>
@@ -855,7 +855,7 @@ function PuneToUjjainBusTravelsPage() {
                     href="https://wa.me/919764413556?text=Hi%20Shailraj%20Travels,%20please%20share%20current%20offers%20for%20AC%20Sleeper%20Bus%20Pune%20to%20Ujjain."
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs text-center transition-colors no-underline block"
+                    className="py-2.5 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-xs text-center transition-colors no-underline block shadow-xs"
                   >
                     WhatsApp
                   </a>
@@ -866,11 +866,11 @@ function PuneToUjjainBusTravelsPage() {
             {/* Card 3: Toyota Innova Crysta Private */}
             <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
               <div>
-                <div className="w-12 h-12 rounded-2xl bg-orange-100 text-brand-orange flex items-center justify-center font-bold text-lg mb-4">
+                <div className="w-12 h-12 rounded-2xl bg-brand-mist border border-brand-blue/10 text-brand-blue flex items-center justify-center font-bold text-lg mb-4">
                   <ShieldCheck className="w-6 h-6" />
                 </div>
                 <h3 className="text-xl font-bold text-slate-900 mb-1">Toyota Innova Crysta</h3>
-                <p className="text-xs text-brand-orange font-bold mb-4">6 - 7 Seater Private Executive</p>
+                <p className="text-xs text-brand-green-dark font-bold mb-4">6 - 7 Seater Private Executive</p>
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6">
                   Fast, ultra-reliable private family car for customized departure timings. 100% doorstep home pickup across Pune and PCMC with flexible temple halts.
                 </p>
@@ -889,7 +889,7 @@ function PuneToUjjainBusTravelsPage() {
                 <div className="grid grid-cols-2 gap-2">
                   <a
                     href="#booking-section"
-                    className="py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs text-center transition-colors no-underline block"
+                    className="py-2.5 rounded-xl bg-brand-blue-deep hover:bg-brand-blue text-white font-bold text-xs text-center transition-colors no-underline block shadow-xs"
                   >
                     Check Offers
                   </a>
@@ -897,7 +897,7 @@ function PuneToUjjainBusTravelsPage() {
                     href="https://wa.me/919764413556?text=Hi%20Shailraj%20Travels,%20please%20share%20current%20offers%20for%20Innova%20Crysta%20Pune%20to%20Ujjain."
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs text-center transition-colors no-underline block"
+                    className="py-2.5 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-xs text-center transition-colors no-underline block shadow-xs"
                   >
                     WhatsApp
                   </a>
@@ -912,7 +912,7 @@ function PuneToUjjainBusTravelsPage() {
       <section className="py-16 lg:py-24 bg-white border-t border-slate-100">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <div className="max-w-3xl mx-auto mb-14">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-50 border border-orange-200 text-brand-orange text-xs font-bold uppercase tracking-widest mb-3">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-green/10 border border-brand-green/20 text-brand-green-dark text-xs font-bold uppercase tracking-widest mb-3">
               Why We Are #1 in Pune
             </div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-display text-brand-blue-deep mb-4">
@@ -925,10 +925,10 @@ function PuneToUjjainBusTravelsPage() {
 
           {/* Comparison Table */}
           <div className="max-w-5xl mx-auto bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-lg text-left">
-            <div className="grid grid-cols-12 bg-slate-950 text-white font-bold text-xs sm:text-sm p-4 sm:p-5">
+            <div className="grid grid-cols-12 bg-brand-blue-deep text-white font-bold text-xs sm:text-sm p-4 sm:p-5">
               <div className="col-span-4 sm:col-span-3">Feature</div>
-              <div className="col-span-4 sm:col-span-5 text-amber-300 flex items-center gap-1.5">
-                <Star className="w-4 h-4 fill-amber-300" />
+              <div className="col-span-4 sm:col-span-5 text-brand-green flex items-center gap-1.5">
+                <Star className="w-4 h-4 fill-brand-green text-brand-green" />
                 Shailraj Travels (Urbania & Bus)
               </div>
               <div className="col-span-4 sm:col-span-4 text-slate-400">Ordinary Highway Aggregators</div>
@@ -959,7 +959,7 @@ function PuneToUjjainBusTravelsPage() {
       <section className="py-16 bg-slate-50 border-t border-slate-200/80">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <div className="max-w-3xl mx-auto mb-12">
-            <span className="text-xs font-bold text-brand-orange uppercase tracking-wider">Convenient Boarding</span>
+            <span className="text-xs font-bold text-brand-green-dark uppercase tracking-wider">Convenient Boarding</span>
             <h2 className="text-3xl sm:text-4xl font-extrabold font-display text-brand-blue-deep mt-2 mb-4">
               Pune Boarding Points & Friday Schedule
             </h2>
@@ -969,7 +969,7 @@ function PuneToUjjainBusTravelsPage() {
           </div>
 
           <div className="max-w-4xl mx-auto bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
-            <div className="grid grid-cols-12 bg-slate-900 text-white font-bold text-xs sm:text-sm p-4">
+            <div className="grid grid-cols-12 bg-brand-blue-deep text-white font-bold text-xs sm:text-sm p-4">
               <div className="col-span-8 sm:col-span-8 text-left">Boarding Location in Pune</div>
               <div className="col-span-4 sm:col-span-4 text-center">Friday Evening Time</div>
             </div>
@@ -977,10 +977,10 @@ function PuneToUjjainBusTravelsPage() {
               {boardingPoints.map((b, i) => (
                 <div key={i} className="grid grid-cols-12 p-4 items-center hover:bg-slate-50/80">
                   <div className="col-span-8 sm:col-span-8 font-semibold text-slate-800 flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-brand-orange shrink-0" />
+                    <MapPin className="w-4 h-4 text-brand-blue shrink-0" />
                     <span>{b.point}</span>
                   </div>
-                  <div className="col-span-4 sm:col-span-4 text-center font-bold text-brand-blue">
+                  <div className="col-span-4 sm:col-span-4 text-center font-bold text-brand-green-dark">
                     {b.timeEvening}
                   </div>
                 </div>
@@ -994,7 +994,7 @@ function PuneToUjjainBusTravelsPage() {
       <section className="py-16 lg:py-24 bg-white border-t border-slate-100">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
-            <span className="text-xs font-bold text-brand-orange uppercase tracking-wider">Got Questions?</span>
+            <span className="text-xs font-bold text-brand-green-dark uppercase tracking-wider">Got Questions?</span>
             <h2 className="text-3xl sm:text-4xl font-extrabold font-display text-brand-blue-deep mt-2 mb-4">
               Frequently Asked Questions (FAQs)
             </h2>
@@ -1014,10 +1014,10 @@ function PuneToUjjainBusTravelsPage() {
                   <button
                     type="button"
                     onClick={() => setOpenFaq(isOpen ? null : index)}
-                    className="w-full p-5 text-left flex items-center justify-between gap-4 font-bold text-slate-800 hover:text-brand-orange text-sm sm:text-base bg-white cursor-pointer"
+                    className="w-full p-5 text-left flex items-center justify-between gap-4 font-bold text-slate-800 hover:text-brand-blue-deep text-sm sm:text-base bg-white cursor-pointer"
                   >
                     <span className="flex items-center gap-3">
-                      <HelpCircle className="w-5 h-5 text-brand-orange shrink-0" />
+                      <HelpCircle className="w-5 h-5 text-brand-blue shrink-0" />
                       {faq.question}
                     </span>
                     <ChevronDown
@@ -1041,15 +1041,15 @@ function PuneToUjjainBusTravelsPage() {
       {/* Final Call to Action Section (Light Theme) */}
       <section className="py-16 lg:py-24 bg-gradient-to-b from-brand-mist via-white to-slate-50 border-t border-slate-200/80 text-center relative overflow-hidden">
         {/* Subtle decorative background blur glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-brand-orange/5 blur-[120px] rounded-full pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-brand-blue/5 blur-[120px] rounded-full pointer-events-none" />
 
         <div className="mx-auto max-w-4xl px-4 sm:px-6 relative z-10">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-orange/10 text-brand-orange text-xs font-bold uppercase tracking-wider mb-4 border border-brand-orange/20">
-            <Calendar className="w-3.5 h-3.5 text-brand-orange" />
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-green/10 text-brand-green-dark text-xs font-bold uppercase tracking-wider mb-4 border border-brand-green/20">
+            <Calendar className="w-3.5 h-3.5 text-brand-green-dark" />
             <span>Every Friday Departures • Limited Seats Per Batch</span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-display text-brand-blue-deep tracking-tight mb-4">
-            Book Your Seat for This Friday's <span className="text-brand-orange">Ujjain Tour</span>
+            Book Your Seat for This Friday's <span className="text-brand-green-dark">Ujjain Tour</span>
           </h2>
           <p className="text-slate-600 text-base sm:text-lg mb-8 max-w-2xl mx-auto leading-relaxed font-medium">
             Direct temple hotel doorstep drop, confirmed Bhasma Aarti reservation assistance, verified 3-star AC hotel stay, and luxury AC Force Urbania travel.
@@ -1057,23 +1057,23 @@ function PuneToUjjainBusTravelsPage() {
           <div className="flex flex-wrap justify-center gap-4">
             <a
               href="#booking-section"
-              className="px-7 py-3.5 rounded-xl bg-brand-orange hover:bg-brand-orange-dark text-white font-bold text-base transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 no-underline flex items-center gap-2"
+              className="btn-cta px-7 py-3.5 rounded-xl text-white font-bold text-base transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 no-underline flex items-center gap-2"
             >
               <Tag className="w-4 h-4" />
               <span>Check Current Offers</span>
             </a>
             <a
               href={`tel:${businessConfig.supportPhone}`}
-              className="px-7 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-base border border-slate-300 transition-all shadow-xs hover:shadow-sm hover:-translate-y-0.5 no-underline flex items-center gap-2"
+              className="px-7 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-brand-blue-deep font-bold text-base border border-slate-200 transition-all shadow-xs hover:shadow-sm hover:-translate-y-0.5 no-underline flex items-center gap-2"
             >
-              <Phone className="w-4 h-4 text-brand-orange" />
+              <Phone className="w-4 h-4 text-brand-blue" />
               <span>Book Your Seat</span>
             </a>
             <a
               href="https://wa.me/919764413556?text=Hi%20Shailraj%20Travels,%20please%20share%20current%20package%20offers%20for%20the%20Friday%20Pune%20to%20Ujjain%20Tour."
               target="_blank"
               rel="noopener noreferrer"
-              className="px-7 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-base transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 no-underline flex items-center gap-2"
+              className="px-7 py-3.5 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-base transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 no-underline flex items-center gap-2"
             >
               <MessageSquare className="w-4 h-4" />
               <span>WhatsApp for Details</span>
