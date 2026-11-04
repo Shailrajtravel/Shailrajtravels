@@ -99,7 +99,7 @@ import {
   Car,
 } from 'lucide-react';
 // @ts-ignore
-import logo from '@/frontend/shared/assets/shailraj-travels-adminlogo.png?w=300&format=webp&as=url';
+import logo from '@/frontend/shared/assets/shailraj-travels-adminlogo.png';
 import { Calendar } from '@/frontend/shared/ui/calendar';
 import { format } from 'date-fns';
 import {

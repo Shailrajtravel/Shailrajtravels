@@ -19,7 +19,6 @@ if (fs.existsSync(envPath)) {
   }
 }
 import Sitemap from "vite-plugin-sitemap";
-import { imagetools } from "vite-imagetools";
 import { compression } from "vite-plugin-compression2";
 import { visualizer } from "rollup-plugin-visualizer";
 
@@ -74,7 +73,6 @@ export default defineConfig({
           "/faq",
         ],
       }),
-      imagetools(),
       visualizer({ filename: "bundle-stats.html", template: "treemap" }),
     ],
     optimizeDeps: {

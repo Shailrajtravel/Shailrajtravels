@@ -4,8 +4,7 @@ import { TourModal } from '@/frontend/features/tours/TourModal';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-// @ts-ignore
-import bgFallback from '@/frontend/shared/assets/hero-pandharpur.webp?w=600&format=webp&as=url';
+import bgFallback from '@/frontend/shared/assets/hero-pandharpur.webp';
 
 export function ToursSection({
   lang,

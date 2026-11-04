@@ -1,14 +1,10 @@
 import React from 'react';
 import { BrandHighlight } from '@/frontend/core/BrandHighlight';
 import { ArrowRight } from 'lucide-react';
-// @ts-ignore
-import iconPin from '@/frontend/shared/assets/icon-pin.webp?w=160&format=webp&as=url';
-// @ts-ignore
-import iconTag from '@/frontend/shared/assets/icon-tag.webp?w=160&format=webp&as=url';
-// @ts-ignore
-import iconShield from '@/frontend/shared/assets/icon-shield.webp?w=160&format=webp&as=url'; // Fallback
-// @ts-ignore
-import iconBus from '@/frontend/shared/assets/icon-bus.webp?w=160&format=webp&as=url'; // Fallback
+import iconPin from '@/frontend/shared/assets/icon-pin.webp';
+import iconTag from '@/frontend/shared/assets/icon-tag.webp';
+import iconShield from '@/frontend/shared/assets/icon-shield.webp'; // Fallback
+import iconBus from '@/frontend/shared/assets/icon-bus.webp'; // Fallback
 
 import { FeatureCardBig, CheckItem } from '@/frontend/features/why-choose-us/components';
 
