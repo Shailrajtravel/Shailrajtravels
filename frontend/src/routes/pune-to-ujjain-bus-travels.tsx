@@ -93,9 +93,6 @@ function PuneToUjjainBusTravelsPage() {
     name: "",
     phone: "",
     travelDate: "",
-    passengers: "2",
-    boardingPoint: "Hadapsar",
-    busType: "AC Force Urbania (10/13/17 Seater)",
   });
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -106,7 +103,7 @@ function PuneToUjjainBusTravelsPage() {
     setTimeout(() => {
       setIsSubmitting(false);
       setFormSubmitted(true);
-      const text = `*Pune to Ujjain Mahakal Darshan Tour Inquiry*%0A%0A*Name:* ${formData.name}%0A*Phone:* ${formData.phone}%0A*Departure:* Friday Batch (${formData.travelDate || "Next Upcoming Friday"})%0A*Passengers:* ${formData.passengers}%0A*Pickup Point:* ${formData.boardingPoint}%0A*Vehicle Preference:* ${formData.busType}%0A%0A_Please share current package offers and seat availability._`;
+      const text = `*Pune to Ujjain Mahakal Darshan Tour Inquiry*%0A%0A*Name:* ${formData.name}%0A*Phone:* ${formData.phone}%0A*Departure Date:* ${formData.travelDate ? formData.travelDate : "Upcoming Friday Batch"}%0A%0A_Please share current package offers, available vehicles, and seat details._`;
       window.open(`https://wa.me/919764413556?text=${text}`, "_blank");
     }, 700);
   };
@@ -511,52 +508,7 @@ function PuneToUjjainBusTravelsPage() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="block font-bold text-slate-700 mb-1">Passengers</label>
-                        <select
-                          value={formData.passengers}
-                          onChange={(e) => setFormData({ ...formData, passengers: e.target.value })}
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-brand-blue text-sm font-medium bg-white"
-                        >
-                          <option value="1">1 Person</option>
-                          <option value="2">2 Persons</option>
-                          <option value="3-5">3 to 5 (Family)</option>
-                          <option value="6-10">6 to 10 (Urbania)</option>
-                          <option value="11-17">11 to 17 (Full Group)</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block font-bold text-slate-700 mb-1">Pune Pickup Point</label>
-                        <select
-                          value={formData.boardingPoint}
-                          onChange={(e) => setFormData({ ...formData, boardingPoint: e.target.value })}
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-brand-blue text-sm font-medium bg-white"
-                        >
-                          <option value="Hadapsar">Hadapsar (Head Office)</option>
-                          <option value="Swargate">Swargate ST Stand</option>
-                          <option value="Pune Station">Pune Railway Station</option>
-                          <option value="Viman Nagar">Viman Nagar / Kharadi</option>
-                          <option value="Bhosari">Bhosari / Nashik Phata</option>
-                          <option value="Wakad">Wakad / Hinjewadi</option>
-                          <option value="Doorstep">Doorstep Home Pickup</option>
-                        </select>
-                      </div>
-                    </div>
 
-                    <div>
-                      <label className="block font-bold text-slate-700 mb-1">Vehicle Preference</label>
-                      <select
-                        value={formData.busType}
-                        onChange={(e) => setFormData({ ...formData, busType: e.target.value })}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-brand-blue text-sm font-medium bg-white"
-                      >
-                        <option value="AC Force Urbania (10/13/17 Seater)">AC Luxury Force Urbania (10/13/17 Seater)</option>
-                        <option value="Multi-Axle AC Sleeper Bus">Multi-Axle AC Sleeper Coach Bus</option>
-                        <option value="Toyota Innova Crysta Private">Toyota Innova Crysta (Private Executive)</option>
-                        <option value="Complete 2D/1N Tour Package">Complete 2D/1N All-Inclusive Package</option>
-                      </select>
-                    </div>
 
                     <button
                       type="submit"
