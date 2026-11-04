@@ -173,11 +173,13 @@ User's draft: "${review}"`;
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold font-display text-brand-blue-deep leading-tight max-w-4xl mb-4">
             {lang === "mr" ? (
               <>
-                आमच्या प्रवाशांचा <span className="text-brand-green-dark">अनुभव व विश्वास</span>
+                आमच्या प्रवाशांचा <br />
+                <span className="text-brand-green-dark inline-block">अनुभव व विश्वास</span>
               </>
             ) : (
               <>
-                What Our Travelers <span className="text-brand-green-dark">Say About Us</span>
+                What Our Travelers <br />
+                <span className="text-brand-green-dark inline-block">Say About Us</span>
               </>
             )}
           </h2>
