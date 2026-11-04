@@ -722,7 +722,7 @@ function PuneToUjjainBusTravelsPage() {
         </div>
       </section>
 
-      <Footer />
+      <Footer t={t} lang={lang} />
     </div>
   );
 }

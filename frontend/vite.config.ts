@@ -49,6 +49,8 @@ export default defineConfig({
           "/travel-agency-in-pune",
           "/tour-operator-in-pune",
           "/tour-packages-from-pune",
+          "/pune-to-ujjain-bus-travels",
+          "/reviews",
           "/pilgrimage-tours-from-pune",
           "/family-tours-from-pune",
           "/group-tours-from-pune",

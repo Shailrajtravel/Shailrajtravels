@@ -134,7 +134,7 @@ function ReviewsPage() {
         <ReviewsSection lang={lang} t={t} />
       </main>
 
-      <Footer />
+      <Footer t={t} lang={lang} />
     </div>
   );
 }

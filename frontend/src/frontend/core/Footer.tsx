@@ -10,7 +10,9 @@ const defaultTours = (seedTours || []).slice(0, 8).map((t: any) => ({
   href: `/tours/${t.slug}`,
 }));
 
-export function FooterSection({ t, lang = "en" }: { t: typeof translations.mr; lang?: string }) {
+export function FooterSection({ t: propT, lang = "en" }: { t?: typeof translations.mr; lang?: string }) {
+  const safeLang = (lang === "mr" ? "mr" : "en") as "mr" | "en";
+  const t = propT || translations[safeLang] || translations.en;
   const [popularTours, setPopularTours] = useState<{ label: string; href: string }[]>(defaultTours);
 
   useEffect(() => {
