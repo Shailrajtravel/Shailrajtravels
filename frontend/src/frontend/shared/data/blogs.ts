@@ -939,7 +939,7 @@ export const blogPosts: BlogPost[] = [
     reviewerId: "shaila-mayur-patil",
     relatedTourSlugs: [
       "pune-to-ashtavinayak-darshan",
-      "pune-to-ujjain-tour-package"
+      "pune-mumbai-to-3-jyotirlinga-darshan"
     ],
     relatedArticleSlugs: [
       "pune-to-ujjain-tour-guide-mahakal-darshan-itinerary",

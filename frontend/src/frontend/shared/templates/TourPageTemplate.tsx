@@ -477,8 +477,8 @@ export function TourPageTemplate({ data, recommendedVehicles = [] }: TourPageTem
 
 
           {/* Internal Linking Components */}
-          <RelatedTours tours={data.relatedTours} />
-          <RelatedBlogs blogs={data.relatedBlogs} />
+          <RelatedTours tours={data.relatedTours} currentTourSlug={data.slug} />
+          <RelatedBlogs blogs={data.relatedBlogs} tourSlug={data.slug} tourTitle={data.title} />
         </div>
 
         <div className="lg:col-span-1">

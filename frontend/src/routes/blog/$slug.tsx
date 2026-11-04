@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React, { useMemo } from 'react';
-import { createFileRoute, Link, notFound } from '@tanstack/react-router';
+import { createFileRoute, Link, notFound, redirect } from '@tanstack/react-router';
 import { generateSEO, generateHreflangLinks } from '@/backend/features/seo';
 import { blogPosts, blogAuthors } from '@/frontend/shared/data/blogs';
 import { Navbar } from '@/frontend/core/Navbar';
@@ -28,6 +28,9 @@ import { LazyImage } from '@/frontend/shared/ui/lazy-image';
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: async ({ params }) => {
+    if (!params.slug || params.slug === 'undefined' || params.slug === 'null') {
+      throw redirect({ to: '/blog', statusCode: 301 });
+    }
     let post = null;
 
     // 1. Check live custom blogs from database first so admin changes take immediate effect
