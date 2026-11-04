@@ -8,3 +8,4 @@ export const Route = createFileRoute('/pune-to-ujjain-tour')({
     });
   },
 });
+

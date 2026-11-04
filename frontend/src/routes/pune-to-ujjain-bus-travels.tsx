@@ -294,7 +294,7 @@ function PuneToUjjainBusTravelsPage() {
       <Navbar t={t} />
 
       {/* Hero Section with Main Landing Page Background Image */}
-      <section className="relative pt-28 pb-16 lg:pt-36 lg:pb-24 text-white overflow-hidden bg-slate-950">
+      <section className="relative pt-28 pb-16 lg:pt-36 lg:pb-24 text-white overflow-hidden bg-black">
         {/* Main Landing Page Background Image */}
         <div className="absolute inset-0 z-0 overflow-hidden">
           {/* Mobile background */}
@@ -327,13 +327,9 @@ function PuneToUjjainBusTravelsPage() {
             />
           </picture>
 
-          {/* Elegant Dark Gradient Overlays for high-contrast text legibility */}
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/85 to-slate-950/50" />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-slate-950/80" />
-
-          {/* Ambient subtle brand glows */}
-          <div className="absolute top-0 right-1/4 w-96 h-96 bg-brand-orange/15 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-brand-blue/25 rounded-full blur-3xl pointer-events-none" />
+          {/* Neutral Dark Vignette Overlays for clean, high-contrast text without any blue tint */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/75 to-black/35" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/60" />
         </div>
 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
