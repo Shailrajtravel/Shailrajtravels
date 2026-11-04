@@ -2182,20 +2182,20 @@ export const seedTours: any[] = [
   },
   {
     "_id": "6aa24c85a1ff1fa2e71229ae_alias",
-    "slug": "ujjain-omkareshwar-Ghrishneshwar-maheshwar-tour",
+    "slug": "pune-to-ujjain-bus-travels",
     "lang": "en",
-    "title": "Pune to Ujjain Tour Package",
-    "subtitle": "3 Days / 2 Nights Spiritual Jyotirlinga Tour (Mahakaleshwar, Omkareshwar & Maheshwar)",
-    "metaTitle": "Pune to Ujjain Tour Package | Best Tours & Travels in Pune | Shailraj Travels",
-    "metaDescription": "Looking for the best travels from Pune to Ujjain? Book Shailraj Travels' premier Pune to Ujjain tour and travels package. AC Force Urbania, Mahakal Bhasma Aarti, Omkareshwar & 3-star stay. Call 24/7.",
+    "title": "Pune to Ujjain Bus Travels",
+    "subtitle": "3 Days / 2 Nights Luxury AC Force Urbania & Bus Travels (Mahakaleshwar, Omkareshwar & Maheshwar)",
+    "metaTitle": "Pune to Ujjain Bus Travels | Friday Mahakal Darshan | Shailraj Travels",
+    "metaDescription": "Explore Pune to Ujjain Mahakal Darshan bus tours with Shailraj Travels. Weekly Friday departures in premium AC Force Urbania.",
     "keywords": [
+      "pune to ujjain bus travels",
+      "pune to ujjain bus",
       "pune to ujjain best travels",
       "pune to ujjain tour and travels",
-      "pune to ujjain tour package",
-      "pune to ujjain travels",
-      "ujjain tour package from pune"
+      "pune to ujjain tour package"
     ],
-    "canonicalUrl": "https://www.shailrajtravels.com/tours/pune-to-ujjain-tour-package",
+    "canonicalUrl": "https://www.shailrajtravels.com/pune-to-ujjain-bus-travels",
     "heroContent": {
       "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1789110978/tours/rpir5cxo58n4lcti44hv.webp",
       "description": "Rated Pune's best travels for Ujjain tour and travels. 3 Days / 2 Nights Tri-Jyotirlinga circuit with luxury AC Force Urbania, Mahakaleshwar Bhasma Aarti guidance, pure veg meals & 3-star AC hotel stays."

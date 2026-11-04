@@ -5,10 +5,50 @@ import { Phone, Mail, MapPin, Instagram, Facebook, Youtube, ArrowRight } from 'l
 import { translations } from '@/frontend/core/i18n';
 import { Link } from '@tanstack/react-router';
 
-const defaultTours = (seedTours || []).slice(0, 8).map((t: any) => ({
-  label: t.title,
-  href: `/tours/${t?.slug}`,
-}));
+const getTourHref = (slug?: string) => {
+  if (slug === 'pune-to-ujjain-bus-travels' || slug === 'pune-to-ujjain-tour') {
+    return '/pune-to-ujjain-bus-travels';
+  }
+  return `/tours/${slug}`;
+};
+
+const mapPopularTour = (t: any, idx: number, isMr: boolean) => {
+  const isBusTravels =
+    t?.slug === 'pune-to-ujjain-bus-travels' ||
+    t?.slug === 'ujjain-omkareshwar-Ghrishneshwar-maheshwar-tour' ||
+    (idx === 0 && (t?.slug?.includes('ujjain') || t?.title?.toLowerCase().includes('ujjain')));
+
+  if (isBusTravels) {
+    return {
+      label: isMr ? "पुणे ते उज्जैन बस प्रवास" : "Pune to Ujjain Bus Travels",
+      href: "/pune-to-ujjain-bus-travels",
+    };
+  }
+
+  const isTourPkg = t?.slug === 'pune-to-ujjain-tour-package' || t?.title?.toLowerCase().includes('ujjain');
+  if (isTourPkg) {
+    return {
+      label: isMr ? "पुणे ते उज्जैन टूर पॅकेज" : "Pune to Ujjain Tour Package",
+      href: "/tours/pune-to-ujjain-tour-package",
+    };
+  }
+
+  return {
+    label: t.title,
+    href: getTourHref(t?.slug),
+  };
+};
+
+const defaultTours = [
+  { label: "Pune to Ujjain Bus Travels", href: "/pune-to-ujjain-bus-travels" },
+  { label: "Pune to Ujjain Tour Package", href: "/tours/pune-to-ujjain-tour-package" },
+  { label: "Pune to Girnar Spiritual Tour", href: "/tours/pune-to-girnar-spiritual-tour" },
+  { label: "Mumbai to Girnar Spiritual Tour", href: "/tours/mumbai-to-girnar-spiritual-tour" },
+  { label: "Pune to Ashtavinayak Darshan", href: "/tours/pune-to-ashtavinayak-darshan" },
+  { label: "Mumbai to Lonavala One-Day Trip", href: "/tours/mumbai-to-lonavala-one-day-trip" },
+  { label: "Pune to Lonavala One-Day Trip", href: "/tours/pune-to-lonavala-one-day-trip" },
+  { label: "Pune to Shakti Peeth Yatra", href: "/tours/pune-to-shakti-peeth-yatra" },
+];
 
 export function FooterSection({ t: propT, lang = "en" }: { t?: typeof translations.mr; lang?: string }) {
   const safeLang = (lang === "mr" ? "mr" : "en") as "mr" | "en";
@@ -16,21 +56,19 @@ export function FooterSection({ t: propT, lang = "en" }: { t?: typeof translatio
   const [popularTours, setPopularTours] = useState<{ label: string; href: string }[]>(defaultTours);
 
   useEffect(() => {
-    getToursFn({ data: { lang } })
+    getToursFn({ data: { lang, forceFresh: true } })
       .then((tours: any[]) => {
         if (tours && Array.isArray(tours) && tours.length > 0) {
+          const isMr = safeLang === "mr";
           setPopularTours(
             tours
               .slice(0, 8)
-              .map((t) => ({
-                label: t.title,
-                href: `/tours/${t?.slug}`,
-              })),
+              .map((t, idx) => mapPopularTour(t, idx, isMr)),
           );
         }
       })
       .catch(console.error);
-  }, [lang]);
+  }, [lang, safeLang]);
 
   return (
     <footer
