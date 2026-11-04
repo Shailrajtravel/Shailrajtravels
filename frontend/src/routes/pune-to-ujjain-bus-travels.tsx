@@ -39,6 +39,10 @@ import {
   Flame,
   CheckCheck,
 } from 'lucide-react';
+import newhomeMobileAvif from '@/frontend/shared/assets/newhome-mobile.avif';
+import newhomeMobileWebp from '@/frontend/shared/assets/newhome-mobile.webp';
+import newhomeAvif from '@/frontend/shared/assets/newhome.avif';
+import newhomeWebp from '@/frontend/shared/assets/newhome.webp';
 
 export const Route = createFileRoute("/pune-to-ujjain-bus-travels")({
   head: () => ({
@@ -289,11 +293,48 @@ function PuneToUjjainBusTravelsPage() {
 
       <Navbar t={t} />
 
-      {/* Hero Section */}
-      <section className="relative pt-28 pb-16 lg:pt-36 lg:pb-24 bg-gradient-to-b from-slate-950 via-slate-900 to-brand-blue-deep text-white overflow-hidden">
-        {/* Ambient background glows */}
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-brand-orange/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-brand-blue/30 rounded-full blur-3xl pointer-events-none" />
+      {/* Hero Section with Main Landing Page Background Image */}
+      <section className="relative pt-28 pb-16 lg:pt-36 lg:pb-24 text-white overflow-hidden bg-slate-950">
+        {/* Main Landing Page Background Image */}
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          {/* Mobile background */}
+          <picture className="block lg:hidden h-full w-full">
+            <source srcSet={newhomeMobileAvif} type="image/avif" />
+            <source srcSet={newhomeMobileWebp} type="image/webp" />
+            <img
+              src={newhomeMobileWebp}
+              alt="Pune to Ujjain Mahakal Darshan Tour - Shailraj Travels"
+              className="h-full w-full object-cover object-[70%_center]"
+              fetchPriority="high"
+              loading="eager"
+              width={720}
+              height={400}
+            />
+          </picture>
+
+          {/* Desktop background */}
+          <picture className="hidden lg:block h-full w-full">
+            <source srcSet={newhomeAvif} type="image/avif" />
+            <source srcSet={newhomeWebp} type="image/webp" />
+            <img
+              src={newhomeWebp}
+              alt="Pune to Ujjain Mahakal Darshan Tour - Shailraj Travels"
+              className="h-full w-full object-cover object-right-bottom scale-105"
+              fetchPriority="high"
+              loading="eager"
+              width={1738}
+              height={905}
+            />
+          </picture>
+
+          {/* Elegant Dark Gradient Overlays for high-contrast text legibility */}
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/85 to-slate-950/50" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-slate-950/80" />
+
+          {/* Ambient subtle brand glows */}
+          <div className="absolute top-0 right-1/4 w-96 h-96 bg-brand-orange/15 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-brand-blue/25 rounded-full blur-3xl pointer-events-none" />
+        </div>
 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
