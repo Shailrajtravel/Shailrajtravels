@@ -9,6 +9,8 @@ export interface SEOProps {
   lang?: string;
   keywords?: string[];
   googleSiteVerification?: string;
+  author?: string;
+  publisher?: string;
 }
 
 export function generateSEO({
@@ -20,6 +22,8 @@ export function generateSEO({
   lang = "en",
   keywords,
   googleSiteVerification,
+  author = "Shailraj Travels",
+  publisher = "Shailraj Travels",
 }: SEOProps): any {
   const defaultKeywords = [
     "best travels in pune",
@@ -66,6 +70,8 @@ export function generateSEO({
   const meta: any[] = [
     { title },
     { name: "description", content: description },
+    { name: "author", content: author },
+    { name: "publisher", content: publisher },
     { name: "keywords", content: (keywords && keywords.length > 0 ? keywords : defaultKeywords).join(", ") },
     { name: "robots", content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" },
     { name: "googlebot", content: "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" },

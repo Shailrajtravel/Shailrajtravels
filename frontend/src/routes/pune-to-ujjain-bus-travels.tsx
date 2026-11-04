@@ -47,9 +47,9 @@ import newhomeWebp from '@/frontend/shared/assets/newhome.webp';
 export const Route = createFileRoute("/pune-to-ujjain-bus-travels")({
   head: () => ({
     meta: generateSEO({
-      title: "Pune to Ujjain Tour Package | Friday Mahakal Darshan – Shailraj Travels",
+      title: "Pune to Ujjain Tour Package | Friday Mahakal Darshan",
       description:
-        "Explore Pune to Ujjain Mahakal Darshan tours with Shailraj Travels. Weekly Friday departures in premium AC Force Urbania with comfortable seating, experienced guides and a memorable 2-day pilgrimage experience.",
+        "Explore Pune to Ujjain Mahakal Darshan tour with Shailraj Travels. Weekly Friday departures in luxury AC Force Urbania with guide & complete 2-day darshan.",
       canonicalUrl: "https://www.shailrajtravels.com/pune-to-ujjain-bus-travels",
       keywords: [
         "Pune to Ujjain Travels",
