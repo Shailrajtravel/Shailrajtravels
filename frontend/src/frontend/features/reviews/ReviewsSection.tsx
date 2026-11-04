@@ -13,6 +13,28 @@ import {
 } from '@/backend/shared/reviews-data';
 import { cn } from '@/backend/shared/utils';
 
+function ReviewAvatar({ photoUrl, name }: { photoUrl?: string; name: string }) {
+  const [hasError, setHasError] = useState(false);
+
+  if (photoUrl && !hasError) {
+    return (
+      <img
+        src={photoUrl}
+        alt={name}
+        className="w-11 h-11 rounded-full object-cover border border-slate-200 shrink-0"
+        referrerPolicy="no-referrer"
+        onError={() => setHasError(true)}
+      />
+    );
+  }
+
+  return (
+    <div className="w-11 h-11 rounded-full bg-slate-200 border border-slate-300 text-slate-700 font-extrabold text-sm flex items-center justify-center shadow-xs shrink-0">
+      {(name || "Y").charAt(0).toUpperCase()}
+    </div>
+  );
+}
+
 export function ReviewsSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
   const [rating, setRating] = useState(5);
   const [name, setName] = useState("");
@@ -186,13 +208,6 @@ User's draft: "${review}"`;
             <span className="text-sm font-bold text-slate-700">
               {reviewStats.reviewCount} {lang === "mr" ? "गुगल प्रमाणित पुनरावलोकने" : "Verified Google Reviews"}
             </span>
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-              </span>
-              {lang === "mr" ? "थेट सिंक" : "Live Google Sync"}
-            </span>
           </div>
 
           {/* Action Buttons */}
@@ -304,18 +319,7 @@ User's draft: "${review}"`;
                       {/* Reviewer Header */}
                       <div className="flex items-center justify-between gap-3 mb-3">
                         <div className="flex items-center gap-3">
-                          {rev.authorPhotoUrl ? (
-                            <img
-                              src={rev.authorPhotoUrl}
-                              alt={rev.name}
-                              className="w-11 h-11 rounded-full object-cover border border-slate-200 shrink-0"
-                              referrerPolicy="no-referrer"
-                            />
-                          ) : (
-                            <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-brand-orange to-amber-500 text-white font-extrabold text-sm flex items-center justify-center shadow-sm shrink-0">
-                              {rev.name.charAt(0)}
-                            </div>
-                          )}
+                          <ReviewAvatar photoUrl={rev.authorPhotoUrl} name={rev.name} />
                           <div className="text-left">
                             <h4 className="font-bold text-slate-900 text-sm group-hover:text-brand-blue-deep transition-colors">
                               {rev.name}
@@ -385,7 +389,7 @@ User's draft: "${review}"`;
               href={reviewStats.googleMapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-5 py-2.5 bg-brand-orange hover:bg-brand-orange-dark text-white text-xs font-bold rounded-2xl transition-all shadow-sm hover:shadow-md flex items-center gap-1.5 no-underline"
+              className="px-5 py-2.5 bg-[#083A8C] hover:bg-[#0B4DBA] text-white text-xs font-bold rounded-2xl transition-all shadow-sm hover:shadow-md flex items-center gap-1.5 no-underline"
             >
               <span>{lang === "mr" ? `गुगलवरील सर्व ${reviewStats.reviewCount}+ अभिप्राय वाचा` : `Read All ${reviewStats.reviewCount}+ Reviews on Google`}</span>
               <ExternalLink className="w-3.5 h-3.5" />
