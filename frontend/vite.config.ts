@@ -18,7 +18,6 @@ if (fs.existsSync(envPath)) {
     // Ignore if dotenv is not installed in production/CI environments
   }
 }
-import Sitemap from "vite-plugin-sitemap";
 import { compression } from "vite-plugin-compression2";
 import { visualizer } from "rollup-plugin-visualizer";
 
@@ -42,40 +41,19 @@ export default defineConfig({
             console.warn("Sitemap build hook error:", e?.message);
           }
         },
+        closeBundle: () => {
+          try {
+            const src = path.resolve(__dirname, 'public/sitemap.xml');
+            const dest = path.resolve(__dirname, 'dist/sitemap.xml');
+            if (fs.existsSync(src)) {
+              fs.copyFileSync(src, dest);
+              console.log('✅ Successfully synced comprehensive 58-URL sitemap.xml to dist/sitemap.xml');
+            }
+          } catch (e: any) {
+            console.warn("Sitemap sync error:", e?.message);
+          }
+        },
       },
-      Sitemap({
-        hostname: "https://www.shailrajtravels.com",
-        generateRobotsTxt: false,
-        dynamicRoutes: [
-          "/travel-agency-in-pune",
-          "/tour-operator-in-pune",
-          "/tour-packages-from-pune",
-          "/pune-to-ujjain-bus-travels",
-          "/reviews",
-          "/pilgrimage-tours-from-pune",
-          "/family-tours-from-pune",
-          "/group-tours-from-pune",
-          "/maharashtra-tour-packages",
-          "/why-choose-shailraj-travels",
-          "/pilgrimage-guides",
-          "/blog",
-          "/blog/pune-to-ujjain-tour-guide-mahakal-darshan-itinerary",
-          "/blog/pune-to-ujjain-road-trip-itinerary",
-          "/tours",
-          "/tours/pune-to-ashtavinayak-darshan",
-          "/tours/pune-mumbai-to-3-jyotirlinga-darshan",
-          "/tours/pune-to-tirupati-balaji-darshan-tour",
-          "/tours/pune-to-girnar-spiritual-tour",
-          "/tours/ujjain-omkareshwar-Ghrishneshwar-maheshwar-tour",
-          "/tours/pune-to-shakti-peeth-yatra",
-          "/tours/nashik-to-ujjain-omkareshwar-Ghrishneshwar-tour",
-          "/tours/satana-baglan-to-ujjain-spiritual-tour",
-          "/about-shailraj-travels",
-          "/offers/pune-to-lalbag-raja-darshan",
-          "/contact",
-          "/faq",
-        ],
-      }),
       visualizer({ filename: "bundle-stats.html", template: "treemap" }),
     ],
     optimizeDeps: {
