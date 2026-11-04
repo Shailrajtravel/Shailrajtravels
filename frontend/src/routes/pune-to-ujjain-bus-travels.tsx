@@ -1038,28 +1038,33 @@ function PuneToUjjainBusTravelsPage() {
         </div>
       </section>
 
-      {/* Final Call to Action Section */}
-      <section className="py-16 lg:py-20 bg-gradient-to-r from-brand-blue-deep via-slate-900 to-slate-950 text-white text-center">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-400/20 text-amber-300 text-xs font-bold uppercase tracking-wider mb-4 border border-amber-400/30">
-            Every Friday Departures • Limited Seats Per Batch
+      {/* Final Call to Action Section (Light Theme) */}
+      <section className="py-16 lg:py-24 bg-gradient-to-b from-brand-mist via-white to-slate-50 border-t border-slate-200/80 text-center relative overflow-hidden">
+        {/* Subtle decorative background blur glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-brand-orange/5 blur-[120px] rounded-full pointer-events-none" />
+
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 relative z-10">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-orange/10 text-brand-orange text-xs font-bold uppercase tracking-wider mb-4 border border-brand-orange/20">
+            <Calendar className="w-3.5 h-3.5 text-brand-orange" />
+            <span>Every Friday Departures • Limited Seats Per Batch</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-display mb-4">
-            Book Your Seat for This Friday's Ujjain Tour
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-display text-brand-blue-deep tracking-tight mb-4">
+            Book Your Seat for This Friday's <span className="text-brand-orange">Ujjain Tour</span>
           </h2>
-          <p className="text-slate-200 text-base sm:text-lg mb-8 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-slate-600 text-base sm:text-lg mb-8 max-w-2xl mx-auto leading-relaxed font-medium">
             Direct temple hotel doorstep drop, confirmed Bhasma Aarti reservation assistance, verified 3-star AC hotel stay, and luxury AC Force Urbania travel.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a
               href="#booking-section"
-              className="px-8 py-4 rounded-xl bg-brand-orange hover:bg-brand-orange-dark text-white font-bold text-base transition-all shadow-lg hover:shadow-orange-500/30 no-underline"
+              className="px-7 py-3.5 rounded-xl bg-brand-orange hover:bg-brand-orange-dark text-white font-bold text-base transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 no-underline flex items-center gap-2"
             >
-              Check Current Offers
+              <Tag className="w-4 h-4" />
+              <span>Check Current Offers</span>
             </a>
             <a
               href={`tel:${businessConfig.supportPhone}`}
-              className="px-8 py-4 rounded-xl bg-white hover:bg-slate-100 text-slate-900 font-bold text-base transition-all shadow-md no-underline flex items-center gap-2"
+              className="px-7 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-base border border-slate-300 transition-all shadow-xs hover:shadow-sm hover:-translate-y-0.5 no-underline flex items-center gap-2"
             >
               <Phone className="w-4 h-4 text-brand-orange" />
               <span>Book Your Seat</span>
@@ -1068,7 +1073,7 @@ function PuneToUjjainBusTravelsPage() {
               href="https://wa.me/919764413556?text=Hi%20Shailraj%20Travels,%20please%20share%20current%20package%20offers%20for%20the%20Friday%20Pune%20to%20Ujjain%20Tour."
               target="_blank"
               rel="noopener noreferrer"
-              className="px-8 py-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-base transition-all shadow-lg hover:shadow-emerald-600/30 no-underline flex items-center gap-2"
+              className="px-7 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-base transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 no-underline flex items-center gap-2"
             >
               <MessageSquare className="w-4 h-4" />
               <span>WhatsApp for Details</span>
