@@ -33,6 +33,8 @@ import {
   Send,
   Loader2,
   MessageSquare,
+  Minus,
+  Plus,
   Tag,
   Zap,
   Building,
@@ -93,6 +95,8 @@ function PuneToUjjainBusTravelsPage() {
     name: "",
     phone: "",
     travelDate: "",
+    pickupPoint: "",
+    persons: 1,
   });
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -103,7 +107,7 @@ function PuneToUjjainBusTravelsPage() {
     setTimeout(() => {
       setIsSubmitting(false);
       setFormSubmitted(true);
-      const text = `*Pune to Ujjain Mahakal Darshan Tour Inquiry*%0A%0A*Name:* ${formData.name}%0A*Phone:* ${formData.phone}%0A*Departure Date:* ${formData.travelDate ? formData.travelDate : "Upcoming Friday Batch"}%0A%0A_Please share current package offers, available vehicles, and seat details._`;
+      const text = `*Pune to Ujjain Mahakal Darshan Tour Inquiry*%0A%0A*Name:* ${formData.name}%0A*Phone:* ${formData.phone}%0A*Departure Date:* ${formData.travelDate ? formData.travelDate : "Upcoming Friday Batch"}%0A*Pickup Point:* ${formData.pickupPoint || "To be confirmed on chat/call"}%0A*Persons:* ${formData.persons} ${formData.persons === 1 ? "Person" : "Persons"}%0A%0A_Please share current package offers and seat availability._`;
       window.open(`https://wa.me/919764413556?text=${text}`, "_blank");
     }, 700);
   };
@@ -505,6 +509,62 @@ function PuneToUjjainBusTravelsPage() {
                           onChange={(e) => setFormData({ ...formData, travelDate: e.target.value })}
                           className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-brand-blue text-sm font-medium"
                         />
+                      </div>
+                    </div>
+
+                    {/* Customer Decided Pickup Point & Persons (Matching Home Hero Style) */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {/* Pickup Point Field */}
+                      <div className="group flex items-center gap-2.5 rounded-2xl border border-slate-200 bg-white px-3 py-2 transition focus-within:border-brand-blue focus-within:ring-2 focus-within:ring-brand-blue/20">
+                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-mist text-brand-blue">
+                          <MapPin className="h-4 w-4" />
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <label htmlFor="form-pickup-point" className="block text-[10px] font-bold uppercase tracking-wider text-slate-500 cursor-pointer">
+                            Pickup Point
+                          </label>
+                          <input
+                            type="text"
+                            id="form-pickup-point"
+                            value={formData.pickupPoint}
+                            onChange={(e) => setFormData({ ...formData, pickupPoint: e.target.value })}
+                            placeholder="Enter pickup point or city"
+                            className="w-full bg-transparent text-xs sm:text-sm font-semibold text-brand-blue-deep placeholder:text-slate-400 placeholder:font-normal focus:outline-none"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Persons Stepper Field */}
+                      <div className="group flex items-center gap-2.5 rounded-2xl border border-slate-200 bg-white px-3 py-2 transition">
+                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-mist text-brand-blue">
+                          <Users className="h-4 w-4" />
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                            Persons
+                          </div>
+                          <div className="flex items-center justify-between w-full mt-0.5">
+                            <button
+                              type="button"
+                              aria-label="Decrease persons"
+                              onClick={() => setFormData({ ...formData, persons: Math.max(1, formData.persons - 1) })}
+                              className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 transition focus-visible:outline-none cursor-pointer"
+                            >
+                              <Minus className="h-3 w-3" />
+                            </button>
+                            <span className="text-xs sm:text-sm font-bold text-brand-blue-deep">
+                              {formData.persons} {formData.persons === 1 ? "Person" : "Persons"}
+                            </span>
+                            <button
+                              type="button"
+                              aria-label="Increase persons"
+                              onClick={() => setFormData({ ...formData, persons: Math.min(20, formData.persons + 1) })}
+                              className="flex h-6 w-6 items-center justify-center rounded-full bg-brand-green/10 text-brand-green-dark hover:bg-brand-green/20 transition focus-visible:outline-none cursor-pointer"
+                            >
+                              <Plus className="h-3 w-3" />
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     </div>
 
