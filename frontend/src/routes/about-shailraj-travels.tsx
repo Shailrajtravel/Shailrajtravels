@@ -9,8 +9,8 @@ import { authors } from '@/frontend/shared/data/authors';
 export const Route = createFileRoute("/about-shailraj-travels")({
   head: () => ({
     meta: generateSEO({
-      title: "About Shailraj Travels | Best Travels in Pune & Hadapsar Tour Operator",
-      description: "About Shailraj Travels — Founded in 2021 by Mayur Patil and Shaila Mayur Patil in Hadapsar, Pune. Specialized pilgrimage tour operator for Ujjain Darshan, Ashtavinayak Yatra & luxury AC Force Urbania. 5.0★ Google Rating.",
+      title: "About Shailraj Travels | Best Travels in Pune & Hadapsar",
+      description: "Learn about Shailraj Travels, Pune's premier tour agency founded in Hadapsar. Specialized in Ujjain Darshan, Ashtavinayak Yatra & luxury AC Force Urbania.",
       canonicalUrl: "https://www.shailrajtravels.com/about-shailraj-travels",
       keywords: [
         "best travels in pune",
