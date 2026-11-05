@@ -21,7 +21,7 @@ export const Route = createFileRoute("/reviews")({
     meta: generateSEO({
       title: "Shailraj Travels Reviews | 5.0★ Google Rating & Verified Yatri Feedback",
       description:
-        "Read authentic 5.0★ Google verified reviews for Shailraj Travels. Over 25+ verified pilgrim reviews for Pune to Ujjain Darshan, Ashtavinayak Yatra, and AC Force Urbania tours.",
+        "Read authentic 5.0★ Google verified reviews for Shailraj Travels. Verified pilgrim reviews for Pune to Ujjain Darshan, Ashtavinayak Yatra, and AC Force Urbania tours.",
       canonicalUrl: "https://www.shailrajtravels.com/reviews",
       keywords: [
         "shailraj travels reviews",
@@ -51,7 +51,7 @@ function ReviewsPage() {
     aggregateRating: {
       "@type": "AggregateRating",
       ratingValue: "5.0",
-      reviewCount: "25",
+      reviewCount: businessConfig.reviewCount || "23",
       bestRating: "5",
       worstRating: "1",
     },
@@ -89,7 +89,18 @@ function ReviewsPage() {
 
       <main className="flex-1 pt-24">
         {/* Page Header */}
-        <section className="bg-gradient-to-b from-slate-900 via-slate-800 to-brand-blue-deep text-white py-16 px-4 sm:px-6 lg:px-8 text-center relative overflow-hidden">
+        <section className="relative text-white py-16 md:py-20 px-4 sm:px-6 lg:px-8 text-center overflow-hidden">
+          {/* Background Image with Atmospheric Gradient Overlay */}
+          <div className="absolute inset-0 z-0">
+            <img
+              src="/images/reviews-hero-temple.jpg"
+              alt="Holy Temple Pilgrimage Ghat"
+              className="w-full h-full object-cover object-center"
+              loading="eager"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-slate-950/85 via-slate-900/80 to-brand-blue-deep/90" />
+          </div>
+
           <div className="mx-auto max-w-4xl relative z-10">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-4 text-xs font-bold text-amber-300">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
@@ -100,33 +111,13 @@ function ReviewsPage() {
               {lang === "mr" ? "आमच्या प्रवाशांचे गुगल अभिप्राय" : "Verified Customer Reviews"}
             </h1>
 
-            <p className="text-base sm:text-lg text-slate-200 max-w-2xl mx-auto mb-8">
+            <p className="text-base sm:text-lg text-slate-200 max-w-2xl mx-auto mb-0">
               {lang === "mr"
-                ? "गुगलवर प्रमाणित ५.० स्टार रेटिंग आणि २५+ प्रवाशांचे अस्सल अनुभव. श्री महाकालेश्वर, अष्टविनायक व ज्योतिर्लिंग यात्रांचे खरे अभिप्राय वाचा."
+                ? "गुगलवर प्रमाणित ५.० स्टार रेटिंग आणि प्रवाशांचे अस्सल अनुभव. श्री महाकालेश्वर, अष्टविनायक व ज्योतिर्लिंग यात्रांचे खरे अभिप्राय वाचा."
                 : "Authentic reviews and 5.0-star feedback from verified yatris who traveled with Shailraj Travels on Ujjain Mahakal, Ashtavinayak, and Maharashtra Jyotirlinga circuits."}
             </p>
 
-            <div className="inline-flex flex-wrap items-center justify-center gap-4 bg-white/10 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/20">
-              <div className="flex items-center gap-2">
-                <svg className="w-6 h-6 shrink-0" viewBox="0 0 24 24">
-                  <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
-                  <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
-                  <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
-                  <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
-                </svg>
-                <span className="font-extrabold text-2xl">5.0</span>
-                <div className="flex text-amber-400">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 fill-amber-400" />
-                  ))}
-                </div>
-              </div>
-              <span className="text-white/40">|</span>
-              <span className="text-sm font-bold">25+ Verified Google Reviews</span>
-              <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
-                100% Recommended
-              </span>
-            </div>
+
           </div>
         </section>
 

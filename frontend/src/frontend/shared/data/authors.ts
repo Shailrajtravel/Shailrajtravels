@@ -28,7 +28,7 @@ export const authors: Record<string, Author> = {
     role: "Co-Founder & Yatri Hospitality Director",
     yearsOfExperience: 5,
     bio: "Shaila Mayur Patil is the Co-Founder of Shailraj Travels. Guiding the yatri care and hospitality vision since 2021, she ensures all pilgrimage packages feature hygienic 3-star AC accommodations, authentic pure vegetarian sattvic meals, and personalized care for elderly pilgrims and family groups.",
-    avatarUrl: "/images/authors/shaila-mayur-patil.svg",
+    avatarUrl: "/images/authors/shaila-mayur-patil.jpg",
     expertiseAreas: [
       "Pilgrim Care & Hospitality",
       "Pure Vegetarian Dining Coordination",
@@ -66,7 +66,7 @@ export const authors: Record<string, Author> = {
     role: "Co-Founder & Yatri Hospitality Director",
     yearsOfExperience: 5,
     bio: "Shaila Mayur Patil is the Co-Founder of Shailraj Travels. Guiding the yatri care and hospitality vision since 2021, she ensures all pilgrimage packages feature hygienic 3-star AC accommodations and personalized yatri care.",
-    avatarUrl: "/images/authors/shaila-mayur-patil.svg",
+    avatarUrl: "/images/authors/shaila-mayur-patil.jpg",
     expertiseAreas: ["Pilgrim Care", "Hospitality", "Family Travel"],
     regionsCovered: ["Maharashtra", "Madhya Pradesh"],
     languages: ["Marathi", "Hindi"],

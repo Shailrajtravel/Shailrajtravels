@@ -53,6 +53,7 @@ function AboutEntityPage() {
       "@type": "Person",
       name: "Shaila Mayur Patil",
       jobTitle: "Co-Founder & Operations Director",
+      image: "https://www.shailrajtravels.com/images/authors/shaila-mayur-patil.jpg",
     },
     aggregateRating: {
       "@type": "AggregateRating",
