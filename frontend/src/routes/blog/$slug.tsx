@@ -6,6 +6,7 @@ import { blogPosts, blogAuthors } from '@/frontend/shared/data/blogs';
 import { Navbar } from '@/frontend/core/Navbar';
 import { FooterSection as Footer } from '@/frontend/core/Footer';
 import { translations } from '@/frontend/core/i18n';
+import { useLanguage } from '@/routes/__root';
 import {
   Calendar,
   Clock,
@@ -132,8 +133,8 @@ export const Route = createFileRoute("/blog/$slug")({
 
 function BlogPostPage() {
   const { post } = Route.useLoaderData();
-  const lang = "en";
-  const t = translations[lang];
+  const { lang } = useLanguage();
+  const t = translations[lang] || translations.en;
   const author = post.authorId ? blogAuthors[post.authorId] : undefined;
   const reviewer = post.reviewerId ? blogAuthors[post.reviewerId] : undefined;
 
@@ -465,9 +466,11 @@ function BlogPostPage() {
 }
 
 function BlogPostSkeleton() {
+  const { lang } = useLanguage();
+  const t = translations[lang] || translations.en;
   return (
     <div className="w-full bg-[#FAFCFB] min-h-screen">
-      <Navbar t={translations.en} />
+      <Navbar t={t} />
       <main className="pt-28 pb-20">
         <div className="max-w-[900px] mx-auto px-4 md:px-8 text-center animate-pulse">
           <div className="h-6 w-28 bg-slate-200 rounded-full mx-auto mb-6" />
@@ -492,7 +495,7 @@ function BlogPostSkeleton() {
           </div>
         </div>
       </main>
-      <Footer t={translations.en} lang="en" />
+      <Footer t={t} lang={lang} />
     </div>
   );
 }

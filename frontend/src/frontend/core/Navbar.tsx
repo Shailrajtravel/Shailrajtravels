@@ -35,17 +35,27 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
         ticking = true;
       }
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    if (typeof window !== "undefined") {
+      setIsScrolled(window.scrollY > 20);
+      window.addEventListener("scroll", handleScroll);
+    }
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("scroll", handleScroll);
+      }
+    };
   }, []);
+
+  const isHomePage = currentPath === "/" || currentPath === "/mr";
+  const showSolidNavbar = isScrolled || !isHomePage;
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 p-2 md:p-3 transition-all">
       <div
-        className={`mx-auto flex max-w-[1600px] items-center justify-between rounded-2xl pl-1 pr-4 py-1.5 transition-all duration-200 md:pl-2 md:pr-6 md:py-2 ${
-          isScrolled
-            ? "bg-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.08)] backdrop-blur-md"
-            : "bg-transparent"
+        className={`mx-auto flex max-w-[1600px] items-center justify-between rounded-2xl pl-1 pr-4 py-1.5 transition-all duration-300 md:pl-2 md:pr-6 md:py-2 ${
+          showSolidNavbar
+            ? "bg-white/95 shadow-[0_4px_25px_rgba(0,0,0,0.07)] backdrop-blur-md border border-slate-100/90"
+            : "bg-transparent border border-transparent"
         }`}
       >
         {/* Left: Logo */}
@@ -83,15 +93,15 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
             const isAllTours = key === "navAllTours";
 
             let isActive = false;
-            if (isHome) isActive = currentPath === "/" && !currentHash;
+            if (isHome) isActive = (currentPath === "/" || currentPath === "/mr") && !currentHash;
             else if (isBlog) isActive = currentPath.startsWith("/blog");
             else if (isGallery) isActive = currentPath.startsWith("/gallery");
             else if (isAllTours) isActive = currentPath.startsWith("/tours");
             else if (isContact) isActive = currentPath.startsWith("/contact") || currentHash === "contact";
-            else if (isAbout) isActive = currentPath === "/" && currentHash === "about";
+            else if (isAbout) isActive = currentPath.startsWith("/about") || (currentPath === "/" && currentHash === "about");
             else if (isFeatures) isActive = currentPath === "/" && currentHash === "features";
             else if (isPackages) isActive = currentPath === "/" && currentHash === "tours";
-            else if (isReviews) isActive = currentPath === "/" && currentHash === "reviews";
+            else if (isReviews) isActive = currentPath.startsWith("/reviews") || (currentPath === "/" && currentHash === "reviews");
 
             const className = `whitespace-nowrap text-[13px] xl:text-[14px] font-medium transition ${
               isActive ? "text-brand-blue-deep font-bold" : "text-slate-700 hover:text-brand-blue"
@@ -207,15 +217,15 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
               const isAllTours = key === "navAllTours";
 
               let isActive = false;
-              if (isHome) isActive = currentPath === "/" && !currentHash;
+              if (isHome) isActive = (currentPath === "/" || currentPath === "/mr") && !currentHash;
               else if (isBlog) isActive = currentPath.startsWith("/blog");
               else if (isGallery) isActive = currentPath.startsWith("/gallery");
               else if (isAllTours) isActive = currentPath.startsWith("/tours");
               else if (isContact) isActive = currentPath.startsWith("/contact") || currentHash === "contact";
-              else if (isAbout) isActive = currentPath === "/" && currentHash === "about";
+              else if (isAbout) isActive = currentPath.startsWith("/about") || (currentPath === "/" && currentHash === "about");
               else if (isFeatures) isActive = currentPath === "/" && currentHash === "features";
               else if (isPackages) isActive = currentPath === "/" && currentHash === "tours";
-              else if (isReviews) isActive = currentPath === "/" && currentHash === "reviews";
+              else if (isReviews) isActive = currentPath.startsWith("/reviews") || (currentPath === "/" && currentHash === "reviews");
 
               const className = `text-[16px] font-bold transition ${
                 isActive ? "text-brand-green" : "text-brand-blue-deep hover:text-brand-green"

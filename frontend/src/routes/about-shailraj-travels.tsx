@@ -5,6 +5,10 @@ import { createFileRoute, Link } from '@tanstack/react-router';
 import { generateSEO } from '@/backend/features/seo';
 import { businessConfig } from '@/frontend/shared/config/business';
 import { authors } from '@/frontend/shared/data/authors';
+import { Navbar } from '@/frontend/core/Navbar';
+import { FooterSection as Footer } from '@/frontend/core/Footer';
+import { useLanguage } from '@/routes/__root';
+import { translations } from '@/frontend/core/i18n';
 
 export const Route = createFileRoute("/about-shailraj-travels")({
   head: () => ({
@@ -33,6 +37,8 @@ export const Route = createFileRoute("/about-shailraj-travels")({
 });
 
 function AboutEntityPage() {
+  const { lang } = useLanguage();
+  const t = translations[lang] || translations.en;
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "TravelAgency",
@@ -78,7 +84,9 @@ function AboutEntityPage() {
   };
 
   return (
-    <main className="w-full bg-slate-50 pb-20 pt-24 px-4 sm:px-6 lg:px-8">
+    <div className="font-sans text-slate-800 bg-slate-50 min-h-screen selection:bg-brand-green/20 selection:text-brand-blue-deep flex flex-col">
+      <Navbar t={t} />
+      <main className="w-full flex-1 bg-slate-50 pb-20 pt-28 sm:pt-32 px-4 sm:px-6 lg:px-8">
       <SchemaMarkup schema={organizationSchema} />
 
       <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-sm border border-slate-100 p-8 md:p-12">
@@ -236,5 +244,7 @@ function AboutEntityPage() {
         </div>
       </div>
     </main>
+      <Footer t={t} lang={lang} />
+    </div>
   );
 }

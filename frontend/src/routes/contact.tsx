@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
 import { generateSEO } from '@/backend/features/seo';
 import { MapPin, Phone, Mail } from 'lucide-react';
+import { Navbar } from '@/frontend/core/Navbar';
+import { FooterSection as Footer } from '@/frontend/core/Footer';
+import { useLanguage } from '@/routes/__root';
+import { translations } from '@/frontend/core/i18n';
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -32,6 +36,8 @@ export const Route = createFileRoute("/contact")({
 });
 
 function ContactPage() {
+  const { lang } = useLanguage();
+  const t = translations[lang] || translations.en;
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -100,7 +106,9 @@ function ContactPage() {
   };
 
   return (
-    <main className="w-full bg-slate-50 pb-20 pt-24">
+    <div className="font-sans text-slate-800 bg-slate-50 min-h-screen selection:bg-brand-green/20 selection:text-brand-blue-deep flex flex-col">
+      <Navbar t={t} />
+      <main className="w-full flex-1 bg-slate-50 pb-20 pt-28 sm:pt-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-extrabold text-brand-blue-deep mb-4">
@@ -322,5 +330,7 @@ function ContactPage() {
         </div>
       </div>
     </main>
+      <Footer t={t} lang={lang} />
+    </div>
   );
 }

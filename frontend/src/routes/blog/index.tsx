@@ -5,6 +5,7 @@ import { blogPosts, blogAuthors } from '@/frontend/shared/data/blogs';
 import { Navbar } from '@/frontend/core/Navbar';
 import { FooterSection as Footer } from '@/frontend/core/Footer';
 import { translations } from '@/frontend/core/i18n';
+import { useLanguage } from '@/routes/__root';
 import { Calendar, Clock, User, ChevronRight } from 'lucide-react';
 import { generateBreadcrumbSchema } from '@/backend/shared/blog-schema';
 import { getCustomBlogsFn } from '@/backend/features/custom-blogs';
@@ -49,9 +50,11 @@ export const Route = createFileRoute("/blog/")({
 });
 
 function BlogListingSkeleton() {
+  const { lang } = useLanguage();
+  const t = translations[lang] || translations.en;
   return (
     <div className="w-full bg-[#FAFCFB] min-h-screen">
-      <Navbar t={translations.en} />
+      <Navbar t={t} />
       <div className="max-w-[1200px] mx-auto px-4 md:px-8 pt-28 pb-16 animate-pulse">
         <div className="text-center max-w-2xl mx-auto mb-12 space-y-4">
           <div className="h-6 w-32 bg-slate-200 rounded-full mx-auto" />
@@ -75,14 +78,14 @@ function BlogListingSkeleton() {
           ))}
         </div>
       </div>
-      <Footer t={translations.en} lang="en" />
+      <Footer t={t} lang={lang} />
     </div>
   );
 }
 
 function BlogIndexPage() {
-  const lang = "en";
-  const t = translations[lang];
+  const { lang } = useLanguage();
+  const t = translations[lang] || translations.en;
   const router = useRouter();
 
   const { customBlogs } = Route.useLoaderData() as any;
