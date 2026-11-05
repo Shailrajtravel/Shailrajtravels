@@ -719,6 +719,151 @@ const tourPackages = [
       }
     ],
     slug: "pune-to-girnar-spiritual-tour"
+  },
+  {
+    "title": "Pune to Nashik & Trimbakeshwar Tour Package",
+    "subtitle": "1 Night / 2 Days Jyotirlinga & Temple Tour",
+    "durationBadge": "2D / 1N",
+    "location": "Nashik, Trimbakeshwar, Panchavati",
+    "price": "₹9,500",
+    "schedule": "Daily & Weekend Departures",
+    "frequency": "Daily",
+    "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1789109017/tours/m3ubfq1crce6ere3pge8.webp",
+    "images": [
+      "https://res.cloudinary.com/dquecn5qj/image/upload/v1789109017/tours/m3ubfq1crce6ere3pge8.webp"
+    ],
+    "route": [
+      "Pune",
+      "Sangamner",
+      "Trimbakeshwar",
+      "Nashik",
+      "Panchavati",
+      "Pune"
+    ],
+    "tags": [
+      "Jyotirlinga",
+      "Trimbakeshwar",
+      "Nashik",
+      "Panchavati",
+      "2 Days",
+      "AC Travel"
+    ],
+    "seatsAvailable": 14,
+    "seatsTotal": 17,
+    "includes": [
+      "AC Urbania / Innova Service",
+      "Doorstep Pickup in Pune",
+      "Trimbakeshwar Darshan",
+      "Experienced Driver",
+      "Tolls & Taxes Included"
+    ],
+    "itinerary": [
+      {
+        "day": "Day 1",
+        "title": "Pune to Trimbakeshwar Jyotirlinga & Kushavarta Kund Darshan → Night stay in Nashik"
+      },
+      {
+        "day": "Day 2",
+        "title": "Panchavati (Kalaram Temple, Sita Gufa, Ramkund) → Muktidham → Return to Pune"
+      }
+    ],
+    "slug": "pune-to-nashik-trimbakeshwar-tour"
+  },
+  {
+    "title": "Mumbai to Ujjain Mahakal Darshan Tour Package",
+    "subtitle": "2 Nights / 3 Days Complete Spiritual Tour",
+    "durationBadge": "3D / 2N",
+    "location": "Ujjain, Omkareshwar, Indore",
+    "price": "₹24,000",
+    "schedule": "Every Friday & Custom Dates",
+    "frequency": "Weekly",
+    "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1789154040/blogs/spy42xnlvgry5xoznqzn.png",
+    "images": [
+      "https://res.cloudinary.com/dquecn5qj/image/upload/v1789154040/blogs/spy42xnlvgry5xoznqzn.png"
+    ],
+    "route": [
+      "Mumbai",
+      "Thane",
+      "Nashik",
+      "Dhule",
+      "Indore",
+      "Ujjain",
+      "Omkareshwar",
+      "Mumbai"
+    ],
+    "tags": [
+      "Mahakaleshwar",
+      "Bhasma Aarti",
+      "Omkareshwar",
+      "Mumbai Travels",
+      "3 Days"
+    ],
+    "seatsAvailable": 14,
+    "seatsTotal": 17,
+    "includes": [
+      "AC Force Urbania / Innova Crysta",
+      "Mumbai Doorstep Pickup",
+      "Bhasma Aarti Assistance",
+      "Omkareshwar Parikrama",
+      "Interstate Permits & Tolls"
+    ],
+    "itinerary": [
+      {
+        "day": "Day 1",
+        "title": "Mumbai / Thane Pickup → Scenic highway drive via Nashik & Dhule → Evening Indore food walk → Night in Ujjain"
+      },
+      {
+        "day": "Day 2",
+        "title": "Early Bhasma Aarti at Mahakaleshwar → Mahakal Lok Corridor → Kaal Bhairav → Omkareshwar Darshan"
+      },
+      {
+        "day": "Day 3",
+        "title": "Mangalnath Temple → Return journey to Mumbai arriving by night"
+      }
+    ],
+    "slug": "mumbai-to-ujjain-mahakal-darshan-tour"
+  },
+  {
+    "title": "Pune to Shirdi & Shani Shingnapur Tour Package",
+    "subtitle": "Same-Day Express or 2-Day Spiritual Pilgrimage",
+    "durationBadge": "1D / 2D",
+    "location": "Shirdi, Shani Shingnapur",
+    "price": "₹4,800",
+    "schedule": "Daily Morning Departures (05:30 AM)",
+    "frequency": "Daily",
+    "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1792764848/blogs/avej2lsveggdqan1spor.png",
+    "images": [
+      "https://res.cloudinary.com/dquecn5qj/image/upload/v1792764848/blogs/avej2lsveggdqan1spor.png"
+    ],
+    "route": [
+      "Pune",
+      "Hadapsar",
+      "Ahmednagar",
+      "Shirdi",
+      "Shani Shingnapur",
+      "Pune"
+    ],
+    "tags": [
+      "Shirdi Sai Baba",
+      "Shani Shingnapur",
+      "One Day Tour",
+      "Pune Cab Booking"
+    ],
+    "seatsAvailable": 14,
+    "seatsTotal": 17,
+    "includes": [
+      "Private AC Cab / Urbania",
+      "Doorstep Pickup & Drop",
+      "Fuel, Toll & Driver Charges",
+      "Free Waiting for Darshan"
+    ],
+    "itinerary": [
+      {
+        "day": "Day 1",
+        "title": "Pune Departure (05:30 AM) → Shirdi Sai Samadhi Darshan, Dwarkamai & Prasadalaya → Shani Shingnapur → Return to Pune by 10:30 PM"
+      }
+    ],
+    "slug": "pune-to-shirdi-shani-shingnapur-tour"
   }
 ];
 

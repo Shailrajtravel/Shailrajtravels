@@ -2311,6 +2311,234 @@ export const seedGallery: any[] = [
     title: "BNI Agni Terrific Performance Certificate - Score 100/100",
     category: "Awards & Recognition",
     aspect: "landscape"
-  }
+  },
+{
+  "_id": "6aa24c86a1ff1fa2e7123001",
+  "slug": "pune-to-nashik-trimbakeshwar-tour",
+  "lang": "en",
+  "title": "Pune to Nashik & Trimbakeshwar Tour Package",
+  "metaTitle": "Pune to Nashik & Trimbakeshwar Tour Package | Cab & Tempo | Shailraj",
+  "metaDescription": "Book Pune to Nashik & Trimbakeshwar Jyotirlinga tour package. Luxury AC cabs, Force Urbania & Tempo Traveller. Panchavati, Muktidham & wine tour options. 2-day yatra.",
+  "canonicalUrl": "https://www.shailrajtravels.com/tours/pune-to-nashik-trimbakeshwar-tour",
+  "heroContent": {
+    "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1789109017/tours/m3ubfq1crce6ere3pge8.webp",
+    "description": "Sacred Trimbakeshwar Jyotirlinga & Nashik Pilgrimage - Private AC Cabs, 17-Seater Force Urbania, and verified family hotels with Shailraj Travels Pune."
+  },
+  "overview": "<p>Embark on a sacred journey from <strong>Pune to Nashik & Trimbakeshwar</strong> with Shailraj Travels. Discover the ancient <strong>Trimbakeshwar Jyotirlinga</strong> (one of the 12 supreme Jyotirlingas featuring three faces embodying Brahma, Vishnu, and Shiva), the sacred origin of River Godavari at Kushavarta Kund, and the historic Panchavati where Lord Rama spent his exile. Travel in unmatched highway luxury with our sanitized fleet of Innova Crysta and AC Force Urbania.</p>",
+  "highlights": [
+    "Trimbakeshwar Jyotirlinga VIP Darshan Assistance",
+    "Kushavarta Kund & Brahmagiri Mountain Excursion",
+    "Panchavati, Kalaram Temple & Sita Gufa Guided Tour",
+    "Optional Sula Vineyards & Wine Tasting Visit",
+    "AC Force Urbania & Innova Crysta Doorstep Pickup from Pune",
+    "100% Transparent Billing with Zero Hidden Toll Surprises"
+  ],
+  "itinerary": [
+    {
+      "day": 1,
+      "title": "Pune to Trimbakeshwar Jyotirlinga & Anjaneri Hill",
+      "description": "Early morning pickup from your doorstep in Pune or Hadapsar (06:00 AM). Travel via NH 60 through Sangamner and Sinnar. Arrive at Trimbak by 11:30 AM for sacred Darshan at Trimbakeshwar Jyotirlinga and holy dip at Kushavarta Kund. Afternoon visit to Anjaneri Hill (the revered birthplace of Lord Hanuman). Evening check-in at your hotel in Nashik."
+    },
+    {
+      "day": 2,
+      "title": "Nashik Spiritual Sightseeing & Return to Pune",
+      "description": "Morning visit to sacred Panchavati: offer prayers at Kalaram Temple, visit Sita Gufa, Kapaleshwar Temple, and witness the Godavari River Aarti at Ramkund. Proceed to the marble marvel Muktidham Temple. Post-lunch optional excursion to Sula Vineyards before departing along NH 60 to arrive back in Pune by 09:30 PM."
+    }
+  ],
+  "inclusions": [
+    "Chauffeur-driven AC Private Vehicle (Innova Crysta / Ertiga / Force Urbania)",
+    "Dedicated fuel, toll taxes, state road taxes & parking charges",
+    "Experienced highway driver allowance & night charges",
+    "Doorstep pickup & drop anywhere in Pune, Hadapsar, PCMC"
+  ],
+  "exclusions": [
+    "Temple VIP darshan tickets or special pooja fees",
+    "Meals, beverages, and personal expenses",
+    "Hotel accommodation (can be added on request)",
+    "Vineyard tasting entry tickets"
+  ],
+  "packages": [
+    {
+      "title": "Maruti Ertiga AC",
+      "price": "₹9,500",
+      "subtitle": "2 Days / 1 Night | Ideal for 4-6 Family Members"
+    },
+    {
+      "title": "Toyota Innova Crysta",
+      "price": "₹13,500",
+      "subtitle": "2 Days / 1 Night | Superior Comfort for Seniors (6-7 Pax)"
+    },
+    {
+      "title": "Luxury AC Force Urbania",
+      "price": "₹19,500",
+      "subtitle": "2 Days / 1 Night | 17 Pushback Recliner Seats for Group Yatras"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "What is the road distance and driving time from Pune to Nashik?",
+      "answer": "The road distance from Pune to Nashik via the NH 60 highway corridor is approximately 212 km. By private AC cab, it takes about 4.5 to 5 hours with a morning breakfast break."
+    },
+    {
+      "question": "Can Trimbakeshwar and Nashik be covered in a 1-day trip from Pune?",
+      "answer": "While a 1-day express trip is possible by starting at 04:30 AM, a 2-day tour is strongly recommended for families to enjoy unhurried darshan at Trimbakeshwar and explore all Panchavati temples comfortably."
+    },
+    {
+      "question": "What are the cab rates for Pune to Nashik round trip?",
+      "answer": "Round-trip 2-day packages start at ₹9,500 for a 6-seater Maruti Ertiga AC, ₹13,500 for a luxury Toyota Innova Crysta, and ₹19,500 for a 17-seater luxury AC Force Urbania."
+    }
+  ]
+},
+{
+  "_id": "6aa24c86a1ff1fa2e7123002",
+  "slug": "mumbai-to-ujjain-mahakal-darshan-tour",
+  "lang": "en",
+  "title": "Mumbai to Ujjain Mahakal Darshan Tour Package",
+  "metaTitle": "Mumbai to Ujjain Tour Package | Mahakal & Omkareshwar | Shailraj",
+  "metaDescription": "Book Mumbai to Ujjain Mahakal tour package by luxury AC cab or Force Urbania. 3-day itinerary covering Mahakaleshwar Bhasma Aarti, Omkareshwar & Maheshwar. Top rated.",
+  "canonicalUrl": "https://www.shailrajtravels.com/tours/mumbai-to-ujjain-mahakal-darshan-tour",
+  "heroContent": {
+    "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1789154040/blogs/spy42xnlvgry5xoznqzn.png",
+    "description": "Mumbai to Ujjain Mahakaleshwar & Omkareshwar 3-Day Pilgrimage Tour - Luxury Force Urbania & Innova Crysta with Shailraj Travels."
+  },
+  "overview": "<p>Travel from <strong>Mumbai to Ujjain & Omkareshwar</strong> in supreme comfort with Shailraj Travels. Experience the divine <strong>Bhasma Aarti at Shri Mahakaleshwar Jyotirlinga</strong>, explore the grand <strong>Shri Mahakal Lok Corridor</strong>, visit the fierce Kaal Bhairav temple, and embark on a sacred Narmada boat parikrama at <strong>Omkareshwar Jyotirlinga</strong>. Doorstep pickup across Mumbai, Thane, and Navi Mumbai.</p>",
+  "highlights": [
+    "Early Morning Bhasma Aarti & Sheegra Darshan Assistance",
+    "Two Supreme Jyotirlingas: Mahakaleshwar & Omkareshwar",
+    "Visit the 900-meter Grand Mahakal Lok Corridor",
+    "Indore Night Food Street (Sarafa Bazaar & 56 Dukan) Experience",
+    "Door-to-door Luxury Pickup across Mumbai, Thane & Navi Mumbai",
+    "17-Seater AC Force Urbania with Reclining Ergonomic Seats"
+  ],
+  "itinerary": [
+    {
+      "day": 1,
+      "title": "Mumbai to Indore & Evening Ujjain Arrival",
+      "description": "Early morning pickup across Mumbai / Thane (05:00 AM). Drive along NH 52 through Nashik and Sendhwa Ghat. Arrive at Indore by 04:30 PM. Visit the iconic Sarafa Bazaar night street food market before reaching your luxury hotel in Ujjain for night stay."
+    },
+    {
+      "day": 2,
+      "title": "Mahakal Bhasma Aarti, Mahakal Lok & Omkareshwar",
+      "description": "Attend the divine early morning Bhasma Aarti at Shri Mahakaleshwar. Explore the newly consecrated Mahakal Lok Corridor, Kaal Bhairav, and Harsiddhi Shaktipeeth. Afternoon drive to Omkareshwar Jyotirlinga for holy Narmada River Darshan and evening Aarti."
+    },
+    {
+      "day": 3,
+      "title": "Mangalnath, Sandipani Ashram & Return to Mumbai",
+      "description": "Morning darshan at Mangalnath (planetary deity) and Maharshi Sandipani Ashram where Lord Krishna studied. Begin return drive along the smooth national highway to arrive back in Mumbai by 10:30 PM."
+    }
+  ],
+  "inclusions": [
+    "Chauffeur-driven AC Private Vehicle for 3 Full Days (~1,400 km)",
+    "All highway tolls, state border permits (MP & Maharashtra), and parking",
+    "Dedicated professional interstate highway pilot with night allowances",
+    "Doorstep pickup & drop anywhere in Mumbai, Thane, Navi Mumbai"
+  ],
+  "exclusions": [
+    "Hotel accommodations (can be arranged upon request)",
+    "Temple VIP darshan passes and pooja offerings",
+    "Meals and personal incidentals"
+  ],
+  "packages": [
+    {
+      "title": "Toyota Innova Crysta",
+      "price": "₹24,000",
+      "subtitle": "3 Days / 2 Nights | Premium Highway Ride for 6-7 Pax"
+    },
+    {
+      "title": "Luxury AC Force Urbania",
+      "price": "₹36,000",
+      "subtitle": "3 Days / 2 Nights | 17 Recliner Luxury for Joint Families"
+    },
+    {
+      "title": "AC Tempo Traveller",
+      "price": "₹34,000",
+      "subtitle": "3 Days / 2 Nights | 20-Seater Group Pilgrimage Tour"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "What is the driving distance from Mumbai to Ujjain?",
+      "answer": "The road distance from Mumbai to Ujjain via the Nashik - Dhule - Sendhwa - Indore highway corridor (NH 52) is approximately 645 km, taking 11 to 12.5 hours."
+    },
+    {
+      "question": "Can senior citizens travel comfortably from Mumbai to Ujjain by road?",
+      "answer": "Yes. Our Toyota Innova Crysta and 17-Seater AC Force Urbania are equipped with independent suspension, plush push-back recliner seats, and continuous AC, making long highway journeys completely smooth and fatigue-free for seniors."
+    }
+  ]
+},
+{
+  "_id": "6aa24c86a1ff1fa2e7123003",
+  "slug": "pune-to-shirdi-shani-shingnapur-tour",
+  "lang": "en",
+  "title": "Pune to Shirdi & Shani Shingnapur Tour Package",
+  "metaTitle": "Pune to Shirdi & Shani Shingnapur Cab Package | Shailraj Travels",
+  "metaDescription": "Book Pune to Shirdi tour package with Shani Shingnapur darshan. 1-day & 2-day AC cab options: Dzire, Ertiga, Innova Crysta & Urbania. Doorstep pickup in Pune & Hadapsar.",
+  "canonicalUrl": "https://www.shailrajtravels.com/tours/pune-to-shirdi-shani-shingnapur-tour",
+  "heroContent": {
+    "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1792764848/blogs/avej2lsveggdqan1spor.png",
+    "description": "Same-Day & 2-Day Shirdi Sai Baba & Shani Shingnapur Yatra from Pune - Experienced drivers, verified pure-veg recommendations, and seamless travel."
+  },
+  "overview": "<p>Experience divine peace on our <strong>Pune to Shirdi & Shani Shingnapur Tour Package</strong>. Seek the blessings of Shri Sai Baba at the sacred Samadhi Mandir in Shirdi, visit Gurusthan, Dwarkamai, and Chavadi, and seek protection at the open-air Swayambhu Shani Dev temple in Shani Shingnapur. Available as a same-day express return or a relaxed 2-day family pilgrimage.</p>",
+  "highlights": [
+    "Shri Sai Baba Samadhi Mandir VIP Darshan Assistance",
+    "Visit Dwarkamai, Chavadi & Sai Baba Museum",
+    "Holy Darshan at Swayambhu Shani Dev (Shani Shingnapur)",
+    "Authentic Mahaprasad Experience at Shri Sai Prasadalaya",
+    "Doorstep Pickup across Pune, Hadapsar, Kharadi & PCMC",
+    "Flexible Same-Day Express or Relaxed 2-Day Options"
+  ],
+  "itinerary": [
+    {
+      "day": 1,
+      "title": "Pune to Shirdi Sai Baba & Shani Shingnapur",
+      "description": "Early morning pickup from Pune (05:30 AM). Enjoy a comfortable 4-hour highway drive via Ahmednagar. Arrive at Shirdi by 09:30 AM for holy Samadhi Darshan, Dwarkamai, and Chavadi. Savor pure-veg Mahaprasad at the modern solar-powered Prasadalaya. At 03:00 PM, depart for Shani Shingnapur (70 km). Complete oil abhishek and darshan at the doorless holy village before returning to Pune by 10:30 PM."
+    }
+  ],
+  "inclusions": [
+    "Chauffeur-driven Private AC Vehicle (Sedan / Ertiga / Innova / Urbania)",
+    "All fuel, highway toll charges, parking fees & driver allowances",
+    "Doorstep pickup & drop at any location in Pune"
+  ],
+  "exclusions": [
+    "Temple VIP darshan passes and pooja expenses",
+    "Meals and hotel stays (available on 2-day package)",
+    "Personal tips and shopping"
+  ],
+  "packages": [
+    {
+      "title": "Maruti Dzire / Etios",
+      "price": "₹4,800",
+      "subtitle": "Same-Day Return | Up to 4 Passengers"
+    },
+    {
+      "title": "Maruti Ertiga AC",
+      "price": "₹6,500",
+      "subtitle": "Same-Day Return | Comfortable 6-Seater Family Ride"
+    },
+    {
+      "title": "Toyota Innova Crysta",
+      "price": "₹8,800",
+      "subtitle": "Same-Day Return | Executive Comfort for Seniors (6-7 Pax)"
+    },
+    {
+      "title": "Luxury AC Force Urbania",
+      "price": "₹14,500",
+      "subtitle": "Same-Day Return | 17-Seater Luxury for Group Yatra"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "What is the distance from Pune to Shirdi?",
+      "answer": "The road distance from Pune to Shirdi via the Ahmednagar highway (SH 27) is approximately 195 km, which takes around 4 to 4.5 hours by private cab."
+    },
+    {
+      "question": "Can we cover both Shirdi and Shani Shingnapur in one day from Pune?",
+      "answer": "Yes. With Shailraj Travels' well-timed one-day tour starting at 05:30 AM, you can comfortably complete Sai Baba darshan, have lunch at Prasadalaya, visit Shani Shingnapur by 04:30 PM, and return to Pune the same evening."
+    }
+  ]
+}
 ];
+
+
+
 
