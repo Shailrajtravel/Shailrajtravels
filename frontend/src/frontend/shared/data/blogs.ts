@@ -619,6 +619,19 @@ export const blogPosts: BlogPost[] = [
 <p>The <strong>Ashtavinayak Yatra</strong> (अष्टविनायक यात्रा) is Maharashtra's most celebrated pilgrimage circuit, connecting eight ancient, self-manifested (<em>Swayambhu</em>) temples of Lord Ganesha scattered across Pune, Raigad, and Ahmednagar districts. Each idol possesses distinct mythological origins documented in the venerated <em>Ganesha Purana</em> and <em>Mudgala Purana</em>.</p>
 <p>Undertaking this sacred parikrama from Pune allows pilgrims to complete the 650–720 km circuit comfortably in <strong>2 to 3 days</strong>. To help you plan an effortless, spiritually enriching journey, our veteran pilgrimage captains at <strong>Shailraj Travels</strong> have compiled this comprehensive, authoritative field guide.</p>
 
+<div class="my-6 p-5 bg-emerald-50/80 border-2 border-emerald-300 rounded-2xl not-prose text-slate-800">
+  <div class="flex items-center gap-2 mb-2">
+    <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-emerald-600 text-white text-xs font-bold">✓</span>
+    <h3 class="text-base sm:text-lg font-bold text-slate-900 m-0">Quick Answer: Distance, Duration & Sequence</h3>
+  </div>
+  <p class="text-sm leading-relaxed text-slate-700 mb-3">
+    The total road distance from Pune for the complete 8-temple Ashtavinayak Darshan circuit is approximately <strong>650 to 700 km</strong>. It takes <strong>2 to 3 days</strong> by car or private cab. By holy tradition, the yatra must start and end at <strong>Mayureshwar (Morgaon)</strong>.
+  </p>
+  <div class="text-xs text-slate-600 bg-white p-3 rounded-xl border border-emerald-200">
+    <strong>Traditional 8-Temple Sequence:</strong> 1. Morgaon (68 km) → 2. Siddhatek (95 km) → 3. Pali (210 km) → 4. Mahad (40 km) → 5. Theur (115 km) → 6. Lenyadri (95 km, 338 steps) → 7. Ozar (15 km) → 8. Ranjangaon (65 km) → Return to Morgaon.
+  </div>
+</div>
+
 <div class="not-prose my-8 bg-gradient-to-br from-slate-900 to-brand-blue-deep text-white rounded-3xl p-6 sm:p-8 shadow-xl border border-slate-800">
 <h3 class="text-xl font-bold font-display text-brand-green mb-4 flex items-center gap-2">
   📍 Quick Travel Snapshot: Pune to Ashtavinayak Darshan
@@ -894,6 +907,30 @@ export const blogPosts: BlogPost[] = [
 </div>
 
 <p class="text-sm text-slate-500"><em>Note: Package rates include vehicle rent, driver allowance, and fuel for 700 km. Tolls and parking charges are payable as per actual receipts. Contact Shailraj Travels for customized multi-day quotes.</em></p>
+
+<div class="my-8 p-6 bg-gradient-to-r from-slate-900 via-indigo-950 to-brand-blue-deep rounded-2xl text-white shadow-xl not-prose border border-slate-800">
+  <div class="max-w-2xl">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="inline-block px-3 py-1 bg-amber-400 text-slate-950 font-bold text-xs rounded-full uppercase tracking-wider">Direct Pilgrimage Booking</span>
+      <span class="text-xs text-emerald-400 font-semibold">★ 4.9/5 (100% Verified Reviews)</span>
+    </div>
+    <h3 class="text-xl md:text-2xl font-bold text-white mb-2">Book Your Pune to Ashtavinayak AC Cab with Shailraj Travels</h3>
+    <p class="text-slate-300 text-sm mb-5 leading-relaxed">
+      Doorstep pickup across Pune & Hadapsar. Experienced highway drivers familiar with ghat bypasses, sanitized AC cabs (Ertiga, Innova Crysta, 17-Seater Luxury Force Urbania), transparent pricing with no hidden surprises, and senior-citizen support.
+    </p>
+    <div class="flex flex-wrap gap-3">
+      <a href="https://wa.me/919764413556?text=Hello%20Shailraj%20Travels,%20I%20am%20planning%20an%20Ashtavinayak%20Yatra%20from%20Pune.%20Please%20share%20cab%20package%20details%20and%20rates." target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition text-sm shadow-md active:scale-95">
+        💬 Chat on WhatsApp for Quote
+      </a>
+      <a href="/tours/pune-to-ashtavinayak-darshan" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-slate-100 text-slate-900 font-bold rounded-xl transition text-sm shadow-md">
+        View Full Tour Package Details →
+      </a>
+      <a href="tel:+919764413556" class="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-800/80 hover:bg-slate-800 text-white font-semibold rounded-xl transition text-sm border border-slate-700">
+        📞 Call +91 97644 13556
+      </a>
+    </div>
+  </div>
+</div>
 </section>
 
 <section id="food-stay-packing">

@@ -17,6 +17,8 @@ import {
   Instagram,
   Youtube,
   ArrowRight,
+  Phone,
+  MessageCircle,
 } from 'lucide-react';
 import { AuthorProfile } from '@/frontend/shared/components/AuthorProfile';
 import {
@@ -459,6 +461,32 @@ function BlogPostPage() {
           </aside>
         </div>
       </main>
+
+      {/* Mobile Sticky Booking Bar */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-200 p-3 px-4 shadow-[0_-4px_20px_rgba(0,0,0,0.1)] flex items-center justify-between gap-3">
+        <div className="flex-1 min-w-0">
+          <div className="text-[11px] text-slate-500 font-medium truncate">Plan Yatra with Experts</div>
+          <div className="text-xs sm:text-sm font-bold text-slate-900 truncate">Shailraj Travels</div>
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <a
+            href="tel:+919764413556"
+            className="inline-flex items-center gap-1.5 px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl transition-colors border border-slate-200"
+          >
+            <Phone className="w-3.5 h-3.5 text-brand-green" /> Call
+          </a>
+          <a
+            href={`https://wa.me/919764413556?text=${encodeURIComponent(
+              `Hello Shailraj Travels, I am reading your "${post.title}" guide. Please share cab package rates and vehicle options.`
+            )}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[#25D366] hover:bg-[#20ba59] text-white text-xs font-bold rounded-xl transition-all shadow-md active:scale-95"
+          >
+            <MessageCircle className="w-3.5 h-3.5" /> WhatsApp
+          </a>
+        </div>
+      </div>
 
       <Footer t={t} lang={lang} />
     </div>
