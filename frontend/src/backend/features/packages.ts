@@ -57,6 +57,8 @@ export const createPackageFn = createServerFn({ method: "POST" })
       body: JSON.stringify(data.data),
     });
     await invalidateCache('packages:all');
+    await invalidateCache('tours:en');
+    await invalidateCache('tours:mr');
     return result;
   });
 
@@ -69,6 +71,12 @@ export const updatePackageFn = createServerFn({ method: "POST" })
       body: JSON.stringify(data.data),
     });
     await invalidateCache('packages:all');
+    await invalidateCache('tours:en');
+    await invalidateCache('tours:mr');
+    if (data?.data?.slug) {
+      await invalidateCache(`tour:slug:${data.data.slug.toLowerCase().trim()}:en`);
+      await invalidateCache(`tour:slug:${data.data.slug.toLowerCase().trim()}:mr`);
+    }
     return result;
   });
 
@@ -80,5 +88,7 @@ export const deletePackageFn = createServerFn({ method: "POST" })
       method: "DELETE",
     });
     await invalidateCache('packages:all');
+    await invalidateCache('tours:en');
+    await invalidateCache('tours:mr');
     return result;
   });

@@ -37,6 +37,7 @@ import {
 } from '@/backend/shared/gallery';
 import { getAuditLogsFn } from '@/backend/shared/audit';
 import { getToursFn, deleteTourFn } from '@/backend/features/tours';
+import { uploadImageToCloudinary } from '@/backend/shared/cloudinary';
 import {
   getWhatsAppStatusFn,
   restartWhatsAppFn,
@@ -2808,6 +2809,8 @@ function AdminPage() {
 // Subcomponent for the Form
 function PackageForm({ token, initialData, onClose, onSuccess }: any) {
   const [loading, setLoading] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState("");
   const [formData, setFormData] = useState<any>(
     initialData || {
       title: "",
@@ -2828,6 +2831,41 @@ function PackageForm({ token, initialData, onClose, onSuccess }: any) {
   const [itinerary, setItinerary] = useState<{ day: string; title: string }[]>(
     Array.isArray(initialData?.itinerary) ? initialData.itinerary : [],
   );
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+
+    setUploadingImage(true);
+    try {
+      const uploadedUrls: string[] = [];
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        setUploadProgress(`Uploading ${i + 1} of ${files.length}...`);
+        const base64 = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result as string);
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+        const cUrl = await uploadImageToCloudinary(base64, "packages");
+        uploadedUrls.push(cUrl);
+      }
+      const currentImages = Array.isArray(formData.images) ? [...formData.images] : [];
+      const newImages = [...uploadedUrls, ...currentImages];
+      setFormData({
+        ...formData,
+        images: newImages,
+        image: uploadedUrls[0] || newImages[0] || "",
+      });
+    } catch (err: any) {
+      alert("Image upload failed: " + (err.message || "Network error"));
+    } finally {
+      setUploadingImage(false);
+      setUploadProgress("");
+      if (e.target) e.target.value = "";
+    }
+  };
 
   const handleChange = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -2972,34 +3010,59 @@ function PackageForm({ token, initialData, onClose, onSuccess }: any) {
             </label>
             <div className="flex flex-col gap-4">
               {formData.images && formData.images.length > 0 && (
-                <div className="flex flex-wrap gap-4">
-                  {formData.images.map((img: string, idx: number) => (
-                    <div
-                      key={idx}
-                      className="relative w-24 h-24 rounded-lg bg-slate-100 overflow-hidden shrink-0 border border-slate-200"
-                    >
-                      <img
-                        src={img}
-                        alt={`Preview ${idx}`}
-                        className="w-full h-full object-cover"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const newImages = [...formData.images];
-                          newImages.splice(idx, 1);
-                          setFormData({
-                            ...formData,
-                            images: newImages,
-                            image: newImages[0] || "",
-                          });
-                        }}
-                        className="absolute top-1 right-1 bg-slate-900/60 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-500 transition-colors shadow-sm"
+                <div className="flex flex-wrap gap-4 mb-2">
+                  {formData.images.map((img: string, idx: number) => {
+                    const isPrimary = formData.image === img || (!formData.image && idx === 0);
+                    return (
+                      <div
+                        key={idx}
+                        className={`relative w-28 h-28 rounded-xl bg-slate-100 overflow-hidden shrink-0 border-2 transition-all ${
+                          isPrimary ? "border-brand-green shadow-md ring-2 ring-brand-green/30" : "border-slate-200"
+                        }`}
                       >
-                        ×
-                      </button>
-                    </div>
-                  ))}
+                        <img
+                          src={img}
+                          alt={`Preview ${idx}`}
+                          className="w-full h-full object-cover"
+                        />
+                        {isPrimary ? (
+                          <span className="absolute bottom-1.5 left-1.5 bg-brand-green text-white text-[10px] font-bold px-1.5 py-0.5 rounded shadow">
+                            Primary
+                          </span>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => setFormData({ ...formData, image: img })}
+                            className="absolute bottom-1.5 left-1.5 bg-slate-900/75 hover:bg-brand-blue text-white text-[10px] font-bold px-1.5 py-0.5 rounded shadow transition-colors"
+                            title="Set as Main Card Image"
+                          >
+                            Set Main
+                          </button>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newImages = formData.images.filter((_: any, i: number) => i !== idx);
+                            setFormData({
+                              ...formData,
+                              images: newImages,
+                              image: formData.image === img ? (newImages[0] || "") : formData.image,
+                            });
+                          }}
+                          className="absolute top-1.5 right-1.5 bg-slate-900/75 hover:bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center transition-colors shadow-sm text-xs font-bold"
+                          title="Delete image"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+              {uploadingImage && (
+                <div className="flex items-center gap-2 p-3 bg-brand-blue/5 border border-brand-blue/20 rounded-xl text-brand-blue-deep text-sm font-semibold animate-pulse">
+                  <Loader2 className="w-4 h-4 animate-spin text-brand-blue" />
+                  <span>{uploadProgress || "Uploading images to Cloudinary..."}</span>
                 </div>
               )}
               <div className="flex-1">
@@ -3007,31 +3070,12 @@ function PackageForm({ token, initialData, onClose, onSuccess }: any) {
                   type="file"
                   accept="image/*"
                   multiple
-                  onChange={(e) => {
-                    const files = Array.from(e.target.files || []);
-                    if (!files.length) return;
-
-                    const newImages = [...(formData.images || [])];
-                    let processedCount = 0;
-
-                    files.forEach((file) => {
-                      const reader = new FileReader();
-                      reader.onloadend = () => {
-                        newImages.push(reader.result as string);
-                        processedCount++;
-
-                        if (processedCount === files.length) {
-                          setFormData({ ...formData, images: newImages, image: newImages[0] });
-                        }
-                      };
-                      reader.readAsDataURL(file);
-                    });
-                  }}
-                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-blue/50 focus:border-brand-blue transition-all file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-brand-blue/10 file:text-brand-blue-deep hover:file:bg-brand-blue/20 cursor-pointer text-sm text-slate-500"
+                  disabled={uploadingImage}
+                  onChange={handleImageUpload}
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-blue/50 focus:border-brand-blue transition-all file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-brand-blue/10 file:text-brand-blue-deep hover:file:bg-brand-blue/20 cursor-pointer text-sm text-slate-500 disabled:opacity-50"
                 />
                 <p className="text-xs text-slate-400 mt-2">
-                  Upload high-quality images from your device. Images are automatically backed up to
-                  Cloudinary.
+                  Upload high-quality images from your device. Images are automatically uploaded to Cloudinary and set as primary.
                 </p>
               </div>
             </div>

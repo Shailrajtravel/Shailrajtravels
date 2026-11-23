@@ -1,5 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { packageRepository } from '../repositories/PackageRepository';
+import { tourRepository } from '../repositories/TourRepository';
+import { storageManager } from '../database/StorageManager';
 import { uploadImageToCloudinary } from '../shared/cloudinary';
 
 @Injectable()
@@ -70,6 +72,30 @@ export class PackagesService {
     const updateData = { ...processedData };
     delete updateData._id;
     await packageRepository.updateOne(id, updateData);
+
+    // Cross-sync image and title updates to tours collection
+    try {
+      const existingPkg = await packageRepository.findById(id);
+      const titleToMatch = updateData.title || existingPkg?.title;
+      const slugToMatch = updateData.slug || existingPkg?.slug;
+      const newImage = updateData.image || (updateData.images && updateData.images[0]);
+      
+      const conditions: any[] = [];
+      if (titleToMatch) conditions.push({ title: titleToMatch });
+      if (slugToMatch) conditions.push({ slug: slugToMatch });
+
+      if (newImage && conditions.length > 0) {
+        const toursCol = await storageManager.getGlobalCollection('tours');
+        await toursCol.updateMany(
+          { $or: conditions },
+          { $set: { "heroContent.image": newImage } }
+        );
+        this.logger.log(`Successfully synced image ${newImage} to matching tours`);
+      }
+    } catch (e: any) {
+      this.logger.warn(`Failed to sync package image to tours: ${e.message}`);
+    }
+
     return { success: true };
   }
 

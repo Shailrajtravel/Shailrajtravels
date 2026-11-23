@@ -85,6 +85,7 @@ type TourInput = {
 const invalidateTourCaches = async (slug?: string) => {
   await invalidateCache('tours:en');
   await invalidateCache('tours:mr');
+  await invalidateCache('packages:all');
   if (slug) {
     await invalidateCache(`tour:slug:${slug}:en`);
     await invalidateCache(`tour:slug:${slug}:mr`);

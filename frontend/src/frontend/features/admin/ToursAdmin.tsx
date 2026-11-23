@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, Loader2, ArrowLeft } from 'lucide-react';
 import { createTourFn, updateTourFn, deleteTourFn } from '@/backend/features/tours';
+import { uploadImageToCloudinary } from '@/backend/shared/cloudinary';
 
 export function ToursAdmin({ token, tours, loadData, setDeleteConfirm }: any) {
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -145,6 +146,8 @@ function TourForm({ token, initialData, onClose, onSuccess }: any) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const [uploadingImage, setUploadingImage] = useState(false);
+
   const handleHeroChange = (e: any) => {
     setFormData({
       ...formData,
@@ -152,18 +155,29 @@ function TourForm({ token, initialData, onClose, onSuccess }: any) {
     });
   };
 
-  const handleImageChange = (e: any) => {
+  const handleImageChange = async (e: any) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
+    setUploadingImage(true);
+    try {
+      const base64 = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+      const cUrl = await uploadImageToCloudinary(base64, "tours");
       setFormData({
         ...formData,
-        heroContent: { ...formData.heroContent, image: reader.result as string },
+        heroContent: { ...formData.heroContent, image: cUrl },
       });
-    };
-    reader.readAsDataURL(file);
+    } catch (err: any) {
+      alert("Image upload failed: " + (err.message || "Network error"));
+    } finally {
+      setUploadingImage(false);
+      if (e.target) e.target.value = "";
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -267,13 +281,42 @@ function TourForm({ token, initialData, onClose, onSuccess }: any) {
               Hero Image
             </label>
             {formData.heroContent.image && (
-              <img
-                src={formData.heroContent.image}
-                className="h-32 object-contain bg-slate-100 rounded mb-4"
-                alt="Hero Preview"
-              />
+              <div className="relative w-fit mb-4">
+                <img
+                  src={formData.heroContent.image}
+                  className="h-32 object-contain bg-slate-100 rounded border border-slate-200"
+                  alt="Hero Preview"
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    setFormData({
+                      ...formData,
+                      heroContent: { ...formData.heroContent, image: "" },
+                    })
+                  }
+                  className="absolute -top-2 -right-2 bg-slate-900/75 hover:bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold transition-colors shadow"
+                  title="Remove image"
+                >
+                  ×
+                </button>
+              </div>
             )}
-            <input type="file" accept="image/*" onChange={handleImageChange} className="w-full" id="tour-hero-image" name="heroImage" />
+            {uploadingImage && (
+              <div className="flex items-center gap-2 p-3 bg-brand-blue/5 border border-brand-blue/20 rounded-xl text-brand-blue-deep text-sm font-semibold animate-pulse mb-3">
+                <Loader2 className="w-4 h-4 animate-spin text-brand-blue" />
+                <span>Uploading hero image to Cloudinary...</span>
+              </div>
+            )}
+            <input
+              type="file"
+              accept="image/*"
+              disabled={uploadingImage}
+              onChange={handleImageChange}
+              className="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-brand-blue/10 file:text-brand-blue-deep hover:file:bg-brand-blue/20 cursor-pointer disabled:opacity-50"
+              id="tour-hero-image"
+              name="heroImage"
+            />
           </div>
 
           <div className="md:col-span-2">

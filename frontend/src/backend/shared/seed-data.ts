@@ -4,7 +4,7 @@ export const seedPackages: any[] = [
     "_id": "6aa24c85a1ff1fa2e71229ab",
     "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1789108976/tours/xfgotflrvwss3xqcav8e.webp",
     "images": [
-      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80"
+      "https://res.cloudinary.com/dquecn5qj/image/upload/v1789108976/tours/xfgotflrvwss3xqcav8e.webp"
     ],
     "durationBadge": "5D / 4N",
     "subtitle": "4 Nights / 5 Days Gujarat Temple & Pilgrimage Tour",
@@ -68,7 +68,7 @@ export const seedPackages: any[] = [
     "_id": "6aa24c85a1ff1fa2e71229aa",
     "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1789108995/tours/m2czsc3ku88d8uwwcwlr.webp",
     "images": [
-      "https://images.unsplash.com/photo-1518684079-3c830dcef090?auto=format&fit=crop&w=1200&q=80"
+      "https://res.cloudinary.com/dquecn5qj/image/upload/v1789108995/tours/m2czsc3ku88d8uwwcwlr.webp"
     ],
     "durationBadge": "5D / 4N",
     "subtitle": "4 Nights / 5 Days Gujarat Temple & Pilgrimage Tour",
@@ -130,9 +130,9 @@ export const seedPackages: any[] = [
   },
   {
     "_id": "6aa24c85a1ff1fa2e71229a9",
-    "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1789109017/tours/m3ubfq1crce6ere3pge8.webp",
+    "image": "https://images.unsplash.com/photo-1567591414240-e9c1e59f3e06?auto=format&fit=crop&w=1200&q=80",
     "images": [
-      "https://images.unsplash.com/photo-1567591414240-e2b2f6b8a8b8?auto=format&fit=crop&w=1200&q=80"
+      "https://images.unsplash.com/photo-1567591414240-e9c1e59f3e06?auto=format&fit=crop&w=1200&q=80"
     ],
     "durationBadge": "1 Day",
     "subtitle": "Complete One-Day Ganpati Temple Tour",
