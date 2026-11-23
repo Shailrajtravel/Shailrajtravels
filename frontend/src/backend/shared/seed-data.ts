@@ -1251,8 +1251,8 @@ export const seedTours: any[] = [
     "slug": "pune-to-ashtavinayak-darshan",
     "lang": "en",
     "title": "Pune to Ashtavinayak Darshan",
-    "metaTitle": "Pune to Ashtavinayak Darshan Tour Package | 1 & 2 Day Yatra | Shailraj Travels",
-    "metaDescription": "Book Ashtavinayak yatra tour package from Pune. Complete 8 Ganpati temple darshan as per shastra in luxury AC Force Urbania. 1-day & 2-day options, best pricing at ₹3,111.",
+    "metaTitle": "Pune to Ashtavinayak Tour Package | AC Car & Urbania | Shailraj",
+    "metaDescription": "Book Ashtavinayak darshan from Pune by car or luxury AC Force Urbania. Complete 8 Ganpati temples as per shastra. 1-day & 2-day options, starting at ₹3,111.",
     "canonicalUrl": "https://www.shailrajtravels.com/tours/pune-to-ashtavinayak-darshan",
     "heroContent": {
       "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1789109017/tours/m3ubfq1crce6ere3pge8.webp",
@@ -2054,8 +2054,8 @@ export const seedTours: any[] = [
     "lang": "en",
     "title": "Pune to Ujjain Tour Package & Bus Travels",
     "subtitle": "3 Days / 2 Nights Luxury AC Force Urbania & Sleeper Bus Travels (Mahakaleshwar, Omkareshwar & Maheshwar)",
-    "metaTitle": "Pune to Ujjain Tour Package | Best Tours & Travels in Pune | Shailraj Travels",
-    "metaDescription": "Looking for the best travels from Pune to Ujjain? Book Shailraj Travels' premier Pune to Ujjain tour and travels package. AC Force Urbania, Mahakal Bhasma Aarti, Omkareshwar & 3-star stay. Call 24/7.",
+    "metaTitle": "Pune to Ujjain Tour Package for Family | AC Urbania & Cabs",
+    "metaDescription": "Best Pune to Ujjain tour package for family: Luxury AC Force Urbania & Innova, Bhasma Aarti booking, 3-star hotel & Omkareshwar. Senior-friendly. Book now.",
     "keywords": [
       "pune to ujjain bus travels",
       "pune to ujjain bus",

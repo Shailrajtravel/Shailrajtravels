@@ -7,14 +7,16 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "pune-to-ujjain-tour-guide-mahakal-darshan-itinerary",
     title: "Pune to Ujjain Tours and Travels: Best Tour Packages, Cab Booking & Mahakal Darshan Guide",
-    metaTitle: "Pune to Ujjain Tours & Travels | Best Packages & Cabs",
-    metaDescription: "Looking for the best travels from Pune to Ujjain? Complete travel guide: Road route, AC Force Urbania cab booking, Bhasma Aarti rules & 3-day tour package.",
+    metaTitle: "Pune to Ujjain Tour Package for Family | Best Travels & Cabs",
+    metaDescription: "Best Pune to Ujjain tour package for family: Road route, AC Force Urbania cab booking, Bhasma Aarti rules & 3-day itinerary with Omkareshwar. Book with Shailraj.",
     focusKeyword: "pune to ujjain tours and travels",
     keywords: [
       "pune to ujjain tours and travels",
       "best travels in pune to ujjain",
       "pune to ujjain bus travels",
       "pune to ujjain tour package",
+      "pune to ujjain tour package for family",
+      "ujjain tour package for family from pune",
       "mahakal darshan guide",
       "bhasma aarti booking pune",
       "pune to omkareshwar travel",
@@ -48,6 +50,14 @@ export const blogPosts: BlogPost[] = [
     ],
     faqs: [
       {
+        question: "What is the distance from Theur to Ozar Ganpati?",
+        answer: "The road distance from Theur (Shri Chintamani Ganpati) to Ozar (Shri Vighnahar Ganpati) is approximately 95 km via the Pune–Nashik National Highway (NH 60). By private car or cab, the drive takes about 2 hours 15 minutes to 2 hours 30 minutes via Bhosari, Chakan, and Narayangaon."
+      },
+      {
+        question: "Can we do Ashtavinayak Darshan from Pune by car with elderly parents?",
+        answer: "Yes, an Ashtavinayak yatra by car is the most comfortable option for families. Hiring a chauffeur-driven AC cab (Maruti Ertiga, Toyota Innova Crysta, or 17-Seater Force Urbania) from Shailraj Travels avoids driving fatigue on rural ghat roads, provides door-to-door pickup, and ensures assistance at Lenyadri (doli / palanquin arrangement)."
+      },
+      {
         question: "What is the road distance and driving time from Pune to Ujjain?",
         answer: "The road distance from Pune to Ujjain via the Nashik - Dhule - Sendhwa - Indore bypass route (NH 60 & NH 52) is approximately 640 km. By private cab or car, it takes about 11 to 13 hours including meal breaks and fuel stops."
       },
@@ -75,6 +85,14 @@ export const blogPosts: BlogPost[] = [
     content: `<section id="trip-snapshot">
 <h2>Pune to Ujjain at a Glance: Essential Trip Facts</h2>
 <p>Planning a sacred pilgrimage from <strong>Pune to Ujjain</strong> connects devotees from Maharashtra to the supreme spiritual energy of <strong>Shri Mahakaleshwar</strong>, the ancient master of time and eternity. As one of the holy <em>Sapta Puris</em> (seven sacred liberation cities) and host of the legendary Simhastha Kumbh Mela on the banks of River Kshipra, Ujjain is among India's most venerated pilgrimage hubs.</p>
+
+
+<div class="my-8 text-center not-prose">
+  <div class="rounded-2xl overflow-hidden shadow-xl border border-slate-200 bg-slate-900">
+    <img src="/images/ashtavinayak-route-map-infographic.svg" alt="Ashtavinayak Ganpati Route Map with Distance from Pune" title="Ashtavinayak Ganpati Route Map with Distance - Shailraj Travels" class="w-full h-auto block" loading="eager" width="1200" height="720" />
+  </div>
+  <p class="text-xs text-slate-500 mt-2 italic">Official Ashtavinayak Ganpati Circuit Route Map with distances and highway corridors starting from Pune (Hadapsar).</p>
+</div>
 
 <div class="not-prose my-8 bg-gradient-to-br from-slate-900 to-brand-blue-deep text-white rounded-3xl p-6 sm:p-8 shadow-xl border border-slate-800">
 <h3 class="text-xl font-bold font-display text-brand-green mb-4 flex items-center gap-2">
@@ -530,12 +548,17 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "pune-to-ashtavinayak-tour-guide-route-map-itinerary",
     title: "Pune to Ashtavinayak Tour Guide: Route Map, Correct Temple Order, Distance & Cab Booking",
-    metaTitle: "Pune to Ashtavinayak Tour Guide | Route Map & Cabs",
-    metaDescription: "Complete Pune to Ashtavinayak Darshan guide: Correct 8-temple sequence, route map (~650 km), 2-3 day itineraries, temple timings, cab fares & tips for seniors.",
+    metaTitle: "Pune to Ashtavinayak Route Map & Distance: 8 Temples & Cabs",
+    metaDescription: "Complete Ashtavinayak route map with distance: Correct 8-temple order, temple-to-temple km chart, 2-3 day car itinerary, timings & AC cab fares from Pune.",
     focusKeyword: "pune to ashtavinayak tour guide",
     keywords: [
       "pune to ashtavinayak tour guide",
       "ashtavinayak route map",
+      "ashtavinayak ganpati map",
+      "ashtavinayak map",
+      "ashtavinayak route map with distance",
+      "theur to ozar ganpati distance",
+      "ashtavinayak darshan from pune by car",
       "ashtavinayak darshan sequence",
       "ashtavinayak yatra from pune",
       "ashtavinayak cab booking pune",
@@ -572,6 +595,7 @@ export const blogPosts: BlogPost[] = [
       { id: "trip-snapshot", title: "Pune to Ashtavinayak at a Glance (Quick Facts)", level: 2 },
       { id: "correct-sequence", title: "The Sacred Traditional Sequence: Why Order Matters", level: 2 },
       { id: "temples-matrix", title: "Complete 8 Temples Reference Matrix (Distance & Timings)", level: 2 },
+      { id: "inter-temple-distance", title: "Temple-to-Temple Distance & Route Chart (KM Matrix)", level: 2 },
       { id: "2-day-itinerary", title: "Recommended 2-Day Ashtavinayak Circuit from Pune", level: 2 },
       { id: "3-day-senior-itinerary", title: "Relaxed 3-Day Itinerary for Senior Citizens & Families", level: 2 },
       { id: "lenyadri-guide", title: "Conquering Lenyadri Caves: Steps, Palanquin (Doli) & Monkey Safety", level: 2 },
@@ -787,6 +811,137 @@ export const blogPosts: BlogPost[] = [
 </tr>
 </tbody>
 </table>
+</div>
+</section>
+
+
+<section id="inter-temple-distance">
+<h2>Temple-to-Temple Distance & Travel Time Chart (Pairwise Matrix)</h2>
+<p>To help you navigate individual driving legs and estimate travel hours between consecutive shrines, here is the complete pairwise distance breakdown:</p>
+
+<div class="overflow-x-auto my-6">
+<table class="w-full text-left border-collapse border border-slate-200 text-sm rounded-xl overflow-hidden shadow-sm">
+<thead>
+<tr class="bg-slate-100 text-brand-blue-deep font-bold">
+  <th class="p-3 border border-slate-200">Route Leg</th>
+  <th class="p-3 border border-slate-200">From Temple</th>
+  <th class="p-3 border border-slate-200">To Temple</th>
+  <th class="p-3 border border-slate-200">Road Distance</th>
+  <th class="p-3 border border-slate-200">Driving Time (Car/Cab)</th>
+  <th class="p-3 border border-slate-200">Highway Route</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100">
+<tr class="hover:bg-slate-50">
+  <td class="p-3 font-semibold text-slate-700">Leg 1</td>
+  <td class="p-3 font-bold text-brand-blue">Pune (Hadapsar)</td>
+  <td class="p-3 font-bold text-slate-800">Mayureshwar (Morgaon)</td>
+  <td class="p-3 font-semibold text-brand-blue">65 km</td>
+  <td class="p-3">1 hr 45 min</td>
+  <td class="p-3">Pune – Saswad – Jejuri – Morgaon Rd</td>
+</tr>
+<tr class="hover:bg-slate-50">
+  <td class="p-3 font-semibold text-slate-700">Leg 2</td>
+  <td class="p-3 font-bold text-slate-800">Mayureshwar (Morgaon)</td>
+  <td class="p-3 font-bold text-slate-800">Siddhivinayak (Siddhatek)</td>
+  <td class="p-3 font-semibold text-brand-blue">95 km</td>
+  <td class="p-3">2 hrs 15 min</td>
+  <td class="p-3">Via Supa & Daund – Siddhatek Rd</td>
+</tr>
+<tr class="hover:bg-slate-50">
+  <td class="p-3 font-semibold text-slate-700">Leg 3</td>
+  <td class="p-3 font-bold text-slate-800">Siddhivinayak (Siddhatek)</td>
+  <td class="p-3 font-bold text-slate-800">Ballaleshwar (Pali)</td>
+  <td class="p-3 font-semibold text-brand-blue">210 km</td>
+  <td class="p-3">4 hrs 30 min</td>
+  <td class="p-3">Via Daund, Hadapsar bypass & Mumbai-Pune Expressway</td>
+</tr>
+<tr class="hover:bg-slate-50">
+  <td class="p-3 font-semibold text-slate-700">Leg 4</td>
+  <td class="p-3 font-bold text-slate-800">Ballaleshwar (Pali)</td>
+  <td class="p-3 font-bold text-slate-800">Varadvinayak (Mahad)</td>
+  <td class="p-3 font-semibold text-brand-blue">40 km</td>
+  <td class="p-3">1 hr</td>
+  <td class="p-3">Khopoli – Pali Road to NH 48</td>
+</tr>
+<tr class="hover:bg-slate-50">
+  <td class="p-3 font-semibold text-slate-700">Leg 5</td>
+  <td class="p-3 font-bold text-slate-800">Varadvinayak (Mahad)</td>
+  <td class="p-3 font-bold text-slate-800">Chintamani (Theur)</td>
+  <td class="p-3 font-semibold text-brand-blue">115 km</td>
+  <td class="p-3">2 hrs 30 min</td>
+  <td class="p-3">Mumbai-Pune Expressway & Pune Ring Rd</td>
+</tr>
+<tr class="hover:bg-emerald-50/50 bg-emerald-50/20">
+  <td class="p-3 font-bold text-emerald-800">Leg 6</td>
+  <td class="p-3 font-bold text-emerald-950">Chintamani (Theur)</td>
+  <td class="p-3 font-bold text-emerald-950">Vighnahar (Ozar)</td>
+  <td class="p-3 font-bold text-emerald-800">95 km</td>
+  <td class="p-3 font-semibold">2 hrs 20 min</td>
+  <td class="p-3">Pune–Nashik Hwy (NH 60) via Narayangaon</td>
+</tr>
+<tr class="hover:bg-slate-50">
+  <td class="p-3 font-semibold text-slate-700">Leg 7</td>
+  <td class="p-3 font-bold text-slate-800">Chintamani (Theur)</td>
+  <td class="p-3 font-bold text-slate-800">Girijatmaj (Lenyadri)</td>
+  <td class="p-3 font-semibold text-brand-blue">95 km</td>
+  <td class="p-3">2 hrs 30 min</td>
+  <td class="p-3">NH 60 to Junnar (338 cave steps)</td>
+</tr>
+<tr class="hover:bg-slate-50">
+  <td class="p-3 font-semibold text-slate-700">Leg 8</td>
+  <td class="p-3 font-bold text-slate-800">Girijatmaj (Lenyadri)</td>
+  <td class="p-3 font-bold text-slate-800">Vighnahar (Ozar)</td>
+  <td class="p-3 font-semibold text-brand-blue">15 km</td>
+  <td class="p-3">25 min</td>
+  <td class="p-3">Junnar – Ozar Link Road</td>
+</tr>
+<tr class="hover:bg-slate-50">
+  <td class="p-3 font-semibold text-slate-700">Leg 9</td>
+  <td class="p-3 font-bold text-slate-800">Vighnahar (Ozar)</td>
+  <td class="p-3 font-bold text-slate-800">Mahaganapati (Ranjangaon)</td>
+  <td class="p-3 font-semibold text-brand-blue">65 km</td>
+  <td class="p-3">1 hr 45 min</td>
+  <td class="p-3">Via Alephata, Shirur & Pune-Nagar Hwy (NH 753F)</td>
+</tr>
+<tr class="hover:bg-slate-50">
+  <td class="p-3 font-semibold text-slate-700">Leg 10</td>
+  <td class="p-3 font-bold text-slate-800">Mahaganapati (Ranjangaon)</td>
+  <td class="p-3 font-bold text-brand-blue">Pune (Drop-off)</td>
+  <td class="p-3 font-semibold text-brand-blue">50 km</td>
+  <td class="p-3">1 hr 15 min</td>
+  <td class="p-3">Pune-Nagar Highway (NH 753F) via Shikrapur</td>
+</tr>
+<tr class="hover:bg-slate-50">
+  <td class="p-3 font-semibold text-slate-700">Leg 11</td>
+  <td class="p-3 font-bold text-slate-800">Mahaganapati (Ranjangaon)</td>
+  <td class="p-3 font-bold text-slate-800">Concluding Morgaon</td>
+  <td class="p-3 font-semibold text-brand-blue">85 km</td>
+  <td class="p-3">2 hrs 15 min</td>
+  <td class="p-3">Via Shikrapur, Uruli Kanchan & Jejuri</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="bg-slate-50 border-l-4 border-emerald-500 p-5 rounded-r-xl my-6">
+  <h3 class="text-base font-bold text-slate-900 mb-2">⚡ Theur to Ozar Ganpati Distance & Route Details</h3>
+  <p class="text-sm text-slate-700 leading-relaxed mb-2">
+    The direct road distance from <strong>Theur (Shri Chintamani Ganpati) to Ozar (Shri Vighnahar Ganpati)</strong> is <strong>95 km</strong>. By car or private cab, the journey takes approximately <strong>2 hours 15 minutes to 2 hours 30 minutes</strong> depending on traffic.
+  </p>
+  <p class="text-xs text-slate-600">
+    <strong>Optimal Driving Route:</strong> Depart Theur via Pune Ring Road / Wagholi bypass ➔ Merge onto Pune–Nashik National Highway (NH 60) ➔ Pass Bhosari, Chakan & Manchar ➔ Reach Narayangaon ➔ Turn onto Otur–Ozar link road directly to Shri Vighnahar Mandir.
+  </p>
+</div>
+
+<div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl my-6">
+  <h3 class="text-base font-bold text-slate-900 mb-2">🚗 Ashtavinayak Darshan from Pune by Car: Driving Tips & Fastag Tolls</h3>
+  <p class="text-sm text-slate-700 leading-relaxed mb-2">
+    Covering the Ashtavinayak yatra from Pune by car is the most popular choice for families. The full circuit is ~650 to 700 km. Average Fastag toll charges across the circuit amount to <strong>₹380 to ₹520</strong> total. 
+  </p>
+  <p class="text-xs text-slate-600">
+    <strong>Why Book an AC Cab vs Self-Driving?</strong> The 8 temples require driving over 16 to 18 hours across busy state highways, ghat passes, and narrow temple village lanes with limited parking. Booking a private chauffeur-driven cab (Maruti Ertiga, Toyota Innova Crysta, or AC Force Urbania) from Shailraj Travels allows your family to rest comfortably while experienced pilgrimage drivers handle traffic and temple parking.
+  </p>
 </div>
 </section>
 

@@ -1,0 +1,145 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" width="100%" height="100%" style="background:#0F172A;font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <defs>
+    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10B981" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E293B" />
+      <stop offset="100%" stop-color="#0F172A" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#10B981" flood-opacity="0.3" />
+    </filter>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.5" />
+    </filter>
+  </defs>
+
+  <!-- Title Banner -->
+  <rect x="0" y="0" width="1200" height="90" fill="#090E17" />
+  <rect x="40" y="20" width="6" height="50" rx="3" fill="#10B981" />
+  <text x="60" y="48" fill="#F8FAFC" font-size="24" font-weight="800" letter-spacing="0.5">PUNE TO ASHTAVINAYAK ROUTE MAP &amp; DISTANCE INFOGRAPHIC</text>
+  <text x="60" y="70" fill="#94A3B8" font-size="14" font-weight="500">Traditional 8-Temple Maha-Pradakshina Circuit (~650–700 km) | Verified by Shailraj Travels Pune</text>
+  <rect x="990" y="25" width="170" height="40" rx="20" fill="#10B981" opacity="0.15" />
+  <text x="1075" y="50" fill="#34D399" font-size="13" font-weight="700" text-anchor="middle">⚡ Total ~650–700 KM</text>
+
+  <!-- Route Path Lines -->
+  <!-- Pune to Morgaon -->
+  <path d="M 600 480 L 760 560" stroke="#10B981" stroke-width="3" stroke-dasharray="6,6" stroke-linecap="round" />
+  <!-- Morgaon to Siddhatek -->
+  <path d="M 760 560 L 980 470" stroke="#10B981" stroke-width="3" stroke-dasharray="6,6" stroke-linecap="round" />
+  <!-- Siddhatek to Pali -->
+  <path d="M 980 470 L 600 480 L 220 370" stroke="#38BDF8" stroke-width="2.5" stroke-dasharray="6,6" opacity="0.6" stroke-linecap="round" />
+  <!-- Pali to Mahad -->
+  <path d="M 220 370 L 280 270" stroke="#10B981" stroke-width="3" stroke-linecap="round" />
+  <!-- Mahad to Theur -->
+  <path d="M 280 270 L 600 480 L 680 420" stroke="#38BDF8" stroke-width="2.5" stroke-dasharray="6,6" opacity="0.6" stroke-linecap="round" />
+  <!-- Theur to Lenyadri -->
+  <path d="M 680 420 L 520 180" stroke="#10B981" stroke-width="3" stroke-dasharray="6,6" stroke-linecap="round" />
+  <!-- Lenyadri to Ozar -->
+  <path d="M 520 180 L 650 170" stroke="#10B981" stroke-width="3" stroke-linecap="round" />
+  <!-- Ozar to Ranjangaon -->
+  <path d="M 650 170 L 780 320" stroke="#10B981" stroke-width="3" stroke-linecap="round" />
+  <!-- Ranjangaon to Pune / Morgaon -->
+  <path d="M 780 320 L 600 480" stroke="#F59E0B" stroke-width="3" stroke-dasharray="6,6" stroke-linecap="round" />
+
+  <!-- PUNE HUB CENTER -->
+  <g transform="translate(600, 480)" filter="url(#shadow)">
+    <circle r="42" fill="#1E293B" stroke="#38BDF8" stroke-width="3" />
+    <circle r="34" fill="#0284C7" opacity="0.2" />
+    <text x="0" y="-8" fill="#38BDF8" font-size="11" font-weight="700" text-anchor="middle">START &amp; END</text>
+    <text x="0" y="10" fill="#FFFFFF" font-size="15" font-weight="800" text-anchor="middle">PUNE</text>
+    <text x="0" y="24" fill="#94A3B8" font-size="10" font-weight="600" text-anchor="middle">(Hadapsar)</text>
+  </g>
+
+  <!-- TEMPLE 1: MORGAON -->
+  <g transform="translate(760, 560)" filter="url(#shadow)">
+    <rect x="-95" y="-35" width="190" height="70" rx="14" fill="#1E293B" stroke="#10B981" stroke-width="2" />
+    <circle cx="-68" cy="0" r="16" fill="#10B981" />
+    <text x="-68" y="5" fill="#FFFFFF" font-size="13" font-weight="800" text-anchor="middle">1</text>
+    <text x="-40" y="-8" fill="#F8FAFC" font-size="13" font-weight="700">Mayureshwar</text>
+    <text x="-40" y="10" fill="#34D399" font-size="11" font-weight="600">Morgaon (65 km)</text>
+    <text x="-40" y="24" fill="#94A3B8" font-size="10">Pune-Jejuri Route</text>
+  </g>
+
+  <!-- TEMPLE 2: SIDDHATEK -->
+  <g transform="translate(980, 470)" filter="url(#shadow)">
+    <rect x="-95" y="-35" width="190" height="70" rx="14" fill="#1E293B" stroke="#10B981" stroke-width="2" />
+    <circle cx="-68" cy="0" r="16" fill="#10B981" />
+    <text x="-68" y="5" fill="#FFFFFF" font-size="13" font-weight="800" text-anchor="middle">2</text>
+    <text x="-40" y="-8" fill="#F8FAFC" font-size="13" font-weight="700">Siddhivinayak</text>
+    <text x="-40" y="10" fill="#34D399" font-size="11" font-weight="600">Siddhatek (95 km)</text>
+    <text x="-40" y="24" fill="#94A3B8" font-size="10">Daund-Bhima River</text>
+  </g>
+
+  <!-- TEMPLE 3: PALI -->
+  <g transform="translate(220, 370)" filter="url(#shadow)">
+    <rect x="-95" y="-35" width="190" height="70" rx="14" fill="#1E293B" stroke="#10B981" stroke-width="2" />
+    <circle cx="-68" cy="0" r="16" fill="#10B981" />
+    <text x="-68" y="5" fill="#FFFFFF" font-size="13" font-weight="800" text-anchor="middle">3</text>
+    <text x="-40" y="-8" fill="#F8FAFC" font-size="13" font-weight="700">Ballaleshwar</text>
+    <text x="-40" y="10" fill="#34D399" font-size="11" font-weight="600">Pali (210 km)</text>
+    <text x="-40" y="24" fill="#94A3B8" font-size="10">Khopoli-Raigad Hwy</text>
+  </g>
+
+  <!-- TEMPLE 4: MAHAD -->
+  <g transform="translate(280, 270)" filter="url(#shadow)">
+    <rect x="-95" y="-35" width="190" height="70" rx="14" fill="#1E293B" stroke="#10B981" stroke-width="2" />
+    <circle cx="-68" cy="0" r="16" fill="#10B981" />
+    <text x="-68" y="5" fill="#FFFFFF" font-size="13" font-weight="800" text-anchor="middle">4</text>
+    <text x="-40" y="-8" fill="#F8FAFC" font-size="13" font-weight="700">Varadvinayak</text>
+    <text x="-40" y="10" fill="#34D399" font-size="11" font-weight="600">Mahad (40 km)</text>
+    <text x="-40" y="24" fill="#94A3B8" font-size="10">Near Mumbai Expwy</text>
+  </g>
+
+  <!-- TEMPLE 5: THEUR -->
+  <g transform="translate(680, 420)" filter="url(#shadow)">
+    <rect x="-95" y="-35" width="190" height="70" rx="14" fill="#1E293B" stroke="#10B981" stroke-width="2" />
+    <circle cx="-68" cy="0" r="16" fill="#10B981" />
+    <text x="-68" y="5" fill="#FFFFFF" font-size="13" font-weight="800" text-anchor="middle">5</text>
+    <text x="-40" y="-8" fill="#F8FAFC" font-size="13" font-weight="700">Chintamani</text>
+    <text x="-40" y="10" fill="#34D399" font-size="11" font-weight="600">Theur (25 km Pune)</text>
+    <text x="-40" y="24" fill="#94A3B8" font-size="10">Solapur Hwy / Mula River</text>
+  </g>
+
+  <!-- TEMPLE 6: LENYADRI -->
+  <g transform="translate(520, 180)" filter="url(#shadow)">
+    <rect x="-95" y="-35" width="190" height="70" rx="14" fill="#1E293B" stroke="#10B981" stroke-width="2" />
+    <circle cx="-68" cy="0" r="16" fill="#10B981" />
+    <text x="-68" y="5" fill="#FFFFFF" font-size="13" font-weight="800" text-anchor="middle">6</text>
+    <text x="-40" y="-8" fill="#F8FAFC" font-size="13" font-weight="700">Girijatmaj</text>
+    <text x="-40" y="10" fill="#34D399" font-size="11" font-weight="600">Lenyadri (95 km)</text>
+    <text x="-40" y="24" fill="#94A3B8" font-size="10">338 Cave Steps (Doli)</text>
+  </g>
+
+  <!-- TEMPLE 7: OZAR -->
+  <g transform="translate(710, 170)" filter="url(#shadow)">
+    <rect x="-95" y="-35" width="190" height="70" rx="14" fill="#1E293B" stroke="#10B981" stroke-width="2" />
+    <circle cx="-68" cy="0" r="16" fill="#10B981" />
+    <text x="-68" y="5" fill="#FFFFFF" font-size="13" font-weight="800" text-anchor="middle">7</text>
+    <text x="-40" y="-8" fill="#F8FAFC" font-size="13" font-weight="700">Vighnahar</text>
+    <text x="-40" y="10" fill="#34D399" font-size="11" font-weight="600">Ozar (15 km)</text>
+    <text x="-40" y="24" fill="#94A3B8" font-size="10">Kukadi River Fort</text>
+  </g>
+
+  <!-- TEMPLE 8: RANJANGAON -->
+  <g transform="translate(860, 310)" filter="url(#shadow)">
+    <rect x="-95" y="-35" width="190" height="70" rx="14" fill="#1E293B" stroke="#10B981" stroke-width="2" />
+    <circle cx="-68" cy="0" r="16" fill="#10B981" />
+    <text x="-68" y="5" fill="#FFFFFF" font-size="13" font-weight="800" text-anchor="middle">8</text>
+    <text x="-40" y="-8" fill="#F8FAFC" font-size="13" font-weight="700">Mahaganapati</text>
+    <text x="-40" y="10" fill="#34D399" font-size="11" font-weight="600">Ranjangaon (65 km)</text>
+    <text x="-40" y="24" fill="#94A3B8" font-size="10">Pune-Nagar Highway</text>
+  </g>
+
+  <!-- FOOTER & LEGEND -->
+  <rect x="40" y="640" width="1120" height="60" rx="12" fill="#1E293B" stroke="#334155" />
+  <circle cx="70" cy="670" r="6" fill="#10B981" />
+  <text x="85" y="674" fill="#F8FAFC" font-size="12" font-weight="600">Sacred 1 to 8 Order</text>
+  <circle cx="250" cy="670" r="6" fill="#38BDF8" />
+  <text x="265" y="674" fill="#F8FAFC" font-size="12" font-weight="600">Expressway &amp; Bypass Connectors</text>
+  <circle cx="510" cy="670" r="6" fill="#F59E0B" />
+  <text x="525" y="674" fill="#F8FAFC" font-size="12" font-weight="600">Concluding Return to Morgaon</text>
+  <text x="1130" y="674" fill="#94A3B8" font-size="12" font-weight="600" text-anchor="end">Shailraj Travels • Cab Booking: +91 97644 13556</text>
+</svg>

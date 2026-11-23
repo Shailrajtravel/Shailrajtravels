@@ -946,8 +946,8 @@ async function seed(targetUri) {
         slug: pkg.slug,
         lang: "en",
         title: pkg.title,
-        metaTitle: `${pkg.title} | Shailraj Travels`,
-        metaDescription: `Book ${pkg.title}. ${pkg.subtitle}. Comfortable AC Force Urbania travel, guided darshan, affordable pricing at ${pkg.price}.`,
+        metaTitle: pkg.slug === "pune-to-ujjain-tour-package" ? "Pune to Ujjain Tour Package for Family | AC Urbania & Cabs" : `${pkg.title} | Shailraj Travels`,
+        metaDescription: pkg.slug === "pune-to-ujjain-tour-package" ? "Best Pune to Ujjain tour package for family: Luxury AC Force Urbania & Innova, Bhasma Aarti booking, 3-star hotel & Omkareshwar. Senior-friendly. Book now." : `Book ${pkg.title}. ${pkg.subtitle}. Comfortable AC Force Urbania travel, guided darshan, affordable pricing at ${pkg.price}.`,
         canonicalUrl: `https://www.shailrajtravels.com/tours/${pkg.slug}`,
         heroContent: {
           image: pkg.image,
