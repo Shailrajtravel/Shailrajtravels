@@ -202,3 +202,5 @@ export const fallbackGoogleReviews: GoogleReviewItem[] = sortReviewsByLatest([
     timestamp: Date.now() - (92 * 86400 * 1000),
   },
 ]);
+
+export const DEFAULT_GOOGLE_REVIEWS = fallbackGoogleReviews;

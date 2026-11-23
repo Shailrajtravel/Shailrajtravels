@@ -24,6 +24,68 @@ import { visualizer } from "rollup-plugin-visualizer";
 export default defineConfig({
   nitro: {
     preset: "cloudflare-pages",
+    routeRules: {
+      "/": {
+        headers: {
+          "Cache-Control": "public, max-age=60, s-maxage=600, stale-while-revalidate=86400",
+        },
+      },
+      "/mr": {
+        headers: {
+          "Cache-Control": "public, max-age=60, s-maxage=600, stale-while-revalidate=86400",
+        },
+      },
+      "/tours/**": {
+        headers: {
+          "Cache-Control": "public, max-age=60, s-maxage=600, stale-while-revalidate=86400",
+        },
+      },
+      "/blog/**": {
+        headers: {
+          "Cache-Control": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400",
+        },
+      },
+      "/gallery": {
+        headers: {
+          "Cache-Control": "public, max-age=300, s-maxage=1800, stale-while-revalidate=86400",
+        },
+      },
+      "/faq": {
+        headers: {
+          "Cache-Control": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400",
+        },
+      },
+      "/compare/**": {
+        headers: {
+          "Cache-Control": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400",
+        },
+      },
+      "/facts/**": {
+        headers: {
+          "Cache-Control": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400",
+        },
+      },
+      "/resources/**": {
+        headers: {
+          "Cache-Control": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400",
+        },
+      },
+      "/assets/**": {
+        headers: {
+          "Cache-Control": "public, max-age=31536000, immutable",
+        },
+      },
+      "/admin/**": {
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate",
+        },
+      },
+      "/_serverfn/**": {
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate",
+        },
+      },
+    },
   },
   tanstackStart: {
     server: { entry: "server" },

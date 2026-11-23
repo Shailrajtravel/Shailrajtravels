@@ -1,5 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { isValidAdminToken } from '@/backend/infrastructure/token';
+import { memoryCache } from '@/backend/shared/memory-cache';
+import { fastApiFetch } from '@/backend/shared/fast-fetch';
 
 export interface VehicleItem {
   id: string;
@@ -150,10 +152,28 @@ const apiFetch = async (endpoint: string, options: RequestInit & { timeoutMs?: n
 export const getRecommendedVehiclesFn = createServerFn({ method: "GET" })
   .handler(async (): Promise<VehicleItem[]> => {
     try {
-      const vehicles = await apiFetch('/recommended-vehicles');
+      const { value: cached, isStale } = memoryCache.getWithMeta<VehicleItem[]>('recommended-vehicles');
+      if (cached && Array.isArray(cached) && cached.length > 0) {
+        if (isStale) {
+          fastApiFetch('/recommended-vehicles', { timeoutMs: 3000 })
+            .then((fresh) => {
+              if (fresh && Array.isArray(fresh) && fresh.length > 0) {
+                memoryCache.set('recommended-vehicles', fresh, 3600);
+              }
+            })
+            .catch(() => {});
+        }
+        return cached;
+      }
+
+      const vehicles = await fastApiFetch('/recommended-vehicles', { timeoutMs: 2000 }).catch(() => null);
       if (Array.isArray(vehicles) && vehicles.length > 0) {
+        memoryCache.set('recommended-vehicles', vehicles, 3600);
         return vehicles;
       }
+
+      // Default fallback cached for quick SSR
+      memoryCache.set('recommended-vehicles', DEFAULT_RECOMMENDED_VEHICLES, 300);
       return DEFAULT_RECOMMENDED_VEHICLES;
     } catch (err) {
       console.error("Failed to fetch recommended vehicles, using defaults:", err);
@@ -168,10 +188,12 @@ export const saveRecommendedVehiclesFn = createServerFn({ method: "POST" })
       throw new Error("Unauthorized");
     }
     
-    return await apiFetch('/recommended-vehicles', {
+    const result = await fastApiFetch('/recommended-vehicles', {
       method: "POST",
       body: JSON.stringify(data.vehicles),
       timeoutMs: 45000,
     });
+    memoryCache.delete('recommended-vehicles');
+    return result;
   });
 

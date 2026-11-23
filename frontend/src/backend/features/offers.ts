@@ -129,57 +129,40 @@ export const DEFAULT_OFFER: PromotionalOffer = {
   updatedAt: new Date().toISOString(),
 };
 
-const apiFetch = async (endpoint: string, options: RequestInit & { timeoutMs?: number } = {}) => {
-  const BACKEND_URL = import.meta.env.VITE_WEBSITE_BACKEND_URL || process.env.VITE_WEBSITE_BACKEND_URL || "https://shailrajtravels.onrender.com/api";
-  
-  // For write operations (POST, PUT, DELETE), give generous 45s timeout to allow payload transfer and DB saves on Render
-  // For read operations (GET), give 12s timeout
-  const isWrite = options.method && ['POST', 'PUT', 'DELETE', 'PATCH'].includes(options.method.toUpperCase());
-  const defaultTimeout = isWrite ? 45000 : 12000;
-  const timeoutMs = options.timeoutMs ?? defaultTimeout;
-
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-
-  try {
-    const res = await fetch(`${BACKEND_URL}${endpoint}`, {
-      ...options,
-      signal: controller.signal,
-      headers: {
-        "Content-Type": "application/json",
-        ...options.headers,
-      },
-    });
-    clearTimeout(timeoutId);
-    if (!res.ok) {
-      const errorText = await res.text();
-      throw new Error(errorText || `API Error: ${res.status}`);
-    }
-    const text = await res.text();
-    return text ? JSON.parse(text) : null;
-  } catch (err: any) {
-    clearTimeout(timeoutId);
-    if (err.name === 'AbortError' || err.message?.includes('aborted')) {
-      throw new Error(`Request timed out after ${timeoutMs / 1000}s while communicating with backend. Please try again.`);
-    }
-    throw err;
-  }
-};
+import { memoryCache } from '@/backend/shared/memory-cache';
+import { fastApiFetch } from '@/backend/shared/fast-fetch';
 
 export const getActiveOfferFn = createServerFn({ method: "GET" })
   .validator((data?: { forceFresh?: boolean }) => data)
   .handler(async ({ data }): Promise<PromotionalOffer | null> => {
     try {
       if (!data?.forceFresh) {
-        const cached = await getCachedData<PromotionalOffer>('offers:active');
+        // 1. Check L1 Memory Cache with SWR (0ms)
+        const { value: cached, isStale } = memoryCache.getWithMeta<PromotionalOffer>('offers:active');
         if (cached && typeof cached === 'object' && cached.slug && cached.isActive) {
+          if (isStale) {
+            fastApiFetch('/offers/active', { timeoutMs: 3000 })
+              .then(async (fresh) => {
+                if (fresh && fresh.slug && fresh.isActive) {
+                  await setCachedData('offers:active', fresh, 3600);
+                }
+              })
+              .catch(() => {});
+          }
           return cached;
+        }
+
+        // 2. Check L2 Redis Cache
+        const l2 = await getCachedData<PromotionalOffer>('offers:active');
+        if (l2 && typeof l2 === 'object' && l2.slug && l2.isActive) {
+          return l2;
         }
       }
 
-      const liveOffer = await apiFetch('/offers/active');
+      // 3. Fast network fetch with 2000ms max timeout
+      const liveOffer = await fastApiFetch('/offers/active', { timeoutMs: 2000 }).catch(() => null);
       if (liveOffer && liveOffer.slug && liveOffer.isActive) {
-        await setCachedData('offers:active', liveOffer, 300);
+        await setCachedData('offers:active', liveOffer, 3600);
         return liveOffer;
       }
       return null;
@@ -193,8 +176,13 @@ export const getOfferBySlugFn = createServerFn({ method: "GET" })
   .validator((data: { slug: string }) => data)
   .handler(async ({ data }): Promise<PromotionalOffer | null> => {
     try {
-      const liveOffer = await apiFetch(`/offers/${data.slug}`);
+      const cacheKey = `offers:slug:${data.slug.toLowerCase().trim()}`;
+      const cached = memoryCache.get<PromotionalOffer>(cacheKey);
+      if (cached) return cached;
+
+      const liveOffer = await fastApiFetch(`/offers/${data.slug}`, { timeoutMs: 2000 }).catch(() => null);
       if (liveOffer && liveOffer.slug) {
+        memoryCache.set(cacheKey, liveOffer, 3600);
         return liveOffer;
       }
       return null;
@@ -211,7 +199,7 @@ export const getOffersFn = createServerFn({ method: "POST" })
       throw new Error("Unauthorized");
     }
     try {
-      const offers = await apiFetch('/offers');
+      const offers = await fastApiFetch('/offers', { timeoutMs: 10000 });
       if (Array.isArray(offers)) {
         return offers;
       }
@@ -229,7 +217,7 @@ export const saveOfferFn = createServerFn({ method: "POST" })
       throw new Error("Unauthorized");
     }
     try {
-      const result = await apiFetch('/offers', {
+      const result = await fastApiFetch('/offers', {
         method: "POST",
         body: JSON.stringify(data.offer),
       });
@@ -248,7 +236,7 @@ export const toggleOfferStatusFn = createServerFn({ method: "POST" })
       throw new Error("Unauthorized");
     }
     try {
-      const result = await apiFetch(`/offers/${data.slug}/status`, {
+      const result = await fastApiFetch(`/offers/${data.slug}/status`, {
         method: "PUT",
         body: JSON.stringify({ isActive: data.isActive }),
       });
@@ -269,7 +257,7 @@ export const deleteOfferFn = createServerFn({ method: "POST" })
     const offerSlug = data?.slug || DEFAULT_OFFER.slug;
     try {
       // 1. Try standard DELETE endpoint
-      const result = await apiFetch(`/offers/${offerSlug}`, {
+      const result = await fastApiFetch(`/offers/${offerSlug}`, {
         method: "DELETE",
       });
       await invalidateCache('offers:active');
@@ -279,7 +267,7 @@ export const deleteOfferFn = createServerFn({ method: "POST" })
 
       // 2. Try POST fallback: /offers/:slug/delete
       try {
-        const postResult = await apiFetch(`/offers/${offerSlug}/delete`, {
+        const postResult = await fastApiFetch(`/offers/${offerSlug}/delete`, {
           method: "POST",
         });
         await invalidateCache('offers:active');

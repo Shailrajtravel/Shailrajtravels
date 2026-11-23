@@ -56,7 +56,7 @@ export function FooterSection({ t: propT, lang = "en" }: { t?: typeof translatio
   const [popularTours, setPopularTours] = useState<{ label: string; href: string }[]>(defaultTours);
 
   useEffect(() => {
-    getToursFn({ data: { lang, forceFresh: true } })
+    getToursFn({ data: { lang } })
       .then((tours: any[]) => {
         if (tours && Array.isArray(tours) && tours.length > 0) {
           const isMr = safeLang === "mr";

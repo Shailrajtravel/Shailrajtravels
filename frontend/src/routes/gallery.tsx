@@ -27,7 +27,7 @@ import {
 export const Route = createFileRoute("/gallery")({
   loader: async () => {
     try {
-      const photos = await getGalleryPhotosFn({ forceFresh: true });
+      const photos = await getGalleryPhotosFn();
       if (Array.isArray(photos) && photos.length > 0) {
         return { photos };
       }

@@ -1,23 +1,8 @@
 import { createServerFn } from '@tanstack/react-start';
 import { getAdminToken, isValidAdminToken } from '@/backend/infrastructure/token';
 import { z } from 'zod';
-
-const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
-  const BACKEND_URL = import.meta.env.VITE_WEBSITE_BACKEND_URL || process.env.VITE_WEBSITE_BACKEND_URL || "https://shailrajtravels.onrender.com/api";
-  const res = await fetch(`${BACKEND_URL}${endpoint}`, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...options.headers,
-    },
-  });
-  if (!res.ok) {
-    const errorText = await res.text();
-    throw new Error(errorText || `API Error: ${res.status}`);
-  }
-  const text = await res.text();
-  return text ? JSON.parse(text) : null;
-};
+import { memoryCache } from '@/backend/shared/memory-cache';
+import { fastApiFetch } from '@/backend/shared/fast-fetch';
 
 export const getCustomBlogsFn = createServerFn({ method: "POST" })
   .validator((data?: unknown) => {
@@ -27,8 +12,28 @@ export const getCustomBlogsFn = createServerFn({ method: "POST" })
   })
   .handler(async ({ data }) => {
     try {
-      const cacheBust = data?.forceFresh ? `?_t=${Date.now()}` : '';
-      return await apiFetch(`/custom-blogs${cacheBust}`);
+      if (!data?.forceFresh) {
+        const { value: cached, isStale } = memoryCache.getWithMeta<any[]>('custom-blogs:all');
+        if (cached && Array.isArray(cached) && cached.length > 0) {
+          if (isStale) {
+            fastApiFetch('/custom-blogs', { timeoutMs: 3000 })
+              .then((fresh) => {
+                if (fresh && Array.isArray(fresh) && fresh.length > 0) {
+                  memoryCache.set('custom-blogs:all', fresh, 3600);
+                }
+              })
+              .catch(() => {});
+          }
+          return cached;
+        }
+      }
+
+      const fresh = await fastApiFetch('/custom-blogs', { timeoutMs: 2000 }).catch(() => null);
+      if (fresh && Array.isArray(fresh) && fresh.length > 0) {
+        memoryCache.set('custom-blogs:all', fresh, 3600);
+        return fresh;
+      }
+      return [];
     } catch (error) {
       console.error("Failed to fetch custom blogs", error);
       return [];
@@ -43,7 +48,16 @@ export const getCustomBlogBySlugFn = createServerFn({ method: "POST" })
   })
   .handler(async ({ data }) => {
     try {
-      return await apiFetch(`/custom-blogs/slug/${data.slug}`);
+      const cacheKey = `custom-blog:slug:${data.slug.toLowerCase().trim()}`;
+      const cached = memoryCache.get<any>(cacheKey);
+      if (cached) return cached;
+
+      const live = await fastApiFetch(`/custom-blogs/slug/${data.slug}`, { timeoutMs: 2000 }).catch(() => null);
+      if (live) {
+        memoryCache.set(cacheKey, live, 3600);
+        return live;
+      }
+      return null;
     } catch (error) {
       console.error("Failed to fetch custom blog by slug", error);
       return null;
@@ -73,10 +87,12 @@ export const createCustomBlogFn = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     try {
       if (!isValidAdminToken(data.adminToken)) throw new Error("Unauthorized");
-      return await apiFetch('/custom-blogs', {
+      const res = await fastApiFetch('/custom-blogs', {
         method: "POST",
         body: JSON.stringify(data),
       });
+      memoryCache.delete('custom-blogs:all');
+      return res;
     } catch (error: any) {
       console.error("Failed to create custom blog", error);
       throw new Error(error.message || "Failed to create custom blog");
@@ -95,9 +111,11 @@ export const deleteCustomBlogFn = createServerFn({ method: "POST" })
       if (!isValidAdminToken(data.adminToken)) {
         throw new Error("Unauthorized");
       }
-      return await apiFetch(`/custom-blogs/${data.id}`, {
+      const res = await fastApiFetch(`/custom-blogs/${data.id}`, {
         method: "DELETE",
       });
+      memoryCache.delete('custom-blogs:all');
+      return res;
     } catch (error: any) {
       console.error("Failed to delete custom blog", error);
       throw new Error(error.message || "Failed to delete custom blog");
