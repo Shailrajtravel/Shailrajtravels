@@ -3,29 +3,8 @@ import { getAdminToken, isValidAdminToken } from '@/backend/infrastructure/token
 export { getAdminToken, isValidAdminToken };
 import { z } from 'zod';
 import { getCachedData, setCachedData, invalidateCache } from '@/backend/infrastructure/redis';
-
-const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
-  const BACKEND_URL = import.meta.env.VITE_WEBSITE_BACKEND_URL || process.env.VITE_WEBSITE_BACKEND_URL || "https://shailrajtravels.onrender.com/api";
-  const res = await fetch(`${BACKEND_URL}${endpoint}`, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...options.headers,
-    },
-  });
-  if (!res.ok) {
-    const errorText = await res.text();
-    throw new Error(errorText || `API Error: ${res.status}`);
-  }
-  const text = await res.text();
-  if (!text) return null;
-  try {
-    return JSON.parse(text);
-  } catch (e) {
-    return { id: text, message: text, success: true };
-  }
-};
-
+import { memoryCache } from '@/backend/shared/memory-cache';
+import { fastApiFetch } from '@/backend/shared/fast-fetch';
 import { seedTripOptions } from '@/backend/shared/seed-data';
 import { uploadImageToCloudinary } from '@/backend/shared/cloudinary';
 
@@ -35,14 +14,32 @@ export const getTripOptionsFn = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     try {
       if (!data?.forceFresh) {
-        const cached = await getCachedData<any[]>('trip-options:all');
+        // 1. Check L1 Memory Cache with SWR (0ms)
+        const { value: cached, isStale } = memoryCache.getWithMeta<any[]>('trip-options:all');
         if (cached && Array.isArray(cached) && cached.length > 0) {
+          if (isStale) {
+            fastApiFetch('/bookings/trip-options', { timeoutMs: 3000 })
+              .then(async (fresh) => {
+                if (fresh && Array.isArray(fresh) && fresh.length > 0) {
+                  await setCachedData('trip-options:all', fresh, 3600);
+                }
+              })
+              .catch(() => {});
+          }
           return cached;
         }
+
+        // 2. Check L2 Redis Cache
+        const l2 = await getCachedData<any[]>('trip-options:all');
+        if (l2 && Array.isArray(l2) && l2.length > 0) {
+          return l2;
+        }
       }
-      const freshData = await apiFetch('/bookings/trip-options');
+
+      // 3. Fast network fetch with 2000ms max timeout
+      const freshData = await fastApiFetch('/bookings/trip-options', { timeoutMs: 2000 }).catch(() => null);
       if (freshData && Array.isArray(freshData) && freshData.length > 0) {
-        await setCachedData('trip-options:all', freshData, 600);
+        await setCachedData('trip-options:all', freshData, 3600);
         return freshData;
       }
       return seedTripOptions;
@@ -64,7 +61,7 @@ export const createTripOptionFn = createServerFn({ method: "POST" })
         console.error("Failed to upload trip image to Cloudinary", err);
       }
     }
-    const result = await apiFetch('/bookings/trip-options', {
+    const result = await fastApiFetch('/bookings/trip-options', {
       method: "POST",
       body: JSON.stringify(tripData),
     });
@@ -84,7 +81,7 @@ export const updateTripOptionFn = createServerFn({ method: "POST" })
         console.error("Failed to upload trip image to Cloudinary", err);
       }
     }
-    const result = await apiFetch(`/bookings/trip-options/${data.id}`, {
+    const result = await fastApiFetch(`/bookings/trip-options/${data.id}`, {
       method: "PUT",
       body: JSON.stringify(tripData),
     });
@@ -96,7 +93,7 @@ export const deleteTripOptionFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string; id: string }) => data)
   .handler(async ({ data }) => {
     if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
-    const result = await apiFetch(`/bookings/trip-options/${data.id}`, {
+    const result = await fastApiFetch(`/bookings/trip-options/${data.id}`, {
       method: "DELETE",
     });
     await invalidateCache('trip-options:all');
