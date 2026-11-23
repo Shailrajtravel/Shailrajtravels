@@ -146,6 +146,7 @@ function HomePage() {
       const key = (tour.title || "").toLowerCase().trim();
       if (!existingTitles.has(key) && !existingTitles.has(norm(tour.title))) {
         merged.push({
+          ...tour,
           _id: tour._id,
           tourId: tour._id,
           title: tour.title,
@@ -155,8 +156,7 @@ function HomePage() {
           image: tour.heroContent?.image || "",
           heroContent: tour.heroContent,
           destinations: tour.destinations || [],
-          price: tour.packages?.[0]?.price ? `₹${tour.packages[0].price}` : undefined,
-          ...tour,
+          price: tour.price || (tour.packages?.[0]?.price ? `₹${tour.packages[0].price}` : undefined),
         });
       }
     }

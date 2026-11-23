@@ -55,6 +55,7 @@ export class ToursService {
         destinations: t.destinations || [],
         dates: Array.isArray(t.dates) ? t.dates.filter(isUpcomingDate) : [],
         packages: t.packages || [],
+        price: t.price || (t.packages?.[0]?.price ? `₹${t.packages[0].price}` : ''),
         faq: t.faq || [],
         relatedTours: t.relatedTours || [],
         relatedBlogs: t.relatedBlogs || [],
@@ -95,6 +96,7 @@ export class ToursService {
         destinations: tour.destinations || [],
         dates: Array.isArray(tour.dates) ? tour.dates.filter(isUpcomingDate) : [],
         packages: tour.packages || [],
+        price: tour.price || (tour.packages?.[0]?.price ? `₹${tour.packages[0].price}` : ''),
         faq: tour.faq || [],
         relatedTours: tour.relatedTours || [],
         relatedBlogs: tour.relatedBlogs || [],
@@ -119,6 +121,21 @@ export class ToursService {
   async createTour(data: any) {
     const processedData = await this.processTourImages(data);
     processedData.createdAt = new Date();
+
+    // Check if tour with same slug or title already exists to prevent duplicates
+    if (processedData.slug || processedData.title) {
+      const col = await storageManager.getGlobalCollection('tours');
+      const conditions: any[] = [];
+      if (processedData.slug) conditions.push({ slug: processedData.slug });
+      if (processedData.title) conditions.push({ title: processedData.title });
+      const existing = await col.findOne({ $or: conditions });
+      if (existing) {
+        delete processedData._id;
+        await tourRepository.updateOne(existing._id.toString(), processedData);
+        return { success: true, id: existing._id.toString() };
+      }
+    }
+
     const insertedId = await tourRepository.insertOne(processedData);
     return { success: true, id: insertedId };
   }
@@ -129,12 +146,13 @@ export class ToursService {
     delete updateData._id;
     await tourRepository.updateOne(id, updateData);
 
-    // Cross-sync dates and heroContent.image to packages collection
+    // Cross-sync dates, price, and heroContent.image to packages collection
     try {
       const existingTour = await tourRepository.findById(id);
       const titleToMatch = updateData.title || existingTour?.title;
       const slugToMatch = updateData.slug || existingTour?.slug;
       const newImage = updateData.heroContent?.image;
+      const rawPrice = updateData.price || (updateData.packages?.[0]?.price ? `₹${updateData.packages[0].price}` : '') || existingTour?.price;
 
       const conditions: any[] = [];
       if (titleToMatch) conditions.push({ title: titleToMatch });
@@ -149,13 +167,16 @@ export class ToursService {
         if (newImage) {
           $setObj.image = newImage;
         }
+        if (rawPrice) {
+          $setObj.price = rawPrice.startsWith('₹') ? rawPrice : `₹${rawPrice}`;
+        }
         if (Object.keys($setObj).length > 0) {
           const updateOp: any = { $set: $setObj };
           if (newImage) {
             updateOp.$addToSet = { images: newImage };
           }
           await pkgsCol.updateMany({ $or: conditions }, updateOp);
-          this.logger.log(`Successfully synced tour updates to matching packages`);
+          this.logger.log(`Successfully synced tour updates (price: ${rawPrice}, image: ${newImage}) to matching packages`);
         }
       }
     } catch (e: any) {

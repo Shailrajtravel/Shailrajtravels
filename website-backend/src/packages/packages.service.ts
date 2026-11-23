@@ -63,6 +63,21 @@ export class PackagesService {
   async createPackage(data: any) {
     const processedData = await this.processPackageImages(data);
     const newDoc = { ...processedData, createdAt: new Date() };
+
+    // Check if package with same slug or title already exists to prevent duplicates
+    if (newDoc.slug || newDoc.title) {
+      const col = await storageManager.getGlobalCollection('packages');
+      const conditions: any[] = [];
+      if (newDoc.slug) conditions.push({ slug: newDoc.slug });
+      if (newDoc.title) conditions.push({ title: newDoc.title });
+      const existing = await col.findOne({ $or: conditions });
+      if (existing) {
+        delete newDoc._id;
+        await packageRepository.updateOne(existing._id.toString(), newDoc);
+        return { success: true, _id: existing._id.toString() };
+      }
+    }
+
     const insertedId = await packageRepository.insertOne(newDoc);
     return { success: true, _id: insertedId };
   }
@@ -73,27 +88,43 @@ export class PackagesService {
     delete updateData._id;
     await packageRepository.updateOne(id, updateData);
 
-    // Cross-sync image and title updates to tours collection
+    // Cross-sync image, price, dates, and title updates to tours collection
     try {
       const existingPkg = await packageRepository.findById(id);
       const titleToMatch = updateData.title || existingPkg?.title;
       const slugToMatch = updateData.slug || existingPkg?.slug;
       const newImage = updateData.image || (updateData.images && updateData.images[0]);
+      const newPrice = updateData.price || existingPkg?.price;
       
       const conditions: any[] = [];
       if (titleToMatch) conditions.push({ title: titleToMatch });
       if (slugToMatch) conditions.push({ slug: slugToMatch });
 
-      if (newImage && conditions.length > 0) {
+      if (conditions.length > 0) {
         const toursCol = await storageManager.getGlobalCollection('tours');
-        await toursCol.updateMany(
-          { $or: conditions },
-          { $set: { "heroContent.image": newImage } }
-        );
-        this.logger.log(`Successfully synced image ${newImage} to matching tours`);
+        const $setObj: any = {};
+        if (newImage) {
+          $setObj['heroContent.image'] = newImage;
+        }
+        if (newPrice) {
+          $setObj['price'] = newPrice;
+          const cleanNumeric = String(newPrice).replace(/[^\d,]/g, '').trim();
+          $setObj['packages.0.price'] = cleanNumeric || newPrice;
+        }
+        if (updateData.dates && Array.isArray(updateData.dates)) {
+          $setObj['dates'] = updateData.dates;
+        }
+
+        if (Object.keys($setObj).length > 0) {
+          await toursCol.updateMany(
+            { $or: conditions },
+            { $set: $setObj }
+          );
+          this.logger.log(`Successfully synced package updates (price: ${newPrice}, image: ${newImage}) to matching tours`);
+        }
       }
     } catch (e: any) {
-      this.logger.warn(`Failed to sync package image to tours: ${e.message}`);
+      this.logger.warn(`Failed to sync package updates to tours: ${e.message}`);
     }
 
     return { success: true };

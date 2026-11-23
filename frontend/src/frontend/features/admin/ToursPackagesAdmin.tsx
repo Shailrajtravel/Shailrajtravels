@@ -78,6 +78,11 @@ export function ToursPackagesAdmin({
         )
       );
 
+      const pkgPrice = pkg.price && pkg.price.trim() ? pkg.price.trim() : '';
+      const tourTopPrice = matchedTour?.price && matchedTour.price.trim() ? matchedTour.price.trim() : '';
+      const tourTierPrice = matchedTour?.packages?.[0]?.price ? `₹${matchedTour.packages[0].price}` : '';
+      const resolvedPrice = pkgPrice || tourTopPrice || tourTierPrice || '₹6,999';
+
       list.push({
         _packageId: pkg._id,
         _tourId: matchedTour?._id,
@@ -90,7 +95,7 @@ export function ToursPackagesAdmin({
         location: pkg.location || (matchedTour?.destinations ? matchedTour.destinations.join(', ') : ''),
         schedule: pkg.schedule || 'Daily Morning Departures',
         frequency: pkg.frequency || '',
-        price: pkg.price || '₹9,999',
+        price: resolvedPrice,
         route: pkg.route || matchedTour?.destinations || [],
         destinations: matchedTour?.destinations || pkg.route || [],
         tags: pkg.tags || [],
@@ -103,6 +108,8 @@ export function ToursPackagesAdmin({
         canonicalUrl: matchedTour?.canonicalUrl || '',
         heroContent: matchedTour?.heroContent || { image: primaryImage, description: pkg.subtitle || '' },
         overview: matchedTour?.overview || '',
+        packages: (matchedTour?.packages && matchedTour.packages.length > 0) ? matchedTour.packages : [],
+        faq: matchedTour?.faq || [],
       });
     }
 
@@ -110,6 +117,10 @@ export function ToursPackagesAdmin({
     for (const tour of tours) {
       if (!visitedTourIds.has(tour._id)) {
         const primaryImage = tour.heroContent?.image || '';
+        const tourTopPrice = tour.price && tour.price.trim() ? tour.price.trim() : '';
+        const tourTierPrice = tour.packages?.[0]?.price ? `₹${tour.packages[0].price}` : '';
+        const resolvedPrice = tourTopPrice || tourTierPrice || '₹6,999';
+
         list.push({
           _packageId: undefined,
           _tourId: tour._id,
@@ -122,7 +133,7 @@ export function ToursPackagesAdmin({
           location: tour.destinations ? tour.destinations.join(', ') : '',
           schedule: 'Daily Morning Departures',
           frequency: '',
-          price: '₹9,999',
+          price: resolvedPrice,
           route: tour.destinations || [],
           destinations: tour.destinations || [],
           tags: [],
@@ -135,6 +146,8 @@ export function ToursPackagesAdmin({
           canonicalUrl: tour.canonicalUrl || '',
           heroContent: tour.heroContent || { image: primaryImage, description: '' },
           overview: tour.overview || '',
+          packages: (tour.packages && tour.packages.length > 0) ? tour.packages : [],
+          faq: tour.faq || [],
         });
       }
     }
@@ -404,7 +417,7 @@ function TourPackageForm({
     subtitle: initialData?.subtitle || '',
     location: initialData?.location || '',
     durationBadge: initialData?.durationBadge || '3D / 2N',
-    price: initialData?.price || '₹9,999',
+    price: initialData?.price || (initialData?.packages?.[0]?.price ? `₹${initialData.packages[0].price}` : '') || '₹6,999',
     schedule: initialData?.schedule || 'Daily Morning Departures (05:30 AM)',
     frequency: initialData?.frequency || 'Daily',
     image: initialData?.image || '',
@@ -546,6 +559,15 @@ function TourPackageForm({
       (formData.images && formData.images[0]) ||
       '';
 
+    const rawPrice = (formData.price || '').trim();
+    // Normalize and format price
+    const numOnly = rawPrice.replace(/[^\d]/g, '');
+    const formattedNum = numOnly ? Number(numOnly).toLocaleString('en-IN') : rawPrice.replace(/[^\d,]/g, '');
+    const displayPrice = rawPrice.startsWith('₹')
+      ? (formattedNum ? `₹${formattedNum}` : rawPrice)
+      : `₹${formattedNum || rawPrice}`;
+    const cleanNumericPrice = formattedNum || rawPrice.replace(/[^\d,]/g, '') || rawPrice;
+
     // 1. Package Payload
     const packagePayload: any = {
       title: formData.title.trim(),
@@ -555,7 +577,7 @@ function TourPackageForm({
       location: formData.location.trim(),
       schedule: formData.schedule.trim(),
       frequency: formData.frequency.trim(),
-      price: formData.price.trim(),
+      price: displayPrice,
       image: primaryImage,
       images: formData.images || (primaryImage ? [primaryImage] : []),
       route: routeArray,
@@ -565,10 +587,49 @@ function TourPackageForm({
       dates: datesArray,
     };
 
-    // 2. Tour Payload
+    // 2. Tour Payload - Ensure package tiers and top-level price are updated
+    const tourPackageTiers = (() => {
+      const existingTiers = Array.isArray(initialData?.packages) && initialData.packages.length > 0
+        ? [...initialData.packages]
+        : [];
+      if (existingTiers.length > 0) {
+        existingTiers[0] = {
+          ...existingTiers[0],
+          title: existingTiers[0].title || formData.durationBadge.trim() || 'Standard Package',
+          price: cleanNumericPrice,
+          inclusions: (existingTiers[0].inclusions && existingTiers[0].inclusions.length > 0)
+            ? existingTiers[0].inclusions
+            : (includesArray.length > 0 ? includesArray : [
+                'AC Urbania / Vehicle Service',
+                'Comfortable Travel & Fuel',
+                'Temple Darshan Assistance',
+                'Toll, Parking, Driver Allowance',
+              ]),
+        };
+        return existingTiers;
+      }
+      return [
+        {
+          title: formData.durationBadge.trim() || 'Standard Package',
+          price: cleanNumericPrice,
+          inclusions: includesArray.length > 0 ? includesArray : [
+            'AC Urbania / Vehicle Service',
+            'Comfortable Travel & Fuel',
+            'Temple Darshan Assistance',
+            'Toll, Parking, Driver Allowance',
+          ],
+          exclusions: [
+            'Personal expenses & meals',
+            'Special VIP puja tickets',
+          ],
+        },
+      ];
+    })();
+
     const tourPayload: any = {
       title: formData.title.trim(),
       slug: finalSlug,
+      price: displayPrice,
       metaTitle: formData.metaTitle?.trim() || `${formData.title.trim()} | Shailraj Travels Pune`,
       metaDescription:
         formData.metaDescription?.trim() ||
@@ -586,7 +647,7 @@ function TourPackageForm({
       highlights: highlightsArray.length > 0 ? highlightsArray : tagsArray,
       destinations: destArray.length > 0 ? destArray : routeArray,
       dates: datesArray,
-      packages: initialData?.packages || [],
+      packages: tourPackageTiers,
       faq: initialData?.faq || [],
     };
 
