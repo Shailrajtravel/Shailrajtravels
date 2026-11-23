@@ -17,7 +17,7 @@ export const Route = createFileRoute("/refund-policy")({
 
 function RefundPolicyPage() {
   return (
-    <main className="w-full bg-white pb-16 pt-24 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+    <main className="w-full bg-white pb-16 pt-32 sm:pt-36 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
       <h1 className="text-4xl md:text-5xl font-extrabold text-brand-blue-deep mb-8">
         Refund Policy
       </h1>

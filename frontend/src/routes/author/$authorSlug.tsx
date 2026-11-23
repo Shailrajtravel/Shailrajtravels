@@ -44,7 +44,7 @@ function AuthorProfilePage() {
   };
 
   return (
-    <main className="w-full bg-slate-50 pb-20 pt-24 px-4 sm:px-6 lg:px-8">
+    <main className="w-full bg-slate-50 pb-20 pt-32 sm:pt-36 px-4 sm:px-6 lg:px-8">
       <SchemaMarkup schema={personSchema} />
 
       <div className="max-w-5xl mx-auto space-y-12">

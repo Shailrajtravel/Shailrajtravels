@@ -51,7 +51,7 @@ function FAQPage() {
   };
 
   return (
-    <main className="w-full bg-slate-50 pb-20 pt-24 px-4 sm:px-6 lg:px-8 min-h-screen">
+    <main className="w-full bg-slate-50 pb-20 pt-32 sm:pt-36 px-4 sm:px-6 lg:px-8 min-h-screen">
       <SchemaMarkup schema={faqSchema} />
 
       <div className="max-w-4xl mx-auto">

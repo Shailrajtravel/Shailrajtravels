@@ -19,7 +19,7 @@ export const Route = createFileRoute("/authors")({
 
 function AuthorsIndexPage() {
   return (
-    <main className="w-full bg-slate-50 pb-20 pt-24 px-4 sm:px-6 lg:px-8 min-h-screen">
+    <main className="w-full bg-slate-50 pb-20 pt-32 sm:pt-36 px-4 sm:px-6 lg:px-8 min-h-screen">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-extrabold text-brand-blue-deep mb-4">

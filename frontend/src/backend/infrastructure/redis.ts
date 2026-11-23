@@ -134,16 +134,18 @@ export const rateLimiters = {
 };
 
 export async function getCachedData<T>(key: string): Promise<T | null> {
-  // 1. Check L1 Memory Cache (Fastest)
+  // 1. Check L1 Memory Cache (Fastest - 0ms)
   const l1Data = memoryCache.get<T>(key);
   if (l1Data !== null) {
     return l1Data;
   }
 
-  // 2. Check L2 Redis Cache
+  // 2. Check L2 Redis Cache with a 500ms timeout race so it never stalls SSR
   if (!redisClient || !isRedisAvailable) return null;
   try {
-    const data = await redisClient.get<T>(key);
+    const redisPromise = redisClient.get<T>(key);
+    const timeoutPromise = new Promise<null>((resolve) => setTimeout(() => resolve(null), 500));
+    const data = await Promise.race([redisPromise, timeoutPromise]);
     if (data !== null) {
       // Backfill L1 Cache from Redis
       memoryCache.set(key, data);

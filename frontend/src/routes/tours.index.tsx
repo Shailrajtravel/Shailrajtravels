@@ -54,7 +54,7 @@ function ToursListingSkeleton() {
   const t = translations[lang];
 
   return (
-    <main className="w-full bg-white pb-16 pt-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <main className="w-full bg-white pb-16 pt-32 sm:pt-36 md:pt-40 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <div className="text-center mb-12">
         {/* Skeleton for Title */}
         <div className="h-12 bg-slate-100 rounded-md w-72 mx-auto mb-4 animate-pulse" />
@@ -169,7 +169,7 @@ function ToursListingPage() {
   return (
     <div className="font-sans text-slate-800 bg-white selection:bg-brand-green/20 selection:text-brand-blue-deep overflow-x-hidden">
       <Navbar t={t} />
-      <main className="w-full bg-slate-50 min-h-screen pb-16 pt-24 px-4 sm:px-6 lg:px-8">
+      <main className="w-full bg-slate-50 min-h-screen pb-16 pt-32 sm:pt-36 md:pt-40 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-extrabold text-brand-blue-deep mb-4">
