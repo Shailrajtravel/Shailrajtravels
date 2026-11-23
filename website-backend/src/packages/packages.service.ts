@@ -100,7 +100,22 @@ export class PackagesService {
   }
 
   async deletePackage(id: string) {
-    await packageRepository.deleteOne(id);
+    try {
+      const existing = await packageRepository.findById(id);
+      await packageRepository.deleteOne(id);
+      if (existing) {
+        const conditions: any[] = [];
+        if (existing.title) conditions.push({ title: existing.title });
+        if (existing.slug) conditions.push({ slug: existing.slug });
+        if (conditions.length > 0) {
+          const toursCol = await storageManager.getGlobalCollection('tours');
+          await toursCol.deleteMany({ $or: conditions });
+          this.logger.log(`Cascaded deletion of package "${existing.title}" to tours`);
+        }
+      }
+    } catch (e: any) {
+      this.logger.warn(`Failed cascade delete of package to tours: ${e.message}`);
+    }
     return { success: true };
   }
 }

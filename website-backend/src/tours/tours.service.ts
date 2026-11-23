@@ -166,12 +166,33 @@ export class ToursService {
   }
 
   async deleteTour(id: string) {
-    await tourRepository.deleteOne(id);
+    try {
+      const existing = await tourRepository.findById(id);
+      await tourRepository.deleteOne(id);
+      if (existing) {
+        const conditions: any[] = [];
+        if (existing.title) conditions.push({ title: existing.title });
+        if (existing.slug) conditions.push({ slug: existing.slug });
+        if (conditions.length > 0) {
+          const pkgsCol = await storageManager.getGlobalCollection('packages');
+          await pkgsCol.deleteMany({ $or: conditions });
+          this.logger.log(`Cascaded deletion of tour "${existing.title}" to packages`);
+        }
+      }
+    } catch (e: any) {
+      this.logger.warn(`Failed cascade delete of tour to packages: ${e.message}`);
+    }
     return { success: true };
   }
 
   async deleteToursBySlug(slug: string) {
-    await tourRepository.deleteManyBySlug(slug);
+    try {
+      await tourRepository.deleteManyBySlug(slug);
+      const pkgsCol = await storageManager.getGlobalCollection('packages');
+      await pkgsCol.deleteMany({ slug });
+    } catch (e: any) {
+      this.logger.warn(`Failed deleteToursBySlug cascade: ${e.message}`);
+    }
     return { success: true };
   }
 }

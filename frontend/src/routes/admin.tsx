@@ -299,7 +299,11 @@ function AdminPage() {
   const [deleteConfirm, setDeleteConfirm] = useState<{
     isOpen: boolean;
     id: string;
-    type: "package" | "review" | "photo" | "trip" | "booking" | "tour" | "blog";
+    type?: "package" | "review" | "photo" | "trip" | "booking" | "tour" | "blog" | "tour_package";
+    title?: string;
+    packageId?: string;
+    tourId?: string;
+    onConfirm?: () => Promise<void>;
   } | null>(null);
   const [bookingSearch, setBookingSearch] = useState("");
   const [bookingDateFilter, setBookingDateFilter] = useState<"all" | "today" | "7days" | "30days" | "custom">("all");
@@ -608,7 +612,16 @@ function AdminPage() {
   const confirmDelete = async () => {
     if (!deleteConfirm || !token) return;
     try {
-      if (deleteConfirm.type === "package")
+      if (deleteConfirm.onConfirm) {
+        await deleteConfirm.onConfirm();
+      } else if (deleteConfirm.type === "tour_package") {
+        if (deleteConfirm.packageId) {
+          await deletePackageFn({ data: { adminToken: token, id: deleteConfirm.packageId } });
+        }
+        if (deleteConfirm.tourId) {
+          await deleteTourFn({ data: { adminToken: token, id: deleteConfirm.tourId } });
+        }
+      } else if (deleteConfirm.type === "package")
         await deletePackageFn({ data: { adminToken: token, id: deleteConfirm.id } });
       else if (deleteConfirm.type === "review")
         await deleteReviewFn({ data: { adminToken: token, id: deleteConfirm.id } });
@@ -623,9 +636,9 @@ function AdminPage() {
       else if (deleteConfirm.type === "blog")
         await deleteCustomBlogFn({ data: { adminToken: token, id: deleteConfirm.id } });
 
-      loadData();
-    } catch (e) {
-      alert(`Failed to delete ${deleteConfirm.type}.`);
+      await loadData();
+    } catch (e: any) {
+      alert(`Failed to delete ${deleteConfirm.title || deleteConfirm.type || "item"}: ${e?.message || ""}`);
     } finally {
       setDeleteConfirm(null);
     }
@@ -2106,7 +2119,7 @@ function AdminPage() {
           <div className="bg-white rounded-2xl max-w-sm w-full p-6 shadow-xl">
             <h3 className="text-xl font-bold text-slate-800 mb-2">Confirm Delete</h3>
             <p className="text-slate-500 mb-6">
-              Are you sure you want to delete this {deleteConfirm.type}? This action cannot be
+              Are you sure you want to delete {deleteConfirm.title ? `"${deleteConfirm.title}"` : `this ${deleteConfirm.type || "item"}`}? This action cannot be
               undone.
             </p>
             <div className="flex justify-end gap-3">

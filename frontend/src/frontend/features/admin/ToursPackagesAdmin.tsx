@@ -165,12 +165,15 @@ export function ToursPackagesAdmin({
     setIsFormOpen(true);
   };
 
-  const handleDelete = async (item: any) => {
+  const handleDelete = (item: any) => {
     if (setDeleteConfirm) {
       setDeleteConfirm({
         isOpen: true,
         id: item._packageId || item._tourId,
+        type: 'tour_package',
         title: item.title,
+        packageId: item._packageId,
+        tourId: item._tourId,
         onConfirm: async () => {
           try {
             if (item._packageId) {
@@ -187,17 +190,19 @@ export function ToursPackagesAdmin({
       });
     } else {
       if (!confirm(`Are you sure you want to delete "${item.title}"?`)) return;
-      try {
-        if (item._packageId) {
-          await deletePackageFn({ data: { adminToken: token, id: item._packageId } });
+      (async () => {
+        try {
+          if (item._packageId) {
+            await deletePackageFn({ data: { adminToken: token, id: item._packageId } });
+          }
+          if (item._tourId) {
+            await deleteTourFn({ data: { adminToken: token, id: item._tourId } });
+          }
+          await loadData();
+        } catch (e: any) {
+          alert('Failed to delete tour/package: ' + e.message);
         }
-        if (item._tourId) {
-          await deleteTourFn({ data: { adminToken: token, id: item._tourId } });
-        }
-        await loadData();
-      } catch (e: any) {
-        alert('Failed to delete tour/package: ' + e.message);
-      }
+      })();
     }
   };
 
