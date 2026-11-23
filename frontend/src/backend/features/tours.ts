@@ -5,6 +5,16 @@ import { memoryCache } from '@/backend/shared/memory-cache';
 import { fastApiFetch } from '@/backend/shared/fast-fetch';
 import { seedTours } from '@/backend/shared/seed-data';
 
+export const sortToursByRank = (items: any[]): any[] => {
+  if (!Array.isArray(items)) return [];
+  return [...items].sort((a: any, b: any) => {
+    const rA = typeof a.order === 'number' && a.order > 0 ? a.order : (typeof a.rank === 'number' && a.rank > 0 ? a.rank : 999999);
+    const rB = typeof b.order === 'number' && b.order > 0 ? b.order : (typeof b.rank === 'number' && b.rank > 0 ? b.rank : 999999);
+    if (rA !== rB) return rA - rB;
+    return 0;
+  });
+};
+
 export const getToursFn = createServerFn({ method: "POST" })
   .validator((data?: { lang?: string; forceFresh?: boolean }) => data || {})
   .handler(async ({ data }) => {
@@ -20,18 +30,19 @@ export const getToursFn = createServerFn({ method: "POST" })
             fastApiFetch(`/tours${qs}`, { timeoutMs: 3000 })
               .then(async (fresh) => {
                 if (fresh && Array.isArray(fresh) && fresh.length > 0) {
-                  await setCachedData(cacheKey, fresh, 3600);
+                  const sorted = sortToursByRank(fresh);
+                  await setCachedData(cacheKey, sorted, 3600);
                 }
               })
               .catch(() => {});
           }
-          return cached;
+          return sortToursByRank(cached);
         }
 
         // 2. Check L2 Redis Cache (max 500ms)
         const l2 = await getCachedData<any[]>(cacheKey);
         if (l2 && Array.isArray(l2) && l2.length > 0) {
-          return l2;
+          return sortToursByRank(l2);
         }
       }
 
@@ -39,13 +50,14 @@ export const getToursFn = createServerFn({ method: "POST" })
       const qs = data?.lang ? `?lang=${data.lang}` : "";
       const result = await fastApiFetch(`/tours${qs}`, { timeoutMs: 2000 }).catch(() => null);
       if (Array.isArray(result) && result.length > 0) {
-        await setCachedData(cacheKey, result, 3600);
-        return result;
+        const sorted = sortToursByRank(result);
+        await setCachedData(cacheKey, sorted, 3600);
+        return sorted;
       }
-      return seedTours;
+      return sortToursByRank(seedTours);
     } catch (error) {
       console.error("Failed to fetch tours", error);
-      return seedTours;
+      return sortToursByRank(seedTours);
     }
   });
 

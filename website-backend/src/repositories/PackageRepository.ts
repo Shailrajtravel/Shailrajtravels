@@ -8,7 +8,7 @@ export class PackageRepository extends BaseRepository<any> {
 
   async findAllSorted(query: any = {}): Promise<any[]> {
     const col = await storageManager.getGlobalCollection(this.baseCollectionName);
-    return col.find(query).sort({ createdAt: -1 }).toArray();
+    return col.find(query).sort({ order: 1, rank: 1, createdAt: -1 }).toArray();
   }
 
   async findByQuery(query: any): Promise<any[]> {

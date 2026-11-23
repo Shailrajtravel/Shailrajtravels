@@ -13,6 +13,8 @@ import {
   MapPin,
   Clock,
   Sparkles,
+  Trophy,
+  Check,
 } from 'lucide-react';
 import { createTourFn, updateTourFn, deleteTourFn } from '@/backend/features/tours';
 import { createPackageFn, updatePackageFn, deletePackageFn } from '@/backend/features/packages';
@@ -83,9 +85,16 @@ export function ToursPackagesAdmin({
       const tourTierPrice = matchedTour?.packages?.[0]?.price ? `₹${matchedTour.packages[0].price}` : '';
       const resolvedPrice = pkgPrice || tourTopPrice || tourTierPrice || '₹6,999';
 
+      const rawRank = pkg.order ?? pkg.rank ?? matchedTour?.order ?? matchedTour?.rank;
+      const parsedRank = (typeof rawRank === 'number' && !isNaN(rawRank) && rawRank > 0)
+        ? rawRank
+        : (rawRank && !isNaN(Number(rawRank)) && Number(rawRank) > 0 ? Number(rawRank) : undefined);
+
       list.push({
         _packageId: pkg._id,
         _tourId: matchedTour?._id,
+        order: parsedRank,
+        rank: parsedRank,
         title: pkg.title || matchedTour?.title || '',
         slug: matchedTour?.slug || pkg.slug || pkgSlug,
         subtitle: pkg.subtitle || matchedTour?.heroContent?.description || '',
@@ -121,9 +130,16 @@ export function ToursPackagesAdmin({
         const tourTierPrice = tour.packages?.[0]?.price ? `₹${tour.packages[0].price}` : '';
         const resolvedPrice = tourTopPrice || tourTierPrice || '₹6,999';
 
+        const rawRank = tour.order ?? tour.rank;
+        const parsedRank = (typeof rawRank === 'number' && !isNaN(rawRank) && rawRank > 0)
+          ? rawRank
+          : (rawRank && !isNaN(Number(rawRank)) && Number(rawRank) > 0 ? Number(rawRank) : undefined);
+
         list.push({
           _packageId: undefined,
           _tourId: tour._id,
+          order: parsedRank,
+          rank: parsedRank,
           title: tour.title,
           slug: tour.slug,
           subtitle: tour.heroContent?.description || '',
@@ -152,6 +168,14 @@ export function ToursPackagesAdmin({
       }
     }
 
+    // Sort items by rank (1, 2, 3...) ascending so admin sees the exact order that website visitors see
+    list.sort((a, b) => {
+      const rankA = typeof a.rank === 'number' && a.rank > 0 ? a.rank : 999999;
+      const rankB = typeof b.rank === 'number' && b.rank > 0 ? b.rank : 999999;
+      if (rankA !== rankB) return rankA - rankB;
+      return (a.title || '').localeCompare(b.title || '');
+    });
+
     return list;
   }, [packages, tours]);
 
@@ -176,6 +200,37 @@ export function ToursPackagesAdmin({
   const handleEdit = (item: any) => {
     setEditingItem(item);
     setIsFormOpen(true);
+  };
+
+  const [updatingRankId, setUpdatingRankId] = useState<string | null>(null);
+
+  const handleQuickRankSave = async (item: any, newRankVal: string) => {
+    const trimmed = (newRankVal || '').trim();
+    const rankNum = trimmed !== '' ? parseInt(trimmed, 10) : undefined;
+    if (trimmed !== '' && (isNaN(rankNum!) || rankNum! < 1)) {
+      alert('Please enter a valid rank number (e.g. 1, 2, 3...)');
+      return;
+    }
+    const id = item._packageId || item._tourId;
+    setUpdatingRankId(id);
+    try {
+      const orderPayload = { order: rankNum, rank: rankNum };
+      if (item._packageId) {
+        await updatePackageFn({
+          data: { adminToken: token, id: item._packageId, data: orderPayload },
+        });
+      }
+      if (item._tourId) {
+        await updateTourFn({
+          data: { adminToken: token, id: item._tourId, data: orderPayload },
+        });
+      }
+      await loadData();
+    } catch (err: any) {
+      alert('Failed to update rank: ' + (err.message || 'Server error'));
+    } finally {
+      setUpdatingRankId(null);
+    }
   };
 
   const handleDelete = (item: any) => {
@@ -285,10 +340,14 @@ export function ToursPackagesAdmin({
       ) : (
         <div className="flex flex-col w-full">
           {/* Desktop Table Header */}
-          <div className="hidden md:grid grid-cols-12 gap-4 bg-slate-50 border-b border-slate-100 text-slate-500 text-[12px] uppercase tracking-wider font-bold px-6 py-4">
+          <div className="hidden md:grid grid-cols-12 gap-3 bg-slate-50 border-b border-slate-100 text-slate-500 text-[12px] uppercase tracking-wider font-bold px-6 py-4 items-center">
+            <div className="col-span-2 flex items-center gap-1.5">
+              <Trophy className="w-3.5 h-3.5 text-amber-500" />
+              <span>Rank / Order</span>
+            </div>
             <div className="col-span-1">Banner</div>
-            <div className="col-span-4">Tour Title & Slug</div>
-            <div className="col-span-3">Duration & Location</div>
+            <div className="col-span-3">Tour Title & Slug</div>
+            <div className="col-span-2">Duration & Location</div>
             <div className="col-span-2">Price & Schedule</div>
             <div className="col-span-2 text-right">Actions</div>
           </div>
@@ -298,8 +357,53 @@ export function ToursPackagesAdmin({
             {filteredItems.map((item) => (
               <div
                 key={item._packageId || item._tourId || item.slug}
-                className="flex flex-col md:grid md:grid-cols-12 md:gap-4 md:items-center hover:bg-slate-50/60 transition-colors p-4 md:px-6 md:py-4"
+                className="flex flex-col md:grid md:grid-cols-12 md:gap-3 md:items-center hover:bg-slate-50/60 transition-colors p-4 md:px-6 md:py-4"
               >
+                {/* Rank Badge & Inline Edit */}
+                <div className="flex items-center gap-2 md:col-span-2 mb-2 md:mb-0">
+                  <span
+                    className={`px-2.5 py-1 rounded-xl text-xs font-black shadow-xs border inline-flex items-center justify-center min-w-[38px] ${
+                      item.rank === 1
+                        ? 'bg-amber-100 text-amber-900 border-amber-300 ring-2 ring-amber-400/30'
+                        : item.rank === 2
+                        ? 'bg-slate-100 text-slate-800 border-slate-300'
+                        : item.rank === 3
+                        ? 'bg-orange-50 text-orange-800 border-orange-200'
+                        : item.rank
+                        ? 'bg-blue-50 text-brand-blue border-blue-200'
+                        : 'bg-slate-50 text-slate-400 border-slate-200'
+                    }`}
+                  >
+                    #{item.rank || '-'}
+                  </span>
+                  <div className="flex items-center gap-1">
+                    <input
+                      type="number"
+                      min="1"
+                      max="99"
+                      placeholder="Rank"
+                      key={item.rank ?? ''}
+                      defaultValue={item.rank ?? ''}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          handleQuickRankSave(item, (e.target as HTMLInputElement).value);
+                        }
+                      }}
+                      onBlur={(e) => {
+                        const val = e.target.value.trim();
+                        if (val && Number(val) !== item.rank) {
+                          handleQuickRankSave(item, val);
+                        }
+                      }}
+                      className="w-14 px-2 py-1 text-xs text-center font-bold bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue/30 text-slate-700"
+                      title="Type rank (1 = 1st card, 2 = 2nd...) and press Enter"
+                    />
+                    {updatingRankId === (item._packageId || item._tourId) && (
+                      <Loader2 className="w-3.5 h-3.5 animate-spin text-brand-blue" />
+                    )}
+                  </div>
+                </div>
+
                 {/* Banner Thumbnail */}
                 <div className="flex items-center gap-4 md:col-span-1 mb-2 md:mb-0">
                   <div className="w-14 h-14 rounded-xl bg-slate-100 overflow-hidden shrink-0 border border-slate-200/80 shadow-sm relative">
@@ -319,7 +423,7 @@ export function ToursPackagesAdmin({
                 </div>
 
                 {/* Title & Slug */}
-                <div className="md:col-span-4 mb-2 md:mb-0">
+                <div className="md:col-span-3 mb-2 md:mb-0">
                   <p className="font-bold text-brand-blue-deep text-base truncate" title={item.title}>
                     {item.title}
                   </p>
@@ -345,7 +449,7 @@ export function ToursPackagesAdmin({
                 </div>
 
                 {/* Duration & Location */}
-                <div className="md:col-span-3 text-sm text-slate-600 mb-2 md:mb-0">
+                <div className="md:col-span-2 text-sm text-slate-600 mb-2 md:mb-0">
                   <div className="flex items-center gap-1.5 font-bold text-brand-blue-deep text-xs">
                     <Clock className="w-3.5 h-3.5 text-brand-orange" />
                     <span>{item.durationBadge || 'Custom Duration'}</span>
@@ -414,6 +518,7 @@ function TourPackageForm({
   const [formData, setFormData] = useState<any>({
     title: initialData?.title || '',
     slug: initialData?.slug || '',
+    order: initialData?.order ?? initialData?.rank ?? '',
     subtitle: initialData?.subtitle || '',
     location: initialData?.location || '',
     durationBadge: initialData?.durationBadge || '3D / 2N',
@@ -568,11 +673,16 @@ function TourPackageForm({
       : `₹${formattedNum || rawPrice}`;
     const cleanNumericPrice = formattedNum || rawPrice.replace(/[^\d,]/g, '') || rawPrice;
 
+    const rawOrder = formData.order !== undefined && formData.order !== null ? String(formData.order).trim() : '';
+    const parsedOrder = rawOrder !== '' && !isNaN(Number(rawOrder)) && Number(rawOrder) > 0 ? Number(rawOrder) : undefined;
+
     // 1. Package Payload
     const packagePayload: any = {
       title: formData.title.trim(),
       subtitle: formData.subtitle.trim(),
       slug: finalSlug,
+      order: parsedOrder,
+      rank: parsedOrder,
       durationBadge: formData.durationBadge.trim(),
       location: formData.location.trim(),
       schedule: formData.schedule.trim(),
@@ -629,6 +739,8 @@ function TourPackageForm({
     const tourPayload: any = {
       title: formData.title.trim(),
       slug: finalSlug,
+      order: parsedOrder,
+      rank: parsedOrder,
       price: displayPrice,
       metaTitle: formData.metaTitle?.trim() || `${formData.title.trim()} | Shailraj Travels Pune`,
       metaDescription:
@@ -806,6 +918,17 @@ function TourPackageForm({
               value={formData.frequency}
               onChange={handleChange}
               placeholder="e.g. Daily, Fixed Departures, Bi-Weekly"
+            />
+            <FormInput
+              label="Display Rank / Order (1 = 1st card, 2 = 2nd...)"
+              name="order"
+              type="number"
+              min="1"
+              max="999"
+              value={formData.order ?? ''}
+              onChange={handleChange}
+              placeholder="e.g. 1 for first card, 2 for second"
+              help="Controls card position on 'Our Pilgrimage Tours' & Homepage (1 = appears 1st, 2 = 2nd)."
             />
           </div>
         )}
@@ -1108,7 +1231,7 @@ function TourPackageForm({
   );
 }
 
-function FormInput({ label, ...props }: any) {
+function FormInput({ label, help, ...props }: any) {
   return (
     <div className="flex flex-col gap-2">
       <label className="text-[13px] font-bold text-slate-700 uppercase tracking-wider">
@@ -1118,6 +1241,7 @@ function FormInput({ label, ...props }: any) {
         className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[14px] font-medium text-brand-blue-deep placeholder-slate-400 focus:ring-2 focus:ring-brand-blue/40 focus:border-brand-blue focus:bg-white transition-all outline-none"
         {...props}
       />
+      {help && <p className="text-xs text-slate-500 font-normal">{help}</p>}
     </div>
   );
 }

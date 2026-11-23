@@ -106,9 +106,19 @@ function ToursListingPage() {
     return ["All", ...Array.from(dests)].sort();
   }, [tours]);
 
+  // Sort tours by admin-configured rank (1, 2, 3...)
+  const sortedTours = useMemo(() => {
+    return [...(tours || [])].sort((a: any, b: any) => {
+      const rankA = typeof a.order === 'number' && a.order > 0 ? a.order : (typeof a.rank === 'number' && a.rank > 0 ? a.rank : 999999);
+      const rankB = typeof b.order === 'number' && b.order > 0 ? b.order : (typeof b.rank === 'number' && b.rank > 0 ? b.rank : 999999);
+      if (rankA !== rankB) return rankA - rankB;
+      return 0;
+    });
+  }, [tours]);
+
   // Filter tours based on smart search term and selected destination
   const filteredTours = useMemo(() => {
-    return tours.filter((tour: any) => {
+    return sortedTours.filter((tour: any) => {
       const matchesDest =
         selectedDestination === "All" ||
         (tour.destinations && tour.destinations.includes(selectedDestination));
@@ -164,7 +174,7 @@ function ToursListingPage() {
 
       return matchesAllTokens;
     });
-  }, [tours, searchTerm, selectedDestination]);
+  }, [sortedTours, searchTerm, selectedDestination]);
 
   return (
     <div className="font-sans text-slate-800 bg-white selection:bg-brand-green/20 selection:text-brand-blue-deep overflow-x-hidden">

@@ -107,6 +107,8 @@ function MarathiHomePage() {
         destinations: match?.destinations || pkg.destinations || [],
         tourId: match?._id,
         slug: match?.slug || pkg.slug,
+        order: match?.order ?? match?.rank ?? pkg.order ?? pkg.rank,
+        rank: match?.rank ?? match?.order ?? pkg.rank ?? pkg.order,
         dates: tourDates || pkgDates || (pkg.schedule && !/every|daily|weekly|departures/i.test(pkg.schedule) ? [pkg.schedule] : []),
       };
     });
@@ -122,6 +124,8 @@ function MarathiHomePage() {
           title: tour.title,
           name: tour.title,
           slug: tour.slug,
+          order: tour.order ?? tour.rank,
+          rank: tour.rank ?? tour.order,
           dates: Array.isArray(tour.dates) ? tour.dates : [],
           image: tour.heroContent?.image || "",
           heroContent: tour.heroContent,
@@ -130,8 +134,15 @@ function MarathiHomePage() {
         });
       }
     }
-    // Only show cards that match an actual tour (have a valid slug)
-    return merged.filter((p: any) => p.slug && p.title);
+    // Only show cards that match an actual tour (have a valid slug), sorted by admin rank
+    return merged
+      .filter((p: any) => p.slug && p.title)
+      .sort((a: any, b: any) => {
+        const rankA = typeof a.order === 'number' && a.order > 0 ? a.order : (typeof a.rank === 'number' && a.rank > 0 ? a.rank : 999999);
+        const rankB = typeof b.order === 'number' && b.order > 0 ? b.order : (typeof b.rank === 'number' && b.rank > 0 ? b.rank : 999999);
+        if (rankA !== rankB) return rankA - rankB;
+        return 0;
+      });
   }, [dbPackages, tours]);
 
   return (

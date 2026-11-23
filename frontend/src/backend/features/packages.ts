@@ -5,6 +5,16 @@ import { memoryCache } from '@/backend/shared/memory-cache';
 import { fastApiFetch } from '@/backend/shared/fast-fetch';
 import { seedPackages } from '@/backend/shared/seed-data';
 
+export const sortPackagesByRank = (items: any[]): any[] => {
+  if (!Array.isArray(items)) return [];
+  return [...items].sort((a: any, b: any) => {
+    const rA = typeof a.order === 'number' && a.order > 0 ? a.order : (typeof a.rank === 'number' && a.rank > 0 ? a.rank : 999999);
+    const rB = typeof b.order === 'number' && b.order > 0 ? b.order : (typeof b.rank === 'number' && b.rank > 0 ? b.rank : 999999);
+    if (rA !== rB) return rA - rB;
+    return 0;
+  });
+};
+
 export const getPackagesFn = createServerFn({ method: "POST" })
   .validator((data?: { forceFresh?: boolean }) => data)
   .handler(async ({ data }) => {
@@ -18,31 +28,33 @@ export const getPackagesFn = createServerFn({ method: "POST" })
             fastApiFetch('/packages', { timeoutMs: 3000 })
               .then(async (fresh) => {
                 if (fresh && Array.isArray(fresh) && fresh.length > 0) {
-                  await setCachedData('packages:all', fresh, 3600);
+                  const sorted = sortPackagesByRank(fresh);
+                  await setCachedData('packages:all', sorted, 3600);
                 }
               })
               .catch(() => {});
           }
-          return cached;
+          return sortPackagesByRank(cached);
         }
 
         // 2. Check L2 Redis Cache (max 500ms)
         const l2 = await getCachedData<any[]>('packages:all');
         if (l2 && Array.isArray(l2) && l2.length > 0) {
-          return l2;
+          return sortPackagesByRank(l2);
         }
       }
 
       // 3. Fast network fetch with 2000ms max timeout
       const liveData = await fastApiFetch('/packages', { timeoutMs: 2000 }).catch(() => null);
       if (liveData && Array.isArray(liveData) && liveData.length > 0) {
-        await setCachedData('packages:all', liveData, 3600);
-        return liveData;
+        const sorted = sortPackagesByRank(liveData);
+        await setCachedData('packages:all', sorted, 3600);
+        return sorted;
       }
-      return seedPackages;
+      return sortPackagesByRank(seedPackages);
     } catch (error) {
       console.error("Failed to fetch packages", error);
-      return seedPackages;
+      return sortPackagesByRank(seedPackages);
     }
   });
 

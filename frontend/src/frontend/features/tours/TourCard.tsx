@@ -22,6 +22,8 @@ export interface TourData {
   itinerary: { day: string; title: string }[];
   includes: string[];
   dates?: string[];
+  order?: number;
+  rank?: number;
 }
 
 interface TourCardProps {

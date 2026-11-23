@@ -11,26 +11,35 @@ export class PackagesService {
   async getPackages() {
     try {
       const packages = await packageRepository.findAllSorted();
-      return packages.map((p: any) => ({
-        _id: p._id.toString(),
-        id: p.id,
-        image: p.image,
-        images: p.images || [],
-        durationBadge: p.durationBadge,
-        subtitle: p.subtitle,
-        title: p.title,
-        location: p.location,
-        schedule: p.schedule,
-        frequency: p.frequency,
-        route: p.route,
-        tags: p.tags,
-        seatsAvailable: p.seatsAvailable,
-        seatsTotal: p.seatsTotal,
-        price: p.price,
-        itinerary: p.itinerary,
-        includes: p.includes,
-        dates: Array.isArray(p.dates) ? p.dates : [],
-      }));
+      return packages
+        .map((p: any) => ({
+          _id: p._id.toString(),
+          id: p.id,
+          order: typeof p.order === 'number' && !isNaN(p.order) ? p.order : (typeof p.rank === 'number' && !isNaN(p.rank) ? p.rank : undefined),
+          rank: typeof p.rank === 'number' && !isNaN(p.rank) ? p.rank : (typeof p.order === 'number' && !isNaN(p.order) ? p.order : undefined),
+          image: p.image,
+          images: p.images || [],
+          durationBadge: p.durationBadge,
+          subtitle: p.subtitle,
+          title: p.title,
+          location: p.location,
+          schedule: p.schedule,
+          frequency: p.frequency,
+          route: p.route,
+          tags: p.tags,
+          seatsAvailable: p.seatsAvailable,
+          seatsTotal: p.seatsTotal,
+          price: p.price,
+          itinerary: p.itinerary,
+          includes: p.includes,
+          dates: Array.isArray(p.dates) ? p.dates : [],
+        }))
+        .sort((a: any, b: any) => {
+          const rankA = typeof a.order === 'number' && a.order > 0 ? a.order : (typeof a.rank === 'number' && a.rank > 0 ? a.rank : 999999);
+          const rankB = typeof b.order === 'number' && b.order > 0 ? b.order : (typeof b.rank === 'number' && b.rank > 0 ? b.rank : 999999);
+          if (rankA !== rankB) return rankA - rankB;
+          return 0;
+        });
     } catch (error) {
       this.logger.error("Failed to fetch packages", error);
       return [];
@@ -113,6 +122,13 @@ export class PackagesService {
         }
         if (updateData.dates && Array.isArray(updateData.dates)) {
           $setObj['dates'] = updateData.dates;
+        }
+        if (typeof updateData.order === 'number' && !isNaN(updateData.order)) {
+          $setObj['order'] = updateData.order;
+          $setObj['rank'] = updateData.order;
+        } else if (typeof updateData.rank === 'number' && !isNaN(updateData.rank)) {
+          $setObj['order'] = updateData.rank;
+          $setObj['rank'] = updateData.rank;
         }
 
         if (Object.keys($setObj).length > 0) {

@@ -41,25 +41,34 @@ export class ToursService {
       }
 
       const tours = await tourRepository.findAllSorted(query);
-      return tours.map((t: any) => ({
-        _id: t._id.toString(),
-        slug: t.slug,
-        lang: t.lang || "en",
-        title: t.title,
-        metaTitle: t.metaTitle,
-        metaDescription: t.metaDescription,
-        canonicalUrl: t.canonicalUrl,
-        heroContent: t.heroContent || { image: "", description: "" },
-        overview: t.overview,
-        highlights: t.highlights || [],
-        destinations: t.destinations || [],
-        dates: Array.isArray(t.dates) ? t.dates.filter(isUpcomingDate) : [],
-        packages: t.packages || [],
-        price: t.price || (t.packages?.[0]?.price ? `₹${t.packages[0].price}` : ''),
-        faq: t.faq || [],
-        relatedTours: t.relatedTours || [],
-        relatedBlogs: t.relatedBlogs || [],
-      }));
+      return tours
+        .map((t: any) => ({
+          _id: t._id.toString(),
+          slug: t.slug,
+          lang: t.lang || "en",
+          title: t.title,
+          order: typeof t.order === 'number' && !isNaN(t.order) ? t.order : (typeof t.rank === 'number' && !isNaN(t.rank) ? t.rank : undefined),
+          rank: typeof t.rank === 'number' && !isNaN(t.rank) ? t.rank : (typeof t.order === 'number' && !isNaN(t.order) ? t.order : undefined),
+          metaTitle: t.metaTitle,
+          metaDescription: t.metaDescription,
+          canonicalUrl: t.canonicalUrl,
+          heroContent: t.heroContent || { image: "", description: "" },
+          overview: t.overview,
+          highlights: t.highlights || [],
+          destinations: t.destinations || [],
+          dates: Array.isArray(t.dates) ? t.dates.filter(isUpcomingDate) : [],
+          packages: t.packages || [],
+          price: t.price || (t.packages?.[0]?.price ? `₹${t.packages[0].price}` : ''),
+          faq: t.faq || [],
+          relatedTours: t.relatedTours || [],
+          relatedBlogs: t.relatedBlogs || [],
+        }))
+        .sort((a: any, b: any) => {
+          const rankA = typeof a.order === 'number' && a.order > 0 ? a.order : (typeof a.rank === 'number' && a.rank > 0 ? a.rank : 999999);
+          const rankB = typeof b.order === 'number' && b.order > 0 ? b.order : (typeof b.rank === 'number' && b.rank > 0 ? b.rank : 999999);
+          if (rankA !== rankB) return rankA - rankB;
+          return 0;
+        });
     } catch (error) {
       this.logger.error("Failed to fetch tours", error);
       return [];
@@ -87,6 +96,8 @@ export class ToursService {
         slug: tour.slug,
         lang: tour.lang || "en",
         title: tour.title,
+        order: typeof tour.order === 'number' && !isNaN(tour.order) ? tour.order : (typeof tour.rank === 'number' && !isNaN(tour.rank) ? tour.rank : undefined),
+        rank: typeof tour.rank === 'number' && !isNaN(tour.rank) ? tour.rank : (typeof tour.order === 'number' && !isNaN(tour.order) ? tour.order : undefined),
         metaTitle: tour.metaTitle,
         metaDescription: tour.metaDescription,
         canonicalUrl: tour.canonicalUrl,
@@ -169,6 +180,13 @@ export class ToursService {
         }
         if (rawPrice) {
           $setObj.price = rawPrice.startsWith('₹') ? rawPrice : `₹${rawPrice}`;
+        }
+        if (typeof updateData.order === 'number' && !isNaN(updateData.order)) {
+          $setObj.order = updateData.order;
+          $setObj.rank = updateData.order;
+        } else if (typeof updateData.rank === 'number' && !isNaN(updateData.rank)) {
+          $setObj.order = updateData.rank;
+          $setObj.rank = updateData.rank;
         }
         if (Object.keys($setObj).length > 0) {
           const updateOp: any = { $set: $setObj };

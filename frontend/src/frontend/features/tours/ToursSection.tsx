@@ -110,6 +110,8 @@ export function ToursSection({
       itinerary: tourItinerary,
       includes: tourIncludes,
       dates: Array.isArray(item.dates) ? item.dates : [],
+      order: item.order ?? item.rank,
+      rank: item.rank ?? item.order,
     };
   };
 
@@ -126,15 +128,24 @@ export function ToursSection({
       dates: trip.dates,
       schedule: trip.schedule,
       price: trip.price,
+      order: trip.order ?? trip.rank,
+      rank: trip.rank ?? trip.order,
     })
   );
 
   const mappedTours = (tours || []).map((tour: any) => formatTourData(tour));
 
-  const displayList: TourData[] =
+  const rawList: TourData[] =
     mode === "packages"
       ? [...(packages || []).map(formatTourData), ...mappedTripOptions]
       : mappedTours;
+
+  const displayList: TourData[] = [...rawList].sort((a: any, b: any) => {
+    const rankA = typeof a.order === 'number' && a.order > 0 ? a.order : (typeof a.rank === 'number' && a.rank > 0 ? a.rank : 999999);
+    const rankB = typeof b.order === 'number' && b.order > 0 ? b.order : (typeof b.rank === 'number' && b.rank > 0 ? b.rank : 999999);
+    if (rankA !== rankB) return rankA - rankB;
+    return 0;
+  });
 
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "start" }, [
     Autoplay({ delay: 3500, stopOnInteraction: true }),

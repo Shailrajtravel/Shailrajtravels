@@ -116,6 +116,8 @@ function TourForm({ token, initialData, onClose, onSuccess }: any) {
     initialData || {
       slug: "",
       title: "",
+      order: "",
+      rank: "",
       metaTitle: "",
       metaDescription: "",
       canonicalUrl: "",
@@ -184,8 +186,13 @@ function TourForm({ token, initialData, onClose, onSuccess }: any) {
     e.preventDefault();
     setLoading(true);
 
+    const rawOrder = formData.order !== undefined && formData.order !== null ? String(formData.order).trim() : '';
+    const parsedOrder = rawOrder !== '' && !isNaN(Number(rawOrder)) && Number(rawOrder) > 0 ? Number(rawOrder) : undefined;
+
     const payload = {
       ...formData,
+      order: parsedOrder,
+      rank: parsedOrder,
       dates: datesInput
         .split(",")
         .map((s: string) => s.trim())
@@ -245,6 +252,16 @@ function TourForm({ token, initialData, onClose, onSuccess }: any) {
             onChange={handleChange}
             required
             placeholder="e.g. ashtavinayak-yatra"
+          />
+          <Input
+            label="Display Rank / Priority (1st, 2nd, 3rd...)"
+            name="order"
+            type="number"
+            min="1"
+            max="999"
+            value={formData.order ?? ''}
+            onChange={handleChange}
+            placeholder="e.g. 1 for first card, 2 for second"
           />
 
           <div className="md:col-span-2">
