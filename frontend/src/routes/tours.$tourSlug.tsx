@@ -11,6 +11,11 @@ import { translations } from '@/frontend/core/i18n';
 const LEGACY_TOUR_REDIRECTS: Record<string, string> = {
   "tirupati-balaji-tour": "/tours/pune-to-tirupati-balaji-darshan-tour",
   "ashtavinayak-yatra": "/tours/pune-to-ashtavinayak-darshan",
+  "pune-to-ashtavinayak-tour-package": "/tours/pune-to-ashtavinayak-darshan",
+  "ashtavinayak-tour-package": "/tours/pune-to-ashtavinayak-darshan",
+  "ashtavinayak-tour": "/tours/pune-to-ashtavinayak-darshan",
+  "pune-to-ashtavinayak-tour": "/tours/pune-to-ashtavinayak-darshan",
+  "ashtavinayak-darshan": "/tours/pune-to-ashtavinayak-darshan",
   "jyotirlinga-darshan": "/tours/pune-mumbai-to-3-jyotirlinga-darshan",
   "pandharpur-wari": "/tours/pune-to-shakti-peeth-yatra",
   "char-dham-yatra": "/pilgrimage-tours-from-pune",

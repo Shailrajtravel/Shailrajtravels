@@ -122,6 +122,11 @@ export default {
       // 301 Permanent Redirects for legacy and moved URLs
       const legacyRedirects: Record<string, string> = {
         "/mr/blog": "/blog",
+        "/tours/pune-to-ashtavinayak-tour-package": "/tours/pune-to-ashtavinayak-darshan",
+        "/tours/ashtavinayak-tour-package": "/tours/pune-to-ashtavinayak-darshan",
+        "/tours/ashtavinayak-tour": "/tours/pune-to-ashtavinayak-darshan",
+        "/tours/pune-to-ashtavinayak-tour": "/tours/pune-to-ashtavinayak-darshan",
+        "/tours/ashtavinayak-darshan": "/tours/pune-to-ashtavinayak-darshan",
         "/tours/ashtavinayak-yatra": "/tours/pune-to-ashtavinayak-darshan",
         "/tours/tirupati-balaji-tour": "/tours/pune-to-tirupati-balaji-darshan-tour",
         "/tours/jyotirlinga-darshan": "/tours/pune-mumbai-to-3-jyotirlinga-darshan",

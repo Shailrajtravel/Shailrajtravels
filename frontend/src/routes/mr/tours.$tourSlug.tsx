@@ -7,6 +7,11 @@ import { generateSEO, generateHreflangLinks } from '@/backend/features/seo';
 const LEGACY_TOUR_REDIRECTS: Record<string, string> = {
   "tirupati-balaji-tour": "/mr/tours/pune-to-tirupati-balaji-darshan-tour",
   "ashtavinayak-yatra": "/mr/tours/pune-to-ashtavinayak-darshan",
+  "pune-to-ashtavinayak-tour-package": "/mr/tours/pune-to-ashtavinayak-darshan",
+  "ashtavinayak-tour-package": "/mr/tours/pune-to-ashtavinayak-darshan",
+  "ashtavinayak-tour": "/mr/tours/pune-to-ashtavinayak-darshan",
+  "pune-to-ashtavinayak-tour": "/mr/tours/pune-to-ashtavinayak-darshan",
+  "ashtavinayak-darshan": "/mr/tours/pune-to-ashtavinayak-darshan",
   "jyotirlinga-darshan": "/mr/tours/pune-mumbai-to-3-jyotirlinga-darshan",
   "pandharpur-wari": "/mr/tours/pune-to-shakti-peeth-yatra",
   "char-dham-yatra": "/pilgrimage-tours-from-pune",
