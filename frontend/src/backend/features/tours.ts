@@ -1,24 +1,8 @@
 import { createServerFn } from '@tanstack/react-start';
 import { getAdminToken, isValidAdminToken } from '@/backend/infrastructure/token';
 import { getCachedData, setCachedData, invalidateCache } from '@/backend/infrastructure/redis';
-
-const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
-  const BACKEND_URL = import.meta.env.VITE_WEBSITE_BACKEND_URL || process.env.VITE_WEBSITE_BACKEND_URL || "https://shailrajtravels.onrender.com/api";
-  const res = await fetch(`${BACKEND_URL}${endpoint}`, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...options.headers,
-    },
-  });
-  if (!res.ok) {
-    const errorText = await res.text();
-    throw new Error(errorText || `API Error: ${res.status}`);
-  }
-  const text = await res.text();
-  return text ? JSON.parse(text) : null;
-};
-
+import { memoryCache } from '@/backend/shared/memory-cache';
+import { fastApiFetch } from '@/backend/shared/fast-fetch';
 import { seedTours } from '@/backend/shared/seed-data';
 
 export const getToursFn = createServerFn({ method: "POST" })
@@ -28,15 +12,34 @@ export const getToursFn = createServerFn({ method: "POST" })
     const cacheKey = `tours:${langKey}`;
     try {
       if (!data?.forceFresh) {
-        const cached = await getCachedData<any[]>(cacheKey);
+        // 1. Check L1 Memory Cache with SWR (0ms)
+        const { value: cached, isStale } = memoryCache.getWithMeta<any[]>(cacheKey);
         if (cached && Array.isArray(cached) && cached.length > 0) {
+          if (isStale) {
+            const qs = data?.lang ? `?lang=${data.lang}` : "";
+            fastApiFetch(`/tours${qs}`, { timeoutMs: 3000 })
+              .then(async (fresh) => {
+                if (fresh && Array.isArray(fresh) && fresh.length > 0) {
+                  await setCachedData(cacheKey, fresh, 3600);
+                }
+              })
+              .catch(() => {});
+          }
           return cached;
         }
+
+        // 2. Check L2 Redis Cache (max 500ms)
+        const l2 = await getCachedData<any[]>(cacheKey);
+        if (l2 && Array.isArray(l2) && l2.length > 0) {
+          return l2;
+        }
       }
+
+      // 3. Fast network fetch with 2000ms max timeout
       const qs = data?.lang ? `?lang=${data.lang}` : "";
-      const result = await apiFetch(`/tours${qs}`);
+      const result = await fastApiFetch(`/tours${qs}`, { timeoutMs: 2000 }).catch(() => null);
       if (Array.isArray(result) && result.length > 0) {
-        await setCachedData(cacheKey, result, 600);
+        await setCachedData(cacheKey, result, 3600);
         return result;
       }
       return seedTours;
@@ -52,15 +55,35 @@ export const getTourBySlugFn = createServerFn({ method: "POST" })
     const slugKey = data.slug.toLowerCase().trim();
     const cacheKey = `tour:slug:${slugKey}:${data.lang || "en"}`;
     try {
-      const cached = await getCachedData<any>(cacheKey);
-      if (cached) return cached;
+      // 1. Check L1 Memory Cache with SWR (0ms)
+      const { value: cached, isStale } = memoryCache.getWithMeta<any>(cacheKey);
+      if (cached) {
+        if (isStale) {
+          const qs = data.lang ? `?lang=${data.lang}` : "";
+          fastApiFetch(`/tours/slug/${slugKey}${qs}`, { timeoutMs: 3000 })
+            .then(async (fresh) => {
+              if (fresh) {
+                await setCachedData(cacheKey, fresh, 3600);
+              }
+            })
+            .catch(() => {});
+        }
+        return cached;
+      }
+
+      // 2. Check L2 Redis Cache
+      const l2 = await getCachedData<any>(cacheKey);
+      if (l2) return l2;
+
+      // 3. Fast network fetch with 2000ms max timeout
       const qs = data.lang ? `?lang=${data.lang}` : "";
-      const result = await apiFetch(`/tours/slug/${slugKey}${qs}`);
+      const result = await fastApiFetch(`/tours/slug/${slugKey}${qs}`, { timeoutMs: 2000 }).catch(() => null);
       if (result) {
-        await setCachedData(cacheKey, result, 600);
+        await setCachedData(cacheKey, result, 3600);
         return result;
       }
-      // Fallback to static seed data if not found in database API
+
+      // 4. Instant fallback to static seed data
       const seedMatch = seedTours.find((t: any) => 
         (t.slug && t.slug.toLowerCase() === slugKey) ||
         (slugKey.includes("ujjain") && t.slug === "pune-to-ujjain-tour-package")
@@ -96,7 +119,7 @@ export const createTourFn = createServerFn({ method: "POST" })
   .validator((data: TourInput) => data)
   .handler(async ({ data }) => {
     if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
-    const result = await apiFetch('/tours', {
+    const result = await fastApiFetch('/tours', {
       method: "POST",
       body: JSON.stringify(data.data),
     });
@@ -108,7 +131,7 @@ export const updateTourFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string; id: string; data: any }) => data)
   .handler(async ({ data }) => {
     if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
-    const result = await apiFetch(`/tours/${data.id}`, {
+    const result = await fastApiFetch(`/tours/${data.id}`, {
       method: "PUT",
       body: JSON.stringify(data.data),
     });
@@ -120,7 +143,7 @@ export const deleteTourFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string; id: string }) => data)
   .handler(async ({ data }) => {
     if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
-    const result = await apiFetch(`/tours/${data.id}`, {
+    const result = await fastApiFetch(`/tours/${data.id}`, {
       method: "DELETE",
     });
     await invalidateTourCaches();
@@ -131,7 +154,7 @@ export const deleteToursBySlugFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string; slug: string }) => data)
   .handler(async ({ data }) => {
     if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
-    const result = await apiFetch(`/tours/slug/${data.slug}`, {
+    const result = await fastApiFetch(`/tours/slug/${data.slug}`, {
       method: "DELETE",
     });
     await invalidateTourCaches(data.slug);
