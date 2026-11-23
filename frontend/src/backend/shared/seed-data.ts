@@ -334,15 +334,15 @@ export const seedPackages: any[] = [
     ],
     "durationBadge": "3D / 2N",
     "subtitle": "2 Nights / 3 Days Spiritual Jyotirlinga Tour",
-    "title": "Nashik to Ujjain – Omkareshwar – Dhoomeshwar",
-    "location": "Nashik, Ujjain, Omkareshwar, Dhoomeshwar",
+    "title": "Nashik to Ujjain – Omkareshwar – Ghrishneshwar",
+    "location": "Nashik, Ujjain, Omkareshwar, Ghrishneshwar",
     "schedule": "Weekly Departures",
     "frequency": "Weekly",
     "route": [
       "Nashik",
       "Ujjain",
       "Omkareshwar",
-      "Dhoomeshwar",
+      "Ghrishneshwar",
       "Nashik"
     ],
     "tags": [
@@ -362,7 +362,7 @@ export const seedPackages: any[] = [
       },
       {
         "day": "Day 2",
-        "title": "Ujjain → Omkareshwar → Omkareshwar Jyotirlinga Darshan → Dhoomeshwar Darshan"
+        "title": "Ujjain → Omkareshwar → Omkareshwar Jyotirlinga Darshan → Ghrishneshwar Darshan"
       },
       {
         "day": "Day 3",
@@ -396,14 +396,14 @@ export const seedPackages: any[] = [
     "durationBadge": "3D / 2N",
     "subtitle": "2 Nights / 3 Days Jyotirlinga Tour",
     "title": "Satana (Baglan) to Ujjain Spiritual Tour",
-    "location": "Satana, Ujjain, Omkareshwar, Dhoomeshwar",
+    "location": "Satana, Ujjain, Omkareshwar, Ghrishneshwar",
     "schedule": "Weekly Departures",
     "frequency": "Weekly",
     "route": [
       "Satana (Baglan)",
       "Ujjain",
       "Omkareshwar",
-      "Dhoomeshwar",
+      "Ghrishneshwar",
       "Satana"
     ],
     "tags": [
@@ -423,7 +423,7 @@ export const seedPackages: any[] = [
       },
       {
         "day": "Day 2",
-        "title": "Ujjain → Omkareshwar → Omkareshwar Darshan → Dhoomeshwar Darshan"
+        "title": "Ujjain → Omkareshwar → Omkareshwar Darshan → Ghrishneshwar Darshan"
       },
       {
         "day": "Day 3",
@@ -453,16 +453,16 @@ export const seedPackages: any[] = [
       "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1200&q=80"
     ],
     "durationBadge": "3D / 2N",
-    "subtitle": "Bhima Shankar – Trimbakeshwar – Dhoomeshwar",
+    "subtitle": "Bhima Shankar – Trimbakeshwar – Ghrishneshwar",
     "title": "Pune / Mumbai to 3 Jyotirlinga Darshan",
-    "location": "Bhima Shankar, Trimbakeshwar, Dhoomeshwar",
+    "location": "Bhima Shankar, Trimbakeshwar, Ghrishneshwar",
     "schedule": "Every Weekend Departures",
     "frequency": "Weekly",
     "route": [
       "Pune/Mumbai",
       "Bhima Shankar",
       "Trimbakeshwar",
-      "Dhoomeshwar",
+      "Ghrishneshwar",
       "Pune/Mumbai"
     ],
     "tags": [
@@ -482,11 +482,11 @@ export const seedPackages: any[] = [
       },
       {
         "day": "Day 2",
-        "title": "Trimbakeshwar Jyotirlinga Darshan → Travel towards Dhoomeshwar"
+        "title": "Trimbakeshwar Jyotirlinga Darshan → Travel towards Ghrishneshwar"
       },
       {
         "day": "Day 3",
-        "title": "Dhoomeshwar Darshan → Begin return journey → Arrive at Pune/Mumbai"
+        "title": "Ghrishneshwar Darshan → Begin return journey → Arrive at Pune/Mumbai"
       }
     ],
     "includes": [
@@ -658,15 +658,15 @@ export const seedPackages: any[] = [
     ],
     "durationBadge": "3D / 2N",
     "subtitle": "2 Nights / 3 Days Spiritual Jyotirlinga Tour",
-    "title": "Mumbai (Lalbaug) – Ujjain – Omkareshwar – Dhoomeshwar Tour",
-    "location": "Mumbai (Lalbaug), Ujjain, Omkareshwar, Dhoomeshwar",
+    "title": "Mumbai (Lalbaug) – Ujjain – Omkareshwar – Ghrishneshwar Tour",
+    "location": "Mumbai (Lalbaug), Ujjain, Omkareshwar, Ghrishneshwar",
     "schedule": "Weekly Departures",
     "frequency": "Weekly",
     "route": [
       "Mumbai (Lalbaug)",
       "Ujjain",
       "Omkareshwar",
-      "Dhoomeshwar",
+      "Ghrishneshwar",
       "Mumbai"
     ],
     "tags": [
@@ -686,7 +686,7 @@ export const seedPackages: any[] = [
       },
       {
         "day": "Day 2",
-        "title": "Ujjain → Omkareshwar → Omkareshwar Darshan → Dhoomeshwar Darshan"
+        "title": "Ujjain → Omkareshwar → Omkareshwar Darshan → Ghrishneshwar Darshan"
       },
       {
         "day": "Day 3",
@@ -718,14 +718,14 @@ export const seedPackages: any[] = [
     "durationBadge": "3D / 2N",
     "subtitle": "2 Nights / 3 Days Temple Tour",
     "title": "Satara to Ujjain Spiritual Tour",
-    "location": "Satara, Ujjain, Omkareshwar, Dhoomeshwar",
+    "location": "Satara, Ujjain, Omkareshwar, Ghrishneshwar",
     "schedule": "Weekly Departures",
     "frequency": "Weekly",
     "route": [
       "Satara",
       "Ujjain",
       "Omkareshwar",
-      "Dhoomeshwar",
+      "Ghrishneshwar",
       "Satara"
     ],
     "tags": [
@@ -745,7 +745,7 @@ export const seedPackages: any[] = [
       },
       {
         "day": "Day 2",
-        "title": "Ujjain → Omkareshwar → Jyotirlinga Darshan → Dhoomeshwar Darshan → Overnight stay/travel"
+        "title": "Ujjain → Omkareshwar → Jyotirlinga Darshan → Ghrishneshwar Darshan → Overnight stay/travel"
       },
       {
         "day": "Day 3",
@@ -776,15 +776,15 @@ export const seedPackages: any[] = [
     ],
     "durationBadge": "3D / 2N",
     "subtitle": "2 Nights / 3 Days Jyotirlinga & Temple Tour",
-    "title": "Ujjain – Omkareshwar – Dhoomeshwar – Maheshwar Tour",
-    "location": "Ujjain, Omkareshwar, Dhoomeshwar, Maheshwar",
+    "title": "Ujjain – Omkareshwar – Ghrishneshwar – Maheshwar Tour",
+    "location": "Ujjain, Omkareshwar, Ghrishneshwar, Maheshwar",
     "schedule": "Every Friday & Weekend Departures",
     "frequency": "Weekly",
     "route": [
       "Pune",
       "Ujjain",
       "Omkareshwar",
-      "Dhoomeshwar",
+      "Ghrishneshwar",
       "Maheshwar",
       "Pune"
     ],
@@ -805,7 +805,7 @@ export const seedPackages: any[] = [
       },
       {
         "day": "Day 2",
-        "title": "Ujjain → Omkareshwar → Omkareshwar Darshan → Dhoomeshwar Darshan → Overnight stay/travel"
+        "title": "Ujjain → Omkareshwar → Omkareshwar Darshan → Ghrishneshwar Darshan → Overnight stay/travel"
       },
       {
         "day": "Day 3",
@@ -838,15 +838,15 @@ export const seedPackages: any[] = [
     ],
     "durationBadge": "3D / 2N",
     "subtitle": "2 Nights / 3 Days Spiritual Jyotirlinga Tour",
-    "title": "Ujjain – Omkareshwar – Dhoomeshwar Jyotirlinga Tour",
-    "location": "Ujjain, Omkareshwar, Dhoomeshwar",
+    "title": "Ujjain – Omkareshwar – Ghrishneshwar Jyotirlinga Tour",
+    "location": "Ujjain, Omkareshwar, Ghrishneshwar",
     "schedule": "Every Friday & Weekend Departures",
     "frequency": "Weekly",
     "route": [
       "Pune",
       "Ujjain",
       "Omkareshwar",
-      "Dhoomeshwar",
+      "Ghrishneshwar",
       "Pune"
     ],
     "tags": [
@@ -866,7 +866,7 @@ export const seedPackages: any[] = [
       },
       {
         "day": "Day 2",
-        "title": "Ujjain → Omkareshwar → Omkareshwar Jyotirlinga Darshan → Continue towards Dhoomeshwar → Darshan → Overnight stay/travel"
+        "title": "Ujjain → Omkareshwar → Omkareshwar Jyotirlinga Darshan → Continue towards Ghrishneshwar → Darshan → Overnight stay/travel"
       },
       {
         "day": "Day 3",
@@ -1519,7 +1519,7 @@ export const seedTours: any[] = [
     "title": "Nashik to Ujjain – Omkareshwar – Ghrishneshwar",
     "metaTitle": "Nashik to Ujjain – Omkareshwar –Ghrishneshwar| Shailraj Travels",
     "metaDescription": "Book Nashik to Ujjain – Omkareshwar – Ghrishneshwar. 2 Nights / 3 Days Spiritual Jyotirlinga Tour. Comfortable AC Force Urbania travel, guided darshan, affordable pricing at ₹5,432.",
-    "canonicalUrl": "https://www.shailrajtravels.com/tours/nashik-to-ujjain-omkareshwar-dhoomeshwar-tour",
+    "canonicalUrl": "https://www.shailrajtravels.com/tours/nashik-to-ujjain-omkareshwar-ghrishneshwar-tour",
     "heroContent": {
       "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1789109343/tours/ic79dsdv6c4kalpgd6nb.webp",
       "description": "2 Nights / 3 Days Spiritual Jyotirlinga Tour - Experienced drivers, verified hotels, and seamless temple darshan with Shailraj Travels Pune."
@@ -1567,7 +1567,7 @@ export const seedTours: any[] = [
     ],
     "faq": [
       {
-        "question": "What vehicle is used for the Nashik to Ujjain – Omkareshwar – Dhoomeshwar?",
+        "question": "What vehicle is used for the Nashik to Ujjain – Omkareshwar – Ghrishneshwar?",
         "answer": "We primarily operate premium AC Force Urbania luxury vans and executive mini buses equipped with reclining seats, charging ports, and ample luggage space."
       },
       {
@@ -1963,7 +1963,7 @@ export const seedTours: any[] = [
     ],
     "faq": [
       {
-        "question": "What vehicle is used for the Mumbai (Lalbaug) – Ujjain – Omkareshwar – Dhoomeshwar Tour?",
+        "question": "What vehicle is used for the Mumbai (Lalbaug) – Ujjain – Omkareshwar – Ghrishneshwar Tour?",
         "answer": "We primarily operate premium AC Force Urbania luxury vans and executive mini buses equipped with reclining seats, charging ports, and ample luggage space."
       },
       {

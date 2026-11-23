@@ -116,10 +116,10 @@ const dailyServices = [
 
 const tourPackages = [
   {
-    title: "Ujjain – Omkareshwar – Dhoomeshwar Jyotirlinga Tour",
+    title: "Ujjain – Omkareshwar – Ghrishneshwar Jyotirlinga Tour",
     subtitle: "2 Nights / 3 Days Spiritual Jyotirlinga Tour",
     durationBadge: "3D / 2N",
-    location: "Ujjain, Omkareshwar, Dhoomeshwar",
+    location: "Ujjain, Omkareshwar, Ghrishneshwar",
     price: "₹6,116",
     schedule: "Every Friday & Weekend Departures",
     frequency: "Weekly",
@@ -127,7 +127,7 @@ const tourPackages = [
     images: [
       "https://res.cloudinary.com/dquecn5qj/image/upload/v1789154040/blogs/spy42xnlvgry5xoznqzn.png"
     ],
-    route: ["Pune", "Ujjain", "Omkareshwar", "Dhoomeshwar", "Pune"],
+    route: ["Pune", "Ujjain", "Omkareshwar", "Ghrishneshwar", "Pune"],
     tags: ["Jyotirlinga", "Temple Tour", "Spiritual Tour", "3 Days", "AC Travel"],
     seatsAvailable: 14,
     seatsTotal: 17,
@@ -145,20 +145,20 @@ const tourPackages = [
       },
       {
         day: "Day 2",
-        title: "Ujjain → Omkareshwar → Omkareshwar Jyotirlinga Darshan → Continue towards Dhoomeshwar → Darshan → Overnight stay/travel"
+        title: "Ujjain → Omkareshwar → Omkareshwar Jyotirlinga Darshan → Continue towards Ghrishneshwar → Darshan → Overnight stay/travel"
       },
       {
         day: "Day 3",
         title: "Complete remaining darshan → Begin return journey → Arrive in Pune"
       }
     ],
-    slug: "ujjain-omkareshwar-dhoomeshwar-jyotirlinga-tour"
+    slug: "ujjain-omkareshwar-ghrishneshwar-jyotirlinga-tour"
   },
   {
-    title: "Ujjain – Omkareshwar – Dhoomeshwar – Maheshwar Tour",
+    title: "Ujjain – Omkareshwar – Ghrishneshwar – Maheshwar Tour",
     subtitle: "2 Nights / 3 Days Jyotirlinga & Temple Tour",
     durationBadge: "3D / 2N",
-    location: "Ujjain, Omkareshwar, Dhoomeshwar, Maheshwar",
+    location: "Ujjain, Omkareshwar, Ghrishneshwar, Maheshwar",
     price: "₹6,999",
     schedule: "Every Friday & Weekend Departures",
     frequency: "Weekly",
@@ -166,7 +166,7 @@ const tourPackages = [
     images: [
       "https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?auto=format&fit=crop&w=1200&q=80"
     ],
-    route: ["Pune", "Ujjain", "Omkareshwar", "Dhoomeshwar", "Maheshwar", "Pune"],
+    route: ["Pune", "Ujjain", "Omkareshwar", "Ghrishneshwar", "Maheshwar", "Pune"],
     tags: ["Jyotirlinga", "Temple Tour", "Spiritual Tour", "Maheshwar", "3 Days"],
     seatsAvailable: 12,
     seatsTotal: 17,
@@ -184,20 +184,20 @@ const tourPackages = [
       },
       {
         day: "Day 2",
-        title: "Ujjain → Omkareshwar → Omkareshwar Darshan → Dhoomeshwar Darshan → Overnight stay/travel"
+        title: "Ujjain → Omkareshwar → Omkareshwar Darshan → Ghrishneshwar Darshan → Overnight stay/travel"
       },
       {
         day: "Day 3",
         title: "Maheshwar visit → Temple/local sightseeing → Return journey to Pune"
       }
     ],
-    slug: "ujjain-omkareshwar-dhoomeshwar-maheshwar-tour"
+    slug: "ujjain-omkareshwar-ghrishneshwar-maheshwar-tour"
   },
   {
     title: "Satara to Ujjain Spiritual Tour",
     subtitle: "2 Nights / 3 Days Temple Tour",
     durationBadge: "3D / 2N",
-    location: "Satara, Ujjain, Omkareshwar, Dhoomeshwar",
+    location: "Satara, Ujjain, Omkareshwar, Ghrishneshwar",
     price: "₹8,115",
     schedule: "Weekly Departures",
     frequency: "Weekly",
@@ -205,7 +205,7 @@ const tourPackages = [
     images: [
       "https://images.unsplash.com/photo-1609766857041-ed402ea8069a?auto=format&fit=crop&w=1200&q=80"
     ],
-    route: ["Satara", "Ujjain", "Omkareshwar", "Dhoomeshwar", "Satara"],
+    route: ["Satara", "Ujjain", "Omkareshwar", "Ghrishneshwar", "Satara"],
     tags: ["Ujjain", "Jyotirlinga", "Temple Tour", "Spiritual Tour", "3 Days"],
     seatsAvailable: 15,
     seatsTotal: 17,
@@ -223,7 +223,7 @@ const tourPackages = [
       },
       {
         day: "Day 2",
-        title: "Ujjain → Omkareshwar → Jyotirlinga Darshan → Dhoomeshwar Darshan → Overnight stay/travel"
+        title: "Ujjain → Omkareshwar → Jyotirlinga Darshan → Ghrishneshwar Darshan → Overnight stay/travel"
       },
       {
         day: "Day 3",
@@ -233,10 +233,10 @@ const tourPackages = [
     slug: "satara-to-ujjain-spiritual-tour"
   },
   {
-    title: "Mumbai (Lalbaug) – Ujjain – Omkareshwar – Dhoomeshwar Tour",
+    title: "Mumbai (Lalbaug) – Ujjain – Omkareshwar – Ghrishneshwar Tour",
     subtitle: "2 Nights / 3 Days Spiritual Jyotirlinga Tour",
     durationBadge: "3D / 2N",
-    location: "Mumbai (Lalbaug), Ujjain, Omkareshwar, Dhoomeshwar",
+    location: "Mumbai (Lalbaug), Ujjain, Omkareshwar, Ghrishneshwar",
     price: "₹6,999",
     schedule: "Weekly Departures",
     frequency: "Weekly",
@@ -244,7 +244,7 @@ const tourPackages = [
     images: [
       "https://res.cloudinary.com/dquecn5qj/image/upload/v1789154040/blogs/spy42xnlvgry5xoznqzn.png"
     ],
-    route: ["Mumbai (Lalbaug)", "Ujjain", "Omkareshwar", "Dhoomeshwar", "Mumbai"],
+    route: ["Mumbai (Lalbaug)", "Ujjain", "Omkareshwar", "Ghrishneshwar", "Mumbai"],
     tags: ["Jyotirlinga", "Temple Tour", "Mumbai", "Ujjain", "Spiritual Tour"],
     seatsAvailable: 13,
     seatsTotal: 17,
@@ -262,14 +262,14 @@ const tourPackages = [
       },
       {
         day: "Day 2",
-        title: "Ujjain → Omkareshwar → Omkareshwar Darshan → Dhoomeshwar Darshan"
+        title: "Ujjain → Omkareshwar → Omkareshwar Darshan → Ghrishneshwar Darshan"
       },
       {
         day: "Day 3",
         title: "Complete sightseeing/darshan → Return journey → Mumbai"
       }
     ],
-    slug: "mumbai-lalbaug-ujjain-omkareshwar-dhoomeshwar-tour"
+    slug: "mumbai-lalbaug-ujjain-omkareshwar-ghrishneshwar-tour"
   },
   {
     title: "Pune to Tirupati Balaji Darshan Tour",
@@ -380,9 +380,9 @@ const tourPackages = [
   },
   {
     title: "Pune / Mumbai to 3 Jyotirlinga Darshan",
-    subtitle: "Bhima Shankar – Trimbakeshwar – Dhoomeshwar",
+    subtitle: "Bhima Shankar – Trimbakeshwar – Ghrishneshwar",
     durationBadge: "3D / 2N",
-    location: "Bhima Shankar, Trimbakeshwar, Dhoomeshwar",
+    location: "Bhima Shankar, Trimbakeshwar, Ghrishneshwar",
     price: "₹3,999",
     schedule: "Every Weekend Departures",
     frequency: "Weekly",
@@ -390,7 +390,7 @@ const tourPackages = [
     images: [
       "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1200&q=80"
     ],
-    route: ["Pune/Mumbai", "Bhima Shankar", "Trimbakeshwar", "Dhoomeshwar", "Pune/Mumbai"],
+    route: ["Pune/Mumbai", "Bhima Shankar", "Trimbakeshwar", "Ghrishneshwar", "Pune/Mumbai"],
     tags: ["Jyotirlinga", "Temple Tour", "Spiritual Tour", "Darshan", "3 Jyotirlinga"],
     seatsAvailable: 11,
     seatsTotal: 17,
@@ -408,11 +408,11 @@ const tourPackages = [
       },
       {
         day: "Day 2",
-        title: "Trimbakeshwar Jyotirlinga Darshan → Travel towards Dhoomeshwar"
+        title: "Trimbakeshwar Jyotirlinga Darshan → Travel towards Ghrishneshwar"
       },
       {
         day: "Day 3",
-        title: "Dhoomeshwar Darshan → Begin return journey → Arrive at Pune/Mumbai"
+        title: "Ghrishneshwar Darshan → Begin return journey → Arrive at Pune/Mumbai"
       }
     ],
     slug: "pune-mumbai-to-3-jyotirlinga-darshan"
@@ -421,7 +421,7 @@ const tourPackages = [
     title: "Satana (Baglan) to Ujjain Spiritual Tour",
     subtitle: "2 Nights / 3 Days Jyotirlinga Tour",
     durationBadge: "3D / 2N",
-    location: "Satana, Ujjain, Omkareshwar, Dhoomeshwar",
+    location: "Satana, Ujjain, Omkareshwar, Ghrishneshwar",
     price: "₹5,000",
     schedule: "Weekly Departures",
     frequency: "Weekly",
@@ -429,7 +429,7 @@ const tourPackages = [
     images: [
       "https://res.cloudinary.com/dquecn5qj/image/upload/v1789154040/blogs/spy42xnlvgry5xoznqzn.png"
     ],
-    route: ["Satana (Baglan)", "Ujjain", "Omkareshwar", "Dhoomeshwar", "Satana"],
+    route: ["Satana (Baglan)", "Ujjain", "Omkareshwar", "Ghrishneshwar", "Satana"],
     tags: ["Ujjain", "Jyotirlinga", "Temple Tour", "Spiritual Tour", "3 Days"],
     seatsAvailable: 15,
     seatsTotal: 17,
@@ -447,7 +447,7 @@ const tourPackages = [
       },
       {
         day: "Day 2",
-        title: "Ujjain → Omkareshwar → Omkareshwar Darshan → Dhoomeshwar Darshan"
+        title: "Ujjain → Omkareshwar → Omkareshwar Darshan → Ghrishneshwar Darshan"
       },
       {
         day: "Day 3",
@@ -457,10 +457,10 @@ const tourPackages = [
     slug: "satana-baglan-to-ujjain-spiritual-tour"
   },
   {
-    title: "Nashik to Ujjain – Omkareshwar – Dhoomeshwar",
+    title: "Nashik to Ujjain – Omkareshwar – Ghrishneshwar",
     subtitle: "2 Nights / 3 Days Spiritual Jyotirlinga Tour",
     durationBadge: "3D / 2N",
-    location: "Nashik, Ujjain, Omkareshwar, Dhoomeshwar",
+    location: "Nashik, Ujjain, Omkareshwar, Ghrishneshwar",
     price: "₹5,432",
     schedule: "Weekly Departures",
     frequency: "Weekly",
@@ -468,7 +468,7 @@ const tourPackages = [
     images: [
       "https://images.unsplash.com/photo-1609766857041-ed402ea8069a?auto=format&fit=crop&w=1200&q=80"
     ],
-    route: ["Nashik", "Ujjain", "Omkareshwar", "Dhoomeshwar", "Nashik"],
+    route: ["Nashik", "Ujjain", "Omkareshwar", "Ghrishneshwar", "Nashik"],
     tags: ["Jyotirlinga", "Ujjain", "Omkareshwar", "Temple Tour", "Spiritual Tour"],
     seatsAvailable: 13,
     seatsTotal: 17,
@@ -486,14 +486,14 @@ const tourPackages = [
       },
       {
         day: "Day 2",
-        title: "Ujjain → Omkareshwar → Omkareshwar Jyotirlinga Darshan → Dhoomeshwar Darshan"
+        title: "Ujjain → Omkareshwar → Omkareshwar Jyotirlinga Darshan → Ghrishneshwar Darshan"
       },
       {
         day: "Day 3",
         title: "Complete sightseeing/darshan → Return journey → Nashik"
       }
     ],
-    slug: "nashik-to-ujjain-omkareshwar-dhoomeshwar-tour"
+    slug: "nashik-to-ujjain-omkareshwar-ghrishneshwar-tour"
   },
   {
     title: "Pune to Shakti Peeth Yatra",

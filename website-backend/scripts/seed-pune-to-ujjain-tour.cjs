@@ -265,8 +265,8 @@ async function seedDatabase(uri) {
     await db.collection('packages').deleteMany({
       $or: [
         { title: "Ujjain – Omkareshwar – Ghrishneshwar Jyotirlinga Tour" },
-        { title: "Ujjain - Omkareshwar - Dhoomeshwar Jyotirlinga Tour" },
-        { title: "Ujjain - Omkareshwar - Dhoomeshwar - Maheshwar Tour" },
+        { title: "Ujjain - Omkareshwar - Ghrishneshwar Jyotirlinga Tour" },
+        { title: "Ujjain - Omkareshwar - Ghrishneshwar - Maheshwar Tour" },
         { slug: "pune-to-ujjain-tour-package" }
       ]
     });
