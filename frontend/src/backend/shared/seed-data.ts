@@ -328,9 +328,9 @@ export const seedPackages: any[] = [
   },
   {
     "_id": "6aa24c85a1ff1fa2e71229a5",
-    "image": "https://images.unsplash.com/photo-1609766857041-ed402ea8069a?auto=format&fit=crop&w=1200&q=80",
+    "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1789109343/tours/ic79dsdv6c4kalpgd6nb.webp",
     "images": [
-      "https://images.unsplash.com/photo-1609766857041-ed402ea8069a?auto=format&fit=crop&w=1200&q=80"
+      "https://res.cloudinary.com/dquecn5qj/image/upload/v1789109343/tours/ic79dsdv6c4kalpgd6nb.webp"
     ],
     "durationBadge": "3D / 2N",
     "subtitle": "2 Nights / 3 Days Spiritual Jyotirlinga Tour",
@@ -713,7 +713,7 @@ export const seedPackages: any[] = [
     "_id": "6aa24c85a1ff1fa2e712299e",
     "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1789109981/tours/dtv4kfbgxyxq1s7yptfi.webp",
     "images": [
-      "https://images.unsplash.com/photo-1609766857041-ed402ea8069a?auto=format&fit=crop&w=1200&q=80"
+      "https://res.cloudinary.com/dquecn5qj/image/upload/v1789109343/tours/ic79dsdv6c4kalpgd6nb.webp"
     ],
     "durationBadge": "3D / 2N",
     "subtitle": "2 Nights / 3 Days Temple Tour",
@@ -770,9 +770,9 @@ export const seedPackages: any[] = [
   },
   {
     "_id": "6aa24c85a1ff1fa2e712299d",
-    "image": "https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?auto=format&fit=crop&w=1200&q=80",
+    "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1789110978/tours/rpir5cxo58n4lcti44hv.webp",
     "images": [
-      "https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?auto=format&fit=crop&w=1200&q=80"
+      "https://res.cloudinary.com/dquecn5qj/image/upload/v1789110978/tours/rpir5cxo58n4lcti44hv.webp"
     ],
     "durationBadge": "3D / 2N",
     "subtitle": "2 Nights / 3 Days Jyotirlinga & Temple Tour",
@@ -1255,7 +1255,7 @@ export const seedTours: any[] = [
     "metaDescription": "Book Ashtavinayak darshan from Pune by car or luxury AC Force Urbania. Complete 8 Ganpati temples as per shastra. 1-day & 2-day options, starting at ₹3,111.",
     "canonicalUrl": "https://www.shailrajtravels.com/tours/pune-to-ashtavinayak-darshan",
     "heroContent": {
-      "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1789109017/tours/m3ubfq1crce6ere3pge8.webp",
+      "image": "https://images.unsplash.com/photo-1567591414240-e9c1e59f3e06?auto=format&fit=crop&w=1200&q=80",
       "description": "Complete One-Day Ganpati Temple Tour - Experienced drivers, verified hotels, and seamless temple darshan with Shailraj Travels Pune."
     },
     "overview": "<p>Join Shailraj Travels on the memorable <strong>Pune to Ashtavinayak Darshan</strong> (Complete One-Day Ganpati Temple Tour). Experience luxurious travel with AC Force Urbania, dedicated tour assistance, and hassle-free darshan across Morgaon, Siddhatek, Pali, Mahad, Theur, Lenyadri, Ozar, Ranjangaon.</p>",
@@ -2475,7 +2475,7 @@ export const seedGallery: any[] = [
   "metaDescription": "Book Pune to Shirdi tour package with Shani Shingnapur darshan. 1-day & 2-day AC cab options: Dzire, Ertiga, Innova Crysta & Urbania. Doorstep pickup in Pune & Hadapsar.",
   "canonicalUrl": "https://www.shailrajtravels.com/tours/pune-to-shirdi-shani-shingnapur-tour",
   "heroContent": {
-    "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1792764848/blogs/avej2lsveggdqan1spor.png",
+    "image": "https://images.unsplash.com/photo-1609766857041-ed402ea8069a?auto=format&fit=crop&w=1200&q=80",
     "description": "Same-Day & 2-Day Shirdi Sai Baba & Shani Shingnapur Yatra from Pune - Experienced drivers, verified pure-veg recommendations, and seamless travel."
   },
   "overview": "<p>Experience divine peace on our <strong>Pune to Shirdi & Shani Shingnapur Tour Package</strong>. Seek the blessings of Shri Sai Baba at the sacred Samadhi Mandir in Shirdi, visit Gurusthan, Dwarkamai, and Chavadi, and seek protection at the open-air Swayambhu Shani Dev temple in Shani Shingnapur. Available as a same-day express return or a relaxed 2-day family pilgrimage.</p>",
