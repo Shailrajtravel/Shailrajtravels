@@ -94,6 +94,8 @@ import {
   CreditCard,
   Check,
   CheckCircle,
+  CheckCircle2,
+  Star,
   AlertCircle,
   Bug,
   Sparkles,
