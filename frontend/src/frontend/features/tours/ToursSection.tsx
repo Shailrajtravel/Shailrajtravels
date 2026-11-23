@@ -190,9 +190,11 @@ export function ToursSection({
 
   return (
     <section
-      id={mode === "packages" ? "tours" : "upcoming-tours"}
+      id={mode === "packages" ? "packages" : "upcoming-tours"}
       className={`w-full ${mode === "packages" ? "bg-[#F8FAFC]" : "bg-white"} pt-12 pb-8 lg:pt-20 lg:pb-16 relative scroll-mt-28 md:scroll-mt-32`}
     >
+      {/* Anchor for backward compatibility if any legacy link points to #tours */}
+      {mode === "packages" && <div id="tours" className="absolute -top-28 md:-top-32" />}
       <div className="mx-auto max-w-[1280px] px-6">
         <div className="flex flex-col items-center justify-center text-center mb-12 animate-reveal">
           <div className="flex items-center gap-4 mb-4">

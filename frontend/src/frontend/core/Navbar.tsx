@@ -100,7 +100,7 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
             else if (isContact) isActive = currentPath.startsWith("/contact") || currentHash === "contact";
             else if (isAbout) isActive = currentPath.startsWith("/about") || (currentPath === "/" && currentHash === "about");
             else if (isFeatures) isActive = currentPath === "/" && currentHash === "features";
-            else if (isPackages) isActive = currentPath === "/" && currentHash === "tours";
+            else if (isPackages) isActive = currentPath === "/" && (currentHash === "packages" || currentHash === "tours");
             else if (isReviews) isActive = currentPath.startsWith("/reviews") || (currentPath === "/" && currentHash === "reviews");
 
             const className = `whitespace-nowrap text-[13px] xl:text-[14px] font-medium transition ${
@@ -142,7 +142,7 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
             if (isFeatures || isPackages || isReviews) {
               const hashMap: Record<string, string> = {
                 navTours: "features",
-                navPilgrimage: "tours",
+                navPilgrimage: "packages",
                 navReviews: "reviews",
               };
               return (
@@ -224,7 +224,7 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
               else if (isContact) isActive = currentPath.startsWith("/contact") || currentHash === "contact";
               else if (isAbout) isActive = currentPath.startsWith("/about") || (currentPath === "/" && currentHash === "about");
               else if (isFeatures) isActive = currentPath === "/" && currentHash === "features";
-              else if (isPackages) isActive = currentPath === "/" && currentHash === "tours";
+              else if (isPackages) isActive = currentPath === "/" && (currentHash === "packages" || currentHash === "tours");
               else if (isReviews) isActive = currentPath.startsWith("/reviews") || (currentPath === "/" && currentHash === "reviews");
 
               const className = `text-[16px] font-bold transition ${
@@ -286,7 +286,7 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
               if (isFeatures || isPackages || isReviews) {
                 const hashMap: Record<string, string> = {
                   navTours: "features",
-                  navPilgrimage: "tours",
+                  navPilgrimage: "packages",
                   navReviews: "reviews",
                 };
                 return (
