@@ -831,9 +831,9 @@ const tourPackages = [
     "price": "₹4,800",
     "schedule": "Daily Morning Departures (05:30 AM)",
     "frequency": "Daily",
-    "image": "https://images.unsplash.com/photo-1609766857041-ed402ea8069a?auto=format&fit=crop&w=1200&q=80",
+    "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1795445274/packages/hfx0x1egvue5o3wyeeyf.png",
     "images": [
-      "https://images.unsplash.com/photo-1609766857041-ed402ea8069a?auto=format&fit=crop&w=1200&q=80"
+      "https://res.cloudinary.com/dquecn5qj/image/upload/v1795445274/packages/hfx0x1egvue5o3wyeeyf.png"
     ],
     "route": [
       "Pune",
