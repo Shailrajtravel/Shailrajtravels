@@ -45,7 +45,7 @@ import {
   getChatbotRulesFn,
   saveChatbotRulesFn,
 } from '@/backend/infrastructure/whatsapp-api';
-import { ToursAdmin } from '@/frontend/features/admin/ToursAdmin';
+import { ToursPackagesAdmin } from '@/frontend/features/admin/ToursPackagesAdmin';
 import { RecommendedVehiclesAdmin } from '@/frontend/features/admin/RecommendedVehiclesAdmin';
 import { IssuesAdmin } from '@/frontend/features/admin/IssuesAdmin';
 import { BlogsAdmin } from '@/frontend/features/admin/BlogsAdmin';
@@ -245,7 +245,7 @@ function AdminPage() {
     | "offers"
     | "vehicles"
   >("dashboard");
-  const [subTab, setSubTab] = useState<"tours" | "packages" | "vehicles">("tours");
+  const [subTab, setSubTab] = useState<"all" | "vehicles" | "tours" | "packages">("all");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Helper to safely extract digits from a string like "₹ 15,000" or "15,000"
@@ -1006,9 +1006,7 @@ function AdminPage() {
                 <span className="hidden sm:inline">Install App</span>
               </button>
             )}
-            {((activeTab === "tours_packages" && subTab === "packages") ||
-              activeTab === "trips" ||
-              activeTab === "gallery") &&
+            {(activeTab === "trips" || activeTab === "gallery") &&
               !isFormOpen && (
                 <button
                   onClick={handleAddNew}
@@ -1016,12 +1014,7 @@ function AdminPage() {
                 >
                   <Plus className="w-4 h-4 md:w-5 md:h-5 shrink-0" />
                   <span className="hidden sm:inline">
-                    Add{" "}
-                    {activeTab === "tours_packages" && subTab === "packages"
-                      ? "Package"
-                      : activeTab === "gallery"
-                        ? "Photo"
-                        : "Trip"}
+                    Add {activeTab === "gallery" ? "Photo" : "Trip"}
                   </span>
                   <span className="sm:hidden">Add</span>
                 </button>
@@ -1049,166 +1042,39 @@ function AdminPage() {
           ) : activeTab === "tours_packages" ? (
             <div>
               {/* Mini-tab toggle */}
-              {!isFormOpen && (
-                <div className="flex gap-4 mb-6 bg-slate-100 p-1 rounded-xl w-fit">
-                  <button
-                    onClick={() => setSubTab("tours")}
-                    className={`px-5 py-2.5 rounded-lg font-bold text-sm transition-all cursor-pointer ${
-                      subTab === "tours"
-                        ? "bg-brand-blue-deep text-white shadow-sm"
-                        : "text-slate-600 hover:text-brand-blue-deep hover:bg-white/50"
-                    }`}
-                  >
-                    Popular Tours
-                  </button>
-                  <button
-                    onClick={() => setSubTab("packages")}
-                    className={`px-5 py-2.5 rounded-lg font-bold text-sm transition-all cursor-pointer ${
-                      subTab === "packages"
-                        ? "bg-brand-blue-deep text-white shadow-sm"
-                        : "text-slate-600 hover:text-brand-blue-deep hover:bg-white/50"
-                    }`}
-                  >
-                    Packages
-                  </button>
-                  <button
-                    onClick={() => setSubTab("vehicles")}
-                    className={`px-5 py-2.5 rounded-lg font-bold text-sm transition-all cursor-pointer ${
-                      subTab === "vehicles"
-                        ? "bg-brand-blue-deep text-white shadow-sm"
-                        : "text-slate-600 hover:text-brand-blue-deep hover:bg-white/50"
-                    }`}
-                  >
-                    Recommended Vehicles
-                  </button>
-                </div>
-              )}
+              <div className="flex gap-4 mb-6 bg-slate-100 p-1 rounded-xl w-fit">
+                <button
+                  onClick={() => setSubTab("all")}
+                  className={`px-5 py-2.5 rounded-lg font-bold text-sm transition-all cursor-pointer ${
+                    subTab !== "vehicles"
+                      ? "bg-brand-blue-deep text-white shadow-sm"
+                      : "text-slate-600 hover:text-brand-blue-deep hover:bg-white/50"
+                  }`}
+                >
+                  All Tours & Packages
+                </button>
+                <button
+                  onClick={() => setSubTab("vehicles")}
+                  className={`px-5 py-2.5 rounded-lg font-bold text-sm transition-all cursor-pointer ${
+                    subTab === "vehicles"
+                      ? "bg-brand-blue-deep text-white shadow-sm"
+                      : "text-slate-600 hover:text-brand-blue-deep hover:bg-white/50"
+                  }`}
+                >
+                  Recommended Vehicles
+                </button>
+              </div>
 
-              {subTab === "tours" ? (
-                <ToursAdmin
+              {subTab === "vehicles" ? (
+                <RecommendedVehiclesAdmin token={token} />
+              ) : (
+                <ToursPackagesAdmin
                   token={token}
+                  packages={packages}
                   tours={tours}
                   loadData={loadData}
                   setDeleteConfirm={setDeleteConfirm}
                 />
-              ) : subTab === "vehicles" ? (
-                <RecommendedVehiclesAdmin token={token} />
-              ) : isFormOpen ? (
-                <PackageForm
-                  token={token}
-                  initialData={editingItem}
-                  onClose={() => setIsFormOpen(false)}
-                  onSuccess={() => {
-                    setIsFormOpen(false);
-                    loadData();
-                  }}
-                />
-              ) : (
-                <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden animate-reveal">
-                  {loading ? (
-                    <div className="p-12 flex justify-center">
-                      <Loader2 className="w-8 h-8 animate-spin text-brand-green" />
-                    </div>
-                  ) : packages.length === 0 ? (
-                    <div className="p-12 text-center text-slate-500">
-                      <Package className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                      <p className="text-lg font-medium">No packages found.</p>
-                      <p className="text-sm mt-1">
-                        Click "Add Package" to create your first package.
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="flex flex-col w-full">
-                      {/* Desktop Header */}
-                      <div className="hidden md:grid grid-cols-12 gap-4 bg-slate-50 border-b border-slate-100 text-slate-500 text-[12px] uppercase tracking-wider font-bold px-6 py-4">
-                        <div className="col-span-1">Image</div>
-                        <div className="col-span-5">Package Details</div>
-                        <div className="col-span-2">Price</div>
-                        <div className="col-span-2">Schedule</div>
-                        <div className="col-span-2 text-right">Actions</div>
-                      </div>
-                      
-                      {/* Desktop and Mobile list wrapper */}
-                      <div className="flex flex-col divide-y divide-slate-100">
-                        {packages.map((pkg) => (
-                          <div
-                            key={pkg._id}
-                            className="flex flex-col md:grid md:grid-cols-12 md:gap-4 md:items-center hover:bg-slate-50/50 transition-colors p-4 md:px-6 md:py-4"
-                          >
-                            <div className="flex items-center gap-4 md:col-span-6">
-                              <div className="w-16 h-16 rounded-lg bg-slate-100 overflow-hidden shrink-0 border border-slate-200/50">
-                                {pkg.image ? (
-                                  <img
-                                    src={pkg.image}
-                                    alt=""
-                                    className="w-full h-full object-cover"
-                                  />
-                                ) : (
-                                  <ImageIcon className="w-8 h-8 m-4 text-slate-300" />
-                                )}
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <p className="font-bold text-brand-blue-deep text-base truncate">
-                                  {pkg.title}
-                                </p>
-                                <p className="text-sm text-brand-green font-medium mt-0.5 truncate">
-                                  {pkg.durationBadge} • {pkg.location}
-                                </p>
-                                <p className="md:hidden font-bold text-slate-700 mt-1.5">
-                                  {pkg.price}
-                                </p>
-                                {pkg.schedule && (
-                                  <p className="md:hidden text-xs text-slate-500 mt-0.5">
-                                    Schedule: {pkg.schedule}
-                                  </p>
-                                )}
-                              </div>
-                              <div className="md:hidden flex gap-1 shrink-0 self-start">
-                                <button
-                                  onClick={() => handleEdit(pkg)}
-                                  className="p-2 text-slate-400 hover:text-brand-blue transition-colors"
-                                  title="Edit"
-                                >
-                                  <Edit className="w-5 h-5" />
-                                </button>
-                                <button
-                                  onClick={() => handleDeletePackage(pkg._id)}
-                                  className="p-2 text-slate-400 hover:text-red-500 transition-colors"
-                                  title="Delete"
-                                >
-                                  <Trash2 className="w-5 h-5" />
-                                </button>
-                              </div>
-                            </div>
-
-                            <div className="hidden md:block col-span-2 font-bold text-slate-700">
-                              {pkg.price}
-                            </div>
-                            <div className="hidden md:block col-span-2 text-sm text-slate-500">
-                              {pkg.schedule}
-                            </div>
-                            <div className="hidden md:flex col-span-2 justify-end gap-2">
-                              <button
-                                onClick={() => handleEdit(pkg)}
-                                className="p-2 text-slate-400 hover:text-brand-blue bg-white rounded-lg border border-slate-200 shadow-sm transition-colors"
-                                title="Edit"
-                              >
-                                <Edit className="w-4 h-4" />
-                              </button>
-                              <button
-                                onClick={() => handleDeletePackage(pkg._id)}
-                                className="p-2 text-slate-400 hover:text-red-500 bg-white rounded-lg border border-slate-200 shadow-sm transition-colors"
-                                title="Delete"
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </button>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
               )}
             </div>
           ) : activeTab === "reviews" ? (

@@ -2,9 +2,9 @@
 export const seedPackages: any[] = [
   {
     "_id": "6aa24c85a1ff1fa2e71229ab",
-    "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1789108976/tours/xfgotflrvwss3xqcav8e.webp",
+    "image": "https://images.unsplash.com/photo-1621847468516-1ed5d0df56fe?auto=format&fit=crop&w=1200&q=80",
     "images": [
-      "https://res.cloudinary.com/dquecn5qj/image/upload/v1789108976/tours/xfgotflrvwss3xqcav8e.webp"
+      "https://images.unsplash.com/photo-1621847468516-1ed5d0df56fe?auto=format&fit=crop&w=1200&q=80"
     ],
     "durationBadge": "5D / 4N",
     "subtitle": "4 Nights / 5 Days Gujarat Temple & Pilgrimage Tour",
@@ -66,9 +66,9 @@ export const seedPackages: any[] = [
   },
   {
     "_id": "6aa24c85a1ff1fa2e71229aa",
-    "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1789108995/tours/m2czsc3ku88d8uwwcwlr.webp",
+    "image": "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1200&q=80",
     "images": [
-      "https://res.cloudinary.com/dquecn5qj/image/upload/v1789108995/tours/m2czsc3ku88d8uwwcwlr.webp"
+      "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1200&q=80"
     ],
     "durationBadge": "5D / 4N",
     "subtitle": "4 Nights / 5 Days Gujarat Temple & Pilgrimage Tour",
@@ -193,7 +193,7 @@ export const seedPackages: any[] = [
   },
   {
     "_id": "6aa24c85a1ff1fa2e71229a8",
-    "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1789109044/tours/gntignjswpx6nhxmqbeo.webp",
+    "image": "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1200&q=80",
     "images": [
       "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1200&q=80"
     ],
@@ -234,7 +234,7 @@ export const seedPackages: any[] = [
   },
   {
     "_id": "6aa24c85a1ff1fa2e71229a7",
-    "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1789109063/tours/npv0uostcmrylkxq4kno.webp",
+    "image": "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
     "images": [
       "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80"
     ],
@@ -275,7 +275,7 @@ export const seedPackages: any[] = [
   },
   {
     "_id": "6aa24c85a1ff1fa2e71229a6",
-    "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1789109095/tours/up9qhan6hdtpdd8d61dm.webp",
+    "image": "https://images.unsplash.com/photo-1698223126743-3b10b78df025?auto=format&fit=crop&w=1200&q=80",
     "images": [
       "https://images.unsplash.com/photo-1621847468516-1ed5d0df56fe?auto=format&fit=crop&w=1200&q=80"
     ],
@@ -1123,7 +1123,7 @@ export const seedTours: any[] = [
     "metaDescription": "Book Pune to Girnar Spiritual Tour. 4 Nights / 5 Days Gujarat Temple & Pilgrimage Tour. Comfortable AC Force Urbania travel, guided darshan, affordable pricing at ₹12,111.",
     "canonicalUrl": "https://www.shailrajtravels.com/tours/pune-to-girnar-spiritual-tour",
     "heroContent": {
-      "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1789108976/tours/xfgotflrvwss3xqcav8e.webp",
+      "image": "https://images.unsplash.com/photo-1621847468516-1ed5d0df56fe?auto=format&fit=crop&w=1200&q=80",
       "description": "4 Nights / 5 Days Gujarat Temple & Pilgrimage Tour - Experienced drivers, verified hotels, and seamless temple darshan with Shailraj Travels Pune."
     },
     "overview": "<p>Join Shailraj Travels on the memorable <strong>Pune to Girnar Spiritual Tour</strong> (4 Nights / 5 Days Gujarat Temple & Pilgrimage Tour). Experience luxurious travel with AC Force Urbania, dedicated tour assistance, and hassle-free darshan across Dwarka, Bet Dwarka, Somnath, Nageshwar, Rukmini Temple, Girnar.</p>",
@@ -1189,7 +1189,7 @@ export const seedTours: any[] = [
     "metaDescription": "Book Mumbai to Girnar Spiritual Tour. 4 Nights / 5 Days Gujarat Temple & Pilgrimage Tour. Comfortable AC Force Urbania travel, guided darshan, affordable pricing at ₹11,111.",
     "canonicalUrl": "https://www.shailrajtravels.com/tours/mumbai-to-girnar-spiritual-tour",
     "heroContent": {
-      "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1789108995/tours/m2czsc3ku88d8uwwcwlr.webp",
+      "image": "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1200&q=80",
       "description": "4 Nights / 5 Days Gujarat Temple & Pilgrimage Tour - Experienced drivers, verified hotels, and seamless temple darshan with Shailraj Travels Pune."
     },
     "overview": "<p>Join Shailraj Travels on the memorable <strong>Mumbai to Girnar Spiritual Tour</strong> (4 Nights / 5 Days Gujarat Temple & Pilgrimage Tour). Experience luxurious travel with AC Force Urbania, dedicated tour assistance, and hassle-free darshan across Dwarka, Bet Dwarka, Somnath, Nageshwar, Rukmini Temple, Girnar.</p>",
@@ -1337,7 +1337,7 @@ export const seedTours: any[] = [
     "metaDescription": "Book Mumbai to Lonavala One-Day Trip. One-Day Nature & Sightseeing Trip. Comfortable AC Force Urbania travel, guided darshan, affordable pricing at ₹1,311.",
     "canonicalUrl": "https://www.shailrajtravels.com/tours/mumbai-to-lonavala-one-day-trip",
     "heroContent": {
-      "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1789109044/tours/gntignjswpx6nhxmqbeo.webp",
+      "image": "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1200&q=80",
       "description": "One-Day Nature & Sightseeing Trip - Experienced drivers, verified hotels, and seamless temple darshan with Shailraj Travels Pune."
     },
     "overview": "<p>Join Shailraj Travels on the memorable <strong>Mumbai to Lonavala One-Day Trip</strong> (One-Day Nature & Sightseeing Trip). Experience luxurious travel with AC Force Urbania, dedicated tour assistance, and hassle-free darshan across Lonavala.</p>",
@@ -1397,7 +1397,7 @@ export const seedTours: any[] = [
     "metaDescription": "Book Pune to Lonavala One-Day Trip. One-Day Nature & Sightseeing Trip. Comfortable AC Force Urbania travel, guided darshan, affordable pricing at ₹1,221.",
     "canonicalUrl": "https://www.shailrajtravels.com/tours/pune-to-lonavala-one-day-trip",
     "heroContent": {
-      "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1789109063/tours/npv0uostcmrylkxq4kno.webp",
+      "image": "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
       "description": "One-Day Nature & Sightseeing Trip - Experienced drivers, verified hotels, and seamless temple darshan with Shailraj Travels Pune."
     },
     "overview": "<p>Join Shailraj Travels on the memorable <strong>Pune to Lonavala One-Day Trip</strong> (One-Day Nature & Sightseeing Trip). Experience luxurious travel with AC Force Urbania, dedicated tour assistance, and hassle-free darshan across Lonavala.</p>",
@@ -1457,7 +1457,7 @@ export const seedTours: any[] = [
     "metaDescription": "Book Pune to Shakti Peeth Yatra. 2 Nights / 3 Days Shakti Peeth Temple Tour. Comfortable AC Force Urbania travel, guided darshan, affordable pricing at ₹6,116.",
     "canonicalUrl": "https://www.shailrajtravels.com/tours/pune-to-shakti-peeth-yatra",
     "heroContent": {
-      "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1789109095/tours/up9qhan6hdtpdd8d61dm.webp",
+      "image": "https://images.unsplash.com/photo-1698223126743-3b10b78df025?auto=format&fit=crop&w=1200&q=80",
       "description": "2 Nights / 3 Days Shakti Peeth Temple Tour - Experienced drivers, verified hotels, and seamless temple darshan with Shailraj Travels Pune."
     },
     "overview": "<p>Join Shailraj Travels on the memorable <strong>Pune to Shakti Peeth Yatra</strong> (2 Nights / 3 Days Shakti Peeth Temple Tour). Experience luxurious travel with AC Force Urbania, dedicated tour assistance, and hassle-free darshan across Tuljapur, Kolhapur, Mahur, Saptashrungi Gad.</p>",
