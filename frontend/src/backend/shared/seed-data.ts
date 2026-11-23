@@ -2321,7 +2321,7 @@ export const seedGallery: any[] = [
   "metaDescription": "Book Pune to Nashik & Trimbakeshwar Jyotirlinga tour package. Luxury AC cabs, Force Urbania & Tempo Traveller. Panchavati, Muktidham & wine tour options. 2-day yatra.",
   "canonicalUrl": "https://www.shailrajtravels.com/tours/pune-to-nashik-trimbakeshwar-tour",
   "heroContent": {
-    "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1789109017/tours/m3ubfq1crce6ere3pge8.webp",
+    "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1789109343/tours/ic79dsdv6c4kalpgd6nb.webp",
     "description": "Sacred Trimbakeshwar Jyotirlinga & Nashik Pilgrimage - Private AC Cabs, 17-Seater Force Urbania, and verified family hotels with Shailraj Travels Pune."
   },
   "overview": "<p>Embark on a sacred journey from <strong>Pune to Nashik & Trimbakeshwar</strong> with Shailraj Travels. Discover the ancient <strong>Trimbakeshwar Jyotirlinga</strong> (one of the 12 supreme Jyotirlingas featuring three faces embodying Brahma, Vishnu, and Shiva), the sacred origin of River Godavari at Kushavarta Kund, and the historic Panchavati where Lord Rama spent his exile. Travel in unmatched highway luxury with our sanitized fleet of Innova Crysta and AC Force Urbania.</p>",

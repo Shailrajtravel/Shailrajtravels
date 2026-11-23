@@ -7,7 +7,7 @@ async function fixBrokenImages() {
   const db = client.db('shailraj');
 
   const ujjainImg = "https://res.cloudinary.com/dquecn5qj/image/upload/v1789154040/blogs/spy42xnlvgry5xoznqzn.png";
-  const ashtaImg = "https://res.cloudinary.com/dquecn5qj/image/upload/v1792764848/blogs/avej2lsveggdqan1spor.png";
+  const ashtaImg = "https://images.unsplash.com/photo-1567591414240-e9c1e59f3e06?auto=format&fit=crop&w=1200&q=80";
 
   const collections = ['tours', 'packages', 'trip_options', 'custom_blogs'];
 

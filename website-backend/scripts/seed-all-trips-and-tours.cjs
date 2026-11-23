@@ -602,9 +602,9 @@ const tourPackages = [
     price: "₹3,111",
     schedule: "Daily & Weekend Departures",
     frequency: "Daily",
-    image: "https://res.cloudinary.com/dquecn5qj/image/upload/v1792764848/blogs/avej2lsveggdqan1spor.png",
+    image: "https://images.unsplash.com/photo-1567591414240-e9c1e59f3e06?auto=format&fit=crop&w=1200&q=80",
     images: [
-      "https://res.cloudinary.com/dquecn5qj/image/upload/v1792764848/blogs/avej2lsveggdqan1spor.png"
+      "https://images.unsplash.com/photo-1567591414240-e9c1e59f3e06?auto=format&fit=crop&w=1200&q=80"
     ],
     route: ["Pune", "Morgaon", "Siddhatek", "Pali", "Mahad", "Theur", "Lenyadri", "Ozar", "Ranjangaon", "Pune"],
     tags: ["Ashtavinayak", "Ganpati Darshan", "Temple Tour", "One Day Trip", "Spiritual Tour"],
@@ -728,9 +728,9 @@ const tourPackages = [
     "price": "₹9,500",
     "schedule": "Daily & Weekend Departures",
     "frequency": "Daily",
-    "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1789109017/tours/m3ubfq1crce6ere3pge8.webp",
+    "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1789109343/tours/ic79dsdv6c4kalpgd6nb.webp",
     "images": [
-      "https://res.cloudinary.com/dquecn5qj/image/upload/v1789109017/tours/m3ubfq1crce6ere3pge8.webp"
+      "https://res.cloudinary.com/dquecn5qj/image/upload/v1789109343/tours/ic79dsdv6c4kalpgd6nb.webp"
     ],
     "route": [
       "Pune",
@@ -831,9 +831,9 @@ const tourPackages = [
     "price": "₹4,800",
     "schedule": "Daily Morning Departures (05:30 AM)",
     "frequency": "Daily",
-    "image": "https://res.cloudinary.com/dquecn5qj/image/upload/v1792764848/blogs/avej2lsveggdqan1spor.png",
+    "image": "https://images.unsplash.com/photo-1609766857041-ed402ea8069a?auto=format&fit=crop&w=1200&q=80",
     "images": [
-      "https://res.cloudinary.com/dquecn5qj/image/upload/v1792764848/blogs/avej2lsveggdqan1spor.png"
+      "https://images.unsplash.com/photo-1609766857041-ed402ea8069a?auto=format&fit=crop&w=1200&q=80"
     ],
     "route": [
       "Pune",

@@ -17,8 +17,8 @@ function sanitizeBlogImage(url?: string): string {
   if (url.includes('photo-1698223126743-3b10b78df025')) {
     return 'https://res.cloudinary.com/dquecn5qj/image/upload/v1789154040/blogs/spy42xnlvgry5xoznqzn.png';
   }
-  if (url.includes('photo-1567591414240-e2b2f6b8a8b8')) {
-    return 'https://res.cloudinary.com/dquecn5qj/image/upload/v1792764848/blogs/avej2lsveggdqan1spor.png';
+  if (url.includes('photo-1567591414240')) {
+    return 'https://images.unsplash.com/photo-1567591414240-e9c1e59f3e06?auto=format&fit=crop&w=1200&q=80';
   }
   return url;
 }
