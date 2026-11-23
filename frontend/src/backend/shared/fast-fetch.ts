@@ -16,9 +16,15 @@ export const fastApiFetch = async (
     options.method &&
     ['POST', 'PUT', 'DELETE', 'PATCH'].includes(options.method.toUpperCase());
 
-  // Strict 2000ms timeout for read operations so SSR is never blocked.
-  // 45000ms for write operations to allow database persistence and image payloads.
-  const defaultTimeout = isWrite ? 45000 : 2000;
+  const isAdminOrSpecial =
+    isWrite ||
+    endpoint.startsWith('/bookings') ||
+    endpoint.startsWith('/audit') ||
+    endpoint.includes('template');
+
+  // Strict timeout for SSR public read operations so SSR is never blocked (3000ms).
+  // 45000ms for bookings, admin endpoints, and write operations to allow database persistence.
+  const defaultTimeout = isAdminOrSpecial ? 45000 : 3000;
   const timeoutMs = options.timeoutMs ?? defaultTimeout;
 
   const controller = new AbortController();
@@ -51,3 +57,5 @@ export const fastApiFetch = async (
     throw err;
   }
 };
+
+export const apiFetch = fastApiFetch;

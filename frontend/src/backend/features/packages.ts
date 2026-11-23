@@ -44,8 +44,9 @@ export const getPackagesFn = createServerFn({ method: "POST" })
         }
       }
 
-      // 3. Fast network fetch with 2000ms max timeout
-      const liveData = await fastApiFetch('/packages', { timeoutMs: 2000 }).catch(() => null);
+      // 3. Fast network fetch (30s for forceFresh admin calls, 2500ms for SSR)
+      const timeoutMs = data?.forceFresh ? 30000 : 2500;
+      const liveData = await fastApiFetch('/packages', { timeoutMs }).catch(() => null);
       if (liveData && Array.isArray(liveData) && liveData.length > 0) {
         const sorted = sortPackagesByRank(liveData);
         await setCachedData('packages:all', sorted, 3600);

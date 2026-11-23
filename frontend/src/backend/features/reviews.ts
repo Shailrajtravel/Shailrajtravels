@@ -29,8 +29,8 @@ export const getReviewsFn = createServerFn({ method: "POST" }).handler(async () 
       return l2;
     }
 
-    // 3. Fast network fetch with 2000ms max timeout
-    const live = await fastApiFetch('/reviews', { timeoutMs: 2000 }).catch(() => null);
+    // 3. Fast network fetch with 15000ms max timeout
+    const live = await fastApiFetch('/reviews', { timeoutMs: 15000 }).catch(() => null);
     if (live && Array.isArray(live) && live.length > 0) {
       await setCachedData('reviews:all', live, 3600);
       return live;

@@ -4,7 +4,7 @@ export { getAdminToken, isValidAdminToken };
 import { z } from 'zod';
 import { getCachedData, setCachedData, invalidateCache } from '@/backend/infrastructure/redis';
 import { memoryCache } from '@/backend/shared/memory-cache';
-import { fastApiFetch } from '@/backend/shared/fast-fetch';
+import { fastApiFetch, apiFetch } from '@/backend/shared/fast-fetch';
 import { seedTripOptions } from '@/backend/shared/seed-data';
 import { uploadImageToCloudinary } from '@/backend/shared/cloudinary';
 
@@ -36,8 +36,9 @@ export const getTripOptionsFn = createServerFn({ method: "POST" })
         }
       }
 
-      // 3. Fast network fetch with 2000ms max timeout
-      const freshData = await fastApiFetch('/bookings/trip-options', { timeoutMs: 2000 }).catch(() => null);
+      // 3. Fast network fetch (30s for forceFresh admin calls, 2500ms for SSR)
+      const timeoutMs = data?.forceFresh ? 30000 : 2500;
+      const freshData = await fastApiFetch('/bookings/trip-options', { timeoutMs }).catch(() => null);
       if (freshData && Array.isArray(freshData) && freshData.length > 0) {
         await setCachedData('trip-options:all', freshData, 3600);
         return freshData;

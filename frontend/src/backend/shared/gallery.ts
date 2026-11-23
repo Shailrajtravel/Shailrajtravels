@@ -32,8 +32,9 @@ export const getGalleryPhotosFn = createServerFn({ method: "POST" })
         }
       }
 
-      // 3. Fast network fetch with 2000ms max timeout
-      const liveData = await fastApiFetch('/gallery', { timeoutMs: 2000 }).catch(() => null);
+      // 3. Fast network fetch (30s for forceFresh admin calls, 2500ms for SSR)
+      const timeoutMs = data?.forceFresh ? 30000 : 2500;
+      const liveData = await fastApiFetch('/gallery', { timeoutMs }).catch(() => null);
       if (liveData && Array.isArray(liveData) && liveData.length > 0) {
         await setCachedData('gallery:all', liveData, 3600);
         return liveData;

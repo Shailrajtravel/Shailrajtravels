@@ -46,9 +46,10 @@ export const getToursFn = createServerFn({ method: "POST" })
         }
       }
 
-      // 3. Fast network fetch with 2000ms max timeout
+      // 3. Fast network fetch (30s for forceFresh admin calls, 2500ms for SSR)
       const qs = data?.lang ? `?lang=${data.lang}` : "";
-      const result = await fastApiFetch(`/tours${qs}`, { timeoutMs: 2000 }).catch(() => null);
+      const timeoutMs = data?.forceFresh ? 30000 : 2500;
+      const result = await fastApiFetch(`/tours${qs}`, { timeoutMs }).catch(() => null);
       if (Array.isArray(result) && result.length > 0) {
         const sorted = sortToursByRank(result);
         await setCachedData(cacheKey, sorted, 3600);

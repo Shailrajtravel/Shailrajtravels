@@ -2,7 +2,7 @@ import { createServerFn } from '@tanstack/react-start';
 import { getAdminToken, isValidAdminToken } from '@/backend/infrastructure/token';
 import { z } from 'zod';
 import { memoryCache } from '@/backend/shared/memory-cache';
-import { fastApiFetch } from '@/backend/shared/fast-fetch';
+import { fastApiFetch, apiFetch } from '@/backend/shared/fast-fetch';
 
 export const getCustomBlogsFn = createServerFn({ method: "POST" })
   .validator((data?: unknown) => {
