@@ -1,24 +1,8 @@
 import { createServerFn } from '@tanstack/react-start';
 import { getAdminToken, isValidAdminToken } from '@/backend/infrastructure/token';
 import { getCachedData, setCachedData, invalidateCache } from '@/backend/infrastructure/redis';
-
-const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
-  const BACKEND_URL = import.meta.env.VITE_WEBSITE_BACKEND_URL || process.env.VITE_WEBSITE_BACKEND_URL || "https://shailrajtravels.onrender.com/api";
-  const res = await fetch(`${BACKEND_URL}${endpoint}`, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...options.headers,
-    },
-  });
-  if (!res.ok) {
-    const errorText = await res.text();
-    throw new Error(errorText || `API Error: ${res.status}`);
-  }
-  const text = await res.text();
-  return text ? JSON.parse(text) : null;
-};
-
+import { memoryCache } from '@/backend/shared/memory-cache';
+import { fastApiFetch } from '@/backend/shared/fast-fetch';
 import { seedGallery } from '@/backend/shared/seed-data';
 
 export const getGalleryPhotosFn = createServerFn({ method: "POST" })
@@ -26,14 +10,32 @@ export const getGalleryPhotosFn = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     try {
       if (!data?.forceFresh) {
-        const cached = await getCachedData<any[]>('gallery:all');
+        // 1. Check L1 Memory Cache with SWR (0ms)
+        const { value: cached, isStale } = memoryCache.getWithMeta<any[]>('gallery:all');
         if (cached && Array.isArray(cached) && cached.length > 0) {
+          if (isStale) {
+            fastApiFetch('/gallery', { timeoutMs: 3000 })
+              .then(async (fresh) => {
+                if (fresh && Array.isArray(fresh) && fresh.length > 0) {
+                  await setCachedData('gallery:all', fresh, 3600);
+                }
+              })
+              .catch(() => {});
+          }
           return cached;
         }
+
+        // 2. Check L2 Redis Cache
+        const l2 = await getCachedData<any[]>('gallery:all');
+        if (l2 && Array.isArray(l2) && l2.length > 0) {
+          return l2;
+        }
       }
-      const liveData = await apiFetch('/gallery');
+
+      // 3. Fast network fetch with 2000ms max timeout
+      const liveData = await fastApiFetch('/gallery', { timeoutMs: 2000 }).catch(() => null);
       if (liveData && Array.isArray(liveData) && liveData.length > 0) {
-        await setCachedData('gallery:all', liveData, 600);
+        await setCachedData('gallery:all', liveData, 3600);
         return liveData;
       }
       return seedGallery;
@@ -52,7 +54,7 @@ export const addGalleryPhotoFn = createServerFn({ method: "POST" })
   .validator((data: GalleryInput) => data)
   .handler(async ({ data }) => {
     if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
-    const result = await apiFetch('/gallery', {
+    const result = await fastApiFetch('/gallery', {
       method: "POST",
       body: JSON.stringify({ imageUrl: data.imageUrl }),
     });
@@ -64,7 +66,7 @@ export const deleteGalleryPhotoFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string; id: string }) => data)
   .handler(async ({ data }) => {
     if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
-    const result = await apiFetch(`/gallery/${data.id}`, {
+    const result = await fastApiFetch(`/gallery/${data.id}`, {
       method: "DELETE",
     });
     await invalidateCache('gallery:all');
