@@ -1,30 +1,44 @@
 import { createServerFn } from '@tanstack/react-start';
 import { getAdminToken, isValidAdminToken } from '@/backend/infrastructure/token';
 import { z } from 'zod';
-
-const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
-  const BACKEND_URL = import.meta.env.VITE_WEBSITE_BACKEND_URL || process.env.VITE_WEBSITE_BACKEND_URL || "https://shailrajtravels.onrender.com/api";
-  const res = await fetch(`${BACKEND_URL}${endpoint}`, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...options.headers,
-    },
-  });
-  if (!res.ok) {
-    const errorText = await res.text();
-    throw new Error(errorText || `API Error: ${res.status}`);
-  }
-  const text = await res.text();
-  return text ? JSON.parse(text) : null;
-};
+import { memoryCache } from '@/backend/shared/memory-cache';
+import { getCachedData, setCachedData, invalidateCache } from '@/backend/infrastructure/redis';
+import { fastApiFetch } from '@/backend/shared/fast-fetch';
+import { DEFAULT_GOOGLE_REVIEWS } from '@/backend/shared/reviews-data';
 
 export const getReviewsFn = createServerFn({ method: "POST" }).handler(async () => {
   try {
-    return await apiFetch('/reviews');
+    // 1. Check L1 Memory Cache with SWR (0ms)
+    const { value: cached, isStale } = memoryCache.getWithMeta<any[]>('reviews:all');
+    if (cached && Array.isArray(cached) && cached.length > 0) {
+      if (isStale) {
+        fastApiFetch('/reviews', { timeoutMs: 3000 })
+          .then(async (fresh) => {
+            if (fresh && Array.isArray(fresh) && fresh.length > 0) {
+              await setCachedData('reviews:all', fresh, 3600);
+            }
+          })
+          .catch(() => {});
+      }
+      return cached;
+    }
+
+    // 2. Check L2 Redis Cache
+    const l2 = await getCachedData<any[]>('reviews:all');
+    if (l2 && Array.isArray(l2) && l2.length > 0) {
+      return l2;
+    }
+
+    // 3. Fast network fetch with 2000ms max timeout
+    const live = await fastApiFetch('/reviews', { timeoutMs: 2000 }).catch(() => null);
+    if (live && Array.isArray(live) && live.length > 0) {
+      await setCachedData('reviews:all', live, 3600);
+      return live;
+    }
+    return DEFAULT_GOOGLE_REVIEWS;
   } catch (error) {
     console.error("Failed to fetch reviews", error);
-    return [];
+    return DEFAULT_GOOGLE_REVIEWS;
   }
 });
 
@@ -38,10 +52,12 @@ export const addReviewFn = createServerFn({ method: "POST" })
   .validator((data: unknown) => addReviewSchema.parse(data))
   .handler(async ({ data }) => {
     try {
-      return await apiFetch('/reviews', {
+      const res = await fastApiFetch('/reviews', {
         method: "POST",
         body: JSON.stringify(data),
       });
+      await invalidateCache('reviews:all');
+      return res;
     } catch (error: any) {
       console.error("Failed to add review", error);
       throw new Error(error.message || "Failed to add review");
@@ -52,9 +68,11 @@ export const deleteReviewFn = createServerFn({ method: "POST" })
   .validator((data: { adminToken: string; id: string }) => data)
   .handler(async ({ data }) => {
     if (!isValidAdminToken(data?.adminToken)) throw new Error("Unauthorized");
-    return await apiFetch(`/reviews/${data.id}`, {
+    const res = await fastApiFetch(`/reviews/${data.id}`, {
       method: "DELETE",
     });
+    await invalidateCache('reviews:all');
+    return res;
   });
 
 export * from '@/backend/shared/reviews-data';
