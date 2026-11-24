@@ -345,7 +345,7 @@ function TravelAgencyInPunePage() {
               </div>
               <div className="px-6 pb-6 pt-0">
                 <Link
-                  to="/tours/ashtavinayak-yatra"
+                  to="/tours/pune-to-ashtavinayak-darshan"
                   className="w-full py-2.5 bg-brand-mist hover:bg-brand-green/10 text-brand-blue-deep font-bold rounded-xl text-center block text-sm border border-brand-green/30 transition-colors"
                 >
                   View Ashtavinayak Details &rarr;
@@ -371,7 +371,7 @@ function TravelAgencyInPunePage() {
               </div>
               <div className="px-6 pb-6 pt-0">
                 <Link
-                  to="/tours/jyotirlinga-darshan"
+                  to="/tours/pune-mumbai-to-3-jyotirlinga-darshan"
                   className="w-full py-2.5 bg-brand-mist hover:bg-brand-green/10 text-brand-blue-deep font-bold rounded-xl text-center block text-sm border border-brand-green/30 transition-colors"
                 >
                   View Jyotirlinga Details &rarr;

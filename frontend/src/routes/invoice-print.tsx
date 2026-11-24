@@ -16,6 +16,12 @@ import { InvoicePrint } from '@/frontend/shared/components/InvoicePrint';
 import { getBookingForPrintFn } from '@/backend/shared/bookings';
 
 export const Route = createFileRoute("/invoice-print")({
+  head: () => ({
+    meta: [
+      { name: "robots", content: "noindex, nofollow" },
+      { title: "Invoice Print | Shailraj Travels" },
+    ],
+  }),
   validateSearch: (s: Record<string, unknown>) => ({
     id: String(s.id || ""),
     bookingId: String(s.bookingId || s.id || ""),
