@@ -25,14 +25,14 @@ export const getPackagesFn = createServerFn({ method: "POST" })
         if (cached && Array.isArray(cached) && cached.length > 0) {
           // If stale, trigger background revalidation without blocking SSR
           if (isStale) {
-            fastApiFetch('/packages', { timeoutMs: 3000 })
+            fastApiFetch('/packages', { timeoutMs: 12000 })
               .then(async (fresh) => {
                 if (fresh && Array.isArray(fresh) && fresh.length > 0) {
                   const sorted = sortPackagesByRank(fresh);
                   await setCachedData('packages:all', sorted, 3600);
                 }
               })
-              .catch(() => {});
+              .catch(() => { });
           }
           return sortPackagesByRank(cached);
         }
@@ -44,8 +44,8 @@ export const getPackagesFn = createServerFn({ method: "POST" })
         }
       }
 
-      // 3. Fast network fetch (30s for forceFresh admin calls, 2500ms for SSR)
-      const timeoutMs = data?.forceFresh ? 30000 : 2500;
+      // 3. Fast network fetch (30s for forceFresh admin calls, 7000ms for SSR)
+      const timeoutMs = data?.forceFresh ? 30000 : 7000;
       const liveData = await fastApiFetch('/packages', { timeoutMs }).catch(() => null);
       if (liveData && Array.isArray(liveData) && liveData.length > 0) {
         const sorted = sortPackagesByRank(liveData);

@@ -14,6 +14,7 @@ const GallerySection = React.lazy(() => import('@/frontend/features/gallery/Gall
 const BookingModal = React.lazy(() => import('@/frontend/features/tours/BookingModal').then(m => ({ default: m.BookingModal })));
 import { getReviewsFn } from '@/backend/features/reviews';
 import { getPackagesFn } from '@/backend/features/packages';
+import { HomeSkeleton } from '@/frontend/shared/ui/HomeSkeleton';
 
 export const Route = createFileRoute("/mr/")({
   head: () => ({
@@ -46,6 +47,7 @@ export const Route = createFileRoute("/mr/")({
     }
   },
   component: MarathiHomePage,
+  pendingComponent: HomeSkeleton,
 });
 
 function MarathiHomePage() {

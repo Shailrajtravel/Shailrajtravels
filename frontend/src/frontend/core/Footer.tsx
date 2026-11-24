@@ -42,12 +42,12 @@ const mapPopularTour = (t: any, idx: number, isMr: boolean) => {
 const defaultTours = [
   { label: "Pune to Ujjain Bus Travels", href: "/pune-to-ujjain-bus-travels" },
   { label: "Pune to Ujjain Tour Package", href: "/tours/pune-to-ujjain-tour-package" },
-  { label: "Pune to Girnar Spiritual Tour", href: "/tours/pune-to-girnar-spiritual-tour" },
-  { label: "Mumbai to Girnar Spiritual Tour", href: "/tours/mumbai-to-girnar-spiritual-tour" },
+  { label: "Pune to Nashik & Trimbakeshwar Tour Package", href: "/tours/pune-to-nashik-trimbakeshwar-tour" },
+  { label: "Mumbai to Ujjain Mahakal Darshan Tour Package", href: "/tours/mumbai-to-ujjain-mahakal-darshan-tour" },
+  { label: "Pune to Shirdi & Shani Shingnapur Tour Package", href: "/tours/pune-to-shirdi-shani-shingnapur-tour" },
   { label: "Pune to Ashtavinayak Darshan", href: "/tours/pune-to-ashtavinayak-darshan" },
-  { label: "Mumbai to Lonavala One-Day Trip", href: "/tours/mumbai-to-lonavala-one-day-trip" },
-  { label: "Pune to Lonavala One-Day Trip", href: "/tours/pune-to-lonavala-one-day-trip" },
   { label: "Pune to Shakti Peeth Yatra", href: "/tours/pune-to-shakti-peeth-yatra" },
+  { label: "Pune to Girnar Spiritual Tour", href: "/tours/pune-to-girnar-spiritual-tour" },
 ];
 
 export function FooterSection({ t: propT, lang = "en" }: { t?: typeof translations.mr; lang?: string }) {

@@ -18,7 +18,7 @@ export const getTripOptionsFn = createServerFn({ method: "POST" })
         const { value: cached, isStale } = memoryCache.getWithMeta<any[]>('trip-options:all');
         if (cached && Array.isArray(cached) && cached.length > 0) {
           if (isStale) {
-            fastApiFetch('/bookings/trip-options', { timeoutMs: 3000 })
+            fastApiFetch('/bookings/trip-options', { timeoutMs: 12000 })
               .then(async (fresh) => {
                 if (fresh && Array.isArray(fresh) && fresh.length > 0) {
                   await setCachedData('trip-options:all', fresh, 3600);
@@ -36,8 +36,8 @@ export const getTripOptionsFn = createServerFn({ method: "POST" })
         }
       }
 
-      // 3. Fast network fetch (30s for forceFresh admin calls, 2500ms for SSR)
-      const timeoutMs = data?.forceFresh ? 30000 : 2500;
+      // 3. Fast network fetch (30s for forceFresh admin calls, 7000ms for SSR)
+      const timeoutMs = data?.forceFresh ? 30000 : 7000;
       const freshData = await fastApiFetch('/bookings/trip-options', { timeoutMs }).catch(() => null);
       if (freshData && Array.isArray(freshData) && freshData.length > 0) {
         await setCachedData('trip-options:all', freshData, 3600);

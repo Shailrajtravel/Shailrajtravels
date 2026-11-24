@@ -13,6 +13,7 @@ const ReviewsSection = React.lazy(() => import('@/frontend/features/reviews/Revi
 const GallerySection = React.lazy(() => import('@/frontend/features/gallery/GallerySection').then(m => ({ default: m.GallerySection })));
 const BookingModal = React.lazy(() => import('@/frontend/features/tours/BookingModal').then(m => ({ default: m.BookingModal })));
 import { OfferBannerSection } from '@/frontend/features/offers/OfferBannerSection';
+import { HomeSkeleton } from '@/frontend/shared/ui/HomeSkeleton';
 
 import { getPackagesFn } from '@/backend/features/packages';
 import { generateSEO } from '@/backend/features/seo';
@@ -60,6 +61,7 @@ export const Route = createFileRoute("/")({
     links: [{ rel: "canonical", href: "https://www.shailrajtravels.com" }],
   }),
   component: HomePage,
+  pendingComponent: HomeSkeleton,
   loader: async ({ deps: { lang } }) => {
     try {
       const [packages, tripOptions, galleryPhotos, tours, activeOffer] = await Promise.all([

@@ -27,7 +27,7 @@ export const getToursFn = createServerFn({ method: "POST" })
         if (cached && Array.isArray(cached) && cached.length > 0) {
           if (isStale) {
             const qs = data?.lang ? `?lang=${data.lang}` : "";
-            fastApiFetch(`/tours${qs}`, { timeoutMs: 3000 })
+            fastApiFetch(`/tours${qs}`, { timeoutMs: 12000 })
               .then(async (fresh) => {
                 if (fresh && Array.isArray(fresh) && fresh.length > 0) {
                   const sorted = sortToursByRank(fresh);
@@ -46,9 +46,9 @@ export const getToursFn = createServerFn({ method: "POST" })
         }
       }
 
-      // 3. Fast network fetch (30s for forceFresh admin calls, 2500ms for SSR)
+      // 3. Fast network fetch (30s for forceFresh admin calls, 7000ms for SSR)
       const qs = data?.lang ? `?lang=${data.lang}` : "";
-      const timeoutMs = data?.forceFresh ? 30000 : 2500;
+      const timeoutMs = data?.forceFresh ? 30000 : 7000;
       const result = await fastApiFetch(`/tours${qs}`, { timeoutMs }).catch(() => null);
       if (Array.isArray(result) && result.length > 0) {
         const sorted = sortToursByRank(result);
@@ -73,7 +73,7 @@ export const getTourBySlugFn = createServerFn({ method: "POST" })
       if (cached) {
         if (isStale) {
           const qs = data.lang ? `?lang=${data.lang}` : "";
-          fastApiFetch(`/tours/slug/${slugKey}${qs}`, { timeoutMs: 3000 })
+          fastApiFetch(`/tours/slug/${slugKey}${qs}`, { timeoutMs: 12000 })
             .then(async (fresh) => {
               if (fresh) {
                 await setCachedData(cacheKey, fresh, 3600);
@@ -88,9 +88,9 @@ export const getTourBySlugFn = createServerFn({ method: "POST" })
       const l2 = await getCachedData<any>(cacheKey);
       if (l2) return l2;
 
-      // 3. Fast network fetch with 2000ms max timeout
+      // 3. Fast network fetch with 7000ms max timeout
       const qs = data.lang ? `?lang=${data.lang}` : "";
-      const result = await fastApiFetch(`/tours/slug/${slugKey}${qs}`, { timeoutMs: 2000 }).catch(() => null);
+      const result = await fastApiFetch(`/tours/slug/${slugKey}${qs}`, { timeoutMs: 7000 }).catch(() => null);
       if (result) {
         await setCachedData(cacheKey, result, 3600);
         return result;
