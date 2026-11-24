@@ -128,10 +128,17 @@ function TravelAgencyInPunePage() {
     ],
     areaServed: [
       { "@type": "City", name: "Pune" },
+      { "@type": "AdministrativeArea", name: "Hadapsar" },
+      { "@type": "AdministrativeArea", name: "Manjri Budruk" },
+      { "@type": "AdministrativeArea", name: "Magarpatta" },
       { "@type": "City", name: "Pimpri-Chinchwad" },
       { "@type": "State", name: "Maharashtra" },
     ],
     knowsAbout: [
+      "Travels in Pune",
+      "Travels in Hadapsar",
+      "Travels in Manjri",
+      "Best Travels in Pune",
       "Pilgrimage Tours from Pune",
       "Ujjain Mahakal Tour Packages",
       "Ashtavinayak Yatra from Pune",

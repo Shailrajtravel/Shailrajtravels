@@ -127,10 +127,35 @@ function ToursListingPage() {
       if (!searchTerm.trim()) return true;
 
       const clean = (s: string) => (s || '').toLowerCase().replace(/[^a-z0-9\s]/g, ' ');
-      const stopWords = new Set(['to', 'from', 'the', 'a', 'an', 'in', 'at', 'by', 'for', 'with', 'and', 'via']);
+      const stopWords = new Set(['to', 'from', 'the', 'a', 'an', 'in', 'at', 'by', 'for', 'with', 'and', 'via', 'best', 'top', 'near', 'me']);
       const rawTokens = clean(searchTerm).split(/\s+/).filter(Boolean);
       const keywords = rawTokens.filter((t) => !stopWords.has(t));
       const searchTokens = keywords.length > 0 ? keywords : rawTokens;
+
+      // Local hub tokens for Shailraj Travels' headquarters & Pune pickup network
+      const LOCAL_HUB_TOKENS = new Set([
+        'manjri', 'manjr', 'manjari', 'hadapsar', 'gadital', 'magarpatta', 'pune', 
+        'pcmc', 'pimpri', 'chinchwad', 'swargate', 'viman', 'nagar', 'kharadi', 
+        'wagholi', 'wakad', 'hinjewadi', 'katraj', 'bhosari', 'shailraj'
+      ]);
+
+      // General travel agency / vehicle tokens
+      const AGENCY_TRANSPORT_TOKENS = new Set([
+        'bus', 'travels', 'travel', 'urbania', 'coach', 'sleeper', 'traveller', 
+        'tempo', 'minibus', 'tour', 'tours', 'package', 'packages', 'yatra', 'ac',
+        'agency', 'operator', 'cab', 'car', 'rental'
+      ]);
+
+      // Check if all tokens are local hub or agency/transport tokens (e.g. "travels in manjr", "travels in pune", "travels in hadapsar")
+      const isPureLocalAgencyQuery = searchTokens.every(tok => 
+        LOCAL_HUB_TOKENS.has(tok) || 
+        AGENCY_TRANSPORT_TOKENS.has(tok) ||
+        [...LOCAL_HUB_TOKENS].some(h => tok.startsWith(h) || h.startsWith(tok))
+      );
+
+      if (isPureLocalAgencyQuery) {
+        return true;
+      }
 
       const fullSearchText = clean([
         tour.title,
@@ -143,6 +168,7 @@ function ToursListingPage() {
         tour.metaTitle,
         tour.metaDescription,
         tour.overview,
+        'shailraj travels hadapsar manjri budruk pune maharashtra pickup swargate viman nagar wakad bhosari'
       ].filter(Boolean).join(' '));
 
       // 1. Direct exact keyword or substring match in keywords array
@@ -155,20 +181,25 @@ function ToursListingPage() {
         if (matchesDirectKeyword) return true;
       }
 
-      // 2. Transport & Bus intent expansion
-      // If user typed "bus", "travels", "sleeper", etc., match tours that provide luxury AC vehicle transport (Urbania, coaches, tempo)
-      const TRANSPORT_TOKENS = new Set(['bus', 'travels', 'urbania', 'coach', 'sleeper', 'traveller', 'tempo', 'minibus', 'tour', 'package', 'yatra', 'ac']);
-
+      // 2. Multi-token evaluation with stemming and synonym expansion
       const matchesAllTokens = searchTokens.every((tok) => {
         if (fullSearchText.includes(tok)) return true;
-        if (TRANSPORT_TOKENS.has(tok)) {
+
+        if (LOCAL_HUB_TOKENS.has(tok) || [...LOCAL_HUB_TOKENS].some(h => tok.startsWith(h) || h.startsWith(tok))) {
+          return true;
+        }
+
+        if (AGENCY_TRANSPORT_TOKENS.has(tok)) {
           return fullSearchText.includes('urbania') || 
                  fullSearchText.includes('tempo') || 
                  fullSearchText.includes('coach') || 
                  fullSearchText.includes('travels') || 
                  fullSearchText.includes('bus') || 
-                 fullSearchText.includes('ac');
+                 fullSearchText.includes('ac') ||
+                 fullSearchText.includes('tour') ||
+                 fullSearchText.includes('package');
         }
+
         return false;
       });
 

@@ -101,10 +101,16 @@ function TourOperatorInPunePage() {
     },
     areaServed: [
       { "@type": "City", name: "Pune" },
+      { "@type": "AdministrativeArea", name: "Hadapsar" },
+      { "@type": "AdministrativeArea", name: "Manjri Budruk" },
+      { "@type": "AdministrativeArea", name: "Magarpatta" },
       { "@type": "City", name: "Pimpri-Chinchwad" },
       { "@type": "State", name: "Maharashtra" },
     ],
     knowsAbout: [
+      "Travels in Pune",
+      "Travels in Hadapsar",
+      "Travels in Manjri",
       "Guided Pilgrimage Tours",
       "End-to-End Tour Operations Pune",
       "AC Force Urbania Group Tours",
