@@ -26,9 +26,9 @@ import {
 export const Route = createFileRoute("/travel-agency-in-pune")({
   head: () => ({
     meta: generateSEO({
-      title: "Best Travel Agency in Pune (Hadapsar) | Tours & Travels | Shailraj",
+      title: "Shailraj Travels - Tours & Travels in Pune, Hadapsar",
       description:
-        "Looking for the best travels in Pune? Shailraj Travels is a top-rated travel agency in Hadapsar. Book Ujjain tours, Ashtavinayak, Pune travels & luxury car/van rentals. Call +91 9764413556!",
+        "Shailraj Travels is Pune's top-rated tour and travel agency based in Hadapsar, serving travelers from all over Pune & PCMC. Book Ujjain tours, Ashtavinayak, Pune travels & luxury car/van rentals. Call +91 9764413556!",
       canonicalUrl: "https://www.shailrajtravels.com/travel-agency-in-pune",
       keywords: [
         "best travels in pune",

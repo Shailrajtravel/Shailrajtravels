@@ -263,20 +263,20 @@ export function Hero({
             {lang === "mr" ? (
               <>
                 शैलराज ट्रॅव्हल्स —{" "}
-                <span className="text-brand-green-dark">पुण्यातील ट्रॅव्हल एजन्सी आणि टूर ऑपरेटर</span>
+                <span className="text-brand-green-dark">टूर्स अँड ट्रॅव्हल्स पुणे, हडपसर</span>
               </>
             ) : (
               <>
                 Shailraj Travels —{" "}
-                <span className="text-brand-green-dark">Travel Agency & Tour Operator in Pune</span>
+                <span className="text-brand-green-dark">Tours & Travels in Pune, Hadapsar</span>
               </>
             )}
           </h1>
 
           <p className="mt-3.5 max-w-[620px] text-[15px] leading-relaxed text-slate-700 md:text-[16px] font-medium">
             {lang === "mr"
-              ? "शैलराज ट्रॅव्हल्स ही पुण्यातील अग्रगण्य ट्रॅव्हल एजन्सी आणि टूर ऑपरेटर असून, महाराष्ट्रासह संपूर्ण भारतातील तीर्थयात्रा, कौटुंबिक सहली, ग्रुप टूर्स आणि सानुकूलित टूर पॅकेजेस प्रदान करते."
-              : "Shailraj Travels is a Pune-based travel agency and tour operator offering pilgrimage, family, group and customized tours across Maharashtra and India."}
+              ? "शैलराज ट्रॅव्हल्स (हडपसर, पुणे) संपूर्ण पुण्यातील प्रवाशांसाठी महाराष्ट्रासह देशभरात लक्झरी एसी वाहनांसह तीर्थयात्रा, कौटुंबिक सहली आणि सानुकूलित टूर पॅकेजेस प्रदान करते."
+              : "Shailraj Travels is a premier tour and travel agency based in Hadapsar, proudly serving travelers from all over Pune & PCMC with luxury AC vehicles, verified stays, and guided pilgrimage tours."}
           </p>
 
           {/* Visible Crawlable AEO Direct Answer Block */}
@@ -286,19 +286,19 @@ export function Hero({
                 {lang === "mr" ? "शैलराज ट्रॅव्हल्स काय आहे?" : "What is Shailraj Travels?"}
               </strong>{" "}
               {lang === "mr"
-                ? "शैलराज ट्रॅव्हल्स (हडपसर, पुणे) ही लक्झरी एसी फोर्स अर्बनिया, सत्यापित हॉटेल्स आणि अनुभवी टूर मॅनेजर्ससह ज्योतिर्लिंग, अष्टविनायक, चार धाम आणि कौटुंबिक यात्रा आयोजित करणारी अधिकृत ट्रॅव्हल एजन्सी आहे."
-                : "Shailraj Travels is a Pune-based travel agency and tour operator offering pilgrimage, family, group and customized tours across Maharashtra and India with luxury AC Force Urbania coaches, verified hotels, and experienced tour managers."}
+                ? "शैलराज ट्रॅव्हल्स - टूर्स अँड ट्रॅव्हल्स पुणे, हडपसर. संपूर्ण पुण्यातील प्रवाशांसाठी (हडपसर, स्वारगेट, कोथरूड, डेक्कन, वाकड, विमान नगर, पिंपरी-चिंचवड) लक्झरी एसी फोर्स अर्बनिया, सत्यापित हॉटेल्स आणि अनुभवी टूर मॅनेजर्ससह ज्योतिर्लिंग, अष्टविनायक, चार धाम आणि कौटुंबिक यात्रा आयोजित करणारी अग्रगण्य ट्रॅव्हल एजन्सी आहे."
+                : "Shailraj Travels - Tours & Travels in Pune, Hadapsar. Serving travelers from all over Pune (Hadapsar, Swargate, Kothrud, Deccan, Wakad, Viman Nagar, PCMC) with luxury AC Force Urbania, verified hotels, and experienced tour managers for Jyotirlinga, Ashtavinayak, Char Dham, and family tours."}
             </p>
           </div>
 
           {/* Hidden SEO/AEO indexable keywords for search engines and AI assistants (clean UI) */}
           <div className="sr-only">
-            <h2>Best Travels in Pune & Hadapsar Tour Operator</h2>
+            <h2>Shailraj Travels - Tours & Travels in Pune, Hadapsar</h2>
             <p>
-              Looking for the best travels in Pune? Shailraj Travels is rated the top travel agency and tour operator in Hadapsar, Pune with 15+ years of experience and 5.0★ Google rating.
+              Looking for top tours and travels in Pune? Headquartered in Hadapsar, Shailraj Travels serves travelers from all over Pune with 15+ years of experience and 5.0★ Google rating. Pickups available from Hadapsar, Swargate, Pune Station, Kothrud, Deccan, Baner, Wakad, Hinjewadi, Viman Nagar, Kharadi, and PCMC.
             </p>
             <p>
-              Popular searches: Best Travels in Pune, Travels in Hadapsar, Travel Agency Pune, Ujjain Tour & Yatra, Pune Travels & Tours.
+              Popular searches: Shailraj Travels - Tours & Travels in Pune, Hadapsar, Best Travels in Pune, Travels in Hadapsar, Travels in Manjri, Travel Agency Pune, Ujjain Tour & Yatra, Pune Travels & Tours.
             </p>
           </div>
 
@@ -633,6 +633,23 @@ function TripSearchCombobox({
         "services",
         "bus",
         "ac",
+        "shailraj",
+        "travels",
+        "pune",
+        "hadapsar",
+        "manjri",
+        "manjr",
+        "manjari",
+        "swargate",
+        "viman",
+        "nagar",
+        "kothrud",
+        "deccan",
+        "shivajinagar",
+        "wakad",
+        "baner",
+        "hinjewadi",
+        "pcmc",
       ].filter(Boolean);
       items.push({
         id: trip._id,
@@ -662,6 +679,23 @@ function TripSearchCombobox({
         "darshan",
         "spiritual",
         "jyotirlinga",
+        "shailraj",
+        "travels",
+        "pune",
+        "hadapsar",
+        "manjri",
+        "manjr",
+        "manjari",
+        "swargate",
+        "viman",
+        "nagar",
+        "kothrud",
+        "deccan",
+        "shivajinagar",
+        "wakad",
+        "baner",
+        "hinjewadi",
+        "pcmc",
       ].filter(Boolean);
       items.push({
         id: pkg._id,
@@ -678,24 +712,52 @@ function TripSearchCombobox({
 
   // Tokenized smart matching:
   // e.g. "pune to ujjain" -> keywords ["pune", "ujjain"] -> matches items containing both!
-  // "ujjain" -> matches any tour containing Ujjain (Satara-Ujjain, Pune-Ujjain, etc.)
-  // "satara to ujjain" -> matches Satara-Ujjain
-  // "tours" / "tour" -> matches all tour packages
-  // "daily" -> matches all daily services
+  // "travels in manjr" / "travels in pune" -> matches all trips operating from Pune/Hadapsar/Manjri hub!
   const filteredItems = React.useMemo(() => {
     if (!search || !search.trim()) {
       return allItems;
     }
 
     const clean = (s: string) => (s || "").toLowerCase().replace(/[^a-z0-9\s]/g, " ");
-    const stopWords = new Set(["to", "from", "the", "a", "an", "in", "at", "by", "for", "with", "and", "via", "trip", "trips"]);
+    const stopWords = new Set(["to", "from", "the", "a", "an", "in", "at", "by", "for", "with", "and", "via", "trip", "trips", "best", "top", "near", "me"]);
     const rawTokens = clean(search).split(/\s+/).filter(Boolean);
     const keywords = rawTokens.filter((t) => !stopWords.has(t));
     const searchTokens = keywords.length > 0 ? keywords : rawTokens;
 
+    // Local hub tokens for Shailraj Travels' headquarters & Pune pickup network
+    const LOCAL_HUB_TOKENS = new Set([
+      "manjri", "manjr", "manjari", "hadapsar", "gadital", "magarpatta", "pune", 
+      "pcmc", "pimpri", "chinchwad", "swargate", "viman", "nagar", "kharadi", 
+      "wagholi", "wakad", "hinjewadi", "katraj", "bhosari", "kothrud", "deccan",
+      "baner", "aundh", "bavdhan", "shivajinagar", "shailraj"
+    ]);
+
+    const AGENCY_TRANSPORT_TOKENS = new Set([
+      "bus", "travels", "travel", "urbania", "coach", "sleeper", "traveller", 
+      "tempo", "minibus", "tour", "tours", "package", "packages", "yatra", "ac",
+      "agency", "operator", "cab", "car", "rental", "trip", "trips"
+    ]);
+
+    const isPureLocalAgencyQuery = searchTokens.every(tok => 
+      LOCAL_HUB_TOKENS.has(tok) || 
+      AGENCY_TRANSPORT_TOKENS.has(tok) ||
+      [...LOCAL_HUB_TOKENS].some(h => tok.startsWith(h) || h.startsWith(tok))
+    );
+
     return allItems
       .map((item) => {
-        const matchesAll = searchTokens.every((tok) => item.searchableText.includes(tok));
+        let matchesAll = false;
+        if (isPureLocalAgencyQuery) {
+          matchesAll = true;
+        } else {
+          matchesAll = searchTokens.every((tok) => {
+            if (item.searchableText.includes(tok)) return true;
+            if (LOCAL_HUB_TOKENS.has(tok) || [...LOCAL_HUB_TOKENS].some(h => tok.startsWith(h) || h.startsWith(tok))) return true;
+            if (AGENCY_TRANSPORT_TOKENS.has(tok)) return true;
+            return false;
+          });
+        }
+
         if (!matchesAll) return null;
 
         let score = 0;
