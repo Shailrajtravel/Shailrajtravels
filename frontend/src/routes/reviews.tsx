@@ -48,13 +48,6 @@ function ReviewsPage() {
     name: "Shailraj Travels",
     url: "https://www.shailrajtravels.com",
     telephone: businessConfig.supportPhone,
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "5.0",
-      reviewCount: businessConfig.reviewCount || "23",
-      bestRating: "5",
-      worstRating: "1",
-    },
     review: fallbackGoogleReviews.map((rev) => ({
       "@type": "Review",
       author: {

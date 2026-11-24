@@ -143,11 +143,6 @@ function PilgrimageToursFromPunePage() {
       postalCode: "412307",
       addressCountry: "IN",
     },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: businessConfig.reviewRating || "5.0",
-      reviewCount: businessConfig.reviewCount || "12",
-    },
     knowsAbout: [
       "Pilgrimage Tours from Pune",
       "Ashtavinayak Yatra",

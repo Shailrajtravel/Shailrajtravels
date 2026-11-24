@@ -34,13 +34,6 @@ export function generateLocalBusinessSchema() {
     url: "https://www.shailrajtravels.com",
     telephone: businessConfig.supportPhone,
     priceRange: "₹₹",
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: businessConfig.reviewRating || "5.0",
-      reviewCount: businessConfig.reviewCount || "12",
-      bestRating: "5",
-      worstRating: "1",
-    },
     address: {
       "@type": "PostalAddress",
       streetAddress: "Gopal Patti, Manjri Budruk, Hadapsar",

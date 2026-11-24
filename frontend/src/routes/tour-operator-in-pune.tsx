@@ -99,11 +99,6 @@ function TourOperatorInPunePage() {
       postalCode: "412307",
       addressCountry: "IN",
     },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: businessConfig.reviewRating || "5.0",
-      reviewCount: businessConfig.reviewCount || "12",
-    },
     areaServed: [
       { "@type": "City", name: "Pune" },
       { "@type": "City", name: "Pimpri-Chinchwad" },

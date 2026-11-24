@@ -270,13 +270,12 @@ function PuneToUjjainBusTravelsPage() {
       <SchemaMarkup
         schema={[
           generateBusTripSchema(),
-          generateLocalBusinessSchema(),
           generateFAQSchema(faqs),
           generateBreadcrumbSchema([
             { name: "Home", url: "https://www.shailrajtravels.com" },
             { name: "Tours", url: "https://www.shailrajtravels.com/tours" },
             {
-              name: "Pune to Ujjain Tour Package",
+              name: "Pune to Ujjain Bus Travels",
               url: "https://www.shailrajtravels.com/pune-to-ujjain-bus-travels",
             },
           ]),

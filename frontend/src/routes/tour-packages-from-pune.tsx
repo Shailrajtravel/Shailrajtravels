@@ -159,11 +159,6 @@ function TourPackagesFromPunePage() {
       postalCode: "412307",
       addressCountry: "IN",
     },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: businessConfig.reviewRating || "5.0",
-      reviewCount: businessConfig.reviewCount || "12",
-    },
   };
 
   const faqSchema = {

@@ -61,13 +61,6 @@ function AboutEntityPage() {
       jobTitle: "Co-Founder & Operations Director",
       image: "https://www.shailrajtravels.com/images/authors/shaila-mayur-patil.jpg",
     },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "5.0",
-      reviewCount: "25",
-      bestRating: "5",
-      worstRating: "1",
-    },
     address: {
       "@type": "PostalAddress",
       addressLocality: "Pune",

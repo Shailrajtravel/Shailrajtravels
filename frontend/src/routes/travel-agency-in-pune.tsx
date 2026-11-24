@@ -126,11 +126,6 @@ function TravelAgencyInPunePage() {
         closes: "23:59",
       },
     ],
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: businessConfig.reviewRating || "5.0",
-      reviewCount: businessConfig.reviewCount || "12",
-    },
     areaServed: [
       { "@type": "City", name: "Pune" },
       { "@type": "City", name: "Pimpri-Chinchwad" },
