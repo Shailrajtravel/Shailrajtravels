@@ -21,7 +21,7 @@ if (fs.existsSync(envPath)) {
 import { compression } from "vite-plugin-compression2";
 import { visualizer } from "rollup-plugin-visualizer";
 
-export default defineConfig({
+export default (defineConfig as any)({
   nitro: {
     preset: "cloudflare-pages",
     routeRules: {
