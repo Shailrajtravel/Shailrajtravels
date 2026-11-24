@@ -35,9 +35,24 @@ export default defineConfig({
           "Cache-Control": "public, max-age=60, s-maxage=600, stale-while-revalidate=86400",
         },
       },
+      "/tours": {
+        headers: {
+          "Cache-Control": "public, max-age=60, s-maxage=600, stale-while-revalidate=86400",
+        },
+      },
       "/tours/**": {
         headers: {
           "Cache-Control": "public, max-age=60, s-maxage=600, stale-while-revalidate=86400",
+        },
+      },
+      "/images/**": {
+        headers: {
+          "Cache-Control": "public, max-age=604800, s-maxage=2592000, stale-while-revalidate=86400",
+        },
+      },
+      "/icons/**": {
+        headers: {
+          "Cache-Control": "public, max-age=604800, s-maxage=2592000, stale-while-revalidate=86400",
         },
       },
       "/blog/**": {
@@ -131,6 +146,8 @@ export default defineConfig({
       },
     },
     build: {
+      cssMinify: true,
+      target: "es2022",
       rollupOptions: {
         external: ["@aws-sdk/client-s3"],
       },

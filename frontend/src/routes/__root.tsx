@@ -161,6 +161,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         { name: "theme-color", content: "#10A34A" },
       ],
       links: [
+        { rel: "preconnect", href: "https://res.cloudinary.com", crossOrigin: "anonymous" },
+        { rel: "dns-prefetch", href: "https://res.cloudinary.com" },
         { rel: "manifest", href: "/manifest.webmanifest?v=5" },
         { rel: "apple-touch-icon", href: "/icons/web-logo-apple-touch-icon.png?v=5" },
         { rel: "stylesheet", href: appCss },

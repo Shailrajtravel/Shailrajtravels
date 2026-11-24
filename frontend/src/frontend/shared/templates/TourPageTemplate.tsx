@@ -96,7 +96,8 @@ export function TourPageTemplate({ data, recommendedVehicles = [] }: TourPageTem
                   containerClassName="w-full h-auto"
                   className="w-full h-auto object-cover block"
                   loading="eager"
-                  autoOptimizeCloudinary={false}
+                  optimizedWidth={720}
+                  autoOptimizeCloudinary={true}
                 />
               </div>
               {/* Desktop Poster / Banner */}
@@ -107,8 +108,8 @@ export function TourPageTemplate({ data, recommendedVehicles = [] }: TourPageTem
                   containerClassName="w-full h-full"
                   className="w-full h-full object-cover block"
                   loading="eager"
-                  optimizedWidth={1920}
-                  autoOptimizeCloudinary={false}
+                  optimizedWidth={1600}
+                  autoOptimizeCloudinary={true}
                 />
               </div>
             </>
@@ -120,8 +121,8 @@ export function TourPageTemplate({ data, recommendedVehicles = [] }: TourPageTem
                 containerClassName="w-full h-full"
                 className="w-full h-full object-cover block"
                 loading="eager"
-                optimizedWidth={1920}
-                autoOptimizeCloudinary={false}
+                optimizedWidth={1600}
+                  autoOptimizeCloudinary={true}
               />
             </div>
           )}

@@ -26,7 +26,7 @@ export function LazyImage({
   className,
   containerClassName,
   skeletonClassName,
-  fallbackSrc = "/images/jyotirlinga.jpg",
+  fallbackSrc = "/images/jyotirlinga.webp",
   autoOptimizeCloudinary = true,
   optimizedWidth = 800,
   decoding = "async",

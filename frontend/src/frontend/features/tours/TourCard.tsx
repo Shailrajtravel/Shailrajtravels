@@ -48,8 +48,8 @@ export function TourCard({ tour, onOpenDetails, onBookSeat, t }: TourCardProps) 
             alt={tour.title}
             width={400}
             height={136}
-            optimizedWidth={1200}
-            autoOptimizeCloudinary={false}
+            optimizedWidth={480}
+            autoOptimizeCloudinary={true}
             className="w-full h-full object-cover group-hover/header:scale-105 transition-transform duration-500 ease-out"
           />
           {/* Duration Badge */}
@@ -69,8 +69,8 @@ export function TourCard({ tour, onOpenDetails, onBookSeat, t }: TourCardProps) 
             alt={tour.title}
             width={400}
             height={136}
-            optimizedWidth={1200}
-            autoOptimizeCloudinary={false}
+            optimizedWidth={480}
+            autoOptimizeCloudinary={true}
             className="w-full h-full object-cover group-hover/header:scale-105 transition-transform duration-500 ease-out"
           />
           {/* Duration Badge */}

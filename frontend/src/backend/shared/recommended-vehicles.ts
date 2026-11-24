@@ -34,7 +34,7 @@ export const DEFAULT_RECOMMENDED_VEHICLES: VehicleItem[] = [
       "USB Mobile Charging at Every Row",
       "Sanitised Clean Luxury Cabin"
     ],
-    image: "/images/vehicles/force-urbania-15-seater.jpg",
+    image: "/images/vehicles/force-urbania-15-seater.webp",
     order: 0,
   },
   {
@@ -53,7 +53,7 @@ export const DEFAULT_RECOMMENDED_VEHICLES: VehicleItem[] = [
       "Fuel, Tolls & Parking Included",
       "Clean & Sanitised Cab"
     ],
-    image: "/images/vehicles/innova-crysta.jpg",
+    image: "/images/vehicles/innova-crysta.webp",
     order: 1,
   },
   {
@@ -72,7 +72,7 @@ export const DEFAULT_RECOMMENDED_VEHICLES: VehicleItem[] = [
       "Fuel, Tolls & Parking Included",
       "Well-Maintained Sanitised Vehicle"
     ],
-    image: "/images/vehicles/maruti-ertiga.jpg",
+    image: "/images/vehicles/maruti-ertiga.webp",
     order: 2,
   },
   {
@@ -91,7 +91,7 @@ export const DEFAULT_RECOMMENDED_VEHICLES: VehicleItem[] = [
       "Fuel, Tolls & Parking Included",
       "Clean & Sanitised Cab"
     ],
-    image: "/images/vehicles/swift-dzire.jpg",
+    image: "/images/vehicles/swift-dzire.webp",
     order: 3,
   },
   {
@@ -110,7 +110,7 @@ export const DEFAULT_RECOMMENDED_VEHICLES: VehicleItem[] = [
       "Fuel, Tolls & Parking Included",
       "Smooth Expressway Ride"
     ],
-    image: "/images/vehicles/force-urbania-12-seater.jpg",
+    image: "/images/vehicles/force-urbania-12-seater.webp",
     order: 4,
   },
 ];
