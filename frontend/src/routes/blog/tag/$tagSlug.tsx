@@ -1,5 +1,5 @@
 import React from 'react';
-import { createFileRoute, Link, notFound } from '@tanstack/react-router';
+import { createFileRoute, Link, notFound, redirect } from '@tanstack/react-router';
 import { generateSEO, generateHreflangLinks } from '@/backend/features/seo';
 import { blogPosts } from '@/frontend/shared/data/blogs';
 import { Navbar } from '@/frontend/core/Navbar';
@@ -9,15 +9,36 @@ import { Calendar, ChevronRight } from 'lucide-react';
 
 export const Route = createFileRoute("/blog/tag/$tagSlug")({
   loader: ({ params }) => {
-    const decodedSlug = params.tagSlug.replace(/-/g, " ").toLowerCase();
+    const rawSlug = (params.tagSlug || '').trim();
+    const cleanTagSlug = rawSlug.replace(/[\.\/\s]+$/g, '').toLowerCase();
+
+    // Catch literal template strings or empty slugs
+    if (!cleanTagSlug || cleanTagSlug === '$tagslug') {
+      throw redirect({ to: '/blog', statusCode: 301 });
+    }
+
+    // Redirect if param had trailing period or trailing characters (e.g. ac-force-urbania.)
+    if (rawSlug !== cleanTagSlug && !rawSlug.includes('$')) {
+      throw redirect({
+        to: `/blog/tag/${cleanTagSlug}` as any,
+        statusCode: 301,
+      });
+    }
+
+    const decodedSlug = cleanTagSlug.replace(/-/g, " ");
 
     // Find matching posts where any tag matches the decoded slug
-    const posts = blogPosts.filter((p) => p.tags.some((t) => t.toLowerCase() === decodedSlug));
+    const posts = blogPosts.filter((p) =>
+      p.tags.some((t) => t.toLowerCase().trim() === decodedSlug)
+    );
 
-    if (posts.length === 0) throw notFound();
+    if (posts.length === 0) {
+      // Rather than throwing 404, gracefully 301 redirect to /blog hub
+      throw redirect({ to: '/blog', statusCode: 301 });
+    }
 
     // Find exact original casing if possible
-    const originalTag = posts[0].tags.find((t) => t.toLowerCase() === decodedSlug) || decodedSlug;
+    const originalTag = posts[0].tags.find((t) => t.toLowerCase().trim() === decodedSlug) || decodedSlug;
 
     return {
       posts,

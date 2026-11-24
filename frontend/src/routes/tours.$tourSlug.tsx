@@ -41,6 +41,9 @@ export const Route = createFileRoute("/tours/$tourSlug")({
   }),
   loaderDeps: ({ search: { lang } }) => ({ lang }),
   loader: async ({ params, deps: { lang } }) => {
+    if (!params.tourSlug || params.tourSlug === '$tourSlug' || params.tourSlug === 'undefined') {
+      throw redirect({ to: '/tours', statusCode: 301 });
+    }
     if (LEGACY_TOUR_REDIRECTS[params.tourSlug]) {
       throw redirect({
         to: LEGACY_TOUR_REDIRECTS[params.tourSlug] as any,

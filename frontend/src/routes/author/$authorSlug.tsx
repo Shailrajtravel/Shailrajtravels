@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { SchemaMarkup } from '@/frontend/shared/components/SchemaMarkup';
 import React from 'react';
-import { createFileRoute, Link, notFound } from '@tanstack/react-router';
+import { createFileRoute, Link, notFound, redirect } from '@tanstack/react-router';
 import { generateSEO } from '@/backend/features/seo';
 import { authors } from '@/frontend/shared/data/authors';
 import { blogPosts } from '@/frontend/shared/data/blogs';
@@ -9,6 +9,9 @@ import { BookOpen, MapPin, Award } from 'lucide-react';
 
 export const Route = createFileRoute("/author/$authorSlug")({
   loader: ({ params }) => {
+    if (!params.authorSlug || params.authorSlug === '$authorSlug' || params.authorSlug === 'undefined') {
+      throw redirect({ to: '/authors', statusCode: 301 });
+    }
     const author = authors[params.authorSlug] || (params.authorSlug === "shailesh-raj" ? authors["mayur-patil"] : authors["mayur-patil"]);
     if (!author) throw notFound();
     return author;

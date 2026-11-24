@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React from 'react';
-import { createFileRoute, Link, notFound } from '@tanstack/react-router';
+import { createFileRoute, Link, notFound, redirect } from '@tanstack/react-router';
 import { generateSEO, generateHreflangLinks } from '@/backend/features/seo';
 import { blogPosts, blogAuthors } from '@/frontend/shared/data/blogs';
 import { Navbar } from '@/frontend/core/Navbar';
@@ -10,8 +10,11 @@ import { Calendar, ChevronRight, User } from 'lucide-react';
 
 export const Route = createFileRoute("/blog/author/$authorSlug")({
   loader: ({ params }) => {
+    if (!params.authorSlug || params.authorSlug === '$authorSlug' || params.authorSlug === 'undefined') {
+      throw redirect({ to: '/authors', statusCode: 301 });
+    }
     const author = blogAuthors[params.authorSlug];
-    if (!author) throw notFound();
+    if (!author) throw redirect({ to: "/authors", statusCode: 301 });
 
     const posts = blogPosts.filter((p) => p.authorId === params.authorSlug);
 
