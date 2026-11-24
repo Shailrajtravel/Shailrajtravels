@@ -29,7 +29,7 @@ export const blogPosts: BlogPost[] = [
     authorId: "mayur-patil",
     reviewerId: "shaila-mayur-patil",
     relatedTourSlugs: ["pune-to-ujjain-tour-package", "5-jyotirlinga-maharashtra-tour"],
-    relatedArticleSlugs: ["pune-to-ujjain-road-trip-itinerary", "pune-to-ashtavinayak-tour-guide-route-map-itinerary"],
+    relatedArticleSlugs: ["pune-to-ujjain-road-trip-itinerary", "ashtavinayak-darshan-from-pune"],
     featuredImage: "https://res.cloudinary.com/dquecn5qj/image/upload/v1789154040/blogs/spy42xnlvgry5xoznqzn.png",
     ogImage: "https://res.cloudinary.com/dquecn5qj/image/upload/v1789154040/blogs/spy42xnlvgry5xoznqzn.png",
     readingTimeMinutes: 10,
@@ -545,34 +545,37 @@ export const blogPosts: BlogPost[] = [
 <p>Contact <strong>Shailraj Travels</strong> to book your customized Pune to Ujjain & Omkareshwar Tour Package with verified pure-veg hotel stays and priority Darshan assistance.</p>
 </section>`
   },
-  {
-    slug: "pune-to-ashtavinayak-tour-guide-route-map-itinerary",
-    title: "Pune to Ashtavinayak Tour Guide: Route Map, Correct Temple Order, Distance & Cab Booking",
-    metaTitle: "Pune to Ashtavinayak Route Map & Distance: 8 Temples & Cabs",
-    metaDescription: "Complete Ashtavinayak route map with distance: Correct 8-temple order, temple-to-temple km chart, 2-3 day car itinerary, timings & AC cab fares from Pune.",
-    focusKeyword: "pune to ashtavinayak tour guide",
+    {
+    slug: "ashtavinayak-darshan-from-pune",
+    title: "Ashtavinayak Darshan from Pune: Complete 2 & 3 Days Itinerary, Route Map, Distance & Cab Packages",
+    metaTitle: "Ashtavinayak Darshan from Pune: 2-3 Day Route Map & Cost",
+    metaDescription: "Complete guide for Ashtavinayak Darshan from Pune: 8 temple order, 680 km route map, 2-day & 3-day itineraries, temple timings & AC cab booking fare chart.",
+    focusKeyword: "ashtavinayak darshan from pune",
     keywords: [
-      "pune to ashtavinayak tour guide",
-      "ashtavinayak route map",
-      "ashtavinayak ganpati map",
-      "ashtavinayak map",
-      "ashtavinayak route map with distance",
-      "theur to ozar ganpati distance",
+      "ashtavinayak darshan from pune",
       "ashtavinayak darshan from pune by car",
-      "ashtavinayak darshan sequence",
-      "ashtavinayak yatra from pune",
+      "ashtavinayak darshan from pune in 2 days",
+      "ashtavinayak darshan from pune in 3 days",
+      "ashtavinayak darshan from pune package",
+      "ashtavinayak darshan from pune price",
+      "ashtavinayak darshan from pune route map",
+      "ashtavinayak darshan from pune distance",
+      "ashtavinayak darshan route from pune with distance",
+      "ashtavinayak darshan sequence from pune",
+      "taxi for ashtavinayak darshan from pune",
+      "how many days required for ashtavinayak darshan from pune",
+      "ashtavinayak tour from pune cost",
       "ashtavinayak cab booking pune",
-      "8 ganpati darshan sequence",
-      "pune to ashtavinayak distance",
-      "ashtavinayak 2 day itinerary",
-      "lenyadri steps tips",
+      "ashtavinayak darshan total km from pune",
+      "theur to ozar ganpati distance",
+      "ashtavinayak darshan tour package from pune",
       "shailraj travels ashtavinayak"
-    ],
-    ogImageAlt: "Pune to Ashtavinayak Tour Guide - Shailraj Travels",
-    excerpt: "Authoritative Pune to Ashtavinayak Tour Guide: Discover the sacred traditional sequence, 650 km highway route map, 2-day vs 3-day itineraries, temple darshan timings, Lenyadri step tips, and luxury cab booking from Pune.",
+],
+    ogImageAlt: "Ashtavinayak Darshan from Pune Route Map and Cab Packages - Shailraj Travels",
+    excerpt: "The definitive guide to Ashtavinayak Darshan from Pune: Master the holy 8-temple sequence, 680 km highway route map, realistic 2-day and 3-day itineraries, temple darshan timings, Lenyadri 307-step tips, and verified AC cab rental packages from Pune.",
     category: "Travel Guides",
     tags: [
-      "Pune to Ashtavinayak",
+      "Ashtavinayak Darshan from Pune",
       "Ashtavinayak Yatra",
       "Ganpati Darshan",
       "Maharashtra Pilgrimage",
@@ -580,570 +583,624 @@ export const blogPosts: BlogPost[] = [
       "Cab Booking Pune",
       "Innova Crysta",
       "AC Force Urbania"
-    ],
+],
     authorId: "mayur-patil",
     reviewerId: "shaila-mayur-patil",
-    relatedTourSlugs: ["pune-to-ashtavinayak-darshan", "pune-mumbai-to-3-jyotirlinga-darshan"],
-    relatedArticleSlugs: ["pune-to-ujjain-tour-guide-mahakal-darshan-itinerary"],
+    relatedTourSlugs: ["pune-to-ashtavinayak-darshan","5-jyotirlinga-maharashtra-tour"],
+    relatedArticleSlugs: ["pune-to-ujjain-tour-guide-mahakal-darshan-itinerary","pune-to-ujjain-road-trip-itinerary"],
     featuredImage: "https://res.cloudinary.com/dquecn5qj/image/upload/v1792764848/blogs/avej2lsveggdqan1spor.png",
     ogImage: "https://res.cloudinary.com/dquecn5qj/image/upload/v1792764848/blogs/avej2lsveggdqan1spor.png",
-    readingTimeMinutes: 12,
-    publishedAt: "2026-10-15T06:00:00.000Z",
-    updatedAt: "2026-10-20T12:00:00.000Z",
-    lastReviewedAt: "2026-10-20T12:00:00.000Z",
+    readingTimeMinutes: 14,
+    publishedAt: "2026-11-24T06:00:00.000Z",
+    updatedAt: "2026-11-24T18:30:00.000Z",
+    lastReviewedAt: "2026-11-24T18:30:00.000Z",
     tableOfContents: [
-      { id: "trip-snapshot", title: "Pune to Ashtavinayak at a Glance (Quick Facts)", level: 2 },
-      { id: "correct-sequence", title: "The Sacred Traditional Sequence: Why Order Matters", level: 2 },
-      { id: "temples-matrix", title: "Complete 8 Temples Reference Matrix (Distance & Timings)", level: 2 },
-      { id: "inter-temple-distance", title: "Temple-to-Temple Distance & Route Chart (KM Matrix)", level: 2 },
-      { id: "2-day-itinerary", title: "Recommended 2-Day Ashtavinayak Circuit from Pune", level: 2 },
-      { id: "3-day-senior-itinerary", title: "Relaxed 3-Day Itinerary for Senior Citizens & Families", level: 2 },
-      { id: "lenyadri-guide", title: "Conquering Lenyadri Caves: Steps, Palanquin (Doli) & Monkey Safety", level: 2 },
-      { id: "cab-rates-fleet", title: "Pune to Ashtavinayak Cab Booking, Rates & Recommended Fleet", level: 2 },
-      { id: "food-stay-packing", title: "Where to Stay, Authentic Maharashtrian Food & Packing Checklist", level: 2 },
-      { id: "darshan-rules", title: "Essential Temple Darshan Rules, Puja Timings & Dress Code", level: 2 },
-      { id: "faqs", title: "Frequently Asked Questions (FAQs)", level: 2 }
-    ],
+      {
+            "id": "trip-snapshot",
+            "title": "Ashtavinayak Darshan from Pune: Essential Facts & Quick Answer",
+            "level": 2
+      },
+      {
+            "id": "traditional-sequence",
+            "title": "The Sacred Traditional Sequence: Why Order Matters",
+            "level": 2
+      },
+      {
+            "id": "temples-reference-table",
+            "title": "Complete 8 Temples Reference Matrix (District, Deity & Distance)",
+            "level": 2
+      },
+      {
+            "id": "route-map-distance-matrix",
+            "title": "Ashtavinayak Darshan Route Map & Temple Distance Chart (680 KM)",
+            "level": 2
+      },
+      {
+            "id": "2-day-itinerary-pune",
+            "title": "Recommended 2-Day Ashtavinayak Darshan Itinerary from Pune",
+            "level": 2
+      },
+      {
+            "id": "3-day-itinerary-pune",
+            "title": "Relaxed 3-Day Itinerary for Senior Citizens & Families",
+            "level": 2
+      },
+      {
+            "id": "car-rental-cab-packages",
+            "title": "Ashtavinayak Darshan from Pune by Car: Cab Rates & Package Cost",
+            "level": 2
+      },
+      {
+            "id": "lenyadri-steps-senior-guide",
+            "title": "Conquering Lenyadri Caves: 307 Steps, Doli Rates & Senior Advice",
+            "level": 2
+      },
+      {
+            "id": "where-to-stay-satvik-food",
+            "title": "Where to Stay Overnight & Pure Vegetarian Dining on the Route",
+            "level": 2
+      },
+      {
+            "id": "temple-rules-dress-code",
+            "title": "Temple Rules, Puja Timings, Dress Code & Best Season to Visit",
+            "level": 2
+      },
+      {
+            "id": "why-choose-shailraj",
+            "title": "Why Devotees Choose Shailraj Travels Pune for Ashtavinayak Yatra",
+            "level": 2
+      },
+      {
+            "id": "faqs",
+            "title": "Frequently Asked Questions About Ashtavinayak Darshan from Pune",
+            "level": 2
+      }
+],
     faqs: [
       {
-        question: "What is the total road distance and driving duration for Ashtavinayak from Pune?",
-        answer: "The complete Ashtavinayak pilgrimage circuit from Pune covers approximately 650 to 720 km depending on the route taken and whether you return to Morgaon to complete the parikrama. Driving time takes roughly 15 to 18 hours spread across 2 days by private cab or car."
+            "question": "How many days are required for Ashtavinayak Darshan from Pune?",
+            "answer": "Most devotees complete the Ashtavinayak Darshan from Pune in 2 days (express pace) or 3 days (relaxed family pace). Covering 8 temples spread over 650 to 700 km requires roughly 16 to 18 hours of total road driving plus temple darshan times. For families traveling with senior citizens or children, a 3-day tour is strongly recommended to avoid travel fatigue."
       },
       {
-        question: "What is the correct traditional sequence of the 8 Ashtavinayak temples?",
-        answer: "According to the Ganesha Purana, the sacred sequence is: 1. Mayureshwar (Morgaon) → 2. Siddhivinayak (Siddhatek) → 3. Ballaleshwar (Pali) → 4. Varadvinayak (Mahad) → 5. Chintamani (Theur) → 6. Girijatmaj (Lenyadri) → 7. Vighnahar (Ozar) → 8. Mahaganapati (Ranjangaon). To complete the yatra, pilgrims must return to Mayureshwar (Morgaon) for the final prayer."
+            "question": "What is the total road distance for Ashtavinayak Darshan from Pune?",
+            "answer": "The total driving distance for the complete Ashtavinayak Darshan circuit from Pune is between 650 km and 720 km, depending on your pickup location in Pune (Hadapsar, Kothrud, Wakad, or Viman Nagar) and whether you return to Shri Mayureshwar at Morgaon to perform the traditional ritual completion."
       },
       {
-        question: "Can the Ashtavinayak Yatra be completed in 1 day from Pune?",
-        answer: "Completing all 8 temples in 1 single day is practically exhausting and not recommended for families. Covering 650+ km of state highways while visiting 8 separate sanctums requires at least 2 full days (or 3 days for senior citizens) to ensure unhurried darshan and safe driving."
+            "question": "What is the cost of Ashtavinayak Darshan from Pune package by cab?",
+            "answer": "A private 2-day Ashtavinayak Darshan cab package from Pune starts at approximately ₹11,500 for a 4-seater AC Sedan (Maruti Dzire), ₹14,000 for a 6-seater AC SUV (Maruti Ertiga), ₹17,500 for a Toyota Innova Crysta, and ₹24,000 to ₹28,000 for a 13/17-seater luxury AC Force Urbania. All-inclusive packages by Shailraj Travels cover fuel, driver allowance, toll taxes, and state parking."
       },
       {
-        question: "How many steps are there at Lenyadri Girijatmaj, and is a palanquin (doli) available?",
-        answer: "Lenyadri Girijatmaj is set inside Buddhist Cave #7 and requires climbing between 307 and 338 stone steps carved into the cliff. For senior citizens, disabled devotees, and young children, authorized palanquins (doli / palkhi) operated by local porters are readily available at the foothills for ₹1,200 to ₹1,800 return."
+            "question": "What is the correct 8-temple sequence for Ashtavinayak Darshan from Pune?",
+            "answer": "According to the holy Ganesha Purana, the sacred sequence is: 1. Shri Mayureshwar (Morgaon) → 2. Shri Siddhivinayak (Siddhatek) → 3. Shri Ballaleshwar (Pali) → 4. Shri Varadvinayak (Mahad) → 5. Shri Chintamani (Theur) → 6. Shri Girijatmaj (Lenyadri) → 7. Shri Vighnahar (Ozar) → 8. Shri Mahaganapati (Ranjangaon). To complete the yatra, pilgrims traditionally return to Morgaon to offer thanksgiving."
       },
       {
-        question: "Which vehicle is best suited for an Ashtavinayak yatra from Pune?",
-        answer: "For families of 4-6 passengers, a Toyota Innova Crysta or Maruti Ertiga provides excellent highway suspension on ghat sections. For larger families and group yatras of 10-17 passengers, the luxury AC Force Urbania or Tempo Traveller from Shailraj Travels is the gold standard, offering pushback ergonomic seats, dual AC, and wide scenic windows."
+            "question": "Can we do Ashtavinayak Darshan from Pune by car comfortably?",
+            "answer": "Yes, doing Ashtavinayak Darshan by car or private cab is by far the most comfortable and flexible way. Unlike crowded public buses with fixed schedules, a private cab allows door-to-door Pune pickup, customized meal and restroom breaks, prompt arrival at morning aartis, and direct drop at temple gates."
       },
       {
-        question: "Where should we stay overnight during a 2-day Ashtavinayak tour?",
-        answer: "The most strategic night halt for a 2-day tour is Ozar or Narayangaon. The Shri Vighnahar Bhakta Niwas at Ozar offers clean, peaceful riverside accommodation. Alternatively, family hotels in Narayangaon or Chakan provide modern amenities and place you 15 minutes away from early morning Lenyadri darshan."
+            "question": "How many steps are there at Lenyadri, and are palanquins (doli) available?",
+            "answer": "Shri Girijatmaj at Lenyadri is situated inside Cave #7 of a Buddhist rock-cut hill complex and requires climbing 307 stone steps (some counts say 338). For senior citizens, heart patients, and young kids, authorized palanquins (doli / palkhi) operated by 4 local porters are readily available at the base for ₹1,200 to ₹1,800 return."
       },
       {
-        question: "Are there strict dress codes at the Ashtavinayak temples?",
-        answer: "General darshan allows modest Indian or Western attire (kurtas, sarees, formal shirts and trousers). Shorts, sleeveless tops, and mini-skirts are discouraged. For devotees performing specialized Abhishek or puja in the Garbhagriha, traditional attire (dhoti/soval for men, saree for women) is mandatory."
+            "question": "Where is the best place to stay overnight during a 2-day Ashtavinayak yatra from Pune?",
+            "answer": "The most strategic midway night halt for a 2-day tour from Pune is Ozar or Junnar/Narayangaon. Shri Vighnahar Bhakta Niwas at Ozar provides clean, affordable rooms right by the river Kukadi. Staying near Ozar allows you to tackle the Lenyadri steps early at 7:00 AM on Day 2 before the rock stairs get hot."
       },
       {
-        question: "What is the best time of year to undertake the Ashtavinayak yatra?",
-        answer: "The ideal months are from September to March, encompassing Bhadrapada Ganeshotsav, winter, and Maghi Ganeshotsav. Monsoon (July to August) offers scenic green landscapes around Pali and Lenyadri, but caution is needed due to slippery temple steps."
+            "question": "What is the distance between Theur and Ozar Ganpati?",
+            "answer": "The road distance from Theur (Shri Chintamani Ganpati) to Ozar (Shri Vighnahar Ganpati) is approximately 95 km via the Pune–Nashik National Highway (NH 60). By private car or cab, the drive takes about 2 hours 15 minutes to 2 hours 30 minutes via Wagholi, Bhosari, Chakan, and Narayangaon."
+      },
+      {
+            "question": "Are there special dress codes or VIP passes at Ashtavinayak temples?",
+            "answer": "Normal darshan allows modest attire (kurtas, sarees, trousers, and shirts). For entering the inner sanctum (Garbhagriha) to perform specialized Abhishek or Pooja, men must wear a traditional Dhoti (Soval) and women must wear a Saree. Most temples offer quick darshan or VIP entry passes (ranging from ₹100 to ₹250) during busy weekend festivals."
+      },
+      {
+            "question": "How do I book an Ashtavinayak Darshan cab from Pune with Shailraj Travels?",
+            "answer": "You can book directly by calling Shailraj Travels at +91 97644 13556 or sending a WhatsApp inquiry with your preferred dates, pickup area in Pune, and group size. We provide guaranteed on-time door-to-door pickups across Hadapsar, Kothrud, Viman Nagar, Hinjewadi, Wakad, Baner, and Swargate."
       }
-    ],
+],
     content: `<section id="trip-snapshot">
-<h2>Pune to Ashtavinayak at a Glance: Essential Trip Facts</h2>
-<p>The <strong>Ashtavinayak Yatra</strong> (अष्टविनायक यात्रा) is Maharashtra's most celebrated pilgrimage circuit, connecting eight ancient, self-manifested (<em>Swayambhu</em>) temples of Lord Ganesha scattered across Pune, Raigad, and Ahmednagar districts. Each idol possesses distinct mythological origins documented in the venerated <em>Ganesha Purana</em> and <em>Mudgala Purana</em>.</p>
-<p>Undertaking this sacred parikrama from Pune allows pilgrims to complete the 650–720 km circuit comfortably in <strong>2 to 3 days</strong>. To help you plan an effortless, spiritually enriching journey, our veteran pilgrimage captains at <strong>Shailraj Travels</strong> have compiled this comprehensive, authoritative field guide.</p>
+<h2>Ashtavinayak Darshan from Pune: Essential Facts & Quick Answer</h2>
+<p>Planning your <strong>Ashtavinayak Darshan from Pune</strong> is one of the most auspicious, spiritually uplifting journeys you can undertake in Maharashtra. Connecting eight sacred, self-manifested (<em>Swayambhu</em>) temples of Lord Ganesha scattered across Pune, Raigad, and Ahmednagar districts, this ancient parikrama draws millions of devotees seeking blessings, peace, and removal of life obstacles (<em>Vighnaharta</em>).</p>
 
-<div class="my-6 p-5 bg-emerald-50/80 border-2 border-emerald-300 rounded-2xl not-prose text-slate-800">
-  <div class="flex items-center gap-2 mb-2">
-    <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-emerald-600 text-white text-xs font-bold">✓</span>
-    <h3 class="text-base sm:text-lg font-bold text-slate-900 m-0">Quick Answer: Distance, Duration & Sequence</h3>
+<div class="my-6 p-6 bg-emerald-50/90 border-2 border-emerald-400 rounded-3xl not-prose text-slate-800 shadow-sm">
+  <div class="flex items-center gap-2.5 mb-3">
+    <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-emerald-600 text-white text-sm font-bold shadow-sm">✓</span>
+    <h3 class="text-lg sm:text-xl font-bold text-slate-900 m-0">Quick Answer: Distance, Duration & Best Route</h3>
   </div>
-  <p class="text-sm leading-relaxed text-slate-700 mb-3">
-    The total road distance from Pune for the complete 8-temple Ashtavinayak Darshan circuit is approximately <strong>650 to 700 km</strong>. It takes <strong>2 to 3 days</strong> by car or private cab. By holy tradition, the yatra must start and end at <strong>Mayureshwar (Morgaon)</strong>.
+  <p class="text-sm sm:text-base leading-relaxed text-slate-700 mb-3">
+    The total road distance for a complete <strong>Ashtavinayak Darshan from Pune</strong> is approximately <strong>650 km to 700 km</strong>. It is comfortably completed in <strong>2 days</strong> (express road trip) or <strong>3 days</strong> (relaxed family and senior-citizen pace) by private car or AC cab. According to sacred scriptures (<em>Ganesha Purana</em>), the pilgrimage must begin and conclude at <strong>Shri Mayureshwar in Morgaon</strong>.
   </p>
-  <div class="text-xs text-slate-600 bg-white p-3 rounded-xl border border-emerald-200">
-    <strong>Traditional 8-Temple Sequence:</strong> 1. Morgaon (68 km) → 2. Siddhatek (95 km) → 3. Pali (210 km) → 4. Mahad (40 km) → 5. Theur (115 km) → 6. Lenyadri (95 km, 338 steps) → 7. Ozar (15 km) → 8. Ranjangaon (65 km) → Return to Morgaon.
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs sm:text-sm text-slate-700 bg-white p-4 rounded-2xl border border-emerald-200">
+    <div><span class="text-slate-400 block font-medium">Total Distance</span><strong class="text-slate-900 font-bold">650 – 700 km</strong></div>
+    <div><span class="text-slate-400 block font-medium">Ideal Duration</span><strong class="text-slate-900 font-bold">2 to 3 Days</strong></div>
+    <div><span class="text-slate-400 block font-medium">Starting Temple</span><strong class="text-emerald-700 font-bold">Morgaon (Mayureshwar)</strong></div>
+    <div><span class="text-slate-400 block font-medium">Night Halt</span><strong class="text-slate-900 font-bold">Ozar / Narayangaon</strong></div>
   </div>
 </div>
 
-<div class="not-prose my-8 bg-gradient-to-br from-slate-900 to-brand-blue-deep text-white rounded-3xl p-6 sm:p-8 shadow-xl border border-slate-800">
-<h3 class="text-xl font-bold font-display text-brand-green mb-4 flex items-center gap-2">
-  📍 Quick Travel Snapshot: Pune to Ashtavinayak Darshan
-</h3>
-<div class="grid grid-cols-2 sm:grid-cols-4 gap-6 text-sm">
-  <div>
-    <span class="text-slate-400 block text-xs uppercase tracking-wider">Total Circuit Distance</span>
-    <strong class="text-white text-lg font-bold">~650 – 720 km</strong>
+<div class="my-8 text-center not-prose">
+  <div class="rounded-3xl overflow-hidden shadow-2xl border border-slate-200 bg-slate-950">
+    <img src="/images/ashtavinayak-route-map-infographic.svg" alt="Ashtavinayak Darshan from Pune Route Map with Distance and Sequence" title="Ashtavinayak Darshan from Pune Route Map - Shailraj Travels" class="w-full h-auto block" loading="lazy" width="1200" height="720" />
   </div>
-  <div>
-    <span class="text-slate-400 block text-xs uppercase tracking-wider">Optimal Duration</span>
-    <strong class="text-white text-lg font-bold">2 Days / 1 Night</strong>
-  </div>
-  <div>
-    <span class="text-slate-400 block text-xs uppercase tracking-wider">Total Shrines</span>
-    <strong class="text-white text-lg font-bold">8 Swayambhu Temples</strong>
-  </div>
-  <div>
-    <span class="text-slate-400 block text-xs uppercase tracking-wider">Start & End Shrine</span>
-    <strong class="text-white text-lg font-bold">Mayureshwar (Morgaon)</strong>
-  </div>
-  <div>
-    <span class="text-slate-400 block text-xs uppercase tracking-wider">Districts Covered</span>
-    <strong class="text-white text-lg font-bold">Pune, Raigad, Ahmednagar</strong>
-  </div>
-  <div>
-    <span class="text-slate-400 block text-xs uppercase tracking-wider">Ideal Months</span>
-    <strong class="text-white text-lg font-bold">September to March</strong>
-  </div>
-  <div>
-    <span class="text-slate-400 block text-xs uppercase tracking-wider">Recommended Vehicle</span>
-    <strong class="text-white text-lg font-bold">Innova Crysta / Urbania</strong>
-  </div>
-  <div>
-    <span class="text-slate-400 block text-xs uppercase tracking-wider">Physical Intensity</span>
-    <strong class="text-white text-lg font-bold">Easy (Moderate at Lenyadri)</strong>
-  </div>
+  <p class="text-xs text-slate-500 mt-2.5 italic">Official Ashtavinayak Darshan Route Map showing all 8 Ganesha temples, highway corridors (NH 65, NH 60, Mumbai-Pune Expressway), and temple-to-temple distances starting from Pune.</p>
 </div>
+
+<div class="not-prose my-8 bg-gradient-to-br from-slate-900 via-slate-950 to-brand-blue-deep text-white rounded-3xl p-6 sm:p-8 shadow-xl border border-slate-800">
+  <h3 class="text-xl font-bold font-display text-brand-green mb-4 flex items-center gap-2">
+    📍 Key Trip Snapshot: Ashtavinayak Darshan from Pune
+  </h3>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
+    <div class="bg-white/5 border border-white/10 rounded-2xl p-4">
+      <span class="text-brand-mist/70 text-xs block uppercase tracking-wider font-semibold">Total Road Distance</span>
+      <span class="text-lg font-bold text-white">~680 km (Complete Loop)</span>
+      <span class="text-xs text-slate-400 block mt-1">Starting & ending at your Pune doorstep</span>
+    </div>
+    <div class="bg-white/5 border border-white/10 rounded-2xl p-4">
+      <span class="text-brand-mist/70 text-xs block uppercase tracking-wider font-semibold">Recommended Duration</span>
+      <span class="text-lg font-bold text-white">2 Days (Standard) / 3 Days (Family)</span>
+      <span class="text-xs text-slate-400 block mt-1">Avoid 1-day rush for genuine spiritual peace</span>
+    </div>
+    <div class="bg-white/5 border border-white/10 rounded-2xl p-4">
+      <span class="text-brand-mist/70 text-xs block uppercase tracking-wider font-semibold">Primary Highways Used</span>
+      <span class="text-lg font-bold text-white">NH 65, NH 60 & Expressway</span>
+      <span class="text-xs text-slate-400 block mt-1">Smooth multi-lane highways with FASTag</span>
+    </div>
+    <div class="bg-white/5 border border-white/10 rounded-2xl p-4">
+      <span class="text-brand-mist/70 text-xs block uppercase tracking-wider font-semibold">Most Popular Vehicle</span>
+      <span class="text-lg font-bold text-white">Ertiga, Innova & Urbania</span>
+      <span class="text-xs text-slate-400 block mt-1">High ground clearance for rural bypasses</span>
+    </div>
+    <div class="bg-white/5 border border-white/10 rounded-2xl p-4">
+      <span class="text-brand-mist/70 text-xs block uppercase tracking-wider font-semibold">Best Visiting Months</span>
+      <span class="text-lg font-bold text-white">October to March</span>
+      <span class="text-xs text-slate-400 block mt-1">Pleasant weather; avoid peak summer heat</span>
+    </div>
+    <div class="bg-white/5 border border-white/10 rounded-2xl p-4">
+      <span class="text-brand-mist/70 text-xs block uppercase tracking-wider font-semibold">Booking Helpline</span>
+      <a href="tel:+919764413556" class="text-lg font-bold text-brand-green hover:underline block">+91 97644 13556</a>
+      <span class="text-xs text-slate-400 block mt-1">Shailraj Travels 24/7 Pilgrimage Desk</span>
+    </div>
+  </div>
 </div>
 </section>
 
-<section id="correct-sequence">
+<section id="traditional-sequence">
 <h2>The Sacred Traditional Sequence: Why Order Matters</h2>
-<p>Unlike ordinary holiday road trips where destinations can be visited randomly, the Ashtavinayak Yatra is a ritualistic <em>Maha-Pradakshina</em> (circumambulation). According to the Shastras, every pilgrim must initiate the yatra at <strong>Morgaon</strong> and conclude it by returning to <strong>Morgaon</strong> to offer concluding prayers (<em>Purna-Aahuti</em>).</p>
+<p>Unlike ordinary sightseeing excursions, the <strong>Ashtavinayak Darshan from Pune</strong> holds strict scriptural guidelines recorded in ancient Puranic texts. The word <em>Ashtavinayak</em> translates to "Eight Ganeshas". Each shrine represents a distinct mythological episode where Lord Ganesha appeared in a specific divine form to liberate his devotees and overcome demonic forces.</p>
 
-<div class="bg-amber-50 border-l-4 border-amber-500 p-5 rounded-r-xl my-6 text-slate-800">
-<h4 class="text-base font-bold text-amber-900 mb-1">📜 Canonical Shastra Sequence (Ganesha Purana Order):</h4>
-<ol class="list-decimal pl-5 space-y-1 text-sm font-medium">
-  <li><strong>Shri Mayureshwar (Morgaon)</strong> – Lord Ganesha riding a peacock; vanquisher of demon Sindhu.</li>
-  <li><strong>Shri Siddhivinayak (Siddhatek)</strong> – Rare right-sided trunk (Dakshinabhimukhi); deity worshipped by Lord Vishnu to destroy demons Madhu and Kaitabha.</li>
-  <li><strong>Shri Ballaleshwar (Pali)</strong> – Only Ganesha temple named after a devoted child (Ballal); east-facing murti with gemstone eyes.</li>
-  <li><strong>Shri Varadvinayak (Mahad)</strong> – The bestower of boons with an eternal flame (<em>Nandadeep</em>) continuously lit since 1892.</li>
-  <li><strong>Shri Chintamani (Theur)</strong> – Reliever of all mental anxieties and worries, situated at the confluence of rivers Mula and Mutha.</li>
-  <li><strong>Shri Girijatmaj (Lenyadri)</strong> – Only Ashtavinayak situated on a hill within a Buddhist rock-cut cave (Cave #7); child form born of Goddess Parvati (Girija).</li>
-  <li><strong>Shri Vighnahar (Ozar)</strong> – The vanquisher of impediments, decorated with a golden dome and surrounded by high fort-like stone ramparts.</li>
-  <li><strong>Shri Mahaganapati (Ranjangaon)</strong> – Ten-armed divine warrior form worshipped by Lord Shiva before slaying demon Tripurasura.</li>
-  <li><strong>Conclusive Return to Morgaon</strong> – Seeking final blessings to close the holy parikrama.</li>
-</ol>
-</div>
+<p>According to the <em>Ganesha Purana</em>, the sacred circuit must begin at <strong>Mayureshwar Temple in Morgaon</strong> and, after visiting the other seven temples across Maharashtra, pilgrims must return to <strong>Morgaon</strong> to perform a final pradakshina and prayer. Only then is the spiritual yatra considered complete and fructified (<em>Sankalpa Siddhi</em>).</p>
 
-<blockquote><strong>Traveler Pro-Tip on Sequence:</strong> While orthodox purists follow the strict scriptural zigzag sequence (which adds roughly 140 km of crisscrossing travel), most modern families and travel planners follow an optimized <strong>Geographical Pradakshina</strong> that groups temples by road corridors while retaining Morgaon as the supreme spiritual focal point. This saves 4-5 hours of driving fatigue.</blockquote>
-</section>
-
-<section id="temples-matrix">
-<h2>Complete 8 Temples Reference Matrix (Distance & Timings)</h2>
-<p>To help you navigate darshan windows, token rules, and road segments, here is our consolidated Ashtavinayak temple matrix:</p>
-
-<div class="overflow-x-auto my-6">
-<table class="w-full text-left border-collapse border border-slate-200 text-sm rounded-xl overflow-hidden shadow-sm">
-<thead>
-<tr class="bg-slate-100 text-brand-blue-deep font-bold">
-  <th class="p-3 border border-slate-200">#</th>
-  <th class="p-3 border border-slate-200">Temple & Deity</th>
-  <th class="p-3 border border-slate-200">Location & District</th>
-  <th class="p-3 border border-slate-200">Trunk Orientation</th>
-  <th class="p-3 border border-slate-200">Distance from Pune</th>
-  <th class="p-3 border border-slate-200">Temple Timings</th>
-  <th class="p-3 border border-slate-200">Key Legend</th>
-</tr>
-</thead>
-<tbody class="divide-y divide-slate-100">
-<tr class="hover:bg-slate-50">
-  <td class="p-3 font-bold text-brand-blue">1</td>
-  <td class="p-3 font-semibold">Mayureshwar</td>
-  <td class="p-3">Morgaon (Pune)</td>
-  <td class="p-3">Left</td>
-  <td class="p-3">65 km (SE)</td>
-  <td class="p-3">05:00 AM – 10:00 PM</td>
-  <td class="p-3">Slain demon Sindhu riding Mayura</td>
-</tr>
-<tr class="hover:bg-slate-50">
-  <td class="p-3 font-bold text-brand-blue">2</td>
-  <td class="p-3 font-semibold">Siddhivinayak</td>
-  <td class="p-3">Siddhatek (Ahmednagar)</td>
-  <td class="p-3 font-bold text-amber-700">Right (Siddhi)</td>
-  <td class="p-3">98 km (East)</td>
-  <td class="p-3">05:30 AM – 09:30 PM</td>
-  <td class="p-3">Vishnu gained siddhi to defeat Madhu-Kaitabha</td>
-</tr>
-<tr class="hover:bg-slate-50">
-  <td class="p-3 font-bold text-brand-blue">3</td>
-  <td class="p-3 font-semibold">Ballaleshwar</td>
-  <td class="p-3">Pali (Raigad)</td>
-  <td class="p-3">Left</td>
-  <td class="p-3">125 km (West)</td>
-  <td class="p-3">05:30 AM – 10:30 PM</td>
-  <td class="p-3">Devotion of child Ballal saved by Ganesha</td>
-</tr>
-<tr class="hover:bg-slate-50">
-  <td class="p-3 font-bold text-brand-blue">4</td>
-  <td class="p-3 font-semibold">Varadvinayak</td>
-  <td class="p-3">Mahad (Raigad)</td>
-  <td class="p-3">Left</td>
-  <td class="p-3">90 km (NW)</td>
-  <td class="p-3">06:00 AM – 09:00 PM</td>
-  <td class="p-3">Nandadeep lamp burning uninterruptedly since 1892</td>
-</tr>
-<tr class="hover:bg-slate-50">
-  <td class="p-3 font-bold text-brand-blue">5</td>
-  <td class="p-3 font-semibold">Chintamani</td>
-  <td class="p-3">Theur (Pune)</td>
-  <td class="p-3">Left</td>
-  <td class="p-3">27 km (East)</td>
-  <td class="p-3">06:00 AM – 10:00 PM</td>
-  <td class="p-3">Retrieved Chintamani jewel for Sage Kapila</td>
-</tr>
-<tr class="hover:bg-slate-50">
-  <td class="p-3 font-bold text-brand-blue">6</td>
-  <td class="p-3 font-semibold">Girijatmaj</td>
-  <td class="p-3">Lenyadri, Junnar (Pune)</td>
-  <td class="p-3">Left</td>
-  <td class="p-3">95 km (North)</td>
-  <td class="p-3">06:00 AM – 06:30 PM</td>
-  <td class="p-3">Mountain cave shrine atop 307 stone steps</td>
-</tr>
-<tr class="hover:bg-slate-50">
-  <td class="p-3 font-bold text-brand-blue">7</td>
-  <td class="p-3 font-semibold">Vighnahar</td>
-  <td class="p-3">Ozar, Junnar (Pune)</td>
-  <td class="p-3">Left</td>
-  <td class="p-3">85 km (North)</td>
-  <td class="p-3">05:00 AM – 11:00 PM</td>
-  <td class="p-3">Defeated Vighnasura; temple on river Kukadi</td>
-</tr>
-<tr class="hover:bg-slate-50">
-  <td class="p-3 font-bold text-brand-blue">8</td>
-  <td class="p-3 font-semibold">Mahaganapati</td>
-  <td class="p-3">Ranjangaon (Pune)</td>
-  <td class="p-3">Left</td>
-  <td class="p-3">52 km (NE)</td>
-  <td class="p-3">05:00 AM – 10:00 PM</td>
-  <td class="p-3">Shiva invoked 10-armed Ganesha against Tripurasura</td>
-</tr>
-</tbody>
-</table>
+<div class="my-6 p-5 bg-amber-50/80 border border-amber-300 rounded-2xl not-prose text-slate-800">
+  <h4 class="text-amber-900 font-bold text-base mb-2">📜 The Scriptural 8-Temple Order (Ganesha Purana):</h4>
+  <ol class="list-decimal pl-5 space-y-1 text-sm text-slate-700">
+    <li><strong>Shri Mayureshwar (Morgaon)</strong> — Where Lord Ganesha rode a peacock (Mayura) to defeat the demon Sindhu.</li>
+    <li><strong>Shri Siddhivinayak (Siddhatek)</strong> — Where Lord Vishnu received divine boons (Siddhis) to defeat demons Madhu and Kaitabha.</li>
+    <li><strong>Shri Ballaleshwar (Pali)</strong> — The only Vinayak named after a devoted child disciple, Ballal.</li>
+    <li><strong>Shri Varadvinayak (Mahad)</strong> — The bestower of all boons, housing an eternal oil lamp (Nanda Deep) burning since 1892.</li>
+    <li><strong>Shri Chintamani (Theur)</strong> — The dispeller of mental worries, where Ganesha retrieved the precious Chintamani gem for sage Kapila.</li>
+    <li><strong>Shri Girijatmaj (Lenyadri)</strong> — Carved into Cave 7 of a Buddhist rock complex where Goddess Parvati (Girija) meditated for a son.</li>
+    <li><strong>Shri Vighnahar (Ozar)</strong> — The vanquisher of obstacles (Vighnasur), situated peacefully on the banks of River Kukadi.</li>
+    <li><strong>Shri Mahaganapati (Ranjangaon)</strong> — The most formidable 10-trunk, 20-arm manifestation invoked by Lord Shiva to destroy Tripurasur.</li>
+    <li><strong>Completion Return to Morgaon</strong> — Final thanksgiving prayer to seal the sacred parikrama.</li>
+  </ol>
 </div>
 </section>
 
+<section id="temples-reference-table">
+<h2>Complete 8 Temples Reference Matrix (District, Deity & Distance from Pune)</h2>
+<p>To help you estimate travel times and plan daily stops from Pune, here is the complete reference table of all eight Ashtavinayak temples:</p>
 
-<section id="inter-temple-distance">
-<h2>Temple-to-Temple Distance & Travel Time Chart (Pairwise Matrix)</h2>
-<p>To help you navigate individual driving legs and estimate travel hours between consecutive shrines, here is the complete pairwise distance breakdown:</p>
-
-<div class="overflow-x-auto my-6">
-<table class="w-full text-left border-collapse border border-slate-200 text-sm rounded-xl overflow-hidden shadow-sm">
-<thead>
-<tr class="bg-slate-100 text-brand-blue-deep font-bold">
-  <th class="p-3 border border-slate-200">Route Leg</th>
-  <th class="p-3 border border-slate-200">From Temple</th>
-  <th class="p-3 border border-slate-200">To Temple</th>
-  <th class="p-3 border border-slate-200">Road Distance</th>
-  <th class="p-3 border border-slate-200">Driving Time (Car/Cab)</th>
-  <th class="p-3 border border-slate-200">Highway Route</th>
-</tr>
-</thead>
-<tbody class="divide-y divide-slate-100">
-<tr class="hover:bg-slate-50">
-  <td class="p-3 font-semibold text-slate-700">Leg 1</td>
-  <td class="p-3 font-bold text-brand-blue">Pune (Hadapsar)</td>
-  <td class="p-3 font-bold text-slate-800">Mayureshwar (Morgaon)</td>
-  <td class="p-3 font-semibold text-brand-blue">65 km</td>
-  <td class="p-3">1 hr 45 min</td>
-  <td class="p-3">Pune – Saswad – Jejuri – Morgaon Rd</td>
-</tr>
-<tr class="hover:bg-slate-50">
-  <td class="p-3 font-semibold text-slate-700">Leg 2</td>
-  <td class="p-3 font-bold text-slate-800">Mayureshwar (Morgaon)</td>
-  <td class="p-3 font-bold text-slate-800">Siddhivinayak (Siddhatek)</td>
-  <td class="p-3 font-semibold text-brand-blue">95 km</td>
-  <td class="p-3">2 hrs 15 min</td>
-  <td class="p-3">Via Supa & Daund – Siddhatek Rd</td>
-</tr>
-<tr class="hover:bg-slate-50">
-  <td class="p-3 font-semibold text-slate-700">Leg 3</td>
-  <td class="p-3 font-bold text-slate-800">Siddhivinayak (Siddhatek)</td>
-  <td class="p-3 font-bold text-slate-800">Ballaleshwar (Pali)</td>
-  <td class="p-3 font-semibold text-brand-blue">210 km</td>
-  <td class="p-3">4 hrs 30 min</td>
-  <td class="p-3">Via Daund, Hadapsar bypass & Mumbai-Pune Expressway</td>
-</tr>
-<tr class="hover:bg-slate-50">
-  <td class="p-3 font-semibold text-slate-700">Leg 4</td>
-  <td class="p-3 font-bold text-slate-800">Ballaleshwar (Pali)</td>
-  <td class="p-3 font-bold text-slate-800">Varadvinayak (Mahad)</td>
-  <td class="p-3 font-semibold text-brand-blue">40 km</td>
-  <td class="p-3">1 hr</td>
-  <td class="p-3">Khopoli – Pali Road to NH 48</td>
-</tr>
-<tr class="hover:bg-slate-50">
-  <td class="p-3 font-semibold text-slate-700">Leg 5</td>
-  <td class="p-3 font-bold text-slate-800">Varadvinayak (Mahad)</td>
-  <td class="p-3 font-bold text-slate-800">Chintamani (Theur)</td>
-  <td class="p-3 font-semibold text-brand-blue">115 km</td>
-  <td class="p-3">2 hrs 30 min</td>
-  <td class="p-3">Mumbai-Pune Expressway & Pune Ring Rd</td>
-</tr>
-<tr class="hover:bg-emerald-50/50 bg-emerald-50/20">
-  <td class="p-3 font-bold text-emerald-800">Leg 6</td>
-  <td class="p-3 font-bold text-emerald-950">Chintamani (Theur)</td>
-  <td class="p-3 font-bold text-emerald-950">Vighnahar (Ozar)</td>
-  <td class="p-3 font-bold text-emerald-800">95 km</td>
-  <td class="p-3 font-semibold">2 hrs 20 min</td>
-  <td class="p-3">Pune–Nashik Hwy (NH 60) via Narayangaon</td>
-</tr>
-<tr class="hover:bg-slate-50">
-  <td class="p-3 font-semibold text-slate-700">Leg 7</td>
-  <td class="p-3 font-bold text-slate-800">Chintamani (Theur)</td>
-  <td class="p-3 font-bold text-slate-800">Girijatmaj (Lenyadri)</td>
-  <td class="p-3 font-semibold text-brand-blue">95 km</td>
-  <td class="p-3">2 hrs 30 min</td>
-  <td class="p-3">NH 60 to Junnar (338 cave steps)</td>
-</tr>
-<tr class="hover:bg-slate-50">
-  <td class="p-3 font-semibold text-slate-700">Leg 8</td>
-  <td class="p-3 font-bold text-slate-800">Girijatmaj (Lenyadri)</td>
-  <td class="p-3 font-bold text-slate-800">Vighnahar (Ozar)</td>
-  <td class="p-3 font-semibold text-brand-blue">15 km</td>
-  <td class="p-3">25 min</td>
-  <td class="p-3">Junnar – Ozar Link Road</td>
-</tr>
-<tr class="hover:bg-slate-50">
-  <td class="p-3 font-semibold text-slate-700">Leg 9</td>
-  <td class="p-3 font-bold text-slate-800">Vighnahar (Ozar)</td>
-  <td class="p-3 font-bold text-slate-800">Mahaganapati (Ranjangaon)</td>
-  <td class="p-3 font-semibold text-brand-blue">65 km</td>
-  <td class="p-3">1 hr 45 min</td>
-  <td class="p-3">Via Alephata, Shirur & Pune-Nagar Hwy (NH 753F)</td>
-</tr>
-<tr class="hover:bg-slate-50">
-  <td class="p-3 font-semibold text-slate-700">Leg 10</td>
-  <td class="p-3 font-bold text-slate-800">Mahaganapati (Ranjangaon)</td>
-  <td class="p-3 font-bold text-brand-blue">Pune (Drop-off)</td>
-  <td class="p-3 font-semibold text-brand-blue">50 km</td>
-  <td class="p-3">1 hr 15 min</td>
-  <td class="p-3">Pune-Nagar Highway (NH 753F) via Shikrapur</td>
-</tr>
-<tr class="hover:bg-slate-50">
-  <td class="p-3 font-semibold text-slate-700">Leg 11</td>
-  <td class="p-3 font-bold text-slate-800">Mahaganapati (Ranjangaon)</td>
-  <td class="p-3 font-bold text-slate-800">Concluding Morgaon</td>
-  <td class="p-3 font-semibold text-brand-blue">85 km</td>
-  <td class="p-3">2 hrs 15 min</td>
-  <td class="p-3">Via Shikrapur, Uruli Kanchan & Jejuri</td>
-</tr>
-</tbody>
-</table>
-</div>
-
-<div class="bg-slate-50 border-l-4 border-emerald-500 p-5 rounded-r-xl my-6">
-  <h3 class="text-base font-bold text-slate-900 mb-2">⚡ Theur to Ozar Ganpati Distance & Route Details</h3>
-  <p class="text-sm text-slate-700 leading-relaxed mb-2">
-    The direct road distance from <strong>Theur (Shri Chintamani Ganpati) to Ozar (Shri Vighnahar Ganpati)</strong> is <strong>95 km</strong>. By car or private cab, the journey takes approximately <strong>2 hours 15 minutes to 2 hours 30 minutes</strong> depending on traffic.
-  </p>
-  <p class="text-xs text-slate-600">
-    <strong>Optimal Driving Route:</strong> Depart Theur via Pune Ring Road / Wagholi bypass ➔ Merge onto Pune–Nashik National Highway (NH 60) ➔ Pass Bhosari, Chakan & Manchar ➔ Reach Narayangaon ➔ Turn onto Otur–Ozar link road directly to Shri Vighnahar Mandir.
-  </p>
-</div>
-
-<div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl my-6">
-  <h3 class="text-base font-bold text-slate-900 mb-2">🚗 Ashtavinayak Darshan from Pune by Car: Driving Tips & Fastag Tolls</h3>
-  <p class="text-sm text-slate-700 leading-relaxed mb-2">
-    Covering the Ashtavinayak yatra from Pune by car is the most popular choice for families. The full circuit is ~650 to 700 km. Average Fastag toll charges across the circuit amount to <strong>₹380 to ₹520</strong> total. 
-  </p>
-  <p class="text-xs text-slate-600">
-    <strong>Why Book an AC Cab vs Self-Driving?</strong> The 8 temples require driving over 16 to 18 hours across busy state highways, ghat passes, and narrow temple village lanes with limited parking. Booking a private chauffeur-driven cab (Maruti Ertiga, Toyota Innova Crysta, or AC Force Urbania) from Shailraj Travels allows your family to rest comfortably while experienced pilgrimage drivers handle traffic and temple parking.
-  </p>
+<div class="my-6 overflow-x-auto not-prose">
+  <table class="w-full text-left border-collapse bg-white rounded-2xl overflow-hidden shadow-md border border-slate-200 text-xs sm:text-sm">
+    <thead class="bg-brand-blue-deep text-white">
+      <tr>
+        <th class="p-3 sm:p-4 font-bold"># Order</th>
+        <th class="p-3 sm:p-4 font-bold">Temple & Deity</th>
+        <th class="p-3 sm:p-4 font-bold">Village / District</th>
+        <th class="p-3 sm:p-4 font-bold">Distance from Pune</th>
+        <th class="p-3 sm:p-4 font-bold">Temple Timings</th>
+        <th class="p-3 sm:p-4 font-bold">Special Significance</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-slate-100 text-slate-700">
+      <tr class="hover:bg-slate-50">
+        <td class="p-3 sm:p-4 font-bold text-brand-blue">1</td>
+        <td class="p-3 sm:p-4"><strong>Shri Mayureshwar</strong></td>
+        <td class="p-3 sm:p-4">Morgaon (Pune)</td>
+        <td class="p-3 sm:p-4 font-semibold text-slate-900">68 km</td>
+        <td class="p-3 sm:p-4">05:00 AM – 10:00 PM</td>
+        <td class="p-3 sm:p-4">Starting & concluding shrine; peacock mount; fort-like stone architecture.</td>
+      </tr>
+      <tr class="hover:bg-slate-50">
+        <td class="p-3 sm:p-4 font-bold text-brand-blue">2</td>
+        <td class="p-3 sm:p-4"><strong>Shri Siddhivinayak</strong></td>
+        <td class="p-3 sm:p-4">Siddhatek (Ahmednagar)</td>
+        <td class="p-3 sm:p-4 font-semibold text-slate-900">95 km</td>
+        <td class="p-3 sm:p-4">05:30 AM – 09:30 PM</td>
+        <td class="p-3 sm:p-4">Only right-trunk idol (Navsacha Ganpati); hill-top shrine on Bhima River.</td>
+      </tr>
+      <tr class="hover:bg-slate-50">
+        <td class="p-3 sm:p-4 font-bold text-brand-blue">3</td>
+        <td class="p-3 sm:p-4"><strong>Shri Ballaleshwar</strong></td>
+        <td class="p-3 sm:p-4">Pali (Raigad)</td>
+        <td class="p-3 sm:p-4 font-semibold text-slate-900">120 km</td>
+        <td class="p-3 sm:p-4">05:30 AM – 10:00 PM</td>
+        <td class="p-3 sm:p-4">East-facing idol; sunrays fall directly on Ganesha during equinox; European brass bell.</td>
+      </tr>
+      <tr class="hover:bg-slate-50">
+        <td class="p-3 sm:p-4 font-bold text-brand-blue">4</td>
+        <td class="p-3 sm:p-4"><strong>Shri Varadvinayak</strong></td>
+        <td class="p-3 sm:p-4">Mahad (Raigad)</td>
+        <td class="p-3 sm:p-4 font-semibold text-slate-900">88 km</td>
+        <td class="p-3 sm:p-4">05:30 AM – 09:00 PM</td>
+        <td class="p-3 sm:p-4">Devotees can enter sanctum and touch idol; eternal oil lamp burning since 1892.</td>
+      </tr>
+      <tr class="hover:bg-slate-50">
+        <td class="p-3 sm:p-4 font-bold text-brand-blue">5</td>
+        <td class="p-3 sm:p-4"><strong>Shri Chintamani</strong></td>
+        <td class="p-3 sm:p-4">Theur (Pune)</td>
+        <td class="p-3 sm:p-4 font-semibold text-slate-900">27 km</td>
+        <td class="p-3 sm:p-4">05:30 AM – 10:00 PM</td>
+        <td class="p-3 sm:p-4">Dispels mental anxieties; beloved shrine of Peshwa Madhavrao I who attained samadhi here.</td>
+      </tr>
+      <tr class="hover:bg-slate-50">
+        <td class="p-3 sm:p-4 font-bold text-brand-blue">6</td>
+        <td class="p-3 sm:p-4"><strong>Shri Girijatmaj</strong></td>
+        <td class="p-3 sm:p-4">Lenyadri (Pune)</td>
+        <td class="p-3 sm:p-4 font-semibold text-slate-900">95 km</td>
+        <td class="p-3 sm:p-4">06:00 AM – 06:30 PM</td>
+        <td class="p-3 sm:p-4">Only Ashtavinayak inside a hill cave; 307 rock-cut steps; palanquin service available.</td>
+      </tr>
+      <tr class="hover:bg-slate-50">
+        <td class="p-3 sm:p-4 font-bold text-brand-blue">7</td>
+        <td class="p-3 sm:p-4"><strong>Shri Vighnahar</strong></td>
+        <td class="p-3 sm:p-4">Ozar (Pune)</td>
+        <td class="p-3 sm:p-4 font-semibold text-slate-900">85 km</td>
+        <td class="p-3 sm:p-4">05:00 AM – 10:30 PM</td>
+        <td class="p-3 sm:p-4">Golden pinnacle (Shikhara); jewel-encrusted eyes; pristine riverside Bhakta Niwas.</td>
+      </tr>
+      <tr class="hover:bg-slate-50">
+        <td class="p-3 sm:p-4 font-bold text-brand-blue">8</td>
+        <td class="p-3 sm:p-4"><strong>Shri Mahaganapati</strong></td>
+        <td class="p-3 sm:p-4">Ranjangaon (Pune)</td>
+        <td class="p-3 sm:p-4 font-semibold text-slate-900">52 km</td>
+        <td class="p-3 sm:p-4">05:30 AM – 10:00 PM</td>
+        <td class="p-3 sm:p-4">Massive east-facing stone entrance; depicted with 10 trunks and 20 arms in bas-relief.</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 </section>
 
-<section id="2-day-itinerary">
-<h2>Recommended 2-Day Ashtavinayak Circuit from Pune</h2>
-<p>For most pilgrims traveling by private car or tour bus, the <strong>2-Day / 1-Night Route</strong> is the most practical, energy-efficient itinerary. It divides the circuit neatly into a Southern/Eastern leg on Day 1 and a Northern/Konkan leg on Day 2.</p>
+<section id="route-map-distance-matrix">
+<h2>Ashtavinayak Darshan Route Map & Temple Distance Chart (680 KM)</h2>
+<p>Planning the exact highway driving sequence saves hours of unnecessary backtracking on Maharashtra's state highways. Below is the authentic <strong>temple-to-temple pairwise distance chart</strong> used by experienced chauffeurs at Shailraj Travels:</p>
 
-<h3>Day 1: Pune → Theur → Morgaon → Siddhatek → Ranjangaon → Ozar (Night Stay)</h3>
-<ul>
-  <li><strong>06:00 AM – Departure from Pune:</strong> Start early from your residence in Pune or PCMC. Early departure helps avoid Pune-Solapur highway traffic jams at Hadapsar.</li>
-  <li><strong>07:00 AM to 08:15 AM – Shri Chintamani Temple, Theur:</strong> Arrive at Theur (27 km). Enjoy morning peaceful darshan in the ancient Peshwa-renovated sanctum on the banks of Mula-Mutha. Savor piping hot Poha and tea at the temple stalls.</li>
-  <li><strong>09:45 AM to 11:15 AM – Shri Mayureshwar Temple, Morgaon:</strong> Drive 55 km south via Saswad / Supe. Offer initial prayers at the grand stone fort-like Mayureshwar temple, noting the Nandi statue seated facing Lord Ganesha.</li>
-  <li><strong>01:15 PM to 02:45 PM – Shri Siddhivinayak Temple, Siddhatek:</strong> Drive via Daund along the Bhima river basin to Siddhatek. Walk up the tranquil river hillock for darshan of the rare right-trunked deity. Enjoy an authentic rural Maharashtrian lunch (Jowar Bhakri, Shengdana Chutney, and Pithla).</li>
-  <li><strong>05:30 PM to 06:45 PM – Shri Mahaganapati Temple, Ranjangaon:</strong> Cross over via Shirur onto the Pune-Ahmednagar highway. Witness the majestic grand entrance and gold-embellished sanctum of Mahaganapati.</li>
-  <li><strong>08:30 PM – Arrival & Night Rest at Ozar / Narayangaon:</strong> Check into the peaceful <em>Shri Vighnahar Bhakta Niwas</em> or a verified AC family hotel in Narayangaon. Enjoy a satvik vegetarian dinner and rest early.</li>
-</ul>
-
-<h3>Day 2: Ozar → Lenyadri → Mahad → Pali → Morgaon Return → Pune</h3>
-<ul>
-  <li><strong>06:00 AM to 07:15 AM – Shri Vighnahar Temple, Ozar:</strong> Begin the morning with refreshing river breezes at the Kukadi river ghats. Darshan of Vighneshwar adorned with diamond eyes and golden crown.</li>
-  <li><strong>08:00 AM to 10:30 AM – Shri Girijatmaj Temple, Lenyadri:</strong> Drive 15 km to Lenyadri hill. Ascend the 307 stone steps in the cool morning shade (or take a reserved doli for senior family members). Experience the cave's natural acoustic resonance.</li>
-  <li><strong>01:30 PM to 02:45 PM – Shri Varadvinayak Temple, Mahad:</strong> Descend via the scenic ghats towards Khalapur and Mahad in Raigad. Pray beside the eternal oil lamp (<em>Nandadeep</em>) and enjoy a coastal Konkani lunch.</li>
-  <li><strong>03:45 PM to 05:15 PM – Shri Ballaleshwar Temple, Pali:</strong> Visit the temple situated between Sarasgad fort and the Amba river. Marvel at the historic Portuguese church bell weighing over 250 kg.</li>
-  <li><strong>07:30 PM – Final Concluding Darshan at Morgaon:</strong> Complete the sacred Pradakshina by offering final gratitude at Mayureshwar temple.</li>
-  <li><strong>09:30 PM – Arrive safely in Pune:</strong> Comfortable drop-off at your doorstep.</li>
-</ul>
+<div class="my-6 overflow-x-auto not-prose">
+  <table class="w-full text-left border-collapse bg-white rounded-2xl overflow-hidden shadow-md border border-slate-200 text-xs sm:text-sm">
+    <thead class="bg-slate-800 text-white">
+      <tr>
+        <th class="p-3 sm:p-4 font-bold">Route Leg (From → To)</th>
+        <th class="p-3 sm:p-4 font-bold">Driving Distance (KM)</th>
+        <th class="p-3 sm:p-4 font-bold">Avg Drive Time</th>
+        <th class="p-3 sm:p-4 font-bold">Best Highway Route</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-slate-100 text-slate-700">
+      <tr class="hover:bg-slate-50">
+        <td class="p-3 sm:p-4"><strong>Pune (Hadapsar) → Morgaon</strong></td>
+        <td class="p-3 sm:p-4 font-bold text-brand-blue">68 km</td>
+        <td class="p-3 sm:p-4">1 hr 45 min</td>
+        <td class="p-3 sm:p-4">Via Saswad – Jejuri – Morgaon Road</td>
+      </tr>
+      <tr class="hover:bg-slate-50">
+        <td class="p-3 sm:p-4"><strong>Morgaon → Siddhatek</strong></td>
+        <td class="p-3 sm:p-4 font-bold text-brand-blue">68 km</td>
+        <td class="p-3 sm:p-4">1 hr 50 min</td>
+        <td class="p-3 sm:p-4">Via Supe – Daund – Bhima Bridge – Siddhatek</td>
+      </tr>
+      <tr class="hover:bg-slate-50">
+        <td class="p-3 sm:p-4"><strong>Siddhatek → Theur</strong></td>
+        <td class="p-3 sm:p-4 font-bold text-brand-blue">82 km</td>
+        <td class="p-3 sm:p-4">2 hr 10 min</td>
+        <td class="p-3 sm:p-4">Via Daund – Patas – Pune-Solapur Highway (NH 65)</td>
+      </tr>
+      <tr class="hover:bg-slate-50">
+        <td class="p-3 sm:p-4"><strong>Theur → Ranjangaon</strong></td>
+        <td class="p-3 sm:p-4 font-bold text-brand-blue">54 km</td>
+        <td class="p-3 sm:p-4">1 hr 20 min</td>
+        <td class="p-3 sm:p-4">Via Kesnand – Wagholi – Shikrapur – Pune-Ahmednagar NH 753F</td>
+      </tr>
+      <tr class="hover:bg-slate-50">
+        <td class="p-3 sm:p-4"><strong>Theur → Ozar (Direct Highway)</strong></td>
+        <td class="p-3 sm:p-4 font-bold text-brand-blue">95 km</td>
+        <td class="p-3 sm:p-4">2 hr 30 min</td>
+        <td class="p-3 sm:p-4">Via Wagholi – Chakan – Narayangaon – Ozar (NH 60)</td>
+      </tr>
+      <tr class="hover:bg-slate-50">
+        <td class="p-3 sm:p-4"><strong>Ranjangaon → Ozar</strong></td>
+        <td class="p-3 sm:p-4 font-bold text-brand-blue">85 km</td>
+        <td class="p-3 sm:p-4">2 hr 00 min</td>
+        <td class="p-3 sm:p-4">Via Shirur – Alephata – Otur – Ozar</td>
+      </tr>
+      <tr class="hover:bg-slate-50">
+        <td class="p-3 sm:p-4"><strong>Ozar → Lenyadri</strong></td>
+        <td class="p-3 sm:p-4 font-bold text-brand-blue">15 km</td>
+        <td class="p-3 sm:p-4">25 min</td>
+        <td class="p-3 sm:p-4">Via Junnar bypass road (Short scenic countryside drive)</td>
+      </tr>
+      <tr class="hover:bg-slate-50">
+        <td class="p-3 sm:p-4"><strong>Lenyadri → Mahad</strong></td>
+        <td class="p-3 sm:p-4 font-bold text-brand-blue">145 km</td>
+        <td class="p-3 sm:p-4">3 hr 30 min</td>
+        <td class="p-3 sm:p-4">Via Narayangaon – Khed – Talegaon – Expressway – Khopoli – Mahad</td>
+      </tr>
+      <tr class="hover:bg-slate-50">
+        <td class="p-3 sm:p-4"><strong>Mahad → Pali</strong></td>
+        <td class="p-3 sm:p-4 font-bold text-brand-blue">42 km</td>
+        <td class="p-3 sm:p-4">1 hr 05 min</td>
+        <td class="p-3 sm:p-4">Via Khopoli – Pali State Highway</td>
+      </tr>
+      <tr class="hover:bg-slate-50">
+        <td class="p-3 sm:p-4"><strong>Pali → Pune (Return Leg)</strong></td>
+        <td class="p-3 sm:p-4 font-bold text-brand-blue">120 km</td>
+        <td class="p-3 sm:p-4">2 hr 45 min</td>
+        <td class="p-3 sm:p-4">Via Khopoli – Mumbai-Pune Expressway – Ravet – Pune</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 </section>
 
-<section id="3-day-senior-itinerary">
-<h2>Relaxed 3-Day Itinerary for Senior Citizens & Families</h2>
-<p>When traveling with grandparents, elderly parents, or infants, cramming 8 temples into 48 hours can result in knee pain and physical exhaustion. Our curated <strong>3-Day Senior Citizen Itinerary</strong> ensures leisurely darshan, ample afternoon rest breaks, and minimal highway fatigue:</p>
+<section id="2-day-itinerary-pune">
+<h2>Recommended 2-Day Ashtavinayak Darshan Itinerary from Pune</h2>
+<p>For working professionals and families planning a weekend pilgrimage, the <strong>2-Day Ashtavinayak Darshan from Pune</strong> is the most popular, time-efficient schedule. It covers all eight temples systematically without excessive night driving.</p>
 
-<div class="space-y-4 my-6">
-<div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-  <h4 class="font-bold text-brand-blue-deep text-base mb-2">🗓️ Day 1: The Spiritual East (Pune → Theur → Morgaon → Siddhatek → Night Stay at Daund/Pune)</h4>
-  <p class="text-sm text-slate-600">Gentle driving day covering 180 km. Ample time for elderly devotees to sit in the temple courtyards and perform peaceful Jap without rushing.</p>
-</div>
-<div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-  <h4 class="font-bold text-brand-blue-deep text-base mb-2">🗓️ Day 2: The Northern Hills (Ranjangaon → Ozar → Lenyadri Cave Darshan → Night Stay at Ozar)</h4>
-  <p class="text-sm text-slate-600">Dedicated half-day allocated exclusively for Lenyadri. Senior citizens can ascend leisurely using doli/palkhi without midday sun, followed by relaxed riverside evening at Ozar.</p>
-</div>
-<div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-  <h4 class="font-bold text-brand-blue-deep text-base mb-2">🗓️ Day 3: The Konkan Shrines & Parikrama Close (Mahad → Pali → Morgaon Completion → Pune)</h4>
-  <p class="text-sm text-slate-600">Smooth expressway drive to Raigad district, temple darshans at Mahad and Pali, followed by the concluding Morgaon ritual before returning to Pune before 09:00 PM.</p>
-</div>
-</div>
-</section>
-
-<section id="lenyadri-guide">
-<h2>Conquering Lenyadri Caves: Steps, Palanquin (Doli) & Monkey Safety</h2>
-<p>Of all eight shrines, <strong>Shri Girijatmaj at Lenyadri</strong> is unique because it is carved into rock cliff Cave #7 of a 30-cave Buddhist complex dating back to the 1st century AD. It presents the only physical climb of the pilgrimage.</p>
-
-<div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 my-6 space-y-4">
-<h3 class="text-lg font-bold text-slate-800">Key Facts for Ascending Lenyadri:</h3>
-<ul class="space-y-2 text-sm text-slate-700">
-  <li><strong>Total Step Count:</strong> Between 307 and 338 wide stone steps with resting landings every 40-50 steps.</li>
-  <li><strong>Climb Duration:</strong> 25 to 40 minutes for adults; 45 to 60 minutes for senior citizens walking at a relaxed pace.</li>
-  <li><strong>Doli / Palanquin Service:</strong> Registered local porters provide sturdy wooden chairs carried by 2 or 4 men. Fixed rates range between <strong>₹1,200 to ₹1,800</strong> per person for a two-way round trip. Tickets can be booked at the foothill counter.</li>
-  <li><strong>🐒 Monkey Safety Warning:</strong> Lenyadri is home to numerous bonnet macaque monkeys. Do <em>not</em> carry open plastic carry bags, flowers, food packets, or water bottles in your hands. Keep everything secured inside a zipped backpack, and avoid wearing sunglasses on your forehead.</li>
-  <li><strong>Unique Architectural Feature:</strong> The cave hall has <em>no supporting pillars</em> and has no electric wiring inside. Darshan is illuminated solely by natural sunlight entering through the cave entrance.</li>
-</ul>
-</div>
-</section>
-
-<section id="cab-rates-fleet">
-<h2>Pune to Ashtavinayak Cab Booking, Rates & Recommended Fleet</h2>
-<p>Self-driving on continuous state highways for 700 km can be exhausting. Renting a chauffeur-driven luxury vehicle from <strong>Shailraj Travels</strong> ensures everyone in the family travels like an honored guest:</p>
-
-<div class="overflow-x-auto my-6">
-<table class="w-full text-left border-collapse border border-slate-200 text-sm rounded-xl overflow-hidden shadow-sm">
-<thead>
-<tr class="bg-slate-100 text-brand-blue-deep font-bold">
-  <th class="p-3 border border-slate-200">Vehicle Type</th>
-  <th class="p-3 border border-slate-200">Seating Capacity</th>
-  <th class="p-3 border border-slate-200">Luggage Space</th>
-  <th class="p-3 border border-slate-200">Estimated 2-Day Package</th>
-  <th class="p-3 border border-slate-200">Best Suited For</th>
-</tr>
-</thead>
-<tbody class="divide-y divide-slate-100">
-<tr class="hover:bg-slate-50">
-  <td class="p-3 font-bold text-slate-800">Sedan (Dzire / Etios)</td>
-  <td class="p-3">4 Passengers</td>
-  <td class="p-3">2 Large Bags</td>
-  <td class="p-3 font-semibold text-brand-blue">₹9,500 – ₹10,500</td>
-  <td class="p-3">Couples & Small Families (3-4 Pax)</td>
-</tr>
-<tr class="hover:bg-slate-50">
-  <td class="p-3 font-bold text-slate-800">Maruti Ertiga AC</td>
-  <td class="p-3">6 Passengers</td>
-  <td class="p-3">3 Medium Bags</td>
-  <td class="p-3 font-semibold text-brand-blue">₹12,500 – ₹13,500</td>
-  <td class="p-3">Families of 5-6 with budget comfort</td>
-</tr>
-<tr class="hover:bg-slate-50">
-  <td class="p-3 font-bold text-slate-800">Toyota Innova Crysta</td>
-  <td class="p-3">6 / 7 Passengers</td>
-  <td class="p-3">4 Large Bags</td>
-  <td class="p-3 font-semibold text-brand-blue">₹15,500 – ₹17,500</td>
-  <td class="p-3">Executive comfort, seniors requiring superior suspension</td>
-</tr>
-<tr class="hover:bg-slate-50">
-  <td class="p-3 font-bold text-slate-800">Luxury AC Force Urbania</td>
-  <td class="p-3">12 – 17 Passengers</td>
-  <td class="p-3">Dedicated Rear Boot</td>
-  <td class="p-3 font-semibold text-brand-blue">₹22,000 – ₹26,000</td>
-  <td class="p-3 font-bold text-brand-green">Flagship choice for joint families & group yatras</td>
-</tr>
-<tr class="hover:bg-slate-50">
-  <td class="p-3 font-bold text-slate-800">AC Tempo Traveller</td>
-  <td class="p-3">17 – 20 Passengers</td>
-  <td class="p-3">Ample Boot & Roof Carrier</td>
-  <td class="p-3 font-semibold text-brand-blue">₹21,000 – ₹24,000</td>
-  <td class="p-3">Society groups, bhajan mandalis & corporate tours</td>
-</tr>
-</tbody>
-</table>
-</div>
-
-<p class="text-sm text-slate-500"><em>Note: Package rates include vehicle rent, driver allowance, and fuel for 700 km. Tolls and parking charges are payable as per actual receipts. Contact Shailraj Travels for customized multi-day quotes.</em></p>
-
-<div class="my-8 p-6 bg-gradient-to-r from-slate-900 via-indigo-950 to-brand-blue-deep rounded-2xl text-white shadow-xl not-prose border border-slate-800">
-  <div class="max-w-2xl">
-    <div class="flex items-center gap-2 mb-2">
-      <span class="inline-block px-3 py-1 bg-amber-400 text-slate-950 font-bold text-xs rounded-full uppercase tracking-wider">Direct Pilgrimage Booking</span>
-      <span class="text-xs text-emerald-400 font-semibold">★ 4.9/5 (100% Verified Reviews)</span>
+<div class="my-6 space-y-6 not-prose">
+  <div class="bg-white border-2 border-slate-200 rounded-3xl p-6 shadow-sm hover:border-brand-blue/30 transition-colors">
+    <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+      <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-blue/10 text-brand-blue text-xs font-bold uppercase tracking-wider">
+        Day 1 Schedule
+      </span>
+      <span class="text-xs text-slate-500 font-semibold">4 Temples • ~270 km Driving</span>
     </div>
-    <h3 class="text-xl md:text-2xl font-bold text-white mb-2">Book Your Pune to Ashtavinayak AC Cab with Shailraj Travels</h3>
-    <p class="text-slate-300 text-sm mb-5 leading-relaxed">
-      Doorstep pickup across Pune & Hadapsar. Experienced highway drivers familiar with ghat bypasses, sanitized AC cabs (Ertiga, Innova Crysta, 17-Seater Luxury Force Urbania), transparent pricing with no hidden surprises, and senior-citizen support.
-    </p>
-    <div class="flex flex-wrap gap-3">
-      <a href="https://wa.me/919764413556?text=Hello%20Shailraj%20Travels,%20I%20am%20planning%20an%20Ashtavinayak%20Yatra%20from%20Pune.%20Please%20share%20cab%20package%20details%20and%20rates." target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition text-sm shadow-md active:scale-95">
-        💬 Chat on WhatsApp for Quote
-      </a>
-      <a href="/tours/pune-to-ashtavinayak-darshan" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-slate-100 text-slate-900 font-bold rounded-xl transition text-sm shadow-md">
-        View Full Tour Package Details →
-      </a>
-      <a href="tel:+919764413556" class="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-800/80 hover:bg-slate-800 text-white font-semibold rounded-xl transition text-sm border border-slate-700">
-        📞 Call +91 97644 13556
-      </a>
+    <div class="mt-4 space-y-3 text-sm text-slate-700">
+      <p><strong>05:30 AM:</strong> Chauffeur doorstep pickup from your Pune home (Hadapsar, Kothrud, Viman Nagar, Wakad, etc.).</p>
+      <p><strong>07:00 AM – 08:30 AM:</strong> <em>Shri Mayureshwar (Morgaon)</em> — Perform initial darshan, offer modaks, and begin sacred yatra.</p>
+      <p><strong>10:30 AM – 11:45 AM:</strong> <em>Shri Siddhivinayak (Siddhatek)</em> — Scenic river-bridge crossing, darshan of right-trunk Ganesha.</p>
+      <p><strong>01:30 PM – 02:45 PM:</strong> <em>Shri Chintamani (Theur)</em> — Traditional hot vegetarian Thali lunch at local dining hall followed by tranquil darshan.</p>
+      <p><strong>04:30 PM – 05:45 PM:</strong> <em>Shri Mahaganapati (Ranjangaon)</em> — Evening darshan at the magnificent stone temple complex on Ahmednagar road.</p>
+      <p><strong>08:00 PM:</strong> Arrival at <strong>Ozar</strong>. Night halt at Shri Vighnahar Bhakta Niwas or pre-booked hotel in Narayangaon. Dinner and peaceful rest.</p>
+    </div>
+  </div>
+
+  <div class="bg-white border-2 border-slate-200 rounded-3xl p-6 shadow-sm hover:border-brand-blue/30 transition-colors">
+    <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+      <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-green/10 text-brand-green-dark text-xs font-bold uppercase tracking-wider">
+        Day 2 Schedule
+      </span>
+      <span class="text-xs text-slate-500 font-semibold">4 Temples + Return • ~380 km Driving</span>
+    </div>
+    <div class="mt-4 space-y-3 text-sm text-slate-700">
+      <p><strong>06:00 AM – 07:00 AM:</strong> <em>Shri Vighnahar (Ozar)</em> — Peaceful morning darshan on the riverside before tourist crowds arrive.</p>
+      <p><strong>07:30 AM – 09:45 AM:</strong> <em>Shri Girijatmaj (Lenyadri)</em> — Climb the 307 cave steps in the cool morning air (palanquin/doli available for seniors).</p>
+      <p><strong>10:15 AM – 01:45 PM:</strong> Highway drive towards Raigad district via Talegaon and the Mumbai-Pune Expressway.</p>
+      <p><strong>01:45 PM – 03:00 PM:</strong> <em>Shri Varadvinayak (Mahad)</em> — Touch the holy idol in the sanctum; vegetarian lunch break.</p>
+      <p><strong>04:15 PM – 05:45 PM:</strong> <em>Shri Ballaleshwar (Pali)</em> — Evening darshan at the massive stone shrine between Sarasgad fort and Amba river.</p>
+      <p><strong>06:00 PM:</strong> Return journey to Pune (or traditional symbolic completion at Morgaon if requested).</p>
+      <p><strong>08:30 PM – 09:30 PM:</strong> Safe drop back at your Pune residence with divine memories.</p>
     </div>
   </div>
 </div>
 </section>
 
-<section id="food-stay-packing">
-<h2>Where to Stay, Authentic Maharashtrian Food & Packing Checklist</h2>
+<section id="3-day-itinerary-pune">
+<h2>Relaxed 3-Day Itinerary for Senior Citizens & Families</h2>
+<p>If you are traveling with elderly parents, infants, or simply prefer an unhurried pilgrimage with plenty of time for peaceful temple meditation, the <strong>3-Day Ashtavinayak Darshan from Pune</strong> is the ideal choice:</p>
 
-<h3>Where to Stay Overnight</h3>
-<ul>
-  <li><strong>Ozar Shri Vighnahar Bhakta Niwas:</strong> The most popular stopover. Clean AC/non-AC rooms situated directly behind the temple along the riverside. Advance booking available via the temple trust website.</li>
-  <li><strong>Narayangaon & Junnar Family Hotels:</strong> Located within 15 km of Ozar and Lenyadri. Offers modern comforts, 24-hour hot water, elevators, and vegetarian restaurants.</li>
-  <li><strong>Shri Ballaleshwar Bhakta Niwas, Pali:</strong> Clean budget accommodation ideal if you reverse the circuit and spend night 1 in the Konkan belt.</li>
-</ul>
-
-<h3>Culinary Highlights Along the Route</h3>
-<p>No pilgrimage in rural Maharashtra is complete without savoring fresh, local delicacies:</p>
-<ul>
-  <li><strong>Ukadiche Modak:</strong> Steamed rice-flour dumplings filled with fresh grated coconut and jaggery, available hot outside Pali and Theur temples.</li>
-  <li><strong>Jowar & Bajra Bhakri with Pithla:</strong> Served with authentic <em>Thecha</em> (crushed green chili garlic chutney) and fresh butter at highway dhabas near Daund and Shirur.</li>
-  <li><strong>Misal Pav & Poori Bhaji:</strong> Best enjoyed as an early morning breakfast stop on the Pune-Solapur or Pune-Nashik highway corridors.</li>
-</ul>
-
-<h3>Pilgrimage Packing Essentials</h3>
-<ol>
-  <li>Valid Government Photo IDs (Aadhaar Card / Driving License) for hotel and Bhakta Niwas check-in.</li>
-  <li>Comfortable slip-on walking footwear (shoes must be removed outside every temple; slip-on sandals save considerable time).</li>
-  <li>Cotton socks (temple stone courtyards can become hot during afternoon hours).</li>
-  <li>Prescribed personal medications, knee support braces, and electrolyte packets for senior citizens.</li>
-  <li>Cloth carry-bag for Prasad and coconut offerings (plastic is banned at many temple trusts).</li>
-</ol>
+<div class="my-6 p-6 bg-slate-50 border border-slate-200 rounded-3xl not-prose text-sm text-slate-700 space-y-4">
+  <div class="border-b border-slate-200 pb-3">
+    <strong class="text-brand-blue-deep text-base block font-bold mb-1">Day 1: Southern Temples (Pune → Theur → Morgaon → Siddhatek → Night Stay Pune/Hadapsar)</strong>
+    <p>Depart Pune at 07:00 AM. Visit nearby Theur (27 km), proceed to holy Morgaon for initial sankalpa, continue to Siddhatek on the Bhima river, and return to Pune for comfortable overnight sleep at home or hotel. Total drive: ~240 km.</p>
+  </div>
+  <div class="border-b border-slate-200 pb-3">
+    <strong class="text-brand-blue-deep text-base block font-bold mb-1">Day 2: Northern Temples (Pune → Ranjangaon → Ozar → Lenyadri → Night Stay Junnar/Ozar)</strong>
+    <p>Depart Pune at 08:00 AM via Ahmednagar road. Visit Mahaganapati at Ranjangaon, drive across to Ozar for riverside darshan and Bhakta Niwas lunch. Afternoon rest, followed by leisurely 4:00 PM ascent of Lenyadri caves when afternoon shadows cool the hill steps. Night stay at Junnar or Ozar. Total drive: ~180 km.</p>
+  </div>
+  <div>
+    <strong class="text-brand-blue-deep text-base block font-bold mb-1">Day 3: Western Temples (Ozar → Mahad → Pali → Return Pune)</strong>
+    <p>Morning departure through the scenic Khopoli ghat to Raigad district. Visit Varadvinayak at Mahad, relish a warm Konkani lunch, proceed to Ballaleshwar at Pali, and drive back to Pune smoothly via the Mumbai-Pune Expressway by 7:30 PM. Total drive: ~260 km.</p>
+  </div>
+</div>
 </section>
 
-<section id="darshan-rules">
-<h2>Essential Temple Darshan Rules, Puja Timings & Dress Code</h2>
-<ul>
-  <li><strong>General Darshan Timings:</strong> Most Ashtavinayak temples open by 05:00 AM / 05:30 AM and close around 10:00 PM. During Angarika Sankashti Chaturthi, temple gates remain open 24 hours.</li>
-  <li><strong>Abhishek & Special Pujas:</strong> Devotees wishing to perform personal <em>Panchamrut Abhishek</em> or <em>Sahasravartan</em> must register at the temple office counters between 06:00 AM and 11:00 AM.</li>
-  <li><strong>Dress Code Guidelines:</strong> Modest traditional attire is strongly recommended. For entering the Garbhagriha during official Abhishek, men must wear a traditional <em>Dhoti / Soval</em> with an <em>Upavastra</em>, while women must wear a <em>Saree</em> or <em>Salwar Kameez</em> with dupatta.</li>
-  <li><strong>Mobile Phones & Photography:</strong> Photography inside the Garbhagriha is strictly prohibited across all eight temples. Secure locker counters are available at Morgaon, Ozar, and Pali.</li>
-</ul>
-</section>
+<section id="car-rental-cab-packages">
+<h2>Ashtavinayak Darshan from Pune by Car: Cab Rates & Package Cost (2026)</h2>
+<p>Booking a dedicated, chauffeur-driven cab from Pune ensures you aren't tied to rigid bus timetables, allows customized breaks for senior citizens, and avoids driving fatigue on rural bypasses. Here is the verified 2026 <strong>Ashtavinayak Darshan package price chart</strong> from Shailraj Travels Pune:</p>
 
-<section id="book-with-shailraj">
-<h2>Book Your Hassle-Free Ashtavinayak Tour with Shailraj Travels</h2>
-<p>Ashtavinayak is more than a road trip—it is an auspicious yatra of faith, positivity, and peace. With over <strong>15 years of dedicated pilgrimage service in Maharashtra</strong>, Shailraj Travels takes care of every detail so your family can focus entirely on devotion.</p>
-
-<div class="my-6 p-6 bg-slate-100 rounded-2xl border border-slate-200">
-<h4 class="font-bold text-brand-blue-deep text-lg mb-3">Why Thousands of Devotees Trust Shailraj Travels:</h4>
-<ul class="space-y-2 text-sm text-slate-700">
-  <li>✅ <strong>Door-to-Door Home Pickup:</strong> Punctual pickup from anywhere in Pune, PCMC, or Pune Airport.</li>
-  <li>✅ <strong>Experienced Pilgrimage Chauffeurs:</strong> Courteous, non-smoking drivers with deep knowledge of temple token timings, bypass routes, and hygienic dining halts.</li>
-  <li>✅ <strong>Immaculately Sanitized Fleet:</strong> Premium AC vehicles (Innova Crysta, Force Urbania, Ertiga) inspected before every trip.</li>
-  <li>✅ <strong>Senior Citizen Friendly:</strong> Thoughtful driving pace, pre-booked Doli assistance at Lenyadri, and frequent bio-breaks.</li>
-  <li>✅ <strong>Transparent Pricing:</strong> No hidden charges, zero surge pricing, and instant GST invoices.</li>
-</ul>
+<div class="my-6 overflow-x-auto not-prose">
+  <table class="w-full text-left border-collapse bg-white rounded-2xl overflow-hidden shadow-md border border-slate-200 text-xs sm:text-sm">
+    <thead class="bg-brand-blue text-white">
+      <tr>
+        <th class="p-3 sm:p-4 font-bold">Vehicle Class</th>
+        <th class="p-3 sm:p-4 font-bold">Seating Capacity</th>
+        <th class="p-3 sm:p-4 font-bold">2-Day Package Cost</th>
+        <th class="p-3 sm:p-4 font-bold">3-Day Package Cost</th>
+        <th class="p-3 sm:p-4 font-bold">Key Vehicle Features</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-slate-100 text-slate-700">
+      <tr class="hover:bg-slate-50">
+        <td class="p-3 sm:p-4"><strong>Maruti Suzuki Dzire</strong></td>
+        <td class="p-3 sm:p-4">4 Passengers + Driver</td>
+        <td class="p-3 sm:p-4 font-bold text-emerald-700">₹11,500 – ₹12,500</td>
+        <td class="p-3 sm:p-4 font-bold text-emerald-700">₹15,500 – ₹16,500</td>
+        <td class="p-3 sm:p-4">Economical AC sedan, ideal for couples and small nuclear families.</td>
+      </tr>
+      <tr class="hover:bg-slate-50">
+        <td class="p-3 sm:p-4"><strong>Maruti Ertiga (SUV)</strong></td>
+        <td class="p-3 sm:p-4">6 Passengers + Driver</td>
+        <td class="p-3 sm:p-4 font-bold text-emerald-700">₹13,800 – ₹14,800</td>
+        <td class="p-3 sm:p-4 font-bold text-emerald-700">₹18,500 – ₹20,000</td>
+        <td class="p-3 sm:p-4">Spacious family favorite; dual AC, luggage carrier, high ground clearance.</td>
+      </tr>
+      <tr class="hover:bg-slate-50">
+        <td class="p-3 sm:p-4"><strong>Toyota Innova Crysta</strong></td>
+        <td class="p-3 sm:p-4">6/7 Passengers + Driver</td>
+        <td class="p-3 sm:p-4 font-bold text-emerald-700">₹17,500 – ₹19,000</td>
+        <td class="p-3 sm:p-4 font-bold text-emerald-700">₹23,500 – ₹25,500</td>
+        <td class="p-3 sm:p-4">Executive captain seats, superior highway suspension, supreme comfort for seniors.</td>
+      </tr>
+      <tr class="hover:bg-slate-50">
+        <td class="p-3 sm:p-4"><strong>13/17-Seater AC Force Urbania</strong></td>
+        <td class="p-3 sm:p-4">12–17 Passengers + Driver</td>
+        <td class="p-3 sm:p-4 font-bold text-emerald-700">₹24,000 – ₹28,000</td>
+        <td class="p-3 sm:p-4 font-bold text-emerald-700">₹32,000 – ₹36,000</td>
+        <td class="p-3 sm:p-4">Luxury group van with reclining bucket seats, ambient lighting, high ceiling.</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
-<p>Ready to embark on the sacred parikrama? Explore our <a href="/tours/pune-to-ashtavinayak-darshan"><strong>Pune to Ashtavinayak Darshan Tour Package</strong></a> or call our 24/7 Pune travel desk today to reserve your private cab.</p>
+<div class="my-6 p-4 bg-slate-100 rounded-2xl not-prose text-xs sm:text-sm text-slate-600">
+  <p><strong>Package Inclusions:</strong> Full vehicle fuel, Mumbai-Pune Expressway & NH FASTag toll charges, driver allowance, night charges, state border taxes, and doorstep pickup/drop across Pune.</p>
+  <p class="mt-1"><strong>Exclusions:</strong> Hotel accommodation, temple puja fees, and passenger meals. (We assist with complimentary Bhakta Niwas reservations upon request).</p>
+</div>
+
+<div class="my-8 p-6 bg-gradient-to-r from-brand-blue-deep to-brand-blue text-white rounded-3xl not-prose text-center shadow-xl">
+  <h3 class="text-xl sm:text-2xl font-bold mb-2">Book Your Ashtavinayak Darshan Cab from Pune</h3>
+  <p class="text-sm text-brand-mist/90 max-w-2xl mx-auto mb-5">
+    Experience a divine, worry-free pilgrimage with Pune's #1 rated tour operator. Verified drivers, sanitized AC vehicles, and punctual doorstep pickup guaranteed.
+  </p>
+  <div class="flex flex-wrap justify-center gap-3">
+    <a href="tel:+919764413556" class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-6 py-3 rounded-full transition-transform hover:scale-105 shadow-md">
+      📞 Call +91 97644 13556
+    </a>
+    <a href="https://wa.me/919764413556?text=Hi%20Shailraj%20Travels,%20I%20want%20to%20book%20an%20Ashtavinayak%20Darshan%20cab%20package%20from%20Pune" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#20ba59] text-white font-bold px-6 py-3 rounded-full transition-transform hover:scale-105 shadow-md">
+      💬 WhatsApp Booking
+    </a>
+  </div>
+</div>
+</section>
+
+<section id="lenyadri-steps-senior-guide">
+<h2>Conquering Lenyadri Caves: 307 Steps, Doli Rates & Senior Advice</h2>
+<p>Of all the eight Ashtavinayak temples, <strong>Shri Girijatmaj at Lenyadri</strong> is unique because it is situated inside an ancient rock-cut Buddhist monastery (Cave #7) carved high into a steep hill cliff overlooking the Kukadi valley near Junnar. Reaching the sanctum requires climbing <strong>307 stone steps</strong> (with some counting up to 338 steps including the upper landing).</p>
+
+<div class="my-6 p-6 bg-amber-50/90 border border-amber-300 rounded-2xl not-prose text-slate-800">
+  <h4 class="text-amber-900 font-bold text-base sm:text-lg mb-2">👵 Essential Senior Citizen Guide for Lenyadri:</h4>
+  <ul class="space-y-2 text-sm text-slate-700">
+    <li><strong>Palanquin (Doli / Palkhi) Service:</strong> Sturdy wooden chairs carried by 4 authorized local porters are available right at the foothills ticket counter. The fixed rate is between <strong>₹1,200 to ₹1,800</strong> for a complete return trip. Porters wait at the cave entrance while you complete darshan.</li>
+    <li><strong>Best Time to Climb:</strong> Climb early in the morning between <strong>06:30 AM and 08:30 AM</strong>. Later in the day, the black basalt rock steps become extremely hot under the sun, causing burning feet and dehydration.</li>
+    <li><strong>Monkey Safety Protocol:</strong> Hundreds of wild monkeys inhabit the Lenyadri cliffs. <em>Keep sunglasses, prescription spectacles, mobile phones, flowers, and coconut offerings tucked away inside a zipped backpack.</em> Never carry open plastic bags, as monkeys will snatch them.</li>
+    <li><strong>Rest Platforms:</strong> For devotees walking up, covered stone resting platforms with handrails are built at every 50 to 75 steps with shaded benches and drinking water stalls.</li>
+  </ul>
+</div>
+</section>
+
+<section id="where-to-stay-satvik-food">
+<h2>Where to Stay Overnight & Pure Vegetarian Dining on the Route</h2>
+<p>A successful pilgrimage requires a comfortable night's rest and wholesome, pure vegetarian food. Here are the top tested options across the Ashtavinayak circuit:</p>
+
+<h3>Recommended Night Halt Locations</h3>
+<ul>
+  <li><strong>Shri Vighnahar Bhakta Niwas (Ozar):</strong> The premier stay choice for a 2-day tour. Features over 100 clean rooms, AC suites, hot water, peaceful river views, and safe parking. Highly affordable (₹500 to ₹1,500/night).</li>
+  <li><strong>Narayangaon & Junnar Family Hotels:</strong> Located just 12–15 km from Lenyadri and Ozar, hotels like Hotel Shivneri and Hotel Rajlaxmi offer modern AC rooms, elevators, and room service.</li>
+  <li><strong>Shri Mayureshwar Bhakta Niwas (Morgaon):</strong> Ideal for 3-day travelers who wish to stay near the starting shrine.</li>
+</ul>
+
+<h3>Authentic Vegetarian Food Highlights</h3>
+<p>Maharashtra's pilgrimage routes offer delicious, hygienic regional vegetarian dining:</p>
+<ul>
+  <li><strong>Hotel Nisarg (Near Theur):</strong> Famous for traditional Maharashtrian Thali, steaming Pithla Bhakri with garlic Thecha, and fresh buttermilk.</li>
+  <li><strong>Hotel Shivneri (Narayangaon):</strong> Ideal breakfast stop for piping hot Misal Pav, Kanda Poha, Sabudana Khichdi, and special ginger tea.</li>
+  <li><strong>Vighnahar Prasadalaya (Ozar):</strong> Clean temple-run dining hall serving sacred Mahaprasad (Dal, Rice, Sabzi, Chapatis, and Sheera).</li>
+</ul>
+</section>
+
+<section id="temple-rules-dress-code">
+<h2>Temple Rules, Puja Timings, Dress Code & Best Season to Visit</h2>
+
+<h3>Temple Operating & Aarti Hours</h3>
+<p>Most Ashtavinayak temples open early in the morning at <strong>05:00 AM or 05:30 AM</strong> and close after the Shej Aarti around <strong>09:30 PM to 10:00 PM</strong>. The exceptional shrine is <strong>Lenyadri</strong>, which closes earlier at <strong>06:30 PM</strong> due to mountain safety regulations.</p>
+
+<h3>Dress Code Guidelines</h3>
+<ul>
+  <li><strong>General Darshan:</strong> Modest Indian or formal Western wear is permitted. Kurtas, sarees, salwar kameez, and full trousers with shirts are appreciated. Shorts, short skirts, and sleeveless gym wear are strictly discouraged.</li>
+  <li><strong>Abhishek / Garbhagriha Entry:</strong> If you intend to sit in the sanctum sanctorum for special Abhishek pooja, men must wear a traditional unstitched Dhoti (<em>Soval / Pitambar</em>) without a leather belt. Women must wear a traditional 9-yard or 6-yard Saree.</li>
+</ul>
+
+<h3>Best Season to Visit</h3>
+<p>The best time to undertake the <strong>Ashtavinayak Darshan from Pune</strong> is between <strong>October and March</strong>. The winter months offer crisp, pleasant mornings and mild afternoon temperatures, making the stone temple courtyards and the Lenyadri cave steps comfortable to traverse on bare feet.</p>
+</section>
+
+<section id="why-choose-shailraj">
+<h2>Why Devotees Choose Shailraj Travels Pune for Ashtavinayak Yatra</h2>
+<p>With more than 15 years of dedicated spiritual tour operations in Maharashtra, <strong>Shailraj Travels</strong> has had the honor of safely guiding over 10,000 families, senior citizen groups, and corporate pilgrims across the Ashtavinayak circuit.</p>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6 not-prose">
+  <div class="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm">
+    <strong class="text-brand-blue font-bold text-base block mb-1">🚗 Well-Maintained AC Fleet</strong>
+    <p class="text-xs sm:text-sm text-slate-600">From commercial Maruti Ertigas and Toyota Innova Crystas to 17-Seater Force Urbanias, every vehicle is sanitized, mechanically inspected, and equipped with luggage carriers and chilled AC.</p>
+  </div>
+  <div class="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm">
+    <strong class="text-brand-blue font-bold text-base block mb-1">🙏 Devotional, Polite Drivers</strong>
+    <p class="text-xs sm:text-sm text-slate-600">Our chauffeurs are non-alcoholic, local Maharashtrian captains who know rural shortcut roads, temple rush hours, clean washroom stops, and senior-citizen boarding spots.</p>
+  </div>
+  <div class="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm">
+    <strong class="text-brand-blue font-bold text-base block mb-1">💰 All-Inclusive Transparent Pricing</strong>
+    <p class="text-xs sm:text-sm text-slate-600">Zero hidden surprises. Our package quotes include vehicle rent, fuel, toll taxes, state parking charges, and driver allowances. You pay exactly what you are quoted.</p>
+  </div>
+  <div class="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm">
+    <strong class="text-brand-blue font-bold text-base block mb-1">🏠 100% Punctual Doorstep Pickup</strong>
+    <p class="text-xs sm:text-sm text-slate-600">Whether you reside in Hadapsar, Kothrud, Viman Nagar, Hinjewadi, Wakad, Baner, or Pimpri-Chinchwad, your cab arrives at your gate punctually at 05:30 AM.</p>
+  </div>
+</div>
+</section>
+
+<section id="faqs">
+<h2>Frequently Asked Questions About Ashtavinayak Darshan from Pune</h2>
+<div class="space-y-4 my-6 not-prose">
+  <div class="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm">
+    <h3 class="font-bold text-slate-900 text-base mb-1.5">How many days are required for Ashtavinayak Darshan from Pune?</h3>
+    <p class="text-sm text-slate-700 leading-relaxed">Most devotees complete the Ashtavinayak Darshan from Pune in 2 days (express pace) or 3 days (relaxed family pace). Covering 8 temples spread over 650 to 700 km requires roughly 16 to 18 hours of total road driving plus temple darshan times. For families traveling with senior citizens or children, a 3-day tour is strongly recommended to avoid travel fatigue.</p>
+  </div>
+  <div class="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm">
+    <h3 class="font-bold text-slate-900 text-base mb-1.5">What is the total road distance for Ashtavinayak Darshan from Pune?</h3>
+    <p class="text-sm text-slate-700 leading-relaxed">The total driving distance for the complete Ashtavinayak Darshan circuit from Pune is between 650 km and 720 km, depending on your pickup location in Pune (Hadapsar, Kothrud, Wakad, or Viman Nagar) and whether you return to Shri Mayureshwar at Morgaon to perform the traditional ritual completion.</p>
+  </div>
+  <div class="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm">
+    <h3 class="font-bold text-slate-900 text-base mb-1.5">What is the cost of Ashtavinayak Darshan from Pune package by cab?</h3>
+    <p class="text-sm text-slate-700 leading-relaxed">A private 2-day Ashtavinayak Darshan cab package from Pune starts at approximately ₹11,500 for a 4-seater AC Sedan (Maruti Dzire), ₹14,000 for a 6-seater AC SUV (Maruti Ertiga), ₹17,500 for a Toyota Innova Crysta, and ₹24,000 to ₹28,000 for a 13/17-seater luxury AC Force Urbania. All-inclusive packages by Shailraj Travels cover fuel, driver allowance, toll taxes, and state parking.</p>
+  </div>
+  <div class="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm">
+    <h3 class="font-bold text-slate-900 text-base mb-1.5">What is the correct 8-temple sequence for Ashtavinayak Darshan from Pune?</h3>
+    <p class="text-sm text-slate-700 leading-relaxed">According to the holy Ganesha Purana, the sacred sequence is: 1. Shri Mayureshwar (Morgaon) → 2. Shri Siddhivinayak (Siddhatek) → 3. Shri Ballaleshwar (Pali) → 4. Shri Varadvinayak (Mahad) → 5. Shri Chintamani (Theur) → 6. Shri Girijatmaj (Lenyadri) → 7. Shri Vighnahar (Ozar) → 8. Shri Mahaganapati (Ranjangaon). To complete the yatra, pilgrims traditionally return to Morgaon to offer thanksgiving.</p>
+  </div>
+  <div class="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm">
+    <h3 class="font-bold text-slate-900 text-base mb-1.5">Can we do Ashtavinayak Darshan from Pune by car comfortably?</h3>
+    <p class="text-sm text-slate-700 leading-relaxed">Yes, doing Ashtavinayak Darshan by car or private cab is by far the most comfortable and flexible way. Unlike crowded public buses with fixed schedules, a private cab allows door-to-door Pune pickup, customized meal and restroom breaks, prompt arrival at morning aartis, and direct drop at temple gates.</p>
+  </div>
+  <div class="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm">
+    <h3 class="font-bold text-slate-900 text-base mb-1.5">How many steps are there at Lenyadri, and are palanquins (doli) available?</h3>
+    <p class="text-sm text-slate-700 leading-relaxed">Shri Girijatmaj at Lenyadri is situated inside Cave #7 of a Buddhist rock-cut hill complex and requires climbing 307 stone steps (some counts say 338). For senior citizens, heart patients, and young kids, authorized palanquins (doli / palkhi) operated by 4 local porters are readily available at the base for ₹1,200 to ₹1,800 return.</p>
+  </div>
+  <div class="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm">
+    <h3 class="font-bold text-slate-900 text-base mb-1.5">Where is the best place to stay overnight during a 2-day Ashtavinayak yatra from Pune?</h3>
+    <p class="text-sm text-slate-700 leading-relaxed">The most strategic midway night halt for a 2-day tour from Pune is Ozar or Junnar/Narayangaon. Shri Vighnahar Bhakta Niwas at Ozar provides clean, affordable rooms right by the river Kukadi. Staying near Ozar allows you to tackle the Lenyadri steps early at 7:00 AM on Day 2 before the rock stairs get hot.</p>
+  </div>
+  <div class="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm">
+    <h3 class="font-bold text-slate-900 text-base mb-1.5">What is the distance between Theur and Ozar Ganpati?</h3>
+    <p class="text-sm text-slate-700 leading-relaxed">The road distance from Theur (Shri Chintamani Ganpati) to Ozar (Shri Vighnahar Ganpati) is approximately 95 km via the Pune–Nashik National Highway (NH 60). By private car or cab, the drive takes about 2 hours 15 minutes to 2 hours 30 minutes via Wagholi, Bhosari, Chakan, and Narayangaon.</p>
+  </div>
+  <div class="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm">
+    <h3 class="font-bold text-slate-900 text-base mb-1.5">How do I book an Ashtavinayak Darshan cab from Pune with Shailraj Travels?</h3>
+    <p class="text-sm text-slate-700 leading-relaxed">You can book directly by calling Shailraj Travels at +91 97644 13556 or sending a WhatsApp inquiry with your preferred dates, pickup area in Pune, and group size. We provide guaranteed on-time door-to-door pickups across Hadapsar, Kothrud, Viman Nagar, Hinjewadi, Wakad, Baner, and Swargate.</p>
+  </div>
+</div>
 </section>`
   },
+
   {
     slug: "best-travels-in-pune-reddit-reviews",
     title: "Best Travels in Pune: What Reddit & Real Travelers Say (2026 Community Review Guide)",
@@ -1177,7 +1234,7 @@ export const blogPosts: BlogPost[] = [
     ],
     relatedArticleSlugs: [
       "pune-to-ujjain-tour-guide-mahakal-darshan-itinerary",
-      "pune-to-ashtavinayak-tour-guide-route-map-itinerary"
+      "ashtavinayak-darshan-from-pune"
     ],
     featuredImage: "https://res.cloudinary.com/dquecn5qj/image/upload/v1792764565/blogs/velwfoeky9hjyy2tnhip.png",
     ogImage: "https://res.cloudinary.com/dquecn5qj/image/upload/v1792764565/blogs/velwfoeky9hjyy2tnhip.png",

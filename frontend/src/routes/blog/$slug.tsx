@@ -34,6 +34,9 @@ export const Route = createFileRoute("/blog/$slug")({
     if (!params.slug || params.slug === 'undefined' || params.slug === 'null') {
       throw redirect({ to: '/blog', statusCode: 301 });
     }
+    if (params.slug === 'pune-to-ashtavinayak-tour-guide-route-map-itinerary') {
+      throw redirect({ to: '/blog/ashtavinayak-darshan-from-pune', statusCode: 301 });
+    }
     let customBlog = null;
 
     // 1. Check live custom blogs from database first so admin changes take immediate effect

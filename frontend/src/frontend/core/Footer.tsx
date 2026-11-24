@@ -370,8 +370,8 @@ export function FooterSection({ t: propT, lang = "en" }: { t?: typeof translatio
             <Link to={"/blog/pune-to-ujjain-road-trip-itinerary" as any} className="text-slate-400 hover:text-white transition-colors py-0.5">
               Ujjain Road Trip Itinerary
             </Link>
-            <Link to={"/blog/pune-to-ashtavinayak-tour-guide-route-map-itinerary" as any} className="text-slate-400 hover:text-white transition-colors py-0.5">
-              Ashtavinayak Route Guide
+            <Link to={"/blog/ashtavinayak-darshan-from-pune" as any} className="text-slate-400 hover:text-white transition-colors py-0.5">
+              Ashtavinayak Darshan from Pune
             </Link>
             <Link to={"/tours/pune-to-ashtavinayak-darshan" as any} className="text-slate-400 hover:text-white transition-colors py-0.5">
               Ashtavinayak Darshan Tour
