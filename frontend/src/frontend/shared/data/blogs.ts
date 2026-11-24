@@ -370,14 +370,20 @@ export const blogPosts: BlogPost[] = [
   },
   {
     slug: "pune-to-ujjain-road-trip-itinerary",
-    title: "Pune to Ujjain Road Trip & Tour: Best Travels 2-Day Tri-Jyotirlinga Itinerary",
-    metaTitle: "Pune to Ujjain Road Trip Guide & Best Travels | Shailraj",
-    metaDescription: "Complete 2-day Pune to Ujjain tour and travels road trip guide: Cover Mahakaleshwar, Omkareshwar & Grishneshwar Jyotirlingas with Shailraj Travels AC Force Urbania.",
-    focusKeyword: "pune to ujjain best travels",
+    title: "Pune to Ujjain Best Route by Car: Distance, Road Map & Toll Guide",
+    metaTitle: "Pune to Ujjain Best Route by Car | Distance & Road Guide",
+    metaDescription: "Complete Pune to Ujjain car route guide: Best 4-lane highway via Nashik-Dhule (NH 60 & NH 52), 640 km distance, 12-hr driving time, verified tolls & 2-day travel plan.",
+    focusKeyword: "pune to ujjain best route by car",
     keywords: [
+      "pune to ujjain best route by car",
       "pune to ujjain road trip",
       "pune to ujjain route map",
       "pune to ujjain driving distance",
+      "pune to ujjain car route",
+      "pune to ujjain by road",
+      "pune to ujjain route by road",
+      "pune to ujjain road map",
+      "pune to ujjain trip plan by car",
       "tri jyotirlinga road trip pune",
       "pune to ujjain car rental",
       "pune to mahakaleshwar road guide"
@@ -427,6 +433,12 @@ export const blogPosts: BlogPost[] = [
     ],
     content: `<section id="trip-overview">
 <h2>Trip Overview: A Sacred Tri-Jyotirlinga Road Odyssey</h2>
+<div class="not-prose my-6 p-5 bg-blue-50/80 border border-blue-200 rounded-2xl shadow-xs">
+  <h3 class="text-base font-bold text-blue-950 mb-2">⚡ Quick Answer: What is the Best Route from Pune to Ujjain by Car?</h3>
+  <p class="text-xs sm:text-sm text-blue-900/90 leading-relaxed">
+    The <strong>best route from Pune to Ujjain by car</strong> is via <strong>NH 60 and NH 52</strong> (Pune → Nashik → Dhule → Sendhwa → Indore Bypass → Ujjain). The total driving distance is <strong>635 to 645 km</strong>, taking approximately <strong>11.5 to 13 hours</strong>. This 4-lane national highway corridor provides smooth asphalt, reliable fuel stations, verified vegetarian restaurants, and verified one-way tolls of <strong>₹880 to ₹950</strong>.
+  </p>
+</div>
 <p>Embarking on a road trip from <strong>Pune to Ujjain</strong> is not merely a drive across state borders—it is one of Western India's most potent spiritual circuits. In just 48 hours, this thoughtfully paced route unites three of the 12 sacred Jyotirlingas:</p>
 <ul>
 <li><strong>Shri Mahakaleshwar</strong> (Ujjain, MP) – The only South-facing (Dakshinmukhi) Jyotirlinga and master of time and mortality.</li>
@@ -452,7 +464,55 @@ export const blogPosts: BlogPost[] = [
 <p class="font-semibold text-brand-blue-deep bg-slate-50 p-4 rounded-xl border border-slate-200">
 📍 <strong>Pune</strong> → Sangamner → <strong>Nashik</strong> → Malegaon → <strong>Dhule</strong> → Sendhwa Border → Dhamnod → <strong>Maheshwar</strong> → Indore Bypass → <strong>Ujjain</strong>
 </p>
-<p><strong>Road Condition:</strong> The four-to-six lane NH 60 and NH 52 highways provide excellent cruising speeds. The Bijasan Ghat stretch at the Maharashtra–MP border (Sendhwa) is well-banked with separate upward and downward lanes. Fastag toll plazas are computerized and quick.</p>
+<p><strong>Road Condition:</strong> The four-lane NH 60 and NH 52 highways provide excellent cruising speeds. The Bijasan Ghat stretch at the Maharashtra–MP border (Sendhwa) is well-banked with separate upward and downward lanes. Fastag toll plazas are computerized and quick.</p>
+
+<h3>Route Comparison: NH 60/52 via Nashik vs. Ahmednagar Route</h3>
+<div class="not-prose my-6 overflow-x-auto rounded-2xl border border-slate-200 shadow-xs">
+  <table class="w-full text-left border-collapse bg-white text-xs sm:text-sm">
+    <thead>
+      <tr class="bg-slate-50 border-b border-slate-200 text-slate-700">
+        <th class="p-3.5 font-bold">Route Option</th>
+        <th class="p-3.5 font-bold">Highway Corridor</th>
+        <th class="p-3.5 font-bold">Distance</th>
+        <th class="p-3.5 font-bold">Driving Time</th>
+        <th class="p-3.5 font-bold">Road Quality</th>
+        <th class="p-3.5 font-bold">Verified Toll</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-slate-100 text-slate-700">
+      <tr class="hover:bg-amber-50/40 font-medium">
+        <td class="p-3.5 text-brand-blue-deep font-bold">Route 1 (Recommended)</td>
+        <td class="p-3.5">Pune → Nashik → Dhule → Sendhwa → Indore Bypass (NH 60 & NH 52)</td>
+        <td class="p-3.5 font-bold text-emerald-700">640 km</td>
+        <td class="p-3.5">11.5 – 12.5 hrs</td>
+        <td class="p-3.5">Smooth 4-lane highway, bypasses city congestion</td>
+        <td class="p-3.5 font-bold">₹880 – ₹950</td>
+      </tr>
+      <tr class="hover:bg-slate-50">
+        <td class="p-3.5 text-slate-800 font-bold">Route 2 (Alternative)</td>
+        <td class="p-3.5">Pune → Ahmednagar → Aurangabad → Dhule → Ujjain (NH 753F & NH 52)</td>
+        <td class="p-3.5">665 km</td>
+        <td class="p-3.5">13.5 – 14.5 hrs</td>
+        <td class="p-3.5">Mixed 2/4-lane highway, heavy Nagar city traffic</td>
+        <td class="p-3.5">₹850 – ₹920</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<h3>Verified Toll Plazas from Pune to Ujjain (Car / Van):</h3>
+<p>Traveling via the primary NH 60 & NH 52 route involves 9 computerized Fastag toll plazas totaling approximately <strong>₹880 to ₹950</strong> one-way:</p>
+<ol>
+  <li><strong>Chalakwadi / Rajgurunagar (NH 60):</strong> ~₹115</li>
+  <li><strong>Hivargaon / Sangamner (NH 60):</strong> ~₹100</li>
+  <li><strong>Sinnar Bypass (NH 60):</strong> ~₹95</li>
+  <li><strong>Pimpalgaon Baswant (NH 52/Nashik):</strong> ~₹125</li>
+  <li><strong>Chandwad Ghat (NH 52):</strong> ~₹95</li>
+  <li><strong>Songir / Dhule (NH 52):</strong> ~₹105</li>
+  <li><strong>Sendhwa MP Border (NH 52):</strong> ~₹135</li>
+  <li><strong>Dhamnod / Gujri (NH 52):</strong> ~₹110</li>
+  <li><strong>Indore–Dewas–Ujjain State Highway (SH 27):</strong> ~₹65</li>
+</ol>
 </section>
 
 <section id="day-1-schedule">
@@ -542,6 +602,7 @@ export const blogPosts: BlogPost[] = [
 <li><strong>AC Force Urbania (12 to 17 Seater):</strong> Recliner luxury push-back seats, independent dual AC, large panoramic windows, and huge luggage space.</li>
 <li><strong>Toyota Innova Crysta (6/7 Seater):</strong> Unmatched highway suspension comfort for small families with senior citizens.</li>
 </ul>
+<p>Looking for organized group travel without the driving fatigue? Explore our <a href="/tours/pune-to-ujjain-tour-package"><strong>Pune to Ujjain Tour Package for Family</strong></a> (all-inclusive 3D/2N with 3-star AC hotel stays and darshan passes) or check Friday bus departures on our <a href="/pune-to-ujjain-bus-travels"><strong>Pune to Ujjain Bus Travels</strong></a> page.</p>
 <p>Contact <strong>Shailraj Travels</strong> to book your customized Pune to Ujjain & Omkareshwar Tour Package with verified pure-veg hotel stays and priority Darshan assistance.</p>
 </section>`
   },

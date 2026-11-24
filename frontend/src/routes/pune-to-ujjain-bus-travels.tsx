@@ -49,9 +49,9 @@ import newhomeWebp from '@/frontend/shared/assets/newhome.webp';
 export const Route = createFileRoute("/pune-to-ujjain-bus-travels")({
   head: () => ({
     meta: generateSEO({
-      title: "Pune to Ujjain Tour Package | Friday Mahakal Darshan",
+      title: "Pune to Ujjain Bus Travels | AC Bus & Tour Package",
       description:
-        "Explore Pune to Ujjain Mahakal Darshan tour with Shailraj Travels. Weekly Friday departures in luxury AC Force Urbania with guide & complete 2-day darshan.",
+        "Book Pune to Ujjain bus travels & AC luxury Urbania tours. Guaranteed Friday departures, Pune pickup points (Swargate, Wakad, Hadapsar), hotel stay & Mahakal darshan.",
       canonicalUrl: "https://www.shailrajtravels.com/pune-to-ujjain-bus-travels",
       keywords: [
         "Pune to Ujjain Travels",
@@ -347,13 +347,13 @@ function PuneToUjjainBusTravelsPage() {
               <h1 className="text-3xl sm:text-5xl lg:text-[54px] font-extrabold font-display leading-[1.15] text-brand-blue-deep tracking-tight mb-4">
                 Pune to Ujjain <br className="hidden sm:inline" />
                 <span className="text-brand-green-dark">
-                  Mahakal Darshan Tour
+                  Bus Travels & Tour Package
                 </span>
               </h1>
 
               {/* Subheadline with Key Route Details */}
               <p className="text-base sm:text-lg text-slate-700 leading-relaxed max-w-2xl font-medium mb-6">
-                Explore Pune to Ujjain Mahakal Darshan tours with <strong className="text-brand-blue-deep font-bold">Shailraj Travels</strong>. Weekly Friday departures in premium AC Force Urbania with comfortable seating, experienced guides and a memorable 2-day pilgrimage experience covering Shri Mahakaleshwar, Kaal Bhairav, Ram Ghat, and Omkareshwar.
+                Looking for reliable <strong className="text-brand-blue-deep font-bold">Pune to Ujjain bus travels</strong>? Book guaranteed Friday departures with <strong className="text-brand-blue-deep font-bold">Shailraj Travels</strong> in luxury AC Force Urbania & sleeper coaches. Enjoy comfortable pushback seats, scheduled boarding points across Pune, verified 3-star AC hotel stay, and a guided 2-day darshan of Shri Mahakaleshwar and Omkareshwar.
               </p>
 
               {/* Quick Route Summary Badges */}
@@ -701,6 +701,67 @@ function PuneToUjjainBusTravelsPage() {
               <MessageSquare className="w-4 h-4" />
               <span>WhatsApp for Details & PDF Itinerary</span>
             </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Pune Boarding Points & Schedule Section */}
+      <section className="py-12 bg-white border-t border-slate-100">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="max-w-4xl mx-auto bg-gradient-to-br from-brand-mist/60 via-white to-amber-50/50 rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm text-left">
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+              <span className="text-xs font-bold text-brand-green-dark uppercase tracking-wider px-3 py-1 rounded-full bg-brand-green/10 border border-brand-green/20">
+                Weekly Friday Schedule
+              </span>
+              <span className="text-xs font-semibold text-slate-500">
+                Doorstep pickup available for private Urbania groups
+              </span>
+            </div>
+            <h3 className="text-2xl font-bold font-display text-brand-blue-deep mb-3">
+              Pune Boarding Points & Departure Timings
+            </h3>
+            <p className="text-slate-600 text-sm mb-6 leading-relaxed">
+              Our AC luxury Force Urbania and sleeper coaches depart every Friday evening with scheduled boarding points across Pune and PCMC:
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5 mb-6 text-xs sm:text-sm">
+              <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-xs">
+                <strong className="text-brand-blue-deep block text-sm">Hadapsar (Head Office)</strong>
+                <span className="text-slate-500 text-xs">Reporting: 7:15 PM • Departure: 7:30 PM</span>
+              </div>
+              <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-xs">
+                <strong className="text-brand-blue-deep block text-sm">Swargate</strong>
+                <span className="text-slate-500 text-xs">Laxmi Narayan Cinema • 8:00 PM</span>
+              </div>
+              <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-xs">
+                <strong className="text-brand-blue-deep block text-sm">Pune Railway Station</strong>
+                <span className="text-slate-500 text-xs">Near Inox / Bus Stand • 8:30 PM</span>
+              </div>
+              <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-xs">
+                <strong className="text-brand-blue-deep block text-sm">Viman Nagar / Kharadi</strong>
+                <span className="text-slate-500 text-xs">Kharadi Bypass Highway • 8:50 PM</span>
+              </div>
+              <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-xs">
+                <strong className="text-brand-blue-deep block text-sm">Bhosari / Nashik Phata</strong>
+                <span className="text-slate-500 text-xs">Nashik Highway Junction • 9:15 PM</span>
+              </div>
+              <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-xs">
+                <strong className="text-brand-blue-deep block text-sm">Wakad / Hinjewadi</strong>
+                <span className="text-slate-500 text-xs">Wakad Bridge / Highway • 9:45 PM</span>
+              </div>
+            </div>
+            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                Looking for an all-inclusive 3D/2N family package with 3-star AC hotel and meals?
+                <br />
+                Explore our <Link to="/tours/pune-to-ujjain-tour-package" className="text-brand-blue font-bold underline hover:text-brand-blue-deep">Pune to Ujjain Tour Package for Family</Link> or read our <Link to="/blog/pune-to-ujjain-road-trip-itinerary" className="text-brand-blue font-bold underline hover:text-brand-blue-deep">Pune to Ujjain Best Route by Car Guide</Link>.
+              </div>
+              <a
+                href="#booking-section"
+                className="shrink-0 px-4 py-2 bg-brand-blue-deep text-white font-bold rounded-lg text-xs text-center hover:bg-brand-blue transition-colors no-underline"
+              >
+                Book Your Seat
+              </a>
+            </div>
           </div>
         </div>
       </section>
