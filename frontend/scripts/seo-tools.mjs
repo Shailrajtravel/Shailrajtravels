@@ -154,7 +154,36 @@ export function buildEnhancedSitemap() {
   const tourSlugs = extractSlugsFromFile(
     path.join(rootDir, 'src', 'backend', 'shared', 'seed-data.ts'),
     /"slug":\s*"([^"]+)"/g
-  );
+  ).filter((slug) => {
+    // Exclude tour slugs that 301 redirect or are top-level routes
+    const excludedTourSlugs = new Set([
+      'pune-to-ujjain-bus-travels',
+      'ujjain-omkareshwar-ghrishneshwar-maheshwar-tour',
+      'ujjain-omkareshwar-Ghrishneshwar-maheshwar-tour',
+      'ujjain-omkareshwar-dhoomeshwar-jyotirlinga-tour',
+      'ujjain-omkareshwar-dhoomeshwar-maheshwar-tour',
+      'pune-to-ujjain-omkareshwar-tour',
+      'pune-to-ujjain-tour',
+      'pune-to-ujjain-bus',
+      'pune-to-ujjain-bus-booking',
+      'pune-to-ujjain-sleeper-bus',
+      'ujjain-tour',
+      'pune-to-ujjain-travels',
+      'pune-to-ujjain-tour-and-travels',
+      'tirupati-balaji-tour',
+      'ashtavinayak-yatra',
+      'ashtavinayak-tour-package',
+      'ashtavinayak-tour',
+      'pune-to-ashtavinayak-tour-package',
+      'pune-to-ashtavinayak-tour',
+      'ashtavinayak-darshan',
+      'jyotirlinga-darshan',
+      'pandharpur-wari',
+      'char-dham-yatra',
+      'shirdi-tour',
+    ]);
+    return !excludedTourSlugs.has(slug);
+  });
 
   const blogSlugs = extractSlugsFromFile(
     path.join(rootDir, 'src', 'frontend', 'shared', 'data', 'blogs.ts'),

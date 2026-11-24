@@ -134,7 +134,7 @@ export default (defineConfig as any)({
             const dest = path.resolve(__dirname, 'dist/sitemap.xml');
             if (fs.existsSync(src)) {
               fs.copyFileSync(src, dest);
-              console.log('✅ Successfully synced comprehensive 58-URL sitemap.xml to dist/sitemap.xml');
+              console.log('✅ Successfully synced comprehensive sitemap.xml to dist/sitemap.xml');
             }
           } catch (e: any) {
             console.warn("Sitemap sync error:", e?.message);
