@@ -4,12 +4,24 @@ import { cn } from '@/backend/shared/utils';
 
 export function optimizeCloudinaryUrl(url?: string, maxWidth = 800): string | undefined {
   if (!url || typeof url !== 'string') return url;
-  if (!url.includes('res.cloudinary.com') || !url.includes('/upload/')) return url;
-  // If already transformed, don't duplicate
-  if (url.includes('/upload/f_') || url.includes('/upload/w_') || url.includes('/upload/q_')) {
-    return url;
+  if (url.includes('res.cloudinary.com') && url.includes('/upload/')) {
+    if (url.includes('/upload/f_') || url.includes('/upload/w_') || url.includes('/upload/q_')) {
+      return url;
+    }
+    return url.replace('/upload/', `/upload/f_auto,q_auto,w_${maxWidth},c_limit/`);
   }
-  return url.replace('/upload/', `/upload/f_auto,q_auto,w_${maxWidth},c_limit/`);
+  if (url.includes('images.unsplash.com')) {
+    try {
+      const u = new URL(url);
+      u.searchParams.set('w', String(maxWidth));
+      u.searchParams.set('q', '75');
+      u.searchParams.set('auto', 'format');
+      return u.toString();
+    } catch {
+      return url;
+    }
+  }
+  return url;
 }
 
 interface LazyImageProps extends ImgHTMLAttributes<HTMLImageElement> {

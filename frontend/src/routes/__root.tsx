@@ -28,12 +28,6 @@ if (typeof window !== 'undefined' && typeof (window as any).Buffer === 'undefine
   };
 }
 
-// @ts-ignore: fonts have no type declarations
-import '@fontsource-variable/inter';
-// @ts-ignore
-import '@fontsource-variable/plus-jakarta-sans';
-// @ts-ignore
-import '@fontsource/tiro-devanagari-marathi';
 import appCss from '@/styles.css?url';
 import newhomeMobileAvif from '@/frontend/shared/assets/newhome-mobile.avif';
 import newhomeAvif from '@/frontend/shared/assets/newhome.avif';

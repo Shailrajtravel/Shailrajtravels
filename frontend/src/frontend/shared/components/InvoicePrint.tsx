@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import { MapPin, Phone, Mail, Globe, ZoomIn, ZoomOut, Maximize, Lock, Unlock, Send, KeyRound } from 'lucide-react';
 // @ts-ignore
-import logo from '@/frontend/shared/assets/shailraj-travels-punelogo.png';
+import logo from '@/frontend/shared/assets/shailraj-travels-punelogo.webp';
 import onlyNameLogo from '@/frontend/shared/assets/orange-logo.png';
 import stamp from '@/frontend/shared/assets/stamp1.png';
 import invoicePattern from '@/frontend/shared/assets/invoice-pattern.png';
