@@ -17,10 +17,11 @@ import { Star, CheckCircle2, ShieldCheck, ExternalLink, MessageSquare } from 'lu
 export const Route = createFileRoute("/reviews")({
   head: () => ({
     meta: generateSEO({
-      title: "Shailraj Travels Reviews | 5.0★ Google Rating & Verified Yatri Feedback",
+      title: "Shailraj Travels Reviews | 5.0★ Verified Google Feedback",
       description:
-        "Read authentic 5.0★ Google verified reviews for Shailraj Travels. Verified pilgrim reviews for Pune to Ujjain Darshan, Ashtavinayak Yatra, and AC Force Urbania tours.",
+        "Read verified 5.0★ Google reviews for Shailraj Travels Pune. Authentic yatri feedback for Ujjain Darshan, Ashtavinayak yatra, and luxury AC vehicle tours.",
       canonicalUrl: "https://www.shailrajtravels.com/reviews",
+      ogImageAlt: "Shailraj Travels Customer Reviews and 5.0 Star Google Rating",
       keywords: [
         "shailraj travels reviews",
         "shailraj travels google reviews",
