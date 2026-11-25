@@ -8,8 +8,6 @@ import { Navbar } from '@/frontend/core/Navbar';
 import { FooterSection as Footer } from '@/frontend/core/Footer';
 import { SchemaMarkup } from '@/frontend/shared/components/SchemaMarkup';
 import { ReviewsSection } from '@/frontend/features/reviews/ReviewsSection';
-import { fallbackGoogleReviews } from '@/backend/shared/reviews-data';
-import { businessConfig } from '@/frontend/shared/config/business';
 import {
   generateLocalBusinessSchema,
   generateBreadcrumbSchema,
@@ -42,34 +40,25 @@ function ReviewsPage() {
   const { lang } = useLanguage();
   const t = (lang && translations[lang]) || translations.en;
 
-  const reviewSchema = {
+  const pageSchema = {
     "@context": "https://schema.org",
-    "@type": "TravelAgency",
-    name: "Shailraj Travels",
-    url: "https://www.shailrajtravels.com",
-    telephone: businessConfig.supportPhone,
-    review: fallbackGoogleReviews.map((rev) => ({
-      "@type": "Review",
-      author: {
-        "@type": "Person",
-        name: rev.name,
-      },
-      reviewRating: {
-        "@type": "Rating",
-        ratingValue: rev.rating || 5,
-        bestRating: 5,
-        worstRating: 1,
-      },
-      reviewBody: rev.text,
-      datePublished: rev.publishTime || "2026-10-01",
-    })),
+    "@type": "ItemPage",
+    name: "Shailraj Travels Verified Customer Reviews & Ratings",
+    url: "https://www.shailrajtravels.com/reviews",
+    description:
+      "Read authentic 5.0★ Google verified reviews for Shailraj Travels. Verified pilgrim reviews for Pune to Ujjain Darshan, Ashtavinayak Yatra, and AC Force Urbania tours.",
+    publisher: {
+      "@type": "TravelAgency",
+      name: "Shailraj Travels",
+      url: "https://www.shailrajtravels.com",
+    },
   };
 
   return (
     <div className="font-sans text-slate-800 bg-white selection:bg-brand-orange/20 selection:text-brand-blue-deep overflow-x-hidden min-h-screen flex flex-col">
       <SchemaMarkup
         schema={[
-          reviewSchema,
+          pageSchema,
           generateLocalBusinessSchema(),
           generateBreadcrumbSchema([
             { name: "Home", url: "https://www.shailrajtravels.com" },
