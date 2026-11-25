@@ -14,3 +14,14 @@
 /about /about-shailraj-travels 301
 /features /why-choose-shailraj-travels 301
 /knowledge-hub /blog 301
+
+# Edge 301 redirects for crawler template strings and tag cleanup
+/tours/$tourSlug /tours 301
+/tours/%24tourSlug /tours 301
+/author/$authorSlug /blog 301
+/author/%24authorSlug /blog 301
+/blog/author/$authorSlug /blog 301
+/blog/author/%24authorSlug /blog 301
+/blog/tag/$tagSlug /blog 301
+/blog/tag/%24tagSlug /blog 301
+/blog/tag/ac-force-urbania. /blog/tag/ac-force-urbania 301

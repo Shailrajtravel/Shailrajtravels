@@ -17,10 +17,11 @@ export const Route = createFileRoute("/tours/")({
   loader: ({ deps: { lang } }) => getToursFn({ data: { lang: lang || "en" } }),
   head: () => ({
     meta: generateSEO({
-      title: "Shailraj Travels - Tours & Travels in Pune, Hadapsar | Tour Packages",
+      title: "Best Tour Packages in Pune | Shailraj Travels Hadapsar",
       description:
-        "Shailraj Travels offers premium tour packages for travelers from all over Pune & Hadapsar. Ujjain Mahakal Darshan, Ashtavinayak Yatra, and luxury AC Force Urbania tours across India.",
+        "Explore top tour packages from Pune with Shailraj Travels Hadapsar. Book Ujjain Mahakal, Ashtavinayak yatra & pilgrimage trips in luxury AC Force Urbania.",
       canonicalUrl: "https://www.shailrajtravels.com/tours",
+      ogImageAlt: "Shailraj Travels Tour Packages from Pune and Hadapsar",
       keywords: [
         "best travels in pune",
         "tours",
