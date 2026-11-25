@@ -1536,7 +1536,7 @@ export const blogPosts: BlogPost[] = [
     ],
     ogImageAlt: "Best Tour Packages and Travel Agency in Pune - Shailraj Travels",
     excerpt: "Comprehensive 2026 guide to finding the best tour packages and choosing a reliable travel agency in Pune. Discover verified holiday packages, private travel packages, fleet options (Force Urbania & Innova), transparent pricing checklists, and doorstep pickups across Pune.",
-    category: "Travel Planning",
+    category: "Travel Guides",
     tags: [
       "Tour Packages",
       "Tour Package",
