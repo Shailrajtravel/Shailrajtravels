@@ -97,11 +97,11 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
             else if (isBlog) isActive = currentPath.startsWith("/blog");
             else if (isGallery) isActive = currentPath.startsWith("/gallery");
             else if (isAllTours) isActive = currentPath.startsWith("/tours");
+            else if (isReviews) isActive = currentPath.startsWith("/reviews");
             else if (isContact) isActive = currentPath.startsWith("/contact") || currentHash === "contact";
             else if (isAbout) isActive = currentPath.startsWith("/about") || (currentPath === "/" && currentHash === "about");
             else if (isFeatures) isActive = currentPath === "/" && currentHash === "features";
             else if (isPackages) isActive = currentPath === "/" && (currentHash === "packages" || currentHash === "tours");
-            else if (isReviews) isActive = currentPath.startsWith("/reviews") || (currentPath === "/" && currentHash === "reviews");
 
             const className = `whitespace-nowrap text-[13px] xl:text-[14px] font-medium transition ${
               isActive ? "text-brand-blue-deep font-bold" : "text-slate-700 hover:text-brand-blue"
@@ -139,11 +139,18 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
               );
             }
 
-            if (isFeatures || isPackages || isReviews) {
+            if (isReviews) {
+              return (
+                <Link key={key} to="/reviews" className={className}>
+                  {t[key]}
+                </Link>
+              );
+            }
+
+            if (isFeatures || isPackages) {
               const hashMap: Record<string, string> = {
                 navTours: "features",
                 navPilgrimage: "packages",
-                navReviews: "reviews",
               };
               return (
                 <Link key={key} to="/" hash={hashMap[key]} className={className}>
@@ -221,11 +228,11 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
               else if (isBlog) isActive = currentPath.startsWith("/blog");
               else if (isGallery) isActive = currentPath.startsWith("/gallery");
               else if (isAllTours) isActive = currentPath.startsWith("/tours");
+              else if (isReviews) isActive = currentPath.startsWith("/reviews");
               else if (isContact) isActive = currentPath.startsWith("/contact") || currentHash === "contact";
               else if (isAbout) isActive = currentPath.startsWith("/about") || (currentPath === "/" && currentHash === "about");
               else if (isFeatures) isActive = currentPath === "/" && currentHash === "features";
               else if (isPackages) isActive = currentPath === "/" && (currentHash === "packages" || currentHash === "tours");
-              else if (isReviews) isActive = currentPath.startsWith("/reviews") || (currentPath === "/" && currentHash === "reviews");
 
               const className = `text-[16px] font-bold transition ${
                 isActive ? "text-brand-green" : "text-brand-blue-deep hover:text-brand-green"
@@ -283,11 +290,23 @@ export function Navbar({ t }: { t: typeof translations.mr }) {
                 );
               }
 
-              if (isFeatures || isPackages || isReviews) {
+              if (isReviews) {
+                return (
+                  <Link
+                    key={key}
+                    to="/reviews"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={className}
+                  >
+                    {t[key]}
+                  </Link>
+                );
+              }
+
+              if (isFeatures || isPackages) {
                 const hashMap: Record<string, string> = {
                   navTours: "features",
                   navPilgrimage: "packages",
-                  navReviews: "reviews",
                 };
                 return (
                   <Link

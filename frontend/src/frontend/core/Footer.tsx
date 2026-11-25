@@ -154,6 +154,7 @@ export function FooterSection({ t: propT, lang = "en" }: { t?: typeof translatio
                 { label: t?.navHome || "Home", href: "/" },
                 { label: t?.navAbout || "About Us", href: "/about-shailraj-travels" },
                 { label: t?.navPilgrimage || "Tour Packages", href: "/tours" },
+                { label: t?.navReviews || "Customer Reviews", href: "/reviews" },
                 { label: t?.navGallery || "Gallery", href: "/gallery" },
                 { label: "Yatri Stories", href: "/yatri-stories" },
                 { label: t?.navBlog || "Spiritual Blog", href: "/blog" },

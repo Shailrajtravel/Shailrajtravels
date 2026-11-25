@@ -177,6 +177,11 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="en">
       <head>
         <HeadContent />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `if(typeof window!=='undefined'&&(window.location.hash==='#reviews'||window.location.hash==='#/reviews'||window.location.href.indexOf('/#reviews')!==-1)){window.location.replace('/reviews');}`,
+          }}
+        />
         <AnalyticsScripts />
         <SchemaMarkup schema={generateLocalBusinessSchema()} />
         <SchemaMarkup schema={generateWebSiteSchema()} />
@@ -276,6 +281,18 @@ function RootComponent() {
     } catch {}
     navigate({ search: ((old: any) => ({ ...old, lang: newLang })) as any, replace: true });
   };
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const checkReviewsHash = () => {
+      if (window.location.hash === "#reviews" || window.location.hash === "#/reviews") {
+        navigate({ to: "/reviews", replace: true });
+      }
+    };
+    checkReviewsHash();
+    window.addEventListener("hashchange", checkReviewsHash);
+    return () => window.removeEventListener("hashchange", checkReviewsHash);
+  }, [navigate]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
