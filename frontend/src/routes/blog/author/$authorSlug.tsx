@@ -35,6 +35,41 @@ export const Route = createFileRoute("/blog/author/$authorSlug")({
         { rel: "canonical", href: `https://www.shailrajtravels.com/blog/author/${author.id}` },
         ...generateHreflangLinks(`https://www.shailrajtravels.com/blog/author/${author.id}`),
       ],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ProfilePage",
+            mainEntity: {
+              "@type": "Person",
+              name: author.name,
+              jobTitle: author.role,
+              description: author.bio,
+              image: author.avatarUrl ? `https://www.shailrajtravels.com${author.avatarUrl}` : undefined,
+              url: `https://www.shailrajtravels.com/blog/author/${author.id}`,
+              sameAs: [
+                author.socialLinks?.instagram,
+                author.socialLinks?.facebook,
+              ].filter(Boolean),
+              worksFor: {
+                "@type": "TravelAgency",
+                name: "Shailraj Travels",
+                url: "https://www.shailrajtravels.com",
+                telephone: "+919764413556",
+                address: {
+                  "@type": "PostalAddress",
+                  streetAddress: "Vaibhav Super Market, near Akshada Medical, Gopal Patti, Manjri Budruk, Hadapsar",
+                  addressLocality: "Pune",
+                  addressRegion: "Maharashtra",
+                  postalCode: "412307",
+                  addressCountry: "IN",
+                },
+              },
+            },
+          }),
+        },
+      ],
     };
   },
   component: BlogAuthorPage,

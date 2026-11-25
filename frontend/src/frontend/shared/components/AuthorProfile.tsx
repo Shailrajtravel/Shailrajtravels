@@ -1,6 +1,6 @@
 import React from 'react';
 import { Author } from '@/frontend/shared/types/author';
-import { Instagram, Facebook, Youtube } from 'lucide-react';
+import { Instagram, Facebook, Youtube, MapPin } from 'lucide-react';
 
 interface AuthorProfileProps {
   author: Author;
@@ -28,6 +28,12 @@ export const AuthorProfile: React.FC<AuthorProfileProps> = ({
             <div>
               <h3 className="text-xl font-bold text-slate-800">{author.name}</h3>
               <p className="text-brand-orange font-medium">{author.role}</p>
+              {author.location && (
+                <p className="text-xs text-slate-500 flex items-center gap-1.5 mt-1 font-medium">
+                  <MapPin className="w-3.5 h-3.5 text-brand-green shrink-0" />
+                  <span>{author.location}</span>
+                </p>
+              )}
             </div>
             <div className="flex items-center gap-2.5">
               <a

@@ -8,6 +8,9 @@ export interface Author {
   expertiseAreas: string[];
   regionsCovered: string[];
   languages: string[];
+  location?: string;
+  address?: string;
+  phone?: string;
   contactProfileUrl?: string;
   socialLinks?: {
     twitter?: string;

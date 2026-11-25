@@ -6,7 +6,10 @@ export const authors: Record<string, Author> = {
     name: "Mayur Patil",
     role: "Founder & Chief Pilgrimage Guide",
     yearsOfExperience: 5,
-    bio: "Mayur Patil is the Founder of Shailraj Travels, established in 2021. With deep devotion and on-ground operational expertise, he pioneered premier spiritual tours from Pune including the Ujjain Mahakaleshwar & Omkareshwar Tour, Ashtavinayak Darshan, and Maharashtra Jyotirlinga circuits using luxury AC Force Urbania coaches. He personally oversees route safety, temple darshan arrangements, and yatri comfort.",
+    location: "Gopal Patti, Manjri Budruk, Hadapsar, Pune - 412307",
+    address: "Vaibhav Super Market, near Akshada Medical, Gopal Patti, Manjri Budruk, Hadapsar, Pune 412307",
+    phone: "+919764413556",
+    bio: "Mayur Patil is the Founder of Shailraj Travels, operating directly from Gopal Patti, Manjri Budruk, Hadapsar, Pune. Established in 2021, he brings deep devotion and firsthand on-ground operational expertise, pioneering premier spiritual tours and custom travel packages from Pune including the Ujjain Mahakaleshwar & Omkareshwar Tour, Ashtavinayak Darshan, and Maharashtra Jyotirlinga circuits with company-owned luxury AC Force Urbania coaches. He personally oversees route safety, temple darshan arrangements, and yatri comfort across Pune.",
     avatarUrl: "/images/authors/mayur-patil.jpg",
     expertiseAreas: [
       "Ujjain & Omkareshwar Pilgrimage Tours",
