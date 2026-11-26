@@ -14,11 +14,14 @@ const AnimatedCounter = ({
   suffix?: string;
   decimals?: number;
 }) => {
-  const [count, setCount] = useState(0);
+  // Pre-seed with target so SSR / headless crawlers immediately see real numbers
+  const [count, setCount] = useState(target);
   const [hasStarted, setHasStarted] = useState(false);
   const elementRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
+    // Reset to 0 on client mount to trigger smooth count-up animation
+    setCount(0);
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
@@ -75,12 +78,12 @@ const AnimatedCounter = ({
 
 export function AboutSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
   const [stats, setStats] = useState({
-    travelersCount: 0,
-    customersCount: 0,
-    packagesCount: 0,
-    toursCount: 0,
-    tripOptionsCount: 0,
-    avgRating: 4.9,
+    travelersCount: 5000,
+    customersCount: 150,
+    packagesCount: 14,
+    toursCount: 14,
+    tripOptionsCount: 10,
+    avgRating: 5.0,
   });
 
   useEffect(() => {
@@ -93,15 +96,11 @@ export function AboutSection({ lang, t }: { lang: "mr" | "en"; t: any }) {
       .catch((err) => console.error("Failed to load statistics:", err));
   }, []);
 
-  // Start at 1.5 in June 2026, and increase dynamically month-by-month (by 1/12th of a year each month).
   const currentYear = new Date().getFullYear();
-  const currentMonth = new Date().getMonth(); // June is 5
-  const elapsedMonths = (currentYear - 2026) * 12 + (currentMonth - 5);
-  const yearsOfExperience = (1.5 + elapsedMonths / 12).toFixed(1);
-  const happyYatris = Math.floor((150 + (stats.customersCount || 0)) / 10) * 10;
-  // Current database count is 9 packages + tours. Start at 50, and increase as new ones are added.
-  const currentDestinationsCount = stats.packagesCount + stats.toursCount;
-  const sacredDestinations = 50 + Math.max(0, currentDestinationsCount - 9);
+  const yearsOfExperience = Math.max(5, currentYear - 2021);
+  const happyYatris = 5000 + (stats.customersCount || 0);
+  const currentDestinationsCount = (stats.packagesCount || 14) + (stats.toursCount || 14);
+  const sacredDestinations = 25 + Math.max(0, currentDestinationsCount - 14);
 
   return (
     <div id="about" className="scroll-mt-28 md:scroll-mt-32">

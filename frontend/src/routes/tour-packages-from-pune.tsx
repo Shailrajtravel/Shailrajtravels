@@ -64,7 +64,7 @@ function TourPackagesFromPunePage() {
     {
       title: "Pune to Ujjain Mahakal & Omkareshwar Tour",
       duration: "3 Days / 2 Nights",
-      price: "From ₹8,500/person",
+      price: "From ₹6,999/person",
       circuit: "Pune → Maheshwar → Omkareshwar → Ujjain → Grishneshwar → Pune",
       vehicle: "Luxury AC Force Urbania",
       highlights: ["Mahakal Bhasma Aarti guidance", "Narmada Boat Parikrama", "Verified 3-Star AC Hotel", "Pure Veg Sattvic Food"],

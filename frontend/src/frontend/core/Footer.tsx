@@ -408,15 +408,18 @@ export function FooterSection({ t: propT, lang = "en" }: { t?: typeof translatio
             <Link to={"/tours" as any} className="hover:text-white transition-colors">Pune Travels</Link>
             <span className="text-slate-700">•</span>
             <Link to={"/pune-to-ujjain-bus-travels" as any} className="hover:text-white transition-colors">Pune to Ujjain Bus Travels</Link>
-            <Link to={"/tours/pune-to-ujjain-tour-package" as any} className="hover:text-white transition-colors">Pune to Ujjain Best Travels</Link>
-            <span className="text-slate-700">•</span>
-            <Link to={"/tours/pune-to-ujjain-tour-package" as any} className="hover:text-white transition-colors">Pune to Ujjain Tour and Travels</Link>
             <span className="text-slate-700">•</span>
             <Link to={"/tours/pune-to-ujjain-tour-package" as any} className="hover:text-white transition-colors">Pune to Ujjain Tour Package</Link>
             <span className="text-slate-700">•</span>
             <Link to={"/tours/pune-to-ashtavinayak-darshan" as any} className="hover:text-white transition-colors">Ashtavinayak Yatra</Link>
             <span className="text-slate-700">•</span>
-            <Link to={"/tours" as any} className="hover:text-white transition-colors">Tours & Travels</Link>
+            <Link to={"/tours/pune-mumbai-to-3-jyotirlinga-darshan" as any} className="hover:text-white transition-colors">3 Jyotirlinga Darshan</Link>
+            <span className="text-slate-700">•</span>
+            <Link to={"/tours/pune-to-tirupati-balaji-darshan-tour" as any} className="hover:text-white transition-colors">Tirupati Balaji Tour</Link>
+            <span className="text-slate-700">•</span>
+            <Link to={"/tours/pune-to-shakti-peeth-yatra" as any} className="hover:text-white transition-colors">Shakti Peeth Yatra</Link>
+            <span className="text-slate-700">•</span>
+            <Link to={"/tours" as any} className="hover:text-white transition-colors">All Tour Packages</Link>
             <span className="text-slate-700">•</span>
             <Link to="/why-choose-shailraj-travels" className="hover:text-white transition-colors">Best Travels</Link>
           </div>

@@ -27,7 +27,7 @@ export const Route = createFileRoute("/")({
     meta: generateSEO({
       title: "Shailraj Travels - Tours & Travels in Pune, Hadapsar",
       description:
-        "Shailraj Travels is Pune's top-rated tour and travel agency based in Hadapsar, proudly serving travelers from all over Pune & PCMC. Book Ujjain Mahakal tours, Ashtavinayak yatra, and luxury AC vehicle rentals with pickups across Pune.",
+        "Explore top tour packages & pilgrimage yatras from Pune with Shailraj Travels Hadapsar. Book Ujjain Mahakal, Ashtavinayak & luxury AC vehicle tours.",
       canonicalUrl: "https://www.shailrajtravels.com",
       keywords: [
         "shailraj travels - tours & travels in pune, hadapsar",
