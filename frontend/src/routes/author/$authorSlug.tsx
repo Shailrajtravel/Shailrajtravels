@@ -12,7 +12,13 @@ export const Route = createFileRoute("/author/$authorSlug")({
     if (!params.authorSlug || params.authorSlug === '$authorSlug' || params.authorSlug === 'undefined') {
       throw redirect({ to: '/authors', statusCode: 301 });
     }
-    const author = authors[params.authorSlug] || (params.authorSlug === "shailesh-raj" ? authors["mayur-patil"] : authors["mayur-patil"]);
+    if (params.authorSlug === 'shailesh-raj') {
+      throw redirect({ to: '/blog/author/mayur-patil', statusCode: 301 });
+    }
+    if (params.authorSlug === 'priya-deshmukh') {
+      throw redirect({ to: '/blog/author/shaila-mayur-patil', statusCode: 301 });
+    }
+    const author = authors[params.authorSlug] || authors['mayur-patil'];
     if (!author) throw notFound();
     return author;
   },

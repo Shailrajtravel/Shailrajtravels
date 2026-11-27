@@ -43,6 +43,27 @@ export function generateLocalBusinessSchema() {
     url: "https://www.shailrajtravels.com",
     telephone: businessConfig.supportPhone,
     priceRange: "₹₹",
+    founder: {
+      "@type": "Person",
+      name: "Mayur Patil",
+      jobTitle: "Founder & Chief Pilgrimage Guide",
+      image: "https://www.shailrajtravels.com/images/authors/mayur-patil.jpg",
+      sameAs: "https://www.instagram.com/wings_of_mayur_9999/",
+    },
+    employee: [
+      {
+        "@type": "Person",
+        name: "Mayur Patil",
+        jobTitle: "Founder & Chief Pilgrimage Guide",
+        image: "https://www.shailrajtravels.com/images/authors/mayur-patil.jpg",
+      },
+      {
+        "@type": "Person",
+        name: "Shaila Mayur Patil",
+        jobTitle: "Co-Founder & Operations Director",
+        image: "https://www.shailrajtravels.com/images/authors/shaila-mayur-patil.jpg",
+      },
+    ],
     address: {
       "@type": "PostalAddress",
       streetAddress: "Gopal Patti, Manjri Budruk, Hadapsar",

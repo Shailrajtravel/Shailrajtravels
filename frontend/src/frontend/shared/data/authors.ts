@@ -42,37 +42,4 @@ export const authors: Record<string, Author> = {
     languages: ["Marathi", "Hindi"],
     contactProfileUrl: "/about-shailraj-travels",
   },
-  // Legacy aliases for backward compatibility with existing links
-  "shailesh-raj": {
-    id: "mayur-patil",
-    name: "Mayur Patil",
-    role: "Founder & Chief Pilgrimage Guide",
-    yearsOfExperience: 5,
-    bio: "Mayur Patil is the Founder of Shailraj Travels, established in 2021. With deep devotion and on-ground operational expertise, he pioneered premier spiritual tours from Pune including the Ujjain Mahakaleshwar & Omkareshwar Tour, Ashtavinayak Darshan, and Maharashtra Jyotirlinga circuits using luxury AC Force Urbania coaches.",
-    avatarUrl: "/images/authors/mayur-patil.jpg",
-    expertiseAreas: [
-      "Ujjain & Omkareshwar Pilgrimage Tours",
-      "Ashtavinayak Yatra",
-      "Pan-India Jyotirlinga Circuits",
-      "Luxury Fleet & Force Urbania Travel",
-    ],
-    regionsCovered: ["Maharashtra", "Madhya Pradesh", "Gujarat"],
-    languages: ["Marathi", "Hindi", "English"],
-    contactProfileUrl: "/about-shailraj-travels",
-    socialLinks: {
-      instagram: "https://www.instagram.com/wings_of_mayur_9999/",
-    },
-  },
-  "priya-deshmukh": {
-    id: "shaila-mayur-patil",
-    name: "Shaila Mayur Patil",
-    role: "Co-Founder & Yatri Hospitality Director",
-    yearsOfExperience: 5,
-    bio: "Shaila Mayur Patil is the Co-Founder of Shailraj Travels. Guiding the yatri care and hospitality vision since 2021, she ensures all pilgrimage packages feature hygienic 3-star AC accommodations and personalized yatri care.",
-    avatarUrl: "/images/authors/shaila-mayur-patil.jpg",
-    expertiseAreas: ["Pilgrim Care", "Hospitality", "Family Travel"],
-    regionsCovered: ["Maharashtra", "Madhya Pradesh"],
-    languages: ["Marathi", "Hindi"],
-    contactProfileUrl: "/about-shailraj-travels",
-  },
 };

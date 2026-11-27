@@ -25,3 +25,7 @@
 /blog/tag/$tagSlug /blog 301
 /blog/tag/%24tagSlug /blog 301
 /blog/tag/ac-force-urbania. /blog/tag/ac-force-urbania 301
+/author/shailesh-raj /blog/author/mayur-patil 301
+/blog/author/shailesh-raj /blog/author/mayur-patil 301
+/author/priya-deshmukh /blog/author/shaila-mayur-patil 301
+/blog/author/priya-deshmukh /blog/author/shaila-mayur-patil 301

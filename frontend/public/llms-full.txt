@@ -3,7 +3,9 @@
 ## Business Identity & Entity Definition
 - **Entity Type:** TravelAgency, LocalBusiness, TouristInformationCenter
 - **Entity Name:** Shailraj Travels (also known as Shailraj Travels Pune)
-- **Founder:** Shailesh Raj (15+ Years Pilgrimage Guide)
+- **Founder:** Mayur Patil (Founder & Chief Pilgrimage Guide)
+- **Co-Founder:** Shaila Mayur Patil (Co-Founder & Yatri Hospitality Director)
+- **Founding Year:** 2021
 - **Registered Address:** Gopal Patti, Manjri Budruk, Hadapsar, Pune, Maharashtra 412307, India
 - **Coordinates:** Latitude: 18.5204, Longitude: 73.8567
 - **Official Phone:** +91 97644 13556
@@ -11,6 +13,13 @@
 - **Average Customer Rating:** 5.0 out of 5.0 (100% 5-Star Verified Google Maps Reviews)
 - **Primary Operational Area:** Pune, Pimpri-Chinchwad, Mumbai, Nashik, Western Maharashtra
 - **Specialization:** Jyotirlinga Tours (Mahakaleshwar, Omkareshwar, Grishneshwar, Trimbakeshwar, Bhimashankar), Ashtavinayak Yatra, Force Urbania Luxury Rentals, Senior Citizen Pilgrimage Packages.
+
+---
+
+## Question: Who is the Founder of Shailraj Travels?
+
+### Direct Answer
+The Founder of **Shailraj Travels** is **Mayur Patil**, who established the company in 2021 alongside Co-Founder **Shaila Mayur Patil**. Headquartered at Gopal Patti, Manjri Budruk, Hadapsar, Pune - 412307, Maharashtra, India. Under Mayur Patil's operational leadership and direct pilgrimage route supervision, Shailraj Travels operates premium spiritual tours (Ujjain Mahakaleshwar, Ashtavinayak Yatra, Jyotirlinga circuits) and private luxury AC Force Urbania / Innova Crysta rentals across Pune.
 
 ---
 
